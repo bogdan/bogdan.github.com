@@ -1,0 +1,34 @@
+.clear {
+  clear: both;
+}
+
+code {
+    white-space: pre-wrap;
+}
+
+h2 a {
+    font-size: 26px;
+}
+
+h5 {
+    font-size: 18px;
+}
+
+body {
+    width: 100%
+}
+
+#wrapper {
+    width: 900px;
+    margin: 0 auto;
+}
+
+ul li {
+    list-style: disc;
+    margin-left: 20px;
+}
+
+ul li ul li {
+    list-style: circle;
+}
+

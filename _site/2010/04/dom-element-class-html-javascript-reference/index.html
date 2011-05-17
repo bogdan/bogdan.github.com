@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+    <head>
+        <title>Bogdan Gusiev's blog</title>
+        <meta name="robots" content="follow, all" />
+        <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
+        <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev?format=xml" />
+        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <title>DOM element class - css reference or javascript reference?</title>
+
+        <link rel="icon" href="/images/favicon.ico"/>
+
+
+    </head>
+
+    <body>
+        <div id="wrapper">
+
+            <div id="header">
+                <h1><a href="http://gusiev.com">Bogdan Gusiev's blog</a></h1>
+                <h2>How to make your Ruby on Rails application</h4>
+            </div> <!-- Closes header -->
+
+
+
+            <div id="catnav">
+                <div id="toprss">
+                    <a href="http://feeds2.feedburner.com/BogdanGusiev?format=xml">
+                        <img src="http://gusiev.com/wp-content/themes/pixeled/images/rss-trans.png" alt="Bogdan Gusiev&#8217;s blog" width="65" height="24" />
+                    </a>
+                </div> <!-- Closes toprss -->
+                <ul id="nav">
+                    <li><a href="http://gusiev.com">Home</a></li>
+                    <li><a href="/?page_id=7">About me</a></li>
+                    <li><a href="/?page_id=13">Contacts</a></li>
+                </ul>
+            </div> <!-- Closes catnav -->
+
+            <div class="clear"></div>
+
+            <div id="main">
+
+                <div id="content">
+                    <div id="post">
+Designer have used element class attribute for CSS styling for ages. Nowadays classes are also used in javascript selectors. This overlapping cause additional problems: Changes in js may cause broken design and changes in design may cause broken js. The last one may be hard to detect especially when design and css are handled by different person.
+<!--more-->
+<hr/>
+Element class seems the best way to query the element from DOM in js code. Other variants like it's relative possition to other elements are very fragile. Let's say that we have the following DOM:
+<pre><code>&lt;a&gt; Delete&lt;/a&gt;
+&lt;a&gt; Edit&lt;/a&gt;</code></pre>
+And both links are handled with javascript. How would you separate them? 
+<ul>
+	<li><strong>By order</strong>(first, second) will cause problems if designer would like to change the order.</li>
+	<li><strong>By id</strong> will fail if you would have a list of elements where each has these links</li>
+	<li><strong>By label</strong> is just a fuck up and won't work for multi language application</li>
+</ul>
+The only one variant that provide the best stability is reference <strong>By class</strong>.
+But as stated above class also serves for another purpose - styling. 
+
+The thing that might help is a special prefix(for example "js") for all 'JavaScript classes'.
+Like:
+<pre><code>&lt;a class="js-new-comment big-blue-button"&gt; New Comment &lt;/a&gt;</code></pre>
+
+And the convention that classes with prefix should only be used in javascript selectors and classes without prefix in CSS.
+<br/><br/>
+Yes, sometimes it may look like:
+<pre><code>&lt;input type='button' class="js-follow-button follow-button"&gt; Follow this person &lt;/input&gt;</code></pre>
+But that makes sense to eliminate maintenance problem described above.
+
+</div>
+
+<div id="related">
+  <h2>Related Posts</h2>
+  <ul class="posts">
+    
+      <li><span>20 Apr 2010</span> &raquo; <a href="/2010/04/dom-element-class-html-javascript-reference">DOM element class - css reference or javascript reference?</a></li>
+    
+      <li><span>08 Jun 2010</span> &raquo; <a href="/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails">Advanced non-flat controllers hierarchy with rails</a></li>
+    
+      <li><span>27 Oct 2009</span> &raquo; <a href="/2009/10/objects-behaviour-inheritance-with-rspec">Objects behaviour inheritance with RSpec</a></li>
+    
+  </ul>
+</div>
+
+                </div>
+                    <a href="http://feeds2.feedburner.com/BogdanGusiev?format=xml">
+                        <img src="http://gusiev.com/wp-content/themes/pixeled/images/rss-trans.png" alt="Bogdan Gusiev&#8217;s blog" width="65" height="24" />
+                    </a>
+                </div> <!-- Closes toprss -->
+                <div id="sidebars">
+                    <div id="welcome">
+                        <h2> Welcome to my home page!</h2><p>Feel free to join the discussion by leaving comments, and stay updated by subscribing to the <a href='http://feeds2.feedburner.com/BogdanGusiev?format=xml'>RSS feed</a>.</p>
+
+                    </div><!-- Closes welcome -->
+                    <div class="sidebarbox">
+                        <h2>Recent Posts</h2>
+                        <ul>
+                            
+                            <li>
+                                <a href='/2011/04/javascript-injection-in-json-inserted-directly-into-script-tag'>JavaScript injection in JSON inserted directly into script tag</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/03/do-git-commits-associated-to-hoptoad-errors'>Do git commits associated to hoptoad errors</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/03/ajax-jquery-debug-javascript'>Debug ajax requests in more easy way</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2010/11/dynamic-context-in-rspec-dont-repeat-yourself'>Dynamic context in Rspec - don't repeat yourself</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2010/09/good-passwords-theory'>Good passwords theory</a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                    <div class="sidebarbox">
+                        <h2>Search</h2>
+                        <p>Use the form below to search the site:</p>
+                        <form method="get" id="searchform" action="http://gusiev.com/">
+                            <input type="text" value="Search keywords" name="s" id="searchbox" onfocus="this.value=''"/>
+                            <input type="submit" class="submitbutton" value="Find it" />
+                        </form>	
+                    </div>
+                    <div class="sidebarbox">
+                        <h2>Browse by tags</h2>
+                    </div>
+
+                </div><!-- Closes Sidebar_full -->
+
+
+
+                <div class="clear"></div>
+            </div> <!-- Closes Sidebars -->
+            <div class="clear"></div>
+
+        </div><!-- Closes Main -->
+
+
+        <div id="morefoot">
+            <!--LiveInternet counter-->
+            <script type="text/javascript">
+                document.write("<a href='http://www.liveinternet.ru/click' "+
+                        "target=_blank><img src='http://counter.yadro.ru/hit?t40.6;r"+
+                        escape(document.referrer)+((typeof(screen)=="undefined")?"":
+                            ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+                                screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+                        ";"+Math.random()+
+                        "' alt='' title='LiveInternet' "+
+                        "border='0' width='31' height='31'><\/a>");
+            </script><!--/LiveInternet-->
+            <!--SpyLOG-->
+            <span id="spylog2009244"></span><script type="text/javascript"> var spylog = { counter: 2009244, image: 26, next: spylog }; document.write(unescape('%3Cscript src%3D"http' + (('https:' == document.location.protocol) ? 's' : '') + '://counter.spylog.com/cnt.js" defer="defer"%3E%3C/script%3E')); </script>
+            <!--SpyLOG-->
+            <script type="text/javascript">
+                var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+                document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+            </script>
+            <script type="text/javascript">
+                try {
+                    var pageTracker = _gat._getTracker("UA-12663165-1");
+                    pageTracker._trackPageview();
+                } catch(err) {}</script>
+            The Content of this blog can be published anywhere with the link to original source.
+
+
+        </div><!-- Closes morefoot -->
+
+
+
+
+    </body>
+</html>
+
+
+

@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+    <head>
+        <title>Bogdan Gusiev's blog</title>
+        <meta name="robots" content="follow, all" />
+        <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
+        <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev?format=xml" />
+        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <title>When BDD user stories is productive</title>
+
+        <link rel="icon" href="/images/favicon.ico"/>
+
+
+    </head>
+
+    <body>
+        <div id="wrapper">
+
+            <div id="header">
+                <h1><a href="http://gusiev.com">Bogdan Gusiev's blog</a></h1>
+                <h2>How to make your Ruby on Rails application</h4>
+            </div> <!-- Closes header -->
+
+
+
+            <div id="catnav">
+                <div id="toprss">
+                    <a href="http://feeds2.feedburner.com/BogdanGusiev?format=xml">
+                        <img src="http://gusiev.com/wp-content/themes/pixeled/images/rss-trans.png" alt="Bogdan Gusiev&#8217;s blog" width="65" height="24" />
+                    </a>
+                </div> <!-- Closes toprss -->
+                <ul id="nav">
+                    <li><a href="http://gusiev.com">Home</a></li>
+                    <li><a href="/?page_id=7">About me</a></li>
+                    <li><a href="/?page_id=13">Contacts</a></li>
+                </ul>
+            </div> <!-- Closes catnav -->
+
+            <div class="clear"></div>
+
+            <div id="main">
+
+                <div id="content">
+                    <div id="post">
+When you are skilled Unit tests writer it is not very easy to estimate the potential of BDD. Moreover in most cases BDD is used as a human-readable wrapper for unit tests. Do you really think that programmers need such abstract layer? Of course not... Users needs them.<br/>
+<!--more-->
+<hr/>
+
+Saying Users I mean every non technical person who will treat to application quality some how.
+Featured innovation of BDD is <strong>User Stories</strong> - a human-readable bit of specification with technical test implementation behind it. <br/>
+Let's review the following example from the blog specification:
+<pre>
+<code>
+  Given I signed up as Author
+    When I write article "TDD and BDD"
+    And text of article is "BDD is ...."
+    And I post article
+    Then I should see "Article is created"
+    And I should see article title "TDD and BDD"
+</code>
+</pre>
+As you can see unlike TDD human readability is the term that was brought to the high priority in BDD. But that is not yet a BDD story.<br/>
+We need the programming implementation for each phrase in the story, like this:
+<pre>
+<code>
+"I signed up as Author":
+     signInAsAuthor();
+</code>
+</pre>
+
+Programmer's task is to chose the implementation that will validate described behavior. User doesn't know about any programming back end of the story. When the test failed he just knows that some behavior of the application is not working properly any more. <br/>
+From this point of view the key principle of user story implementation is that it should <strong>guarantee</strong> with the most high probability that the user can complete described actions.<br/> 
+
+Therefore user stories are the most productive when the implementation is done using <strong>GUI Robots</strong> like SWT bot, Selenium.
+
+
+
+</div>
+
+<div id="related">
+  <h2>Related Posts</h2>
+  <ul class="posts">
+    
+      <li><span>29 Jun 2009</span> &raquo; <a href="/2009/06/bdd-user-stories-productive-tdd-criticism">When BDD user stories is productive</a></li>
+    
+      <li><span>27 Oct 2009</span> &raquo; <a href="/2009/10/objects-behaviour-inheritance-with-rspec">Objects behaviour inheritance with RSpec</a></li>
+    
+      <li><span>30 Jun 2010</span> &raquo; <a href="/2010/06/ultimate-rspec-matcher-to-test-validation">Ultimate rspec matcher to test validation</a></li>
+    
+  </ul>
+</div>
+
+                </div>
+                    <a href="http://feeds2.feedburner.com/BogdanGusiev?format=xml">
+                        <img src="http://gusiev.com/wp-content/themes/pixeled/images/rss-trans.png" alt="Bogdan Gusiev&#8217;s blog" width="65" height="24" />
+                    </a>
+                </div> <!-- Closes toprss -->
+                <div id="sidebars">
+                    <div id="welcome">
+                        <h2> Welcome to my home page!</h2><p>Feel free to join the discussion by leaving comments, and stay updated by subscribing to the <a href='http://feeds2.feedburner.com/BogdanGusiev?format=xml'>RSS feed</a>.</p>
+
+                    </div><!-- Closes welcome -->
+                    <div class="sidebarbox">
+                        <h2>Recent Posts</h2>
+                        <ul>
+                            
+                            <li>
+                                <a href='/2011/04/javascript-injection-in-json-inserted-directly-into-script-tag'>JavaScript injection in JSON inserted directly into script tag</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/03/do-git-commits-associated-to-hoptoad-errors'>Do git commits associated to hoptoad errors</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/03/ajax-jquery-debug-javascript'>Debug ajax requests in more easy way</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2010/11/dynamic-context-in-rspec-dont-repeat-yourself'>Dynamic context in Rspec - don't repeat yourself</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2010/09/good-passwords-theory'>Good passwords theory</a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                    <div class="sidebarbox">
+                        <h2>Search</h2>
+                        <p>Use the form below to search the site:</p>
+                        <form method="get" id="searchform" action="http://gusiev.com/">
+                            <input type="text" value="Search keywords" name="s" id="searchbox" onfocus="this.value=''"/>
+                            <input type="submit" class="submitbutton" value="Find it" />
+                        </form>	
+                    </div>
+                    <div class="sidebarbox">
+                        <h2>Browse by tags</h2>
+                    </div>
+
+                </div><!-- Closes Sidebar_full -->
+
+
+
+                <div class="clear"></div>
+            </div> <!-- Closes Sidebars -->
+            <div class="clear"></div>
+
+        </div><!-- Closes Main -->
+
+
+        <div id="morefoot">
+            <!--LiveInternet counter-->
+            <script type="text/javascript">
+                document.write("<a href='http://www.liveinternet.ru/click' "+
+                        "target=_blank><img src='http://counter.yadro.ru/hit?t40.6;r"+
+                        escape(document.referrer)+((typeof(screen)=="undefined")?"":
+                            ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+                                screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+                        ";"+Math.random()+
+                        "' alt='' title='LiveInternet' "+
+                        "border='0' width='31' height='31'><\/a>");
+            </script><!--/LiveInternet-->
+            <!--SpyLOG-->
+            <span id="spylog2009244"></span><script type="text/javascript"> var spylog = { counter: 2009244, image: 26, next: spylog }; document.write(unescape('%3Cscript src%3D"http' + (('https:' == document.location.protocol) ? 's' : '') + '://counter.spylog.com/cnt.js" defer="defer"%3E%3C/script%3E')); </script>
+            <!--SpyLOG-->
+            <script type="text/javascript">
+                var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+                document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+            </script>
+            <script type="text/javascript">
+                try {
+                    var pageTracker = _gat._getTracker("UA-12663165-1");
+                    pageTracker._trackPageview();
+                } catch(err) {}</script>
+            The Content of this blog can be published anywhere with the link to original source.
+
+
+        </div><!-- Closes morefoot -->
+
+
+
+
+    </body>
+</html>
+
+
+
