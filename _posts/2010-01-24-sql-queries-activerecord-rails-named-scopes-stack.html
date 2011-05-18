@@ -15,9 +15,9 @@ If you ever work with rails application that is a little bit more complex then a
 Let's review the following named_scope that suppose to be usable in different combinations with others:
 <pre><code>named_scope :network_of, lambda {|user|
 {
-:select => "u.*"
-:from => "users u, followings f1, followings f2",
-:conditions => "f1.follower_id = #{user.id} AND " + 
+:select =&gt; "u.*"
+:from =&gt; "users u, followings f1, followings f2",
+:conditions =&gt; "f1.follower_id = #{user.id} AND " + 
 "f1.followed_id = f2.follower_id AND " +
 "f2.followed_id = u.id"
 }</code></pre>

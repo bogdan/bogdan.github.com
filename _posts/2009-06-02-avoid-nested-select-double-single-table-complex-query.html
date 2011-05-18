@@ -28,18 +28,16 @@ order by e.sort_field limit 1;
 </pre>
 Looks not very cool.
 Let's do the select statement from `element` table twice to avoid nesting:
-<pre>
-<code>-- The e1 is the result row and e2 is a helper row 
+<pre><code>-- The e1 is the result row and e2 is a helper row 
 --that was picked up using nested select previously.
 select e1.* from elements e1, elements e2
 --conditional statement will look like
-where e1.sort_field >= e2.sort_field and 
+where e1.sort_field &gt;= e2.sort_field and 
      e1.element_id != e2.element_id and 
      e2.element_id = #value#
 -- and the end of the query remains almost the same
 order by e1.sort_field limit 1
-</code>
-</pre>
+</code></pre>
 
 Do not scare of double select from single table. That is the same technique as if they were different tables.
 

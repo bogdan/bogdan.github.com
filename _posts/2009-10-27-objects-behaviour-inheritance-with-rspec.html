@@ -17,33 +17,28 @@ With Ruby modules(mixins) feature we can build reusable code and include it in d
 <br/>
 
 Let's review the following module that uses one of the Rails callback and adds some logging:<br/>
-<pre>
-<code>
+<pre><code>
 module LoggedModel
   def after_save
     super
     handle_logging
   end
 end
-</code>
-</pre>
+</code></pre>
 and the some tests group for this module:<br/>
 <pre><code>
 describe LoggableModel
   it "should be loggable" do
     LoggableModel.should ...
   end
-end
-</code>
-</pre>
+end</code></pre>
 Now, we have a tested code that is going to be used in many cases like this:<br/>
 <pre><code>class MyModel
   include LoggableModel
   def after_save
     do_some_other_thing
   end
-end
-</code></pre>
+end</code></pre>
 
 OK, let's see what we have: after_save in MyModel overwrites after_save in LoggableModel and breaks the logging. This is simplest example when the behavior inheritance may be broken. Rspec shared examples groups allows you to ensure that the code in LoggableModel is used correctly from any inherited class. Let's change the definithin of LoggableModel tests.<br/>
 <pre><code>

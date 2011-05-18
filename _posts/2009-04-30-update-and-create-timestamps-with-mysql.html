@@ -20,7 +20,7 @@ id integer not null auto_increment primary key,
 stamp_created timestamp default '0000-00-00 00:00:00', 
 stamp_updated timestamp default now() on update now() 
 ); </code></pre>
-Note that it is necessary to enter nulls into both columns during ‘insert’:
+Note that it is necessary to enter nulls into both columns during "insert":
 <pre><code> mysql&gt; insert into test_table(stamp_created, stamp_updated) values(null, null); 
 Query OK, 1 row affected (0.06 sec)
 mysql&gt; select * from t5; 

@@ -13,19 +13,16 @@ Many web developers came to the problem that they are not able to change value o
 <hr/>
 You can simply redraw the html block where your input tag is located. In this case all data will remain the same except the selected file value.
 
-<pre>
-<code>
+<pre><code>
 &lt;div id="uploadFile_div"&gt;
 &lt;input type="file" class="fieldMoz" id="uploadFile" 
             onkeydown="return false;" size="40" name="uploadFile"/&gt;
 &lt;/div&gt;
 &lt;a onclick="clearFileInputField('uploadFile_div')" 
                          href="javascript:noAction();"&gt;Clear&lt;/a&gt;
-</code>
-</pre>
+</code></pre>
 Java Script function below looks strange but acts exactly in the way we want:
-<pre>
-<code> 
+<pre><code> 
 &lt;script&gt;
 function clearFileInputField(tagId) {
     document.getElementById(tagId).innerHTML = 
@@ -33,5 +30,4 @@ function clearFileInputField(tagId) {
 }
 &lt;/script&gt;
             
-</code>
-</pre>
+</code></pre>

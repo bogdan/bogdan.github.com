@@ -32,9 +32,9 @@ This is very special validation because you always need more then one record to 
 <pre><code>describe User do
   context "if user with email 'aa@bb.com' exists" do
     before do
-      User.create!(@valid_attributes.merge(:email => 'aa@bb.com')
+      User.create!(@valid_attributes.merge(:email =&gt; 'aa@bb.com')
     end
-    it { should_not accept_values_for(:email, “aa@bb.com”) }
+    it { should_not accept_values_for(:email, "aa@bb.com") }
   end
 end</code></pre>
 <h3> Summary </h3>
