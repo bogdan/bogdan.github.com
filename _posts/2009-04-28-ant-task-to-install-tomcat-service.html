@@ -14,9 +14,7 @@ If you are familiar to run Apache Tomcat as Windows service, you can install it 
 <hr/>
 First of all let's do some properties setup:
 
-<div class="bordered">
-<code>
-catalina.home=d:/java/tomcat-6.0.18
+<code>catalina.home=d:/java/tomcat-6.0.18
 tomcat.executable=${catalina.home}/bin/tomcat6.exe
 tomcat.service.executable=\
 ${catalina.home}/bin/service.bat
@@ -25,7 +23,6 @@ tomcat.service.name=myproject
 tomcat.service.jvm.ms=128
 tomcat.service.jvm.mx=256
 </code>
-</div>
 Service startup task consists of 5 exec commands:
 <ul>
 	<li>Stop service if currently running</li>

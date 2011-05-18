@@ -20,8 +20,8 @@ But that is huge contradiction with BDD methodology because it doesn't make you 
 <h3> Easy DSL and Implementation </h3>
 When I implement validation everything I care about is: what values should be accepted and what values should not. An easy DSL that realize this pattern would be:
 <pre><code>describe User do
-  it { should accept_values_for(:email, “john@example.com”, “lambda@gusiev.com”) }
-  it { should_not accept_values_for(:email, “invalid”, nil, “a@b”, “john@.com”) }
+  it { should accept_values_for(:email, "john@example.com", "lambda@gusiev.com") }
+  it { should_not accept_values_for(:email, "invalid", nil, "a@b", "john@.com") }
 end</code></pre> 
 That's it! Two lines of code per attribute. And that is perfectly fine for "test first" principle.<br/>
 Rspec authors take care about custom Rspec matcher. So the implementation is very easy.

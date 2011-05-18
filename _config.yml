@@ -2,5 +2,5 @@ rdiscount: true
 pygments: true
 auto: true
 lsi: true
-#paginate: 10
+paginate: 10
 permalink: "/:year/:month/:title"

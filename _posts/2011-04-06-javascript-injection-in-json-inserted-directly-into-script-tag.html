@@ -30,7 +30,7 @@ Rails core team is aware of that problem and implemented special helper:
     # Note that after this operation is performed the output is not
     # valid JSON. In particular double quotes are removed:
     #
-    #   json_escape('{"name":"john","created_at":"2010-04-28T01:39:31Z","id":1}')
+    #   json_escape('{'name':'john','created_at':'2010-04-28T01:39:31Z','id':1}')
     #   # => {name:john,created_at:2010-04-28T01:39:31Z,id:1}
     #
     # This method is also aliased as +j+, and available as a helper
