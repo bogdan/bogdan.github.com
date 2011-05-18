@@ -78,30 +78,36 @@ ul li ul li {
 }
 /* line 54, css/default.sass */
 .recent-posts .rss {
+  margin-top: 10px;
   display: inline-block;
   float: right;
 }
 
-/* line 59, css/default.sass */
+/* line 60, css/default.sass */
 .pages {
   margin: 35px 60px;
   float: left;
 }
-/* line 62, css/default.sass */
+/* line 63, css/default.sass */
 .pages a {
   padding: 0 20px;
 }
 
-/* line 66, css/default.sass */
+/* line 67, css/default.sass */
 .tags {
   margin: 10px 0;
 }
-/* line 68, css/default.sass */
+/* line 69, css/default.sass */
 .tags a {
   margin: 0 10px;
 }
 
-/* line 71, css/default.sass */
+/* line 72, css/default.sass */
 .header {
   float: left;
+}
+
+/* line 76, css/default.sass */
+.tag-cloud a {
+  margin: 0 2px;
 }
