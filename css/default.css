@@ -1,65 +1,107 @@
-/* line 1, default.sass */
+/* line 1, css/default.sass */
+body {
+  width: 100%;
+}
+
+/* line 4, css/default.sass */
 .clear {
   clear: both;
 }
 
-/* line 4, default.sass */
-p, ul, ol, h5, pre, code {
+/* line 7, css/default.sass */
+h1, h4, p, ul, ol, h5, pre, code {
   margin: 10px 0px;
 }
 
-/* line 7, default.sass */
+/* line 10, css/default.sass */
 pre, code {
   white-space: pre-wrap;
   display: block;
   font-family: monospace;
   margin-left: 20px;
 }
-/* line 12, default.sass */
+/* line 15, css/default.sass */
 pre code, code code {
   margin: 0;
 }
 
-/* line 15, default.sass */
+/* line 18, css/default.sass */
 h2 a {
   font-size: 26px;
 }
 
-/* line 18, default.sass */
+/* line 21, css/default.sass */
 h5 {
   font-size: 18px;
   margin-top: 15px;
 }
 
-/* line 22, default.sass */
-body {
-  width: 100%;
-}
-
-/* line 25, default.sass */
+/* line 26, css/default.sass */
 #wrapper {
   width: 900px;
   margin: 0 auto;
 }
 
-/* line 29, default.sass */
+/* line 30, css/default.sass */
 #content {
   width: 600px;
   float: left;
 }
 
-/* line 33, default.sass */
+/* line 34, css/default.sass */
 #sidebar {
   width: 280px;
   float: right;
 }
 
-/* line 37, default.sass */
+/* line 40, css/default.sass */
 ul li {
   list-style: disc;
-  margin-left: 10px;
 }
-/* line 40, default.sass */
+/* line 42, css/default.sass */
 ul li ul li {
   list-style: circle;
+}
+
+/* line 46, css/default.sass */
+.recent-posts {
+  width: 100%;
+}
+/* line 49, css/default.sass */
+.recent-posts ul li {
+  margin-left: 0px;
+}
+/* line 51, css/default.sass */
+.recent-posts h2 {
+  display: inline-block;
+  float: left;
+}
+/* line 54, css/default.sass */
+.recent-posts .rss {
+  display: inline-block;
+  float: right;
+}
+
+/* line 59, css/default.sass */
+.pages {
+  margin: 35px 60px;
+  float: left;
+}
+/* line 62, css/default.sass */
+.pages a {
+  padding: 0 20px;
+}
+
+/* line 66, css/default.sass */
+.tags {
+  margin: 10px 0;
+}
+/* line 68, css/default.sass */
+.tags a {
+  margin: 0 10px;
+}
+
+/* line 71, css/default.sass */
+.header {
+  float: left;
 }

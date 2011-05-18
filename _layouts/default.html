@@ -7,31 +7,26 @@
         <title>Bogdan Gusiev's blog</title>
         <meta name="robots" content="follow, all" />
         <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
-        <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev?format=xml" />
+        <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="/atom.xml" />
         <link rel="shortcut icon" href="/images/favicon.ico"/>
         <title>{{ page.title }}</title>
-
         <link rel="icon" href="/images/favicon.ico"/>
-
-
     </head>
 
     <body>
         <div id="wrapper">
 
-            <div id="header">
-                <h1><a href="http://gusiev.com">Bogdan Gusiev's blog</a></h1>
-                <h2>How to make your Ruby on Rails application</h4>
+            <div class="header">
+                <h1><a href="/">Bogdan Gusiev's blog</a></h1>
+                <h4>How to make your Ruby on Rails application</h4>
             </div> <!-- Closes header -->
 
 
 
-            <div id="catnav">
-                <ul id="nav">
-                    <li><a href="http://gusiev.com">Home</a></li>
-                    <li><a href="/?page_id=7">About me</a></li>
-                    <li><a href="/?page_id=13">Contacts</a></li>
-                </ul>
+            <div class="pages">
+                <a href="/">Home</a>
+                <a href="/?page_id=7">About me</a>
+                <a href="/?page_id=13">Contacts</a>
             </div> <!-- Closes catnav -->
 
             <div class="clear"></div>
@@ -41,19 +36,13 @@
                 <div id="content">
                     {{ content }}
                 </div>
-                <a href="http://feeds2.feedburner.com/BogdanGusiev?format=xml">
-                    <img src="http://gusiev.com/wp-content/themes/pixeled/images/rss-trans.png" alt="Bogdan Gusiev&#8217;s blog" width="65" height="24" />
-                </a>
                 <div id="sidebar">
-                    <div id="welcome">
-                        <h2> Welcome to my home page!</h2>
-                        <p>
-                            Feel free to join the discussion by leaving comments, and stay updated by subscribing to the 
-                            <a href='http://feeds2.feedburner.com/BogdanGusiev?format=xml'>RSS feed</a>.
-                        </p>
-                    </div><!-- Closes welcome -->
-                    <div class="sidebarbox">
+                    <div class="recent-posts">
                         <h2>Recent Posts</h2>
+                        <a class="rss" href="/atom.xml">
+                            <img src="/images/rss.png" alt="Bogdan Gusiev&#8217;s blog" />
+                        </a>
+                        <div class="clear"></div>
                         <ul>
                             {% for post in site.posts limit:5 %}
                             <li>
@@ -62,14 +51,15 @@
                             {% endfor %}
                         </ul>
                     </div>
-                    <div class="sidebarbox">
-                        <h2>Search</h2>
-                        <p>Use the form below to search the site:</p>
-                        <form method="get" id="searchform" action="http://gusiev.com/">
-                            <input type="text" value="Search keywords" name="s" id="searchbox" onfocus="this.value=''"/>
-                            <input type="submit" class="submitbutton" value="Find it" />
-                        </form>	
-                    </div>
+                    <!--<div class="sidebarbox">-->
+                        <!--TODO: enable search-->
+                        <!--<h2>Search</h2>-->
+                        <!--<p>Use the form below to search the site:</p>-->
+                        <!--<form method="get" id="searchform" action="http://gusiev.com/">-->
+                            <!--<input type="text" value="Search keywords" name="s" id="searchbox" onfocus="this.value=''"/>-->
+                            <!--<input type="submit" class="submitbutton" value="Find it" />-->
+                        <!--</form>	-->
+                    <!--</div>-->
                     <div class="sidebarbox">
                         <h2>Browse by tags</h2>
                     </div>

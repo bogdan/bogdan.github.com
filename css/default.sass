@@ -1,7 +1,10 @@
+body
+  width: 100%
+  //font-family:
 .clear
   clear: both
 
-p, ul, ol, h5, pre, code
+h1, h4, p, ul, ol, h5, pre, code
   margin: 10px 0px
   
 pre, code
@@ -19,8 +22,6 @@ h5
   font-size: 18px
   margin-top: 15px
 
-body
-  width: 100%
 
 #wrapper
   width: 900px
@@ -34,8 +35,40 @@ body
   width: 280px
   float: right
 
-ul li
-  list-style: disc
-  margin-left: 10px
-  ul li
-    list-style: circle
+ul
+  //margin-left: 10px
+  li
+    list-style: disc
+    ul li
+      list-style: circle
+
+
+.recent-posts
+  width: 100%
+  ul
+    li
+      margin-left: 0px
+  h2
+    display: inline-block
+    float: left
+  .rss
+    margin-top: 10px
+    display: inline-block
+    float: right
+
+
+.pages
+  margin: 35px 60px
+  float: left
+  a
+    padding: 0 20px
+
+
+.tags
+  margin: 10px 0
+  a
+    margin: 0 10px
+
+.header
+  float: left
+
