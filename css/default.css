@@ -1,34 +1,65 @@
+/* line 1, default.sass */
 .clear {
   clear: both;
 }
 
-code {
-    white-space: pre-wrap;
+/* line 4, default.sass */
+p, ul, ol, h5, pre, code {
+  margin: 10px 0px;
 }
 
+/* line 7, default.sass */
+pre, code {
+  white-space: pre-wrap;
+  display: block;
+  font-family: monospace;
+  margin-left: 20px;
+}
+/* line 12, default.sass */
+pre code, code code {
+  margin: 0;
+}
+
+/* line 15, default.sass */
 h2 a {
-    font-size: 26px;
+  font-size: 26px;
 }
 
+/* line 18, default.sass */
 h5 {
-    font-size: 18px;
+  font-size: 18px;
+  margin-top: 15px;
 }
 
+/* line 22, default.sass */
 body {
-    width: 100%
+  width: 100%;
 }
 
+/* line 25, default.sass */
 #wrapper {
-    width: 900px;
-    margin: 0 auto;
+  width: 900px;
+  margin: 0 auto;
 }
 
+/* line 29, default.sass */
+#content {
+  width: 600px;
+  float: left;
+}
+
+/* line 33, default.sass */
+#sidebar {
+  width: 280px;
+  float: right;
+}
+
+/* line 37, default.sass */
 ul li {
-    list-style: disc;
-    margin-left: 20px;
+  list-style: disc;
+  margin-left: 10px;
 }
-
+/* line 40, default.sass */
 ul li ul li {
-    list-style: circle;
+  list-style: circle;
 }
-
