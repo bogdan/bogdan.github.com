@@ -67,7 +67,7 @@ task :cloud_basic do
     s = posts.count
     if s > 1
       font_size = 14 + (s*1.8);
-      html << "<a href=\"/tag/#{category}/\" title=\"Pages tagged #{category}\" style=\"font-size: #{font_size}px; line-height:#{font_size}px\" rel=\"tag\">#{category}</a> \n"
+      html << "<a href=\"/tags/#{category}.html\" title=\"Pages tagged #{category}\" style=\"font-size: #{font_size}px; line-height:#{font_size}px\" rel=\"tag\">#{category}</a> \n"
     end
   end
 
