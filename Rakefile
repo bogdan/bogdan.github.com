@@ -8,7 +8,7 @@ task :dev => :build do
     `compass watch --sass-dir css --css-dir css`
   end
   j = Thread.new do
-    `jekyll --server --auto`
+    `ejekyll --server --auto`
   end
   sleep(1)
   c.join

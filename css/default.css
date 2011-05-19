@@ -1,156 +1,161 @@
-/* line 6, css/default.sass */
+/* line 6, default.sass */
 body {
   width: 100%;
 }
 
-/* line 9, css/default.sass */
+/* line 9, default.sass */
 .clear {
   clear: both;
 }
 
-/* line 12, css/default.sass */
+/* line 12, default.sass */
 h1, h4, p, ul, ol, h5, pre, code {
   margin: 10px 0px;
 }
 
-/* line 15, css/default.sass */
+/* line 15, default.sass */
 pre, code {
   white-space: pre-wrap;
   display: block;
   font-family: monospace;
   margin-left: 20px;
 }
-/* line 20, css/default.sass */
+/* line 20, default.sass */
 pre code, code code {
   margin: 0;
 }
 
-/* line 23, css/default.sass */
+/* line 23, default.sass */
 h2 a {
   font-size: 26px;
 }
 
-/* line 26, css/default.sass */
+/* line 26, default.sass */
 h5 {
   font-size: 18px;
   margin-top: 15px;
 }
 
-/* line 30, css/default.sass */
+/* line 30, default.sass */
 hr {
   border-style: inset;
   border-width: 1px;
-  border-color: grey;
+  border-color: #eeeeee;
 }
 
-/* line 33, css/default.sass */
+/* line 34, default.sass */
+h1 a, h2 a, h3 a, h4 a, h5 a {
+  text-decoration: none;
+}
+
+/* line 38, default.sass */
 #wrapper {
   width: 920px;
   margin: 0 auto;
 }
-/* line 37, css/default.sass */
+/* line 42, default.sass */
 #wrapper #content {
   width: 600px;
   float: left;
 }
-/* line 41, css/default.sass */
+/* line 46, default.sass */
 #wrapper #sidebar {
   width: 280px;
   float: right;
 }
-/* line 45, css/default.sass */
+/* line 50, default.sass */
 #wrapper .vsplit {
   float: left;
   height: 800px;
   margin: 0 15px;
   border-style: inset;
   border-width: 1px;
-  border-color: grey;
+  border-color: #eeeeee;
 }
 
-/* line 55, css/default.sass */
+/* line 60, default.sass */
 ul li {
   list-style: disc;
 }
-/* line 57, css/default.sass */
+/* line 62, default.sass */
 ul li ul li {
   list-style: circle;
 }
 
-/* line 61, css/default.sass */
+/* line 66, default.sass */
 .recent-posts {
   width: 100%;
 }
-/* line 63, css/default.sass */
+/* line 68, default.sass */
 .recent-posts ul {
   padding-left: 25px;
 }
-/* line 65, css/default.sass */
+/* line 70, default.sass */
 .recent-posts ul li {
   margin-left: 0px;
 }
-/* line 67, css/default.sass */
+/* line 72, default.sass */
 .recent-posts h2 {
   display: inline-block;
   float: left;
 }
-/* line 70, css/default.sass */
+/* line 75, default.sass */
 .recent-posts .rss {
   margin-top: 10px;
   display: inline-block;
   float: right;
 }
 
-/* line 78, css/default.sass */
+/* line 83, default.sass */
 .tags {
   margin: 10px 0;
 }
-/* line 80, css/default.sass */
+/* line 85, default.sass */
 .tags a {
   margin: 0 10px;
 }
 
-/* line 84, css/default.sass */
+/* line 89, default.sass */
 .header .title {
   float: left;
 }
-/* line 86, css/default.sass */
+/* line 91, default.sass */
 .header .pages {
   margin: 35px 120px;
   float: left;
 }
-/* line 89, css/default.sass */
+/* line 94, default.sass */
 .header .pages a {
   padding: 0 20px;
 }
-/* line 91, css/default.sass */
+/* line 96, default.sass */
 .header .avatar {
   margin-top: 15px;
   float: right;
 }
-/* line 92, css/default.sass */
+/* line 97, default.sass */
 .header .avatar img {
   width: 64px;
   height: 64px;
 }
-/* line 97, css/default.sass */
+/* line 102, default.sass */
 .header hr {
   margin: 5px 0 10px 0;
 }
 
-/* line 102, css/default.sass */
+/* line 107, default.sass */
 .tag-cloud a {
   margin: 0 2px;
 }
 
-/* line 105, css/default.sass */
+/* line 110, default.sass */
 .footer {
   padding: 10px 0;
   margin: 0 auto;
   width: 100%;
 }
 
-/* line 111, css/default.sass */
+/* line 116, default.sass */
 .post hr {
   margin: 15px 0 25px 0;
 }
