@@ -109,53 +109,54 @@ ul li ul li {
 /* line 83, default.sass */
 .tags {
   margin: 10px 0;
+  float: right;
 }
-/* line 85, default.sass */
+/* line 86, default.sass */
 .tags a {
   margin: 0 10px;
 }
 
-/* line 89, default.sass */
+/* line 90, default.sass */
 .header .title {
   float: left;
 }
-/* line 91, default.sass */
+/* line 92, default.sass */
 .header .pages {
   margin: 35px 120px;
   float: left;
 }
-/* line 94, default.sass */
+/* line 95, default.sass */
 .header .pages a {
   padding: 0 20px;
 }
-/* line 96, default.sass */
+/* line 97, default.sass */
 .header .avatar {
   margin-top: 15px;
   float: right;
 }
-/* line 97, default.sass */
+/* line 98, default.sass */
 .header .avatar img {
   width: 64px;
   height: 64px;
 }
-/* line 102, default.sass */
+/* line 103, default.sass */
 .header hr {
   margin: 5px 0 10px 0;
 }
 
-/* line 107, default.sass */
+/* line 108, default.sass */
 .tag-cloud a {
   margin: 0 2px;
 }
 
-/* line 110, default.sass */
+/* line 111, default.sass */
 .footer {
   padding: 10px 0;
   margin: 0 auto;
   width: 100%;
 }
 
-/* line 116, default.sass */
+/* line 117, default.sass */
 .post hr {
   margin: 15px 0 25px 0;
 }
