@@ -1,3 +1,8 @@
+=borderer
+  border-style: inset
+  border-width: 1px
+  border-color: grey
+
 body
   width: 100%
   //font-family:
@@ -22,18 +27,28 @@ h5
   font-size: 18px
   margin-top: 15px
 
+hr
+  +borderer
 
 #wrapper
-  width: 900px
+  width: 920px
   margin: 0 auto
 
-#content
-  width: 600px
-  float: left
+  #content
+    width: 600px
+    float: left
 
-#sidebar
-  width: 280px
-  float: right
+  #sidebar
+    width: 280px
+    float: right
+
+  .vsplit
+    float: left
+    height: 800px
+    margin: 0 15px
+    +borderer
+
+
 
 ul
   //margin-left: 10px
@@ -46,6 +61,7 @@ ul
 .recent-posts
   width: 100%
   ul
+    padding-left: 25px
     li
       margin-left: 0px
   h2
@@ -57,11 +73,6 @@ ul
     float: right
 
 
-.pages
-  margin: 35px 60px
-  float: left
-  a
-    padding: 0 20px
 
 
 .tags
@@ -70,9 +81,33 @@ ul
     margin: 0 10px
 
 .header
-  float: left
+  .title
+    float: left
+  .pages
+    margin: 35px 120px
+    float: left
+    a
+      padding: 0 20px
+  .avatar
+    img
+      width: 64px
+      height: 64px
+    margin-top: 15px
+    float: right
+  hr
+    margin: 5px 0 10px 0
+
 
 .tag-cloud
   a
     margin: 0 2px
+
+.footer
+  padding: 10px 0
+  margin: 0 auto
+  width: 100%
+
+.post
+  hr
+    margin: 15px 0 25px 0
 

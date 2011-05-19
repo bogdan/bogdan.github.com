@@ -4,12 +4,7 @@ layout: default
 <div id="post">
     <h2>{{ page.title }}</h2>
     {{ content }}
-    <h4 class="tags">
-        <strong>Tags</strong>
-        {% for category in page.tags %}
-        <a href="/tags/{{ category }}.html">{{ category }}</a>
-        {% endfor %}
-    </h4>
+    {% include tags.html %}
 
     <div id="related">
         <h3>Related Posts</h3>

@@ -8,6 +8,8 @@ title: Move along, nothing to see here
             <a href='{{ post.url }}'>{{ post.title }}</a>
         </h2>
         {{ post.content  }}
+        {% include tags.html %}
+        <hr/>
     </div>
 {% endfor %}
 
