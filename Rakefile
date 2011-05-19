@@ -1,4 +1,9 @@
-task :dev do
+require 'rubygems'
+require 'jekyll'
+require "fileutils"
+require "sass/plugin"
+
+task :dev => :build do
   c = Thread.new do
     `compass watch --sass-dir css --css-dir css`
   end
@@ -10,12 +15,13 @@ task :dev do
   j.join
 end
 
+task :build => [:tags, :cloud, :sass] do
+
+end
+
 desc 'Generate tags page'
 task :tags do
   puts "Generating tags..."
-  require 'rubygems'
-  require 'jekyll'
-  require "fileutils"
 
   include Jekyll::Filters
 
@@ -50,10 +56,8 @@ title: Posts tagged "#{tag}"
 end
 
 
-task :cloud_basic do
+task :cloud do
   puts 'Generating tag cloud...'
-  require 'rubygems'
-  require 'jekyll'
   include Jekyll::Filters
 
   options = Jekyll.configuration({})
@@ -71,51 +75,18 @@ task :cloud_basic do
     end
   end
 
-  File.open('_includes/tags.html', 'w+') do |file|
+  File.open('_includes/cloud.html', 'w') do |file|
     file.puts html
   end
 
   puts 'Done.'
 end
 
-
-task :cloud do
-  puts 'Generating tag cloud...'
-  require 'rubygems'
-  require 'jekyll'
-  include Jekyll::Filters
-
-  options = Jekyll.configuration({})
-  site = Jekyll::Site.new(options)
-  site.read_posts('')
-
-
-  html =<<-HTML
----
-layout: default
-title: Tags
-type: A tag cloud
----
-
-<h1>Tag cloud for {{site.title}}</h1>
-
-    <p>Click on a tag to see the relevant posts.</p>
-  HTML
-
-  site.categories.sort.each do |category, posts|
-    html << <<-HTML
-    HTML
-
-    s = posts.count
-    font_size = 12 + (s*1.5);
-    html << "<a href=\"/tags/#{category}/\" title=\"Entries tagged #{category}\" style=\"font-size: #{font_size}px; line-height:#{font_size}px\">#{category}</a> "
-  end
-
-
-
-  File.open('tags/index.html', 'w+') do |file|
-    file.puts html
-  end
-
-  puts 'Done.'
+task :sass do
+  directory = File.dirname(__FILE__)
+  Sass::Plugin.options[:template_location] = directory
+  Sass::Plugin.options[:css_location] = directory
+  Sass::Plugin.check_for_updates
 end
+
+
