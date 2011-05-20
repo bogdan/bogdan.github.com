@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2011-05-20T17:44:39+03:00</updated>
+ <updated>2011-05-20T17:55:43+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>GitHub</name>
@@ -46,6 +46,8 @@
 &lt;h3 id='problems'&gt;Problems&lt;/h3&gt;
 
 &lt;p&gt;Jekyll looks not very extensible. Some methods are not available in the API. Example: integrate SASS require more pain the ass than it should be. I am planning to fix that in a few days. Another problem I ran into is that github native support don&amp;#8217;t allow you any extension. My suggestion is to generate static content locally with your own code on top of jekyll and upload static content to git repository.&lt;/p&gt;
+
+&lt;p&gt;Currently I build site locally from &lt;a href='http://github.com/bogdan/blog'&gt;source code&lt;/a&gt; and push static content into &lt;a href='http://github.com/bogdan/bogdan.github.com'&gt;separated repository&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h3 id='result'&gt;Result&lt;/h3&gt;
 
