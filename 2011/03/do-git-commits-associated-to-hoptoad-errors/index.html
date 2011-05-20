@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+    <head>
+        <title>Bogdan Gusiev's blog</title>
+        <meta name="robots" content="follow, all" />
+        <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
+        <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="/atom.xml" />
+        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <title>Do git commits associated to hoptoad errors</title>
+        <link rel="icon" href="/images/favicon.ico"/>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+        
+        <div id="wrapper">
+
+            <div class="header">
+                <div class="title">
+                    <h1><a href="/">Bogdan Gusiev's blog</a></h1>
+                    <h4>How to make your Ruby on Rails application</h4>
+                </div>
+
+                <div class="pages">
+                    <a href="/">Home</a>
+                    <a href="/pages/about.html">About me</a>
+                    <a href="/pages/contacts.html">Contacts</a>
+                </div>
+                <a href="/pages/about.html" class="avatar">
+                    <img src="/images/me.jpg"/>
+                </a>
+            <div class="clear"></div>
+            <hr/>
+            </div> <!-- Closes header -->
+
+
+            <div id="main">
+
+                <div id="content">
+                    <div id="post">
+    <h2>
+        Do git commits associated to hoptoad errors
+        <div class="date">28 Mar 2011</div>
+    </h2>
+    We are trying to build a better development workflow by connecting all our tools together.
+So, this time we tried to connect HopToad Application with git commits because sometimes it's better to just paste the link to hoptoad error rather than describe all steps to reproduce. This idea was resulted in the command line interface for hoptoad api with a little git integration - <a target="_blank" href="http://github.com/railsware/shelltoad">Shelltoad</a>.
+<!--more-->
+<br/><br/>
+Currently, in order to resolve hoptoad error we do the following.<br/>
+Check the list of errors:
+<pre><code>$ shelltoad
+[#3374331] production ActionController::MethodNotAllowed: Only put requests are allowed
+[#4023713] production ActiveRecord::StatementInvalid: PGError: ERROR:
+       duplicate key value violates unique constraint "index_companies_on_slug" :
+       INSERT INTO "companies" .....
+</code></pre>
+View the information on the required error.
+ '713' is automatically guess for 4023713
+<pre><code>
+$ shelltoad 713
+ActiveRecord::StatementInvalid: PGError: ERROR: duplicate key value violates unique constraint
+ "index_companies_on_slug" : INSERT INTO "companies"
+("slug", "created_at", "title", "updated_at", "external_url", "logo_id", "custom") VALUES('abbott-associates
+/var/data/www/apps/startwire/shared/bundle/ruby/1.8/gems/activerecord-
+2.3.8/lib/active_record/connection_adapters/abstract_adapter.rb:221
+/var/data/www/apps/startwire/releases/20110218113457/app/models/company.rb:50
+/var/data/www/apps/startwire/releases/20110218113457/app/utils/network_map/populate.rb:9
+/var/data/www/apps/startwire/releases/20110218113457/app/utils/network_map/populate.rb:74
+/var/data/www/apps/startwire/releases/20110218113457/app/utils/network_map/populate.rb:70
+....
+</code></pre>
+Fix the error in the code ...
+Prepare git commit:
+<pre><code>
+$ git add .
+</code></pre>
+Commit the fix to git with connection to hoptoad issue id
+<pre><code>
+$ shelltoad commit 713
+[dev 47f09ec]     http://xxx.hoptoadapp.com//errors/4023713
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+</code></pre>
+
+Commit message will look like this:
+<code><pre>http://startdatelabs.hoptoadapp.com//errors/4023713
+
+ActiveRecord::StatementInvalid: PGError: ERROR: duplicate key value violates unique constraint
+ "index_companies_on_slug" : INSERT INTO "companies"
+("slug", "created_at", "title", "updated_at", "external_url", "logo_id", "custom") VALUES('abbott-associates</pre></code>
+
+
+This help us maintain the links between git and hoptoad automatically.
+
+    <h4 class="tags">
+    
+    
+    <a href="/tags/ruby.html">ruby</a>
+    
+    <a href="/tags/git.html">git</a>
+    
+    <a href="/tags/hoptoad.html">hoptoad</a>
+    
+    <a href="/tags/commit.html">commit</a>
+    
+</h4>
+<div class="clear"></div>
+
+
+    <div id="related">
+        <h3>Related Posts</h3>
+        <ul class="posts">
+            
+            <li><span>26 Aug 2010</span> &raquo; <a href="/2010/08/populate-db-pattern-fake-data">Populate database pattern - why is it so cool?</a></li>
+            
+            <li><span>23 Apr 2009</span> &raquo; <a href="/2009/04/clear-upload-file-input-field">Clear upload file input field </a></li>
+            
+            <li><span>30 Apr 2009</span> &raquo; <a href="/2009/04/update-and-create-timestamps-with-mysql">Update and create timestamps with MySQL</a></li>
+            
+        </ul>
+    </div>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
+
+    //var disqus_identifier = '/2011/03/do-git-commits-associated-to-hoptoad-errors';
+    //var disqus_url = 'http://gusiev.com/2011/03/do-git-commits-associated-to-hoptoad-errors';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+</div>
+
+
+                </div>
+                <div class="vsplit">
+                </div>
+                <div id="sidebar">
+                    <div class="recent-posts">
+                        <h2>Recent Posts</h2>
+                        <a class="rss" href="/atom.xml">
+                            <img src="/images/rss.png" alt="Bogdan Gusiev&#8217;s blog" />
+                        </a>
+                        <div class="clear"></div>
+                        <ul>
+                            
+                            <li>
+                                <a href='/2011/05/migrate-wordpress-jekyll-post-preview'>Finally get rid of WordPress and PHP</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/04/javascript-injection-in-json-inserted-directly-into-script-tag'>JavaScript injection in JSON inserted directly into script tag</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/03/do-git-commits-associated-to-hoptoad-errors'>Do git commits associated to hoptoad errors</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/03/ajax-jquery-debug-javascript'>Debug ajax requests in more easy way</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2010/11/dynamic-context-in-rspec-dont-repeat-yourself'>Dynamic context in Rspec - don't repeat yourself</a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                    <div class="sidebarbox">
+                        <h2>Search</h2>
+                        <p>Use the form below to search the site:</p>
+                        <form method="get" id="searchform" action="">
+                            <input type="text" placeholder="Search keywords" name="s" id="searchbox"/>
+                            <input type="submit" class="submitbutton" value="Find it" />
+                        </form>	
+                        <script>
+                            $('#searchform').submit(function(event) {
+                                event.preventDefault();
+                                window.location.href = "http://google.com/search?q=site:gusiev.com " + $('#searchbox').val();
+                            });
+                        </script>
+                        </div>
+                    <div class="sidebarbox tag-cloud">
+                        <h2>Browse by tags</h2>
+                        <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 19.4px; line-height:19.4px" rel="tag">activerecord</a> 
+<a href="/tags/application.html" title="Pages tagged application" style="font-size: 17.6px; line-height:17.6px" rel="tag">application</a> 
+<a href="/tags/bdd.html" title="Pages tagged bdd" style="font-size: 17.6px; line-height:17.6px" rel="tag">bdd</a> 
+<a href="/tags/behavior.html" title="Pages tagged behavior" style="font-size: 17.6px; line-height:17.6px" rel="tag">behavior</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
+<a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
+<a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
+<a href="/tags/html.html" title="Pages tagged html" style="font-size: 19.4px; line-height:19.4px" rel="tag">html</a> 
+<a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
+<a href="/tags/java.html" title="Pages tagged java" style="font-size: 19.4px; line-height:19.4px" rel="tag">java</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 21.2px; line-height:21.2px" rel="tag">javascript</a> 
+<a href="/tags/named_scope.html" title="Pages tagged named_scope" style="font-size: 17.6px; line-height:17.6px" rel="tag">named_scope</a> 
+<a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
+<a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
+<a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 19.4px; line-height:19.4px" rel="tag">rails</a> 
+<a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 21.2px; line-height:21.2px" rel="tag">rspec</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 24.8px; line-height:24.8px" rel="tag">ruby</a> 
+<a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 17.6px; line-height:17.6px" rel="tag">sql</a> 
+<a href="/tags/test.html" title="Pages tagged test" style="font-size: 17.6px; line-height:17.6px" rel="tag">test</a> 
+<a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
+
+                    </div>
+                </div><!-- Closes Sidebar_full -->
+                <div class="clear"></div>
+            </div> <!-- Closes Sidebar -->
+            <div class="clear"></div>
+
+        </div><!-- Closes Main -->
+
+
+        <div class="footer">
+            <hr/>
+            <!--LiveInternet counter-->
+            <script type="text/javascript">
+                document.write("<a href='http://www.liveinternet.ru/click' "+
+                        "target=_blank><img src='http://counter.yadro.ru/hit?t40.6;r"+
+                        escape(document.referrer)+((typeof(screen)=="undefined")?"":
+                            ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+                                screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+                        ";"+Math.random()+
+                        "' alt='' title='LiveInternet' "+
+                        "border='0' width='31' height='31'><\/a>");
+                </script><!--/LiveInternet-->
+                <!--SpyLOG-->
+                <span id="spylog2009244"></span><script type="text/javascript"> var spylog = { counter: 2009244, image: 26, next: spylog }; document.write(unescape('%3Cscript src%3D"http' + (('https:' == document.location.protocol) ? 's' : '') + '://counter.spylog.com/cnt.js" defer="defer"%3E%3C/script%3E')); </script>
+                <!--SpyLOG-->
+                <script type="text/javascript">
+                    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+                    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+                    </script>
+                    <script type="text/javascript">
+                        try {
+                            var pageTracker = _gat._getTracker("UA-12663165-1");
+                            pageTracker._trackPageview();
+                        } catch(err) {}</script>
+                    The Content of this blog can be published anywhere with the link to original source.
+                </div><!-- Closes morefoot -->
+
+
+
+
+            </body>
+        </html>
+
+
+

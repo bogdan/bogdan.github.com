@@ -1,0 +1,699 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+    <head>
+        <title>Bogdan Gusiev's blog</title>
+        <meta name="robots" content="follow, all" />
+        <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
+        <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="/atom.xml" />
+        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <title>Move along, nothing to see here</title>
+        <link rel="icon" href="/images/favicon.ico"/>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+        
+        <div id="wrapper">
+
+            <div class="header">
+                <div class="title">
+                    <h1><a href="/">Bogdan Gusiev's blog</a></h1>
+                    <h4>How to make your Ruby on Rails application</h4>
+                </div>
+
+                <div class="pages">
+                    <a href="/">Home</a>
+                    <a href="/pages/about.html">About me</a>
+                    <a href="/pages/contacts.html">Contacts</a>
+                </div>
+                <a href="/pages/about.html" class="avatar">
+                    <img src="/images/me.jpg"/>
+                </a>
+            <div class="clear"></div>
+            <hr/>
+            </div> <!-- Closes header -->
+
+
+            <div id="main">
+
+                <div id="content">
+                    
+    <div class="post">
+        <h2>
+            <a href='/2010/04/dom-element-class-html-javascript-reference'>DOM element class - css reference or javascript reference?</a>
+            <div class="date">20 Apr 2010</div>
+        </h2>
+        Designer have used element class attribute for CSS styling for ages. Nowadays classes are also used in javascript selectors. This overlapping cause additional problems: Changes in js may cause broken design and changes in design may cause broken js. The last one may be hard to detect especially when design and css are handled by different person.
+<!--
+<hr/>
+Element class seems the best way to query the element from DOM in js code. Other variants like it's relative possition to other elements are very fragile. Let's say that we have the following DOM:
+<pre><code>&lt;a&gt; Delete&lt;/a&gt;
+&lt;a&gt; Edit&lt;/a&gt;</code></pre>
+And both links are handled with javascript. How would you separate them? 
+<ul>
+	<li><strong>By order</strong>(first, second) will cause problems if designer would like to change the order.</li>
+	<li><strong>By id</strong> will fail if you would have a list of elements where each has these links</li>
+	<li><strong>By label</strong> is just a fuck up and won't work for multi language application</li>
+</ul>
+The only one variant that provide the best stability is reference <strong>By class</strong>.
+But as stated above class also serves for another purpose - styling. 
+
+The thing that might help is a special prefix(for example "js") for all 'JavaScript classes'.
+Like:
+<pre><code>&lt;a class="js-new-comment big-blue-button"&gt; New Comment &lt;/a&gt;</code></pre>
+
+And the convention that classes with prefix should only be used in javascript selectors and classes without prefix in CSS.
+<br/><br/>
+Yes, sometimes it may look like:
+<pre><code>&lt;input type='button' class="js-follow-button follow-button"&gt; Follow this person &lt;/input&gt;</code></pre>
+But that makes sense to eliminate maintenance problem described above.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/javascript.html">javascript</a>
+    
+    <a href="/tags/html.html">html</a>
+    
+    <a href="/tags/dom.html">dom</a>
+    
+    <a href="/tags/css.html">css</a>
+    
+    <a href="/tags/class.html">class</a>
+    
+    <a href="/tags/element.html">element</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2010/04/ruby18-private-protected-incapsulatio'>Ruby1.8: 'private' doesn't give expected level of privacy</a>
+            <div class="date">05 Apr 2010</div>
+        </h2>
+        The classic OOP pattern usually called encapsulation implemented in ruby with <em>private</em> and <em>protected</em> <del>keywords</del> methods. The distinction between API and implementation works great with both. The problem is that <em>private</em> doesn't hide method for inherited classes. 
+<!--
+<hr/>
+See the simple example below:
+
+<pre><code>
+class A
+  private
+  def implementation
+    puts 'private A'
+  end
+end
+
+class B < A
+  def api
+    implementation
+  end
+end
+
+B.new.api
+</code></pre>
+
+And we won't get exception at the last line.<br/>
+The real difference between protected and private methods is more specific.<br/>
+At first: <em>implementation</em> method can not be called like <em>self.implementation</em> even from class A.
+<pre><code>class A
+  def api
+    self.implementation #exception here
+  end
+  private
+  def implementation
+    puts 'private A'
+  end
+end
+
+A.new.api
+</code></pre>
+Seamless pure gap. You can do such call if the method would be protected. Can't imagine the case when this limitation is useful. <br/>
+<br/>
+The second difference is a bit esoteric. Two instances of the same class can access protected methods of each other but not private methods.
+
+<pre><code>class A
+  def api(another) #suppose to receive an instance of a
+    implementation == another.implementation
+  end
+  protected
+  def implementation
+    puts 'private A'
+  end
+end
+A.new.api(A.new)
+</code></pre>
+Fine for <em>protected</em> but fail for <em>private</em>. Well, this kind of protection do not make a real because of it's rareness.
+<br/><br/>
+
+You might do any decision on the points above.<br/>
+My conclusion is to not use <em>private</em> at all, because it doesn't give the level of privacy that I expect. <em>private</em> is not suitable for such an extremely dynamic language as Ruby. 
+
+
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/criticism.html">criticism</a>
+    
+    <a href="/tags/ruby.html">ruby</a>
+    
+    <a href="/tags/encapsulation.html">encapsulation</a>
+    
+    <a href="/tags/privacy.html">privacy</a>
+    
+    <a href="/tags/method.html">method</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2010/03/quality-develop-application-improve-usability-design'>A dream to develop application that I will use</a>
+            <div class="date">29 Mar 2010</div>
+        </h2>
+        Developing sites for communities you never join, enterprise applications for company you never work in, services you never find useful... a serious problem of IT industry. All misunderstanding between customers and developers come from that reason.
+<br/><br/>
+It would be so great if we could always feel ourselves as a user of our applications and make  something useful, but not spend time on improving features that won't be familiar. Being a user of the developed application makes it really possible to develop ergonomic and pretty design.
+<br/><br/>
+Unfortunately most of the companies are ignoring that simple rule and unfortunately in some cases it is hard to follow. But anyway that is the only one way to build the best product.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/application.html">application</a>
+    
+    <a href="/tags/quality.html">quality</a>
+    
+    <a href="/tags/design.html">design</a>
+    
+    <a href="/tags/usability.html">usability</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2010/01/sql-queries-activerecord-rails-named-scopes-stack'>Advanced SQL and named scopes stack with ActiveRecord</a>
+            <div class="date">24 Jan 2010</div>
+        </h2>
+        If you ever work with rails application that is a little bit more complex then a simple CRUD you would know that some of the ActiveRecord magic doesn't work for complex SQL queries. I am primary talking about named scopes stack feature.<br/>
+<!--
+<hr/>
+Let's review the following named_scope that suppose to be usable in different combinations with others:
+<pre><code>named_scope :network_of, lambda {|user|
+{
+:select =&gt; "u.*"
+:from =&gt; "users u, followings f1, followings f2",
+:conditions =&gt; "f1.follower_id = #{user.id} AND " + 
+"f1.followed_id = f2.follower_id AND " +
+"f2.followed_id = u.id"
+}</code></pre>
+It suppose to returns all people that are followed by people that are followed by the given person.
+From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL.
+But this solution will have some issues with Active Record named scopes stack magic.
+See that User.network_for(current_user).all(:limit =>5) will result in SQL exception primary because (:limit => 5) doesn't know about the table alias "users u".
+We can not use it in fact.<br/>
+The second problem comes to the foreground when we will try to use ActiveRecord features like
+User.network_for(current_user).all(:include => :orders). ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.<br/>
+The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make "users" table to be the last one declared in :from parameter.
+<pre><code>:select => "users.*"
+:from => "followings f1, followings f2, users",
+:conditions => "f1.follower_id = #{user.id} AND " + 
+"f1.followed_id = f2.follower_id AND " +
+"f2.followed_id = users.id"</code></pre>
+Summary I would say that using :joins instead of :from/:conditions would give more flexibility and stackability to your named scopes but sometimes :from is more clear and here you got the tip how to use it.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/sql.html">sql</a>
+    
+    <a href="/tags/query.html">query</a>
+    
+    <a href="/tags/ruby.html">ruby</a>
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    <a href="/tags/activerecord.html">activerecord</a>
+    
+    <a href="/tags/named_scope.html">named_scope</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/12/vim-as-ruby-on-rails-ide-development-perfomanc'>Vim as IDE - new development era for me</a>
+            <div class="date">01 Dec 2009</div>
+        </h2>
+        I was using Vim to do the minor editing in config files for ages. Vim is advanced on basic navigation and editing operations. However I was always prefer IDE for programming because of it's specific to language navigation('go to definition' feature is awesome!), integrated debugger. But while gaining the experience I noticed that all advanced features began to be less important then basic ones. And you should try Vim if you feel the same.<br/>
+<!--
+<hr/>
+
+The basic concept of vim is that: Vim think in the same way as you do. For example: I want to delete 'd' everything inside 'i' brackets ')' and vim understands my command: di) <br/>
+You shouldn't type a dozen of button to move cursor around and finally delete the selected fragment. 
+It's hard to adapt because people are use to think in the way that there text editor do. Vim does vice versa. Some people are saying that they don't like vim because it make them think a lot. That's wrong! Vim is trying to make you free from thinking about editing and concentrate on the content.<br/>
+
+General editing in Vim considered up to every small details. Ask yourself if there is some usual task that I am doing inefficiently and search the Vim feature to optimize that in 3-5 keys. And in ninety nine percent of cases you will find it as built in vim command or a plugin.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/vim.html">vim</a>
+    
+    <a href="/tags/perfomance.html">perfomance</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/10/objects-behaviour-inheritance-with-rspec'>Objects behaviour inheritance with RSpec</a>
+            <div class="date">27 Oct 2009</div>
+        </h2>
+        About half of a year ago I was writing about <a href="http://gusiev.com/2009/05/what-do-you-expect-from-interface/">object interface and Liskov Substitution Princeple</a>. In short: Any class instance that extends the base class should pass all <span style="text-decoration: line-through;">unit tests</span> behaviour tests written for base class instance. It was a surprise for me that this concept has already been implemented in RSpec.<br/><br/>
+
+<!--
+My previous article was primary inspired by Java programming language and it's interface concept. Unlike Java, Ruby does not have interfaces, but behaviour inheritance is still actual for both languages. RSpec seems the first testing framework that provide the ability to validate LSP and behavior inheritance with 'it_should_behave_like'. <br/>
+With Ruby modules(mixins) feature we can build reusable code and include it in different classes<a href="http://ruby-doc.org/core/classes/Module.html">(read more)</a>. With RSpec we can bundle the tests as well.<br/>
+
+<br/>
+
+Let's review the following module that uses one of the Rails callback and adds some logging:<br/>
+<pre><code>
+module LoggedModel
+  def after_save
+    super
+    handle_logging
+  end
+end
+</code></pre>
+and the some tests group for this module:<br/>
+<pre><code>
+describe LoggableModel
+  it "should be loggable" do
+    LoggableModel.should ...
+  end
+end</code></pre>
+Now, we have a tested code that is going to be used in many cases like this:<br/>
+<pre><code>class MyModel
+  include LoggableModel
+  def after_save
+    do_some_other_thing
+  end
+end</code></pre>
+
+OK, let's see what we have: after_save in MyModel overwrites after_save in LoggableModel and breaks the logging. This is simplest example when the behavior inheritance may be broken. Rspec shared examples groups allows you to ensure that the code in LoggableModel is used correctly from any inherited class. Let's change the definithin of LoggableModel tests.<br/>
+<pre><code>
+shared_examples_for "logged model" do
+  it "should be loggable" do
+    subject.should...
+  end
+end
+</code>
+</pre>
+'Subject' is the ultimate RSpec magic that let us make a simple abstraction with the tested class and reuse these shared examples in MyModel spec:
+<pre>
+<code>describe MyModel do
+  it_should_behave_like 'loggable model'
+end</code>
+</pre>
+In this way we will rerun the LoggableModel examples for MyModel and make sure that it's behavior wasn't broken.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/test.html">test</a>
+    
+    <a href="/tags/ruby.html">ruby</a>
+    
+    <a href="/tags/rspec.html">rspec</a>
+    
+    <a href="/tags/behaviour.html">behaviour</a>
+    
+    <a href="/tags/inheritance.html">inheritance</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/07/computer-science-programming-criticism-object-database-design'>Computer science ain't as good as it should be</a>
+            <div class="date">30 Jul 2009</div>
+        </h2>
+        When I start studying computer science in the University class I truly believe that it is all I need to get started writing good programs. Algorithms > Functional programming > OOP > Databases > MVC is a step-by-step path of all people that learn programming of the web application. But...
+<!--
+<br/><br/>
+Programming basics like conditions, variables, cycles and functions are mandatory for everyone just like writing and speaking for a baby.<br/> 
+
+But more advanced knowledge are less useful and optional. All of these:
+<ul>
+	<li>Object hierarchy</li>
+	<li>Normalized database model</li>
+</ul>
+are turned into dust by more important
+<ul>
+	<li>Do it as fast as possible</li>
+	<li>Customer wants!</li>
+</ul>
+
+Each framework declare it's own way to organize the application Classes. If you are working on CRUD(create-read-update-delete) data application you don't need to think about object hierarchy yourself anymore. All you need to do is understand where you need place the function that handle data processing. And the principles a well declined in the framework manual. 
+Normalized database is only a myth in a real world application. In 80% of cases the database design is evident to the developer. In other 20% the database couldn't be normalized at all.<br/>
+<br/>
+
+When you start learning programming try to let your knowledge be "moved to production" as fast as possible. In other words: Have a programming practice as fast as possible and you will understand what kind of programming theory you really need. Concentrate your education on all cases you met and avoid learning things that you could possible come across.   
+
+
+
+
+
+
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/programming.html">programming</a>
+    
+    <a href="/tags/database.html">database</a>
+    
+    <a href="/tags/criticism.html">criticism</a>
+    
+    <a href="/tags/science.html">science</a>
+    
+    <a href="/tags/oop.html">oop</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/06/bdd-user-stories-productive-tdd-criticism'>When BDD user stories is productive</a>
+            <div class="date">29 Jun 2009</div>
+        </h2>
+        When you are skilled Unit tests writer it is not very easy to estimate the potential of BDD. Moreover in most cases BDD is used as a human-readable wrapper for unit tests. Do you really think that programmers need such abstract layer? Of course not... Users needs them.<br/>
+<!--
+<hr/>
+
+Saying Users I mean every non technical person who will treat to application quality some how.
+Featured innovation of BDD is <strong>User Stories</strong> - a human-readable bit of specification with technical test implementation behind it. <br/>
+Let's review the following example from the blog specification:
+<pre><code>
+  Given I signed up as Author
+    When I write article "TDD and BDD"
+    And text of article is "BDD is ...."
+    And I post article
+    Then I should see "Article is created"
+    And I should see article title "TDD and BDD"
+</code></pre>
+As you can see unlike TDD human readability is the term that was brought to the high priority in BDD. But that is not yet a BDD story.<br/>
+We need the programming implementation for each phrase in the story, like this:
+<pre><code>
+"I signed up as Author":
+     signInAsAuthor();
+</code></pre>
+
+Programmer's task is to chose the implementation that will validate described behavior. User doesn't know about any programming back end of the story. When the test failed he just knows that some behavior of the application is not working properly any more. <br/>
+From this point of view the key principle of user story implementation is that it should <strong>guarantee</strong> with the most high probability that the user can complete described actions.<br/> 
+
+Therefore user stories are the most productive when the implementation is done using <strong>GUI Robots</strong> like SWT bot, Selenium.
+
+
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/criticism.html">criticism</a>
+    
+    <a href="/tags/bdd.html">bdd</a>
+    
+    <a href="/tags/tdd.html">tdd</a>
+    
+    <a href="/tags/test.html">test</a>
+    
+    <a href="/tags/behavior.html">behavior</a>
+    
+    <a href="/tags/application.html">application</a>
+    
+    <a href="/tags/user story.html">user story</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/06/pragmatic-review-view-google-wave-criticism-technolog'>Pragmatic review of Google Wave technology</a>
+            <div class="date">08 Jun 2009</div>
+        </h2>
+        Have a good time watching the <a href="http://www.youtube.com/watch?v=v_UyVmITiYQ">Google Wave presentation video</a>. Looks like an excellent open technology that will make our life easier. I like the overall idea. It is really awesome. But I personally admit some things that seems useless to me...<br/>
+<!--
+<hr/>
+Starting from the very beginning I need to say: Wow! Now we can organize all communication threads to the widespread object called <strong>Wave</strong> that will be readable and editable by any other application. No more browsing dozen of sites and tracking all changes around - all interested waves can be reorganized in the way you want.<br/>
+Let's review the features now:<br/>
+<ul>
+	<li> Act as Wiki. Wiki can be handled via Waves too, but not sure about parallel editing. That looks sexy on presentation but has no sense in action.</li>
+	<li>Translation to another languages. I would like to have that on my desktop. Don't think it would be useful then doing the real time communication. Machine translation never was good enough.</li>	
+  <li> Spell checker based on language model. Many people around worked on language model and no one has built it strong enough to handle automatic spell check. Let's wait for release and see if Google guys reach the success here.</li>
+
+</ul>
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/criticism.html">criticism</a>
+    
+    <a href="/tags/technology.html">technology</a>
+    
+    <a href="/tags/review.html">review</a>
+    
+    <a href="/tags/wave.html">wave</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/06/avoid-nested-select-double-single-table-complex-query'>Double select from a single table in complex SQL query.</a>
+            <div class="date">02 Jun 2009</div>
+        </h2>
+        When I start learning SQL I have to write a lot of nested queries when working on complex select statements from a single table. Now, I feel more comfortable with it and show how to avoid nesting. There are cases when you have to compare one row of the table with all others to get the result:
+<ul>
+	<li>Select next  element to current by the value of some field</li>
+	<li>Select records that are unique by some complex expression</li>
+	<li>Select all records that have the same parameter as given record.</li>
+</ul>
+You can get rid of nesting in all above cases. Let's review the example.
+<!--
+
+<hr />Let's say we have the list of elements in `elements` table and we have the id of some element in this table. Now we have to get the next element from the list ordered by `sort_field`.
+That could be easily done with the nested select statement:
+<pre>
+<code>select * from elements e 
+where e.sort_field >= 
+            (select * from elements where element_id = #value#) and
+         e.element_id != #value#
+order by e.sort_field limit 1;
+</code>
+</pre>
+Looks not very cool.
+Let's do the select statement from `element` table twice to avoid nesting:
+<pre><code>-- The e1 is the result row and e2 is a helper row 
+--that was picked up using nested select previously.
+select e1.* from elements e1, elements e2
+--conditional statement will look like
+where e1.sort_field &gt;= e2.sort_field and 
+     e1.element_id != e2.element_id and 
+     e2.element_id = #value#
+-- and the end of the query remains almost the same
+order by e1.sort_field limit 1
+</code></pre>
+
+Do not scare of double select from single table. That is the same technique as if they were different tables.
+
+
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/sql.html">sql</a>
+    
+    <a href="/tags/nesting.html">nesting</a>
+    
+    <a href="/tags/query.html">query</a>
+    
+    <a href="/tags/select.html">select</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+
+<div class='paginator'>
+    
+        <div class='next'>
+            <a href='/page3'>
+                Earlier posts &rarr;
+            </a>
+        </div>
+    
+    
+        <div class='prev'>
+            
+                <a href='/'>
+                    &larr; Later posts
+                </a>
+            
+        </div>
+    
+    <div class='clear'></div>
+</div>
+
+                </div>
+                <div class="vsplit">
+                </div>
+                <div id="sidebar">
+                    <div class="recent-posts">
+                        <h2>Recent Posts</h2>
+                        <a class="rss" href="/atom.xml">
+                            <img src="/images/rss.png" alt="Bogdan Gusiev&#8217;s blog" />
+                        </a>
+                        <div class="clear"></div>
+                        <ul>
+                            
+                            <li>
+                                <a href='/2011/05/migrate-wordpress-jekyll-post-preview'>Finally get rid of WordPress and PHP</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/04/javascript-injection-in-json-inserted-directly-into-script-tag'>JavaScript injection in JSON inserted directly into script tag</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/03/do-git-commits-associated-to-hoptoad-errors'>Do git commits associated to hoptoad errors</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/03/ajax-jquery-debug-javascript'>Debug ajax requests in more easy way</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2010/11/dynamic-context-in-rspec-dont-repeat-yourself'>Dynamic context in Rspec - don't repeat yourself</a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                    <div class="sidebarbox">
+                        <h2>Search</h2>
+                        <p>Use the form below to search the site:</p>
+                        <form method="get" id="searchform" action="">
+                            <input type="text" placeholder="Search keywords" name="s" id="searchbox"/>
+                            <input type="submit" class="submitbutton" value="Find it" />
+                        </form>	
+                        <script>
+                            $('#searchform').submit(function(event) {
+                                event.preventDefault();
+                                window.location.href = "http://google.com/search?q=site:gusiev.com " + $('#searchbox').val();
+                            });
+                        </script>
+                        </div>
+                    <div class="sidebarbox tag-cloud">
+                        <h2>Browse by tags</h2>
+                        <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 19.4px; line-height:19.4px" rel="tag">activerecord</a> 
+<a href="/tags/application.html" title="Pages tagged application" style="font-size: 17.6px; line-height:17.6px" rel="tag">application</a> 
+<a href="/tags/bdd.html" title="Pages tagged bdd" style="font-size: 17.6px; line-height:17.6px" rel="tag">bdd</a> 
+<a href="/tags/behavior.html" title="Pages tagged behavior" style="font-size: 17.6px; line-height:17.6px" rel="tag">behavior</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
+<a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
+<a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
+<a href="/tags/html.html" title="Pages tagged html" style="font-size: 19.4px; line-height:19.4px" rel="tag">html</a> 
+<a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
+<a href="/tags/java.html" title="Pages tagged java" style="font-size: 19.4px; line-height:19.4px" rel="tag">java</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 21.2px; line-height:21.2px" rel="tag">javascript</a> 
+<a href="/tags/named_scope.html" title="Pages tagged named_scope" style="font-size: 17.6px; line-height:17.6px" rel="tag">named_scope</a> 
+<a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
+<a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
+<a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 19.4px; line-height:19.4px" rel="tag">rails</a> 
+<a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 21.2px; line-height:21.2px" rel="tag">rspec</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 24.8px; line-height:24.8px" rel="tag">ruby</a> 
+<a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 17.6px; line-height:17.6px" rel="tag">sql</a> 
+<a href="/tags/test.html" title="Pages tagged test" style="font-size: 17.6px; line-height:17.6px" rel="tag">test</a> 
+<a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
+
+                    </div>
+                </div><!-- Closes Sidebar_full -->
+                <div class="clear"></div>
+            </div> <!-- Closes Sidebar -->
+            <div class="clear"></div>
+
+        </div><!-- Closes Main -->
+
+
+        <div class="footer">
+            <hr/>
+            <!--LiveInternet counter-->
+            <script type="text/javascript">
+                document.write("<a href='http://www.liveinternet.ru/click' "+
+                        "target=_blank><img src='http://counter.yadro.ru/hit?t40.6;r"+
+                        escape(document.referrer)+((typeof(screen)=="undefined")?"":
+                            ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+                                screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+                        ";"+Math.random()+
+                        "' alt='' title='LiveInternet' "+
+                        "border='0' width='31' height='31'><\/a>");
+                </script><!--/LiveInternet-->
+                <!--SpyLOG-->
+                <span id="spylog2009244"></span><script type="text/javascript"> var spylog = { counter: 2009244, image: 26, next: spylog }; document.write(unescape('%3Cscript src%3D"http' + (('https:' == document.location.protocol) ? 's' : '') + '://counter.spylog.com/cnt.js" defer="defer"%3E%3C/script%3E')); </script>
+                <!--SpyLOG-->
+                <script type="text/javascript">
+                    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+                    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+                    </script>
+                    <script type="text/javascript">
+                        try {
+                            var pageTracker = _gat._getTracker("UA-12663165-1");
+                            pageTracker._trackPageview();
+                        } catch(err) {}</script>
+                    The Content of this blog can be published anywhere with the link to original source.
+                </div><!-- Closes morefoot -->
+
+
+
+
+            </body>
+        </html>
+
+
+

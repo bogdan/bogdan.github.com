@@ -16,7 +16,17 @@ task :dev => :build do
 end
 
 task :build => [:tags, :cloud, :sass] do
-
+  def f(name)
+    File.dirname(__FILE__) + "/" + name
+  end
+  begin
+    FileUtils.mkdir_p(f("build"))
+    FileUtils.mkdir_p(f("tmp"))
+    FileUtils.mv(f("build/.git"), f("tmp"))
+    puts `jekyll --no-auto build`
+  ensure
+    FileUtils.mv(f("tmp/.git"), f("build"))
+  end
 end
 
 desc 'Generate tags page'
@@ -83,7 +93,7 @@ task :cloud do
 end
 
 task :sass do
-  directory = File.dirname(__FILE__)
+  directory = File.dirname(__FILE__) + "/css"
   Sass::Plugin.options[:template_location] = directory
   Sass::Plugin.options[:css_location] = directory
   Sass::Plugin.check_for_updates

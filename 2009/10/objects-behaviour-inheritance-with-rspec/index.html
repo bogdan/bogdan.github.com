@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+    <head>
+        <title>Bogdan Gusiev's blog</title>
+        <meta name="robots" content="follow, all" />
+        <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
+        <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="/atom.xml" />
+        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <title>Objects behaviour inheritance with RSpec</title>
+        <link rel="icon" href="/images/favicon.ico"/>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+        
+        <div id="wrapper">
+
+            <div class="header">
+                <div class="title">
+                    <h1><a href="/">Bogdan Gusiev's blog</a></h1>
+                    <h4>How to make your Ruby on Rails application</h4>
+                </div>
+
+                <div class="pages">
+                    <a href="/">Home</a>
+                    <a href="/pages/about.html">About me</a>
+                    <a href="/pages/contacts.html">Contacts</a>
+                </div>
+                <a href="/pages/about.html" class="avatar">
+                    <img src="/images/me.jpg"/>
+                </a>
+            <div class="clear"></div>
+            <hr/>
+            </div> <!-- Closes header -->
+
+
+            <div id="main">
+
+                <div id="content">
+                    <div id="post">
+    <h2>
+        Objects behaviour inheritance with RSpec
+        <div class="date">27 Oct 2009</div>
+    </h2>
+    About half of a year ago I was writing about <a href="http://gusiev.com/2009/05/what-do-you-expect-from-interface/">object interface and Liskov Substitution Princeple</a>. In short: Any class instance that extends the base class should pass all <span style="text-decoration: line-through;">unit tests</span> behaviour tests written for base class instance. It was a surprise for me that this concept has already been implemented in RSpec.<br/><br/>
+
+<!--more-->
+My previous article was primary inspired by Java programming language and it's interface concept. Unlike Java, Ruby does not have interfaces, but behaviour inheritance is still actual for both languages. RSpec seems the first testing framework that provide the ability to validate LSP and behavior inheritance with 'it_should_behave_like'. <br/>
+With Ruby modules(mixins) feature we can build reusable code and include it in different classes<a href="http://ruby-doc.org/core/classes/Module.html">(read more)</a>. With RSpec we can bundle the tests as well.<br/>
+
+<br/>
+
+Let's review the following module that uses one of the Rails callback and adds some logging:<br/>
+<pre><code>
+module LoggedModel
+  def after_save
+    super
+    handle_logging
+  end
+end
+</code></pre>
+and the some tests group for this module:<br/>
+<pre><code>
+describe LoggableModel
+  it "should be loggable" do
+    LoggableModel.should ...
+  end
+end</code></pre>
+Now, we have a tested code that is going to be used in many cases like this:<br/>
+<pre><code>class MyModel
+  include LoggableModel
+  def after_save
+    do_some_other_thing
+  end
+end</code></pre>
+
+OK, let's see what we have: after_save in MyModel overwrites after_save in LoggableModel and breaks the logging. This is simplest example when the behavior inheritance may be broken. Rspec shared examples groups allows you to ensure that the code in LoggableModel is used correctly from any inherited class. Let's change the definithin of LoggableModel tests.<br/>
+<pre><code>
+shared_examples_for "logged model" do
+  it "should be loggable" do
+    subject.should...
+  end
+end
+</code>
+</pre>
+'Subject' is the ultimate RSpec magic that let us make a simple abstraction with the tested class and reuse these shared examples in MyModel spec:
+<pre>
+<code>describe MyModel do
+  it_should_behave_like 'loggable model'
+end</code>
+</pre>
+In this way we will rerun the LoggableModel examples for MyModel and make sure that it's behavior wasn't broken.
+
+    <h4 class="tags">
+    
+    
+    <a href="/tags/test.html">test</a>
+    
+    <a href="/tags/ruby.html">ruby</a>
+    
+    <a href="/tags/rspec.html">rspec</a>
+    
+    <a href="/tags/behaviour.html">behaviour</a>
+    
+    <a href="/tags/inheritance.html">inheritance</a>
+    
+</h4>
+<div class="clear"></div>
+
+
+    <div id="related">
+        <h3>Related Posts</h3>
+        <ul class="posts">
+            
+            <li><span>08 Jun 2010</span> &raquo; <a href="/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails">Advanced non-flat controllers hierarchy with rails</a></li>
+            
+            <li><span>11 Jul 2010</span> &raquo; <a href="/2010/07/bdd-rspec-matcher-to-test-named_scope-scoped-rails-3">Ultimate rspec matcher to test named_scope or scoped</a></li>
+            
+            <li><span>05 Apr 2010</span> &raquo; <a href="/2010/04/ruby18-private-protected-incapsulatio">Ruby1.8: 'private' doesn't give expected level of privacy</a></li>
+            
+        </ul>
+    </div>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
+
+    //var disqus_identifier = '/2009/10/objects-behaviour-inheritance-with-rspec';
+    //var disqus_url = 'http://gusiev.com/2009/10/objects-behaviour-inheritance-with-rspec';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+</div>
+
+
+                </div>
+                <div class="vsplit">
+                </div>
+                <div id="sidebar">
+                    <div class="recent-posts">
+                        <h2>Recent Posts</h2>
+                        <a class="rss" href="/atom.xml">
+                            <img src="/images/rss.png" alt="Bogdan Gusiev&#8217;s blog" />
+                        </a>
+                        <div class="clear"></div>
+                        <ul>
+                            
+                            <li>
+                                <a href='/2011/05/migrate-wordpress-jekyll-post-preview'>Finally get rid of WordPress and PHP</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/04/javascript-injection-in-json-inserted-directly-into-script-tag'>JavaScript injection in JSON inserted directly into script tag</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/03/do-git-commits-associated-to-hoptoad-errors'>Do git commits associated to hoptoad errors</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/03/ajax-jquery-debug-javascript'>Debug ajax requests in more easy way</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2010/11/dynamic-context-in-rspec-dont-repeat-yourself'>Dynamic context in Rspec - don't repeat yourself</a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                    <div class="sidebarbox">
+                        <h2>Search</h2>
+                        <p>Use the form below to search the site:</p>
+                        <form method="get" id="searchform" action="">
+                            <input type="text" placeholder="Search keywords" name="s" id="searchbox"/>
+                            <input type="submit" class="submitbutton" value="Find it" />
+                        </form>	
+                        <script>
+                            $('#searchform').submit(function(event) {
+                                event.preventDefault();
+                                window.location.href = "http://google.com/search?q=site:gusiev.com " + $('#searchbox').val();
+                            });
+                        </script>
+                        </div>
+                    <div class="sidebarbox tag-cloud">
+                        <h2>Browse by tags</h2>
+                        <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 19.4px; line-height:19.4px" rel="tag">activerecord</a> 
+<a href="/tags/application.html" title="Pages tagged application" style="font-size: 17.6px; line-height:17.6px" rel="tag">application</a> 
+<a href="/tags/bdd.html" title="Pages tagged bdd" style="font-size: 17.6px; line-height:17.6px" rel="tag">bdd</a> 
+<a href="/tags/behavior.html" title="Pages tagged behavior" style="font-size: 17.6px; line-height:17.6px" rel="tag">behavior</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
+<a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
+<a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
+<a href="/tags/html.html" title="Pages tagged html" style="font-size: 19.4px; line-height:19.4px" rel="tag">html</a> 
+<a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
+<a href="/tags/java.html" title="Pages tagged java" style="font-size: 19.4px; line-height:19.4px" rel="tag">java</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 21.2px; line-height:21.2px" rel="tag">javascript</a> 
+<a href="/tags/named_scope.html" title="Pages tagged named_scope" style="font-size: 17.6px; line-height:17.6px" rel="tag">named_scope</a> 
+<a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
+<a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
+<a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 19.4px; line-height:19.4px" rel="tag">rails</a> 
+<a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 21.2px; line-height:21.2px" rel="tag">rspec</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 24.8px; line-height:24.8px" rel="tag">ruby</a> 
+<a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 17.6px; line-height:17.6px" rel="tag">sql</a> 
+<a href="/tags/test.html" title="Pages tagged test" style="font-size: 17.6px; line-height:17.6px" rel="tag">test</a> 
+<a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
+
+                    </div>
+                </div><!-- Closes Sidebar_full -->
+                <div class="clear"></div>
+            </div> <!-- Closes Sidebar -->
+            <div class="clear"></div>
+
+        </div><!-- Closes Main -->
+
+
+        <div class="footer">
+            <hr/>
+            <!--LiveInternet counter-->
+            <script type="text/javascript">
+                document.write("<a href='http://www.liveinternet.ru/click' "+
+                        "target=_blank><img src='http://counter.yadro.ru/hit?t40.6;r"+
+                        escape(document.referrer)+((typeof(screen)=="undefined")?"":
+                            ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+                                screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+                        ";"+Math.random()+
+                        "' alt='' title='LiveInternet' "+
+                        "border='0' width='31' height='31'><\/a>");
+                </script><!--/LiveInternet-->
+                <!--SpyLOG-->
+                <span id="spylog2009244"></span><script type="text/javascript"> var spylog = { counter: 2009244, image: 26, next: spylog }; document.write(unescape('%3Cscript src%3D"http' + (('https:' == document.location.protocol) ? 's' : '') + '://counter.spylog.com/cnt.js" defer="defer"%3E%3C/script%3E')); </script>
+                <!--SpyLOG-->
+                <script type="text/javascript">
+                    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+                    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+                    </script>
+                    <script type="text/javascript">
+                        try {
+                            var pageTracker = _gat._getTracker("UA-12663165-1");
+                            pageTracker._trackPageview();
+                        } catch(err) {}</script>
+                    The Content of this blog can be published anywhere with the link to original source.
+                </div><!-- Closes morefoot -->
+
+
+
+
+            </body>
+        </html>
+
+
+

@@ -1,0 +1,616 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+    <head>
+        <title>Bogdan Gusiev's blog</title>
+        <meta name="robots" content="follow, all" />
+        <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
+        <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="/atom.xml" />
+        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <title>Move along, nothing to see here</title>
+        <link rel="icon" href="/images/favicon.ico"/>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+        
+        <div id="wrapper">
+
+            <div class="header">
+                <div class="title">
+                    <h1><a href="/">Bogdan Gusiev's blog</a></h1>
+                    <h4>How to make your Ruby on Rails application</h4>
+                </div>
+
+                <div class="pages">
+                    <a href="/">Home</a>
+                    <a href="/pages/about.html">About me</a>
+                    <a href="/pages/contacts.html">Contacts</a>
+                </div>
+                <a href="/pages/about.html" class="avatar">
+                    <img src="/images/me.jpg"/>
+                </a>
+            <div class="clear"></div>
+            <hr/>
+            </div> <!-- Closes header -->
+
+
+            <div id="main">
+
+                <div id="content">
+                    
+    <div class="post">
+        <h2>
+            <a href='/2009/05/how-to-choose-a-good-sexy-title-for-your-article'>How to choose a sexy title for your article</a>
+            <div class="date">13 May 2009</div>
+        </h2>
+        Most of the people will not spend a minute reading your article if they wouldn't get interested from the very beginning. What resides at the beginning of any article? <strong>It is the title of course.</strong>
+That is why choose a good title is very important for every content posted in the net.
+<!--
+<hr/>
+
+Title should not reflect the overall idea of your article, let it <b>just be cool</b>. Attracting users attention is more important. It should be the key point of what are you righting about<br/> 
+<br/>
+
+Here is my idea: <strong>Title looks cool for the reader if it is close to his thoughts. </strong><br/>
+Reader should feel himself close to the topic you are going to speak about.
+Let's find out and see what do our mind filled in and describe some title choosing principles:
+
+<h4>Emotions</h4>
+Emotions acts like a catalyst. Expressing strong emotion in the title will give you the most effective result. People are getting interested not only when your emotion correspond to their but also vice versa.<br/>
+Example: <a href="/2009/05/jboss-seam-usage-makes-the-application-code-crazy/">JBoss Seam usage makes the application code crazy!</a>
+
+<h4>Questions</h4>
+In most cases the reader is somebody who want to know more about the world. Put a question in the title and it will engage everybody who wants to know the answer. <br/>
+Like this one: <a href="/2009/05/what-do-you-expect-from-interface/">What do you expect from the interface?</a> 
+
+
+<h4>Famous topics</h4>
+<ul>
+	<li>Humor is top theme on every forum, every blog, every site all the time. Joking title is a good way to awake the interest.</li>
+	<li>Sex. You noticed the title of this article, right?</li>
+	<li>Weather</li>
+	<li>Politics</li>
+	<li>Sports</li>	
+        <li>etc.</li>
+</ul>
+<br/>
+Making a slight reference in the title to one of above mentioned topics will attract much more attention to your article<br/>
+I hope this information was helpful. Thanks for reading.
+
+
+
+
+
+
+
+
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/howto.html">howto</a>
+    
+    <a href="/tags/idea.html">idea</a>
+    
+    <a href="/tags/title.html">title</a>
+    
+    <a href="/tags/article.html">article</a>
+    
+    <a href="/tags/reader.html">reader</a>
+    
+    <a href="/tags/author.html">author</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/05/what-do-you-expect-from-interface'>What do you expect from the interface?</a>
+            <div class="date">05 May 2009</div>
+        </h2>
+        Read a great article today - <a href="http://www.google.com.ua/url?sa=t&source=web&ct=res&cd=3&url=http%3A%2F%2Fwww.objectmentor.com%2Fresources%2Farticles%2Flsp.pdf&ei=xjb_Sbi-EJbItge-ocmSDA&usg=AFQjCNFnNI0DmzofjWDQEGILAT-W1L8Mtw&sig2=okCh8NuqsQslKMTSWOlaTw"> Liskov Substitution Principle (LSP)</a>. It let me understand that Interface is not just a list of methods.<br/>
+<!--
+<hr/>
+Let's review the following utility function:
+<div class="bordered">
+<code>public static void processList(List list) {
+          list.clear();
+          list.add(new Object());
+}</code>
+</div>
+It accepts the object that implements <em>java.utils.List</em> interface as the parameter.
+What do you expect to receive in result? The list with one element, right?<br/>
+But does the result really meet your expectation? Who knows, the object that implements list interface do not guarantee you 'Act as container' behavior. It just implements all the methods of the interface and nothing else.<br/>
+Actually all methods of the interface <strike>should have</strike> have a notation of their usage. If you do not follow these notations - you should not inherit your object from the interface even if the object has all the methods of the interface.<br/>
+<br/>
+<strong>Idea:</strong> Maybe one day programming languages will have unit tests as part of interface and validate each instance that implements this interface with them.
+
+
+
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/java.html">java</a>
+    
+    <a href="/tags/programming.html">programming</a>
+    
+    <a href="/tags/interface.html">interface</a>
+    
+    <a href="/tags/idea.html">idea</a>
+    
+    <a href="/tags/lsp.html">lsp</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/05/jboss-seam-usage-makes-the-application-code-crazy'>JBoss Seam usage makes the application code crazy!</a>
+            <div class="date">04 May 2009</div>
+        </h2>
+        Seam Application has a number of good innovations but let's find out if we lose some advantages that we had before. I started application development with JBoss Seam one year ago. With the code base growth I have had more and more problems in workflow development .
+<!--
+<hr/> 
+I noticed that there are many problems which we have not had before, for example: 
+<ul>
+	<li>Utility methods calls are not straight and clear now.</li>
+	<li>Find all usages IDE has feature became useless because of mass EL calls.</li>
+	<li>There is much of the meta programming in such a severe OOP language as Java.</li>
+	<li>It is impossible to debug JSF templates</li>
+	<li>Seam Exceptions look so unclear.</li>
+</ul>
+
+Programming with Seam has all disadvantages of script languages like PHP or Ruby.
+ I definitely admit that some features like Conversations and Native AJAX support made a big step forward. There is a lot of information in the net about How cool is seam but I tried to reveal the underside.<br/>
+<br/>
+Think twice before switching to Seam. 
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/java.html">java</a>
+    
+    <a href="/tags/programming.html">programming</a>
+    
+    <a href="/tags/jboss.html">jboss</a>
+    
+    <a href="/tags/seam.html">seam</a>
+    
+    <a href="/tags/criticism.html">criticism</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/04/update-and-create-timestamps-with-mysql'>Update and create timestamps with MySQL</a>
+            <div class="date">30 Apr 2009</div>
+        </h2>
+        A lot of relational tables need created and update timestamps columns. I prefer having them for all tables with no exception. However, most of applications I am working on are running MySQL. MySQL has minor limitation on timestamps. Unfortunately you can create only one time stamp column that has <em> DEFAULT NOW()</em> value. Read more to see how to avoid this limitation. <!--
+<hr/>
+The simplest way to do this is create the following columns in the table:
+<div class="bordered"><code>stamp_created timestamp default now(), 
+stamp_updated timestamp default now() on update now()) </code></div>
+But MySQL will return the following error: <br/> 
+<em>ERROR 1293 (HY000): Incorrect table definition; there can be only one TIMESTAMP column with CURRENT_ in DEFAULT or ON UPDATE clause</em> <br/>
+You can use only one of the definitions in one table. However here is the way how to create both timestamps columns:
+<pre><code> create table test_table( 
+id integer not null auto_increment primary key, 
+stamp_created timestamp default '0000-00-00 00:00:00', 
+stamp_updated timestamp default now() on update now() 
+); </code></pre>
+Note that it is necessary to enter nulls into both columns during "insert":
+<pre><code> mysql&gt; insert into test_table(stamp_created, stamp_updated) values(null, null); 
+Query OK, 1 row affected (0.06 sec)
+mysql&gt; select * from t5; 
++----+---------------------+---------------------+ 
+| id | stamp_created       | stamp_updated       |
++----+---------------------+---------------------+
+|  2 | 2009-04-30 09:44:35 | 2009-04-30 09:44:35 |
++----+---------------------+---------------------+
+2 rows in set (0.00 sec)  
+mysql&gt; update test_table set id = 3 where id = 2; 
+Query OK, 1 row affected (0.05 sec) Rows matched: 1  Changed: 1  Warnings: 0  
+mysql&gt; select * from test_table;
++----+---------------------+---------------------+
+| id | stamp_created       | stamp_updated       | 
++----+---------------------+---------------------+ 
+|  3 | 2009-04-30 09:44:35 | 2009-04-30 09:46:59 | 
++----+---------------------+---------------------+ 
+2 rows in set (0.00 sec)  
+mysql&gt;
+</code></pre>
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/howto.html">howto</a>
+    
+    <a href="/tags/mysql.html">mysql</a>
+    
+    <a href="/tags/timestamp.html">timestamp</a>
+    
+    <a href="/tags/database.html">database</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/04/some-programming-aphorisms'>Aphorisms about programming</a>
+            <div class="date">29 Apr 2009</div>
+        </h2>
+        I am not clever. I am just yet another way to use google.<br/>
+Good programmer should be lazy.<br/>
+The hole in your pocket is not critical unless you have a hole in your other pocket.<br/>
+<!--
+<hr/>
+Software is like sex - better when it is free. Linus Torvalds.<br/>
+Sometimes the theory meets practice. Practice wins. Always.<br/>
+10% of your zeals brings you 90% of success. Other 90% just 10% of success.<br/>
+About haste: The perfection of a clock is not in the speed of the movement, but in its correctness.<br/>
+Don't be satisfied with an apparent fix; full understanding is the standard.<br/>
+If you only know one language, no matter how well you know it, you're not a great programmer.<br/>
+The only "best practice" you should be using all the time is "Use Your Brain".<br/>
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/humor.html">humor</a>
+    
+    <a href="/tags/programming.html">programming</a>
+    
+    <a href="/tags/aphorism.html">aphorism</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/04/ant-task-to-install-tomcat-service'>Ant task to install tomcat service26px</a>
+            <div class="date">28 Apr 2009</div>
+        </h2>
+        If you are familiar to run Apache Tomcat as Windows service, you can install it with the ant task. <i>build.xml</i> file sample under the cut line.
+<!--
+<hr/>
+First of all let's do some properties setup:
+
+<pre><code>catalina.home=d:/java/tomcat-6.0.18
+tomcat.executable=${catalina.home}/bin/tomcat6.exe
+tomcat.service.executable=\
+${catalina.home}/bin/service.bat
+tomcat.service.name=myproject
+# parameters that will be used in the jvm
+tomcat.service.jvm.ms=128
+tomcat.service.jvm.mx=256
+</code></pre>
+Service startup task consists of 5 exec commands:
+<ul>
+	<li>Stop service if currently running</li>
+	<li>Delete service if installed</li>
+	<li>Install service with bat script</li>
+	<li>Update service with some parameters</li>
+	<li>Start service</li>
+</ul>
+
+Here is the implementation:
+<pre><code>
+    &lt;target name="tomcat.service.install" description="Install tomcat service"&gt;
+        
+        &lt;exec command="net stop ${tomcat.service.name}"
+              failifexecutionfails="false"
+              failonerror="false"/&gt;
+
+        &lt;exec command="${tomcat.executable} //DS//${tomcat.service.name}"
+              failifexecutionfails="false"
+              failonerror="false"/&gt;
+        &lt;exec executable="${tomcat.service.executable}" 
+                  failifexecutionfails="true" failonerror="true"&gt;
+            &lt;env key="CATALINA_HOME" value="${catalina.home}"/&gt;
+            &lt;arg value="install"/&gt;
+            &lt;arg value="${tomcat.service.name}"/&gt;
+        &lt;/exec&gt;
+       &lt;exec executable="${tomcat.executable}"&gt;
+            &lt;arg value="//US//${tomcat.service.name}"/&gt;
+            &lt;arg value="--JvmMs=${jvm.ms}"/&gt;
+            &lt;arg value="--JvmMx=${jvm.mx}"/&gt;
+            &lt;arg value="--Startup=auto"/&gt;
+        &lt;/exec&gt;
+        &lt;exec command="net start ${tomcat.service.name}" 
+                  failifexecutionfails="true" failonerror="true"/&gt;
+    &lt;/target&gt;
+</code></pre>
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/java.html">java</a>
+    
+    <a href="/tags/howto.html">howto</a>
+    
+    <a href="/tags/ant.html">ant</a>
+    
+    <a href="/tags/tomcat26px.html">tomcat26px</a>
+    
+    <a href="/tags/windows.html">windows</a>
+    
+    <a href="/tags/service.html">service</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/04/clear-upload-file-input-field'>Clear upload file input field </a>
+            <div class="date">23 Apr 2009</div>
+        </h2>
+        Many web developers came to the problem that they are not able to change value of file input field from Java Script in the web application. There is no access to value field of file input tag because of security restriction. However there is a trick how to erase this field if you need it in your application. <br/>
+<!--
+<hr/>
+You can simply redraw the html block where your input tag is located. In this case all data will remain the same except the selected file value.
+
+<pre><code>
+&lt;div id="uploadFile_div"&gt;
+&lt;input type="file" class="fieldMoz" id="uploadFile" 
+            onkeydown="return false;" size="40" name="uploadFile"/&gt;
+&lt;/div&gt;
+&lt;a onclick="clearFileInputField('uploadFile_div')" 
+                         href="javascript:noAction();"&gt;Clear&lt;/a&gt;
+</code></pre>
+Java Script function below looks strange but acts exactly in the way we want:
+<pre><code> 
+&lt;script&gt;
+function clearFileInputField(tagId) {
+    document.getElementById(tagId).innerHTML = 
+                    document.getElementById(tagId).innerHTML;
+}
+&lt;/script&gt;
+            
+</code></pre>
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/javascript.html">javascript</a>
+    
+    <a href="/tags/howto.html">howto</a>
+    
+    <a href="/tags/input.html">input</a>
+    
+    <a href="/tags/file.html">file</a>
+    
+    <a href="/tags/html.html">html</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/04/success-components'>Components of success </a>
+            <div class="date">10 Apr 2009</div>
+        </h2>
+        People from different countries are reaching success in completely different way. And that is good because no matter who you are you can be successful. I heard a lot of success stories and now can summarize - what components are required to build your own success story...<br/>
+<!--
+<br/>
+Here are the components:<br/>
+<h5> Hard work </h5>
+That's it. This is may be the most important one. Don't think you can be successful while sitting on the chair and do nothing. 
+
+<h5> Intellect </h5>
+Many people work hard whole life and stay where they are without moving ahead. That is a pity that sometimes hard work is done in the wrong direction. Also try to look several steps ahead and see the perspective of the work you do.
+
+<h5>Risk</h5>
+Risk is a very helpful component. You can go the most reliable way.  But in fact add some risk can seriously improve the result. Do something without risk is impossible because there is always a risk that your work is useless.
+
+<h5>Luck</h5>
+Yes, that's it. This component is very important. All above components are nothing without luck and there is also some good and bad tricks in our way that we can not forecast.
+
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/success.html">success</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/04/brain-async'>Brain async</a>
+            <div class="date">09 Apr 2009</div>
+        </h2>
+        Many people came to the question: Why do our brain is having so many gaps: forget important info, quickly change opinion, stuck when doing usual actions, etc? Well, try to look from the different side.<br/>
+Our brain is about 4 million of neurons('processors') that works completely async: neural impulses follow though brain without any rules and permissions, every neuron process the information in there own way, no body is able to re implement such a large information processing system. From this point of gap are normal and true solutions and that is being solved by our brain every day is a miracle.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/mind.html">mind</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/04/technical-documentation'>Technical documentation</a>
+            <div class="date">08 Apr 2009</div>
+        </h2>
+        There is no one technical book I read more than a half. Is everybody doing this way?
+I recommend book authors to explain themselves in more short form.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/documentation.html">documentation</a>
+    
+    <a href="/tags/it-related.html">it-related</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+
+<div class='paginator'>
+    
+    
+        <div class='prev'>
+            
+                <a href='/'>
+                    &larr; Later posts
+                </a>
+            
+        </div>
+    
+    <div class='clear'></div>
+</div>
+
+                </div>
+                <div class="vsplit">
+                </div>
+                <div id="sidebar">
+                    <div class="recent-posts">
+                        <h2>Recent Posts</h2>
+                        <a class="rss" href="/atom.xml">
+                            <img src="/images/rss.png" alt="Bogdan Gusiev&#8217;s blog" />
+                        </a>
+                        <div class="clear"></div>
+                        <ul>
+                            
+                            <li>
+                                <a href='/2011/05/migrate-wordpress-jekyll-post-preview'>Finally get rid of WordPress and PHP</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/04/javascript-injection-in-json-inserted-directly-into-script-tag'>JavaScript injection in JSON inserted directly into script tag</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/03/do-git-commits-associated-to-hoptoad-errors'>Do git commits associated to hoptoad errors</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/03/ajax-jquery-debug-javascript'>Debug ajax requests in more easy way</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2010/11/dynamic-context-in-rspec-dont-repeat-yourself'>Dynamic context in Rspec - don't repeat yourself</a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                    <div class="sidebarbox">
+                        <h2>Search</h2>
+                        <p>Use the form below to search the site:</p>
+                        <form method="get" id="searchform" action="">
+                            <input type="text" placeholder="Search keywords" name="s" id="searchbox"/>
+                            <input type="submit" class="submitbutton" value="Find it" />
+                        </form>	
+                        <script>
+                            $('#searchform').submit(function(event) {
+                                event.preventDefault();
+                                window.location.href = "http://google.com/search?q=site:gusiev.com " + $('#searchbox').val();
+                            });
+                        </script>
+                        </div>
+                    <div class="sidebarbox tag-cloud">
+                        <h2>Browse by tags</h2>
+                        <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 19.4px; line-height:19.4px" rel="tag">activerecord</a> 
+<a href="/tags/application.html" title="Pages tagged application" style="font-size: 17.6px; line-height:17.6px" rel="tag">application</a> 
+<a href="/tags/bdd.html" title="Pages tagged bdd" style="font-size: 17.6px; line-height:17.6px" rel="tag">bdd</a> 
+<a href="/tags/behavior.html" title="Pages tagged behavior" style="font-size: 17.6px; line-height:17.6px" rel="tag">behavior</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
+<a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
+<a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
+<a href="/tags/html.html" title="Pages tagged html" style="font-size: 19.4px; line-height:19.4px" rel="tag">html</a> 
+<a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
+<a href="/tags/java.html" title="Pages tagged java" style="font-size: 19.4px; line-height:19.4px" rel="tag">java</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 21.2px; line-height:21.2px" rel="tag">javascript</a> 
+<a href="/tags/named_scope.html" title="Pages tagged named_scope" style="font-size: 17.6px; line-height:17.6px" rel="tag">named_scope</a> 
+<a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
+<a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
+<a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 19.4px; line-height:19.4px" rel="tag">rails</a> 
+<a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 21.2px; line-height:21.2px" rel="tag">rspec</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 24.8px; line-height:24.8px" rel="tag">ruby</a> 
+<a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 17.6px; line-height:17.6px" rel="tag">sql</a> 
+<a href="/tags/test.html" title="Pages tagged test" style="font-size: 17.6px; line-height:17.6px" rel="tag">test</a> 
+<a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
+
+                    </div>
+                </div><!-- Closes Sidebar_full -->
+                <div class="clear"></div>
+            </div> <!-- Closes Sidebar -->
+            <div class="clear"></div>
+
+        </div><!-- Closes Main -->
+
+
+        <div class="footer">
+            <hr/>
+            <!--LiveInternet counter-->
+            <script type="text/javascript">
+                document.write("<a href='http://www.liveinternet.ru/click' "+
+                        "target=_blank><img src='http://counter.yadro.ru/hit?t40.6;r"+
+                        escape(document.referrer)+((typeof(screen)=="undefined")?"":
+                            ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+                                screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+                        ";"+Math.random()+
+                        "' alt='' title='LiveInternet' "+
+                        "border='0' width='31' height='31'><\/a>");
+                </script><!--/LiveInternet-->
+                <!--SpyLOG-->
+                <span id="spylog2009244"></span><script type="text/javascript"> var spylog = { counter: 2009244, image: 26, next: spylog }; document.write(unescape('%3Cscript src%3D"http' + (('https:' == document.location.protocol) ? 's' : '') + '://counter.spylog.com/cnt.js" defer="defer"%3E%3C/script%3E')); </script>
+                <!--SpyLOG-->
+                <script type="text/javascript">
+                    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+                    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+                    </script>
+                    <script type="text/javascript">
+                        try {
+                            var pageTracker = _gat._getTracker("UA-12663165-1");
+                            pageTracker._trackPageview();
+                        } catch(err) {}</script>
+                    The Content of this blog can be published anywhere with the link to original source.
+                </div><!-- Closes morefoot -->
+
+
+
+
+            </body>
+        </html>
+
+
+
