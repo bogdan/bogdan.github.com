@@ -36,6 +36,7 @@ end
 task :upload => [:build] do
   puts `git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} add .`
   puts `git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} commit -m "Build #{DateTime.now.to_s}"`
+  puts `git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} push`
 end
 
 desc 'Generate tags page'
