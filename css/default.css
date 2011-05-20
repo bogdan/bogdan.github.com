@@ -18,7 +18,7 @@ pre, code {
     margin: 0; }
 
 h2 a {
-  font-size: 26px; }
+  font-size: 22px; }
 
 h5 {
   font-size: 18px;
@@ -29,8 +29,7 @@ hr {
   border-width: 1px;
   border-color: white; }
 
-h1 a, h2 a, h3 a {
-  color: #ff4444;
+h1 a, h2 a, h3 a, h4 a, h5 a {
   text-decoration: none; }
 
 .date {
@@ -72,12 +71,11 @@ ul li {
     display: inline-block;
     float: right; }
 
-h4.tags {
+.tags {
   margin: 10px 0;
   float: right; }
-  h4.tags a {
-    margin: 0 10px;
-    color: black; }
+  .tags a {
+    margin: 0 10px; }
 
 .header .title {
   float: left; }
@@ -96,8 +94,7 @@ h4.tags {
   margin: 5px 0 10px 0; }
 
 .tag-cloud a {
-  margin: 0 2px;
-  color: black; }
+  margin: 0 2px; }
 
 .footer {
   padding: 10px 0;
