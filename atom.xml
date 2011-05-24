@@ -4,13 +4,45 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2011-05-24T10:52:15+03:00</updated>
+ <updated>2011-05-24T16:33:36+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>GitHub</name>
    <email>support@github.com</email>
  </author>
  
+ 
+ <entry>
+   <title>Logging HTTP api calls just like database queries</title>
+   <link href="http://gusiev.com/2011/05/http-api-logging-rails"/>
+   <updated>2011-05-24T00:00:00+03:00</updated>
+   <id>http://gusiev.com/2011/05/http-api-logging-rails</id>
+   <content type="html">Http api calls are pretty similar to SQL queries - they query data from external source to process them in ruby space. So I think it's a good idea to log them just like ActiveRecord does with SQL queries. 
+&lt;pre&gt;&lt;code&gt;  Location Load (25.1ms)   SELECT * FROM &quot;locations&quot; WHERE (&quot;locations&quot;.&quot;id&quot; = 2548) ORDER BY title&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!--more--&gt;
+This simple peace of code could be very helpful in case of 
+&lt;a href=&quot;http://github.com/railsware/http_logger&quot;&gt;
+    debugging HTTP api in ruby&lt;/a&gt;.
+&lt;a href=&quot;https://github.com/railsware/http_logger/blob/master/screenshots/solr.png&quot;&gt;Screenshot&lt;/a&gt; with the result
+
+
+Installation is simple:
+
+&lt;pre&gt;&lt;code&gt;gem install http_logger&lt;/code&gt;&lt;/pre&gt;
+
+And:
+
+&lt;pre&gt;&lt;code&gt;require 'http_logger'
+
+Net::HTTP.logger = Logger.new(...) 
+    # Default: Rails.logger if defined?(Rails)
+
+Net::HTTP.colorize = true 
+    # Default: true&lt;/code&gt;&lt;/pre&gt;
+
+</content>
+ </entry>
  
  <entry>
    <title>Finally get rid of WordPress and PHP</title>
