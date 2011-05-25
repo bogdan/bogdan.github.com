@@ -17,8 +17,11 @@ pre, code {
   pre code, code code {
     margin: 0; }
 
+h1 a {
+  font-size: 30px; }
+
 h2 a {
-  font-size: 22px; }
+  font-size: 24px; }
 
 h5 {
   font-size: 18px;
@@ -29,7 +32,8 @@ hr {
   border-width: 1px;
   border-color: white; }
 
-h1 a, h2 a, h3 a, h4 a, h5 a {
+h1 a, h2 a, h3 a {
+  color: #ff4444;
   text-decoration: none; }
 
 .date {
@@ -71,11 +75,12 @@ ul li {
     display: inline-block;
     float: right; }
 
-.tags {
+h4.tags {
   margin: 10px 0;
   float: right; }
-  .tags a {
-    margin: 0 10px; }
+  h4.tags a {
+    margin: 0 10px;
+    color: black; }
 
 .header .title {
   float: left; }
@@ -94,7 +99,8 @@ ul li {
   margin: 5px 0 10px 0; }
 
 .tag-cloud a {
-  margin: 0 2px; }
+  margin: 0 2px;
+  color: black; }
 
 .footer {
   padding: 10px 0;
@@ -108,3 +114,8 @@ ul li {
   float: right; }
 .paginator .prev {
   float: left; }
+
+.fork {
+  position: absolute;
+  top: 0;
+  right: 0; }

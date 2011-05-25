@@ -12,10 +12,29 @@
         <title>Move along, nothing to see here</title>
         <link rel="icon" href="/images/favicon.ico"/>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                var params = decodeURI(window.location.search).replace(/^\?/, "").split("&");
+                $(params).each(function(index, param) {
+                    if (param.match(/^p=/)) {
+
+                        switch(parseInt(param.split("=")[1])) {
+                            case 11: window.location.href = "http://www.gusiev.com/2009/04/clear-upload-file-input-field/";
+                            break;
+                            case 3: window.location.href = "http://www.gusiev.com/2009/04/upload-files-with-selenium-ide/";
+                            break;
+                        }
+                    }
+                })
+            });
+        </script>
     </head>
 
     <body>
-        
+        <a href="http://github.com/bogdan" class="fork">
+            <img src="/images/fork.png"/>
+        </a>
+
         <div id="wrapper">
 
             <div class="header">
@@ -32,8 +51,8 @@
                 <a href="/pages/about.html" class="avatar">
                     <img src="/images/me.jpg"/>
                 </a>
-            <div class="clear"></div>
-            <hr/>
+                <div class="clear"></div>
+                <hr/>
             </div> <!-- Closes header -->
 
 
@@ -41,6 +60,64 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2009/06/avoid-nested-select-double-single-table-complex-query'>Double select from a single table in complex SQL query.</a>
+            <div class="date">02 Jun 2009</div>
+        </h2>
+        When I start learning SQL I have to write a lot of nested queries when working on complex select statements from a single table. Now, I feel more comfortable with it and show how to avoid nesting. There are cases when you have to compare one row of the table with all others to get the result:
+<ul>
+	<li>Select next  element to current by the value of some field</li>
+	<li>Select records that are unique by some complex expression</li>
+	<li>Select all records that have the same parameter as given record.</li>
+</ul>
+You can get rid of nesting in all above cases. Let's review the example.
+<!--
+
+<hr />Let's say we have the list of elements in `elements` table and we have the id of some element in this table. Now we have to get the next element from the list ordered by `sort_field`.
+That could be easily done with the nested select statement:
+<pre>
+<code>select * from elements e 
+where e.sort_field >= 
+            (select * from elements where element_id = #value#) and
+         e.element_id != #value#
+order by e.sort_field limit 1;
+</code>
+</pre>
+Looks not very cool.
+Let's do the select statement from `element` table twice to avoid nesting:
+<pre><code>-- The e1 is the result row and e2 is a helper row 
+--that was picked up using nested select previously.
+select e1.* from elements e1, elements e2
+--conditional statement will look like
+where e1.sort_field &gt;= e2.sort_field and 
+     e1.element_id != e2.element_id and 
+     e2.element_id = #value#
+-- and the end of the query remains almost the same
+order by e1.sort_field limit 1
+</code></pre>
+
+Do not scare of double select from single table. That is the same technique as if they were different tables.
+
+
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/sql.html">sql</a>
+    
+    <a href="/tags/nesting.html">nesting</a>
+    
+    <a href="/tags/query.html">query</a>
+    
+    <a href="/tags/select.html">select</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2009/05/how-to-choose-a-good-sexy-title-for-your-article'>How to choose a sexy title for your article</a>
@@ -461,29 +538,14 @@ Our brain is about 4 million of neurons('processors') that works completely asyn
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2009/04/technical-documentation'>Technical documentation</a>
-            <div class="date">08 Apr 2009</div>
-        </h2>
-        There is no one technical book I read more than a half. Is everybody doing this way?
-I recommend book authors to explain themselves in more short form.
--->
-        <h4 class="tags">
-    
-    <a href="/tags/documentation.html">documentation</a>
-    
-    <a href="/tags/it-related.html">it-related</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
+    
+        <div class='next'>
+            <a href='/page4'>
+                Earlier posts &rarr;
+            </a>
+        </div>
     
     
         <div class='prev'>
@@ -510,6 +572,10 @@ I recommend book authors to explain themselves in more short form.
                         <ul>
                             
                             <li>
+                                <a href='/2011/05/http-api-logging-rails'>Logging HTTP api calls just like database queries</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2011/05/migrate-wordpress-jekyll-post-preview'>Finally get rid of WordPress and PHP</a>
                             </li>
                             
@@ -525,10 +591,6 @@ I recommend book authors to explain themselves in more short form.
                                 <a href='/2011/03/ajax-jquery-debug-javascript'>Debug ajax requests in more easy way</a>
                             </li>
                             
-                            <li>
-                                <a href='/2010/11/dynamic-context-in-rspec-dont-repeat-yourself'>Dynamic context in Rspec - don't repeat yourself</a>
-                            </li>
-                            
                         </ul>
                     </div>
                     <div class="sidebarbox">
@@ -537,14 +599,14 @@ I recommend book authors to explain themselves in more short form.
                         <form method="get" id="searchform" action="">
                             <input type="text" placeholder="Search keywords" name="s" id="searchbox"/>
                             <input type="submit" class="submitbutton" value="Find it" />
-                        </form>	
+                        </form>
                         <script>
                             $('#searchform').submit(function(event) {
                                 event.preventDefault();
                                 window.location.href = "http://google.com/search?q=site:gusiev.com " + $('#searchbox').val();
                             });
                         </script>
-                        </div>
+                    </div>
                     <div class="sidebarbox tag-cloud">
                         <h2>Browse by tags</h2>
                         <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 19.4px; line-height:19.4px" rel="tag">activerecord</a> 
@@ -553,18 +615,19 @@ I recommend book authors to explain themselves in more short form.
 <a href="/tags/behavior.html" title="Pages tagged behavior" style="font-size: 17.6px; line-height:17.6px" rel="tag">behavior</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
+<a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 17.6px; line-height:17.6px" rel="tag">debug</a> 
 <a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 19.4px; line-height:19.4px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
-<a href="/tags/java.html" title="Pages tagged java" style="font-size: 19.4px; line-height:19.4px" rel="tag">java</a> 
+<a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
 <a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 21.2px; line-height:21.2px" rel="tag">javascript</a> 
 <a href="/tags/named_scope.html" title="Pages tagged named_scope" style="font-size: 17.6px; line-height:17.6px" rel="tag">named_scope</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 19.4px; line-height:19.4px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 21.2px; line-height:21.2px" rel="tag">rails</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 21.2px; line-height:21.2px" rel="tag">rspec</a> 
-<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 24.8px; line-height:24.8px" rel="tag">ruby</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 26.6px; line-height:26.6px" rel="tag">ruby</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 17.6px; line-height:17.6px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 17.6px; line-height:17.6px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 

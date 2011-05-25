@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
         <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
         <link rel="shortcut icon" href="/images/favicon.ico"/>
-        <title>Posts tagged "howto"</title>
+        <title>Logging HTTP api calls just like database queries</title>
         <link rel="icon" href="/images/favicon.ico"/>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
         <script>
@@ -59,12 +59,82 @@
             <div id="main">
 
                 <div id="content">
-                        <h1 id="howto">Posts tagged "howto"</h1>
-<ul class="posts">        <li><a href="/2009/04/ant-task-to-install-tomcat-service">Ant task to install tomcat service26px</a></li>
-        <li><a href="/2009/04/clear-upload-file-input-field">Clear upload file input field </a></li>
-        <li><a href="/2009/05/how-to-choose-a-good-sexy-title-for-your-article">How to choose a sexy title for your article</a></li>
-        <li><a href="/2009/04/update-and-create-timestamps-with-mysql">Update and create timestamps with MySQL</a></li>
-</ul>
+                    <div id="post">
+    <h2>
+        <a href="/2011/05/http-api-logging-rails">Logging HTTP api calls just like database queries</a>
+        <div class="date">24 May 2011</div>
+    </h2>
+    Http api calls are pretty similar to SQL queries - they query data from external source to process them in ruby space. So I think it's a good idea to log them just like ActiveRecord does with SQL queries. 
+<pre><code>  Location Load (25.1ms)   SELECT * FROM "locations" WHERE ("locations"."id" = 2548) ORDER BY title</code></pre>
+
+<!--more-->
+This simple peace of code could be very helpful in case of 
+<a href="http://github.com/railsware/http_logger">
+    debugging HTTP api in ruby</a>.
+<a href="https://github.com/railsware/http_logger/blob/master/screenshots/solr.png">Screenshot</a> with the result
+
+
+Installation is simple:
+
+<pre><code>gem install http_logger</code></pre>
+
+And:
+
+<pre><code>require 'http_logger'
+
+Net::HTTP.logger = Logger.new(...) 
+    # Default: Rails.logger if defined?(Rails)
+
+Net::HTTP.colorize = true 
+    # Default: true</code></pre>
+
+
+    <h4 class="tags">
+    
+    
+    <a href="/tags/api.html">api</a>
+    
+    <a href="/tags/http.html">http</a>
+    
+    <a href="/tags/logging.html">logging</a>
+    
+    <a href="/tags/ruby.html">ruby</a>
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    <a href="/tags/debug.html">debug</a>
+    
+</h4>
+<div class="clear"></div>
+
+
+    <div id="related">
+        <h3>Related Posts</h3>
+        <ul class="posts">
+            
+            <li><span>02 Jun 2009</span> &raquo; <a href="/2009/06/avoid-nested-select-double-single-table-complex-query">Double select from a single table in complex SQL query.</a></li>
+            
+            <li><span>11 Jul 2010</span> &raquo; <a href="/2010/07/bdd-rspec-matcher-to-test-named_scope-scoped-rails-3">Ultimate rspec matcher to test named_scope or scoped</a></li>
+            
+            <li><span>24 Jan 2010</span> &raquo; <a href="/2010/01/sql-queries-activerecord-rails-named-scopes-stack">Advanced SQL and named scopes stack with ActiveRecord</a></li>
+            
+        </ul>
+    </div>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
+
+    //var disqus_identifier = '/2011/05/http-api-logging-rails';
+    //var disqus_url = 'http://gusiev.com/2011/05/http-api-logging-rails';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+</div>
 
 
                 </div>
