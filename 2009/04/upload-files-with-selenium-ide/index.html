@@ -73,8 +73,7 @@ Here is my solution written with <a target="_blank" href="http://jinvoke.com">JI
 <hr/>
 The problem I meat is selenium is stuck when simulate the click on upload file input. I have to launch the concurent thread that do the file name input. Thread code(Note file name should be given in Java format like 'c:/boot.ini):
 
-<div class="bordered">
-<code>import javax.swing.*;
+<pre><code>import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.*;
 
@@ -119,18 +118,16 @@ class FileRunner implements Runnable {
         }
     }
 
-}</code>
-</div>
+}</code></pre>
 Here is selenium call method:
 
-<div class="bordered">
-<code >protected void chooseFile(String element, String fileName) {
+<pre><code >protected void chooseFile(String element, String fileName) {
            Number positionLeft = selenium.getElementPositionLeft(element);
            Number positionTop = selenium.getElementPositionTop(element);
            new FileChooserThread(fileName).start(); //launch input thread.
            //this method will held current thread while FileChooser gives the file name
            selenium.clickAt("file", positionLeft + "," + positionTop); 
-}</code></div>
+}</code></pre>
 
     <h4 class="tags">
     
@@ -151,7 +148,7 @@ Here is selenium call method:
             
             <li><span>05 Apr 2010</span> &raquo; <a href="/2010/04/ruby18-private-protected-incapsulatio">Ruby1.8: 'private' doesn't give expected level of privacy</a></li>
             
-            <li><span>20 Apr 2010</span> &raquo; <a href="/2010/04/dom-element-class-html-javascript-reference">DOM element class - css reference or javascript reference?</a></li>
+            <li><span>08 Jun 2010</span> &raquo; <a href="/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails">Advanced non-flat controllers hierarchy with rails</a></li>
             
         </ul>
     </div>

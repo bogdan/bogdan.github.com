@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2011-05-25T10:38:45+03:00</updated>
+ <updated>2011-05-25T17:04:03+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>GitHub</name>
@@ -1263,8 +1263,7 @@ Here is my solution written with &lt;a target=&quot;_blank&quot; href=&quot;http
 &lt;hr/&gt;
 The problem I meat is selenium is stuck when simulate the click on upload file input. I have to launch the concurent thread that do the file name input. Thread code(Note file name should be given in Java format like 'c:/boot.ini):
 
-&lt;div class=&quot;bordered&quot;&gt;
-&lt;code&gt;import javax.swing.*;
+&lt;pre&gt;&lt;code&gt;import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.*;
 
@@ -1309,18 +1308,16 @@ class FileRunner implements Runnable {
         }
     }
 
-}&lt;/code&gt;
-&lt;/div&gt;
+}&lt;/code&gt;&lt;/pre&gt;
 Here is selenium call method:
 
-&lt;div class=&quot;bordered&quot;&gt;
-&lt;code &gt;protected void chooseFile(String element, String fileName) {
+&lt;pre&gt;&lt;code &gt;protected void chooseFile(String element, String fileName) {
            Number positionLeft = selenium.getElementPositionLeft(element);
            Number positionTop = selenium.getElementPositionTop(element);
            new FileChooserThread(fileName).start(); //launch input thread.
            //this method will held current thread while FileChooser gives the file name
            selenium.clickAt(&quot;file&quot;, positionLeft + &quot;,&quot; + positionTop); 
-}&lt;/code&gt;&lt;/div&gt;
+}&lt;/code&gt;&lt;/pre&gt;
 </content>
  </entry>
  
