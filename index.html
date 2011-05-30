@@ -62,6 +62,66 @@
                     
     <div class="post">
         <h2>
+            <a href='/2011/05/dbext-vim-table-names-convention-patch'>Patching dbext vim plugin to support Rails naming conventions</a>
+            <div class="date">30 May 2011</div>
+        </h2>
+        <p><a href='http://www.vim.org/scripts/script.php?script_id=356'>dbext</a> is an excellent vim plugin that allows you to execute SQL queries directly from vim. For example: <code>select * from &lt;word under cursor&gt;</code>. When dbext is used with Rails there is a problem that you can work with some variation of table name like:</p>
+
+<ul>
+<li>UserRole</li>
+
+<li>user_role_id</li>
+
+<li>user_role_ids</li>
+
+<li>user_role</li>
+</ul>
+
+<p>But still wants to use it as table name in your database queries so that you won&#8217;t type it manually.</p>
+<!--
+<p>So, I made it to automatically convert word under cursor into a table name with the following configuration options:</p>
+
+<pre><code>let g:dbext_table_names_number = 2 
+    # 0 - disabled, 1 - singular, 2 - plural
+let g:dbext_table_names_case = 2 
+    # 0 - disabled, 1 - camelcase, 2 - underscore</code></pre>
+
+<p>Also there is an option to automatically strip <code>_id</code> suffix from word to convert it to table name:</p>
+
+<pre><code>let g:dbext_table_names_strip_id = 1</code></pre>
+
+<p>All these options match Rails table name convention by default. Staff in <a href='http://github.com/bogdan/dbext'>my dbext fork</a>.</p>
+
+<p>Once you install it in your vim runtime put your cursor on any table name variation like example above and run <code>:DBSelectFromTable</code> to get:</p>
+
+<p><code>select * from user_roles</code></p>
+
+<p>Other commands are also patched. Please let me know if any bugs found.</p>
+
+<p>Don&#8217;t know if non-rails developers would love this patch but pretty sure that it won&#8217;t annoy them. Please support <a href='https://github.com/zklinger/dbext/pull/1'>my pull request</a> if you like it.</p>-->
+        <h4 class="tags">
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    <a href="/tags/vim.html">vim</a>
+    
+    <a href="/tags/dbext.html">dbext</a>
+    
+    <a href="/tags/patch.html">patch</a>
+    
+    <a href="/tags/convention.html">convention</a>
+    
+    <a href="/tags/sql.html">sql</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2011/05/http-api-logging-rails'>Logging HTTP api calls just like database queries</a>
             <div class="date">24 May 2011</div>
         </h2>
@@ -617,62 +677,6 @@ I 've add this matcher to the <a href="http://gusiev.com/2010/06/ultimate-rspec-
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2010/06/ultimate-rspec-matcher-to-test-validation'>Ultimate rspec matcher to test validation</a>
-            <div class="date">30 Jun 2010</div>
-        </h2>
-        After a first thousand of tests using Rspec I fount it very annoying to repeat my self testing the standard code as spec code is usually twice longer than code it test. I've started to look for a way to simplify the patterns and make it reusable. Among other nice rspec tricks there is possibility to write custom Rspec matchers. Spec the validation is just two lines of code for each attribute now.
-<!--
-
-
-<h3> Existing solutions </h3>
-After doing some search around I found Shoulda and remarkable gems that provide a way of doing this. Here is one of remarkable variant (others are just ugly): 
-<pre><code>it { should validate_numericality_of(:age, :greater_than => 18, :only_integer => true) }</code></pre>
-But that is huge contradiction with BDD methodology because it doesn't make you think about behavior. People use to copy-paste code from model to spec and all possible bugs within. As the result <strong>nothing is tested</strong>... I don't even say about "test first".
-
-<h3> Easy DSL and Implementation </h3>
-When I implement validation everything I care about is: what values should be accepted and what values should not. An easy DSL that realize this pattern would be:
-<pre><code>describe User do
-  it { should accept_values_for(:email, "john@example.com", "lambda@gusiev.com") }
-  it { should_not accept_values_for(:email, "invalid", nil, "a@b", "john@.com") }
-end</code></pre> 
-That's it! Two lines of code per attribute. And that is perfectly fine for "test first" principle.<br/>
-Rspec authors take care about custom Rspec matcher. So the implementation is very easy.
-Fork me on github: <a href="http://github.com/bogdan/accept_values_for">accept_values_for rpec matcher</a>. The <strong>accept_values_for</strong> pattern is a true BDD way and unlike Remarkable it really do testing.
-
-<h3> validates_uniqueness_of </h3> 
-This is very special validation because you always need more then one record to test it. So, the pattern for uniqueness validation is:
-<pre><code>describe User do
-  context "if user with email 'aa@bb.com' exists" do
-    before do
-      User.create!(@valid_attributes.merge(:email =&gt; 'aa@bb.com')
-    end
-    it { should_not accept_values_for(:email, "aa@bb.com") }
-  end
-end</code></pre>
-<h3> Summary </h3>
-Custom matcher is just 50 lines of code that make your life much easier. Do not scare to write your own. Custom matcher to test ActiveRecord#named_scope coming soon.
--->
-        <h4 class="tags">
-    
-    <a href="/tags/rspec.html">rspec</a>
-    
-    <a href="/tags/rails.html">rails</a>
-    
-    <a href="/tags/activerecord.html">activerecord</a>
-    
-    <a href="/tags/validation.html">validation</a>
-    
-    <a href="/tags/pattern.html">pattern</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -699,6 +703,10 @@ Custom matcher is just 50 lines of code that make your life much easier. Do not 
                         <ul>
                             
                             <li>
+                                <a href='/2011/05/dbext-vim-table-names-convention-patch'>Patching dbext vim plugin to support Rails naming conventions</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2011/05/http-api-logging-rails'>Logging HTTP api calls just like database queries</a>
                             </li>
                             
@@ -712,10 +720,6 @@ Custom matcher is just 50 lines of code that make your life much easier. Do not 
                             
                             <li>
                                 <a href='/2011/03/do-git-commits-associated-to-hoptoad-errors'>Do git commits associated to hoptoad errors</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2011/03/ajax-jquery-debug-javascript'>Debug ajax requests in more easy way</a>
                             </li>
                             
                         </ul>
@@ -752,12 +756,13 @@ Custom matcher is just 50 lines of code that make your life much easier. Do not 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 21.2px; line-height:21.2px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 23.0px; line-height:23.0px" rel="tag">rails</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 21.2px; line-height:21.2px" rel="tag">rspec</a> 
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 26.6px; line-height:26.6px" rel="tag">ruby</a> 
-<a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 17.6px; line-height:17.6px" rel="tag">sql</a> 
+<a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 17.6px; line-height:17.6px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
+<a href="/tags/vim.html" title="Pages tagged vim" style="font-size: 17.6px; line-height:17.6px" rel="tag">vim</a> 
 
                     </div>
                 </div><!-- Closes Sidebar_full -->

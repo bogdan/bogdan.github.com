@@ -4,13 +4,54 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2011-05-27T10:32:38+03:00</updated>
+ <updated>2011-05-30T14:23:02+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>GitHub</name>
    <email>support@github.com</email>
  </author>
  
+ 
+ <entry>
+   <title>Patching dbext vim plugin to support Rails naming conventions</title>
+   <link href="http://gusiev.com/2011/05/dbext-vim-table-names-convention-patch"/>
+   <updated>2011-05-30T00:00:00+03:00</updated>
+   <id>http://gusiev.com/2011/05/dbext-vim-table-names-convention-patch</id>
+   <content type="html">&lt;p&gt;&lt;a href='http://www.vim.org/scripts/script.php?script_id=356'&gt;dbext&lt;/a&gt; is an excellent vim plugin that allows you to execute SQL queries directly from vim. For example: &lt;code&gt;select * from &amp;lt;word under cursor&amp;gt;&lt;/code&gt;. When dbext is used with Rails there is a problem that you can work with some variation of table name like:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;UserRole&lt;/li&gt;
+
+&lt;li&gt;user_role_id&lt;/li&gt;
+
+&lt;li&gt;user_role_ids&lt;/li&gt;
+
+&lt;li&gt;user_role&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But still wants to use it as table name in your database queries so that you won&amp;#8217;t type it manually.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;p&gt;So, I made it to automatically convert word under cursor into a table name with the following configuration options:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let g:dbext_table_names_number = 2 
+    # 0 - disabled, 1 - singular, 2 - plural
+let g:dbext_table_names_case = 2 
+    # 0 - disabled, 1 - camelcase, 2 - underscore&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Also there is an option to automatically strip &lt;code&gt;_id&lt;/code&gt; suffix from word to convert it to table name:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let g:dbext_table_names_strip_id = 1&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;All these options match Rails table name convention by default. Staff in &lt;a href='http://github.com/bogdan/dbext'&gt;my dbext fork&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Once you install it in your vim runtime put your cursor on any table name variation like example above and run &lt;code&gt;:DBSelectFromTable&lt;/code&gt; to get:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;select * from user_roles&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Other commands are also patched. Please let me know if any bugs found.&lt;/p&gt;
+
+&lt;p&gt;Don&amp;#8217;t know if non-rails developers would love this patch but pretty sure that it won&amp;#8217;t annoy them. Please support &lt;a href='https://github.com/zklinger/dbext/pull/1'&gt;my pull request&lt;/a&gt; if you like it.&lt;/p&gt;</content>
+ </entry>
  
  <entry>
    <title>Logging HTTP api calls just like database queries</title>
