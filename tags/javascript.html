@@ -62,8 +62,8 @@
                         <h1 id="javascript">Posts tagged "javascript"</h1>
 <ul class="posts">        <li><a href="/2011/04/javascript-injection-in-json-inserted-directly-into-script-tag">JavaScript injection in JSON inserted directly into script tag</a></li>
         <li><a href="/2009/04/clear-upload-file-input-field">Clear upload file input field </a></li>
-        <li><a href="/2011/03/ajax-jquery-debug-javascript">Debug ajax requests in more easy way</a></li>
         <li><a href="/2010/04/dom-element-class-html-javascript-reference">DOM element class - css reference or javascript reference?</a></li>
+        <li><a href="/2011/03/ajax-jquery-debug-javascript">Debug ajax requests in more easy way</a></li>
 </ul>
 
 
@@ -103,7 +103,6 @@
                     </div>
                     <div class="sidebarbox">
                         <h2>Search</h2>
-                        <p>Use the form below to search the site:</p>
                         <form method="get" id="searchform" action="">
                             <input type="text" placeholder="Search keywords" name="s" id="searchbox"/>
                             <input type="submit" class="submitbutton" value="Find it" />
@@ -170,8 +169,10 @@
                 if (window.location.href.indexOf("gusiev") >= 0) {
                     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
                     document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+                }
                     </script>
                     <script type="text/javascript">
+                if (window.location.href.indexOf("gusiev") >= 0) {
                         try {
                             var pageTracker = _gat._getTracker("UA-12663165-1");
                             pageTracker._trackPageview();
