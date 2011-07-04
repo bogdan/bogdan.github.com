@@ -7,6 +7,7 @@
         <title>Bogdan Gusiev's blog</title>
         <meta name="robots" content="follow, all" />
         <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
         <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
         <link rel="shortcut icon" href="/images/favicon.ico"/>
         <title>Move along, nothing to see here</title>
@@ -60,6 +61,101 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2010/07/bdd-rspec-matcher-to-test-named_scope-scoped-rails-3'>Ultimate rspec matcher to test named_scope or scoped</a>
+            <div class="date">11 Jul 2010</div>
+        </h2>
+        After having a good practice on using <a href="http://gusiev.com/2010/06/ultimate-rspec-matcher-to-test-validation/">Ultimate rspec matcher to test validation</a> I think it's time to implement one for testing named scopes - custom finders. Testing these finders is daily task. Here is how it can be done with minimum amount of code and maximum readability.
+<!--
+<h3>Discovery <del>(Animal Planet)</del></h3>
+
+What do we expect from the custom finder?
+We expect that it should find assets A, B, C and should not find assets D, E, F.
+And sometimes the order is important: it should find A, B C with exact order.
+
+With respect to <em>let</em> rspec feature let's take an example: Product has and belongs to many categories. We need to have a scope to filter products within the specified category:
+
+<pre><code>describe "#by_category_id" do
+      let(:given_category) do 
+        Factory.create(:given_category)
+      end
+ 
+
+      let(:product_in_given_category) do
+        Factory.create(
+          :product,
+          :categories => [category]
+        )
+      end
+
+      let(:product_not_in_given_category) do
+        Factory.create(
+          :product,
+          :categories => [Factory.create(:category)]
+        )
+      end
+
+      # This might be tricky to redefine subject as the finder result
+      # but in this way we can delegate the matcher to subject and 
+      # avoid writing test descriptions.
+      subject { Product.by_category_id(given_category.id) }
+
+      it { should discover(product_in_given_category) }
+      it { should_not discover(product_not_in_given_category) }
+
+    end
+</code></pre> 
+
+Factory girl was used in this example because factories kickass when we test finders. As you can see the example has a perfect readability with no one line of plain English text. I didn't include the description in my examples but you can easily make them if they make sense for you.<br/>
+Note: Be aware of the lazy loading of your finder. <em>let</em> is initialized lazy too. You should make sure it is called before the actual query to the database.
+If you don't want to care about lazy loading their is <em>let!</em> method that could be easily copy-pasted from Rspec 2.0. Unlike <em>let</em> it doesn't have lazy initialization:
+<pre><code>def let!(name, &block)
+  let(name, &block)
+  before { __send__(name) } 
+end
+</code></pre>
+
+<h3>Testing sort order</h3>
+
+If the ordering is done in non-trivial way let's <em>discover.with_exact_order</em>. 
+<pre><code>describe "#most_commented named scope" do
+  let(:uncommented_post) { Factory.create(:post)}
+  let!(:less_commented_post) { Factory.create(:post, :comments => [Factory.build(:comment)])}
+  let!(:more_commented_post) { 
+    Factory.create(:post, :comments => [Factory.build(:comment), Factory.build(:comment)])}
+  }
+
+  subject { described_class.most_commented }
+ it {should discover(more_commented_post, less_commented_post).with_exact_order }
+ it {should_not discover(uncommented_post) }
+end</code></pre>
+
+Be careful with default order. MySQL and Postgres sort objects as they were created by default.
+That is why generate objects in reverse order e.g. <em>less_commented_post</em> before <em>more_commented_post</em> is important to make sure that ordering is your code behavior rather than default db behavior.
+ 
+<h3> Summary </h3>
+I 've add this matcher to the <a href="http://gusiev.com/2010/06/ultimate-rspec-matcher-to-test-validation/">previous one</a>. Both matchers are available here <a href="http://github.com/bogdan/accept_values_for">accept_values_for</a>. Let's start thinking of what else we can do.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/bdd.html">bdd</a>
+    
+    <a href="/tags/rspec.html">rspec</a>
+    
+    <a href="/tags/activerecord.html">activerecord</a>
+    
+    <a href="/tags/named_scope.html">named_scope</a>
+    
+    <a href="/tags/matcher.html">matcher</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2010/06/ultimate-rspec-matcher-to-test-validation'>Ultimate rspec matcher to test validation</a>
@@ -647,63 +743,6 @@ When you start learning programming try to let your knowledge be "moved to produ
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2009/06/bdd-user-stories-productive-tdd-criticism'>When BDD user stories is productive</a>
-            <div class="date">29 Jun 2009</div>
-        </h2>
-        When you are skilled Unit tests writer it is not very easy to estimate the potential of BDD. Moreover in most cases BDD is used as a human-readable wrapper for unit tests. Do you really think that programmers need such abstract layer? Of course not... Users needs them.<br/>
-<!--
-<hr/>
-
-Saying Users I mean every non technical person who will treat to application quality some how.
-Featured innovation of BDD is <strong>User Stories</strong> - a human-readable bit of specification with technical test implementation behind it. <br/>
-Let's review the following example from the blog specification:
-<pre><code>
-  Given I signed up as Author
-    When I write article "TDD and BDD"
-    And text of article is "BDD is ...."
-    And I post article
-    Then I should see "Article is created"
-    And I should see article title "TDD and BDD"
-</code></pre>
-As you can see unlike TDD human readability is the term that was brought to the high priority in BDD. But that is not yet a BDD story.<br/>
-We need the programming implementation for each phrase in the story, like this:
-<pre><code>
-"I signed up as Author":
-     signInAsAuthor();
-</code></pre>
-
-Programmer's task is to chose the implementation that will validate described behavior. User doesn't know about any programming back end of the story. When the test failed he just knows that some behavior of the application is not working properly any more. <br/>
-From this point of view the key principle of user story implementation is that it should <strong>guarantee</strong> with the most high probability that the user can complete described actions.<br/> 
-
-Therefore user stories are the most productive when the implementation is done using <strong>GUI Robots</strong> like SWT bot, Selenium.
-
-
--->
-        <h4 class="tags">
-    
-    <a href="/tags/criticism.html">criticism</a>
-    
-    <a href="/tags/bdd.html">bdd</a>
-    
-    <a href="/tags/tdd.html">tdd</a>
-    
-    <a href="/tags/test.html">test</a>
-    
-    <a href="/tags/behavior.html">behavior</a>
-    
-    <a href="/tags/application.html">application</a>
-    
-    <a href="/tags/user story.html">user story</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -738,6 +777,10 @@ Therefore user stories are the most productive when the implementation is done u
                         <ul>
                             
                             <li>
+                                <a href='/2011/06/ruby-datagrid-gem-report'>Reporting made easy by Datagrid gem for Rails</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2011/05/dbext-vim-table-names-convention-patch'>Patching dbext vim plugin to support Rails naming conventions</a>
                             </li>
                             
@@ -751,10 +794,6 @@ Therefore user stories are the most productive when the implementation is done u
                             
                             <li>
                                 <a href='/2011/04/javascript-injection-in-json-inserted-directly-into-script-tag'>JavaScript injection in JSON inserted directly into script tag</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2011/03/do-git-commits-associated-to-hoptoad-errors'>Do git commits associated to hoptoad errors</a>
                             </li>
                             
                         </ul>
@@ -775,13 +814,14 @@ Therefore user stories are the most productive when the implementation is done u
                     </div>
                     <div class="sidebarbox tag-cloud">
                         <h2>Browse by tags</h2>
-                        <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 19.4px; line-height:19.4px" rel="tag">activerecord</a> 
+                        <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 21.2px; line-height:21.2px" rel="tag">activerecord</a> 
 <a href="/tags/application.html" title="Pages tagged application" style="font-size: 17.6px; line-height:17.6px" rel="tag">application</a> 
 <a href="/tags/bdd.html" title="Pages tagged bdd" style="font-size: 17.6px; line-height:17.6px" rel="tag">bdd</a> 
 <a href="/tags/behavior.html" title="Pages tagged behavior" style="font-size: 17.6px; line-height:17.6px" rel="tag">behavior</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 17.6px; line-height:17.6px" rel="tag">debug</a> 
+<a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 17.6px; line-height:17.6px" rel="tag">gem</a> 
 <a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 19.4px; line-height:19.4px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
@@ -791,7 +831,7 @@ Therefore user stories are the most productive when the implementation is done u
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 23.0px; line-height:23.0px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 24.8px; line-height:24.8px" rel="tag">rails</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 21.2px; line-height:21.2px" rel="tag">rspec</a> 
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 26.6px; line-height:26.6px" rel="tag">ruby</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
