@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2011-07-04T20:41:37+03:00</updated>
+ <updated>2011-07-06T11:47:20+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>GitHub</name>
@@ -770,11 +770,11 @@ But that makes sense to eliminate maintenance problem described above.
  </entry>
  
  <entry>
-   <title>Ruby1.8: 'private' doesn't give expected level of privacy</title>
+   <title>Encapsulation in Ruby: 'private' doesn't give expected level of privacy</title>
    <link href="http://gusiev.com/2010/04/ruby18-private-protected-incapsulatio"/>
    <updated>2010-04-05T00:00:00+03:00</updated>
    <id>http://gusiev.com/2010/04/ruby18-private-protected-incapsulatio</id>
-   <content type="html">The classic OOP pattern usually called encapsulation implemented in ruby with &lt;em&gt;private&lt;/em&gt; and &lt;em&gt;protected&lt;/em&gt; &lt;del&gt;keywords&lt;/del&gt; methods. The distinction between API and implementation works great with both. The problem is that &lt;em&gt;private&lt;/em&gt; doesn't hide method for inherited classes. 
+   <content type="html">The classic OOP pattern usually called encapsulation implemented in ruby with &lt;code&gt;private&lt;/code&gt; and &lt;code&gt;protected&lt;/code&gt; &lt;del&gt;keywords&lt;/del&gt; methods. The distinction between API and implementation works great with both. The problem is that &lt;code&gt;private&lt;/code&gt; doesn't hide method for inherited classes. 
 &lt;!--more--&gt;
 &lt;hr/&gt;
 See the simple example below:
@@ -797,8 +797,8 @@ B.new.api
 &lt;/code&gt;&lt;/pre&gt;
 
 And we won't get exception at the last line.&lt;br/&gt;
-The real difference between protected and private methods is more specific.&lt;br/&gt;
-At first: &lt;em&gt;implementation&lt;/em&gt; method can not be called like &lt;em&gt;self.implementation&lt;/em&gt; even from class A.
+So, in fact &lt;code&gt;private&lt;/code&gt; do not do what you expect it to do. Use cases that distinguish &lt;code&gt;private&lt;/code&gt; and &lt;code&gt;protected&lt;/code&gt; are more specific.
+At first: &lt;code&gt;implementation&lt;/code&gt; method can not be called like &lt;code&gt;self.implementation&lt;/code&gt; even from class A.
 &lt;pre&gt;&lt;code&gt;class A
   def api
     self.implementation #exception here
@@ -826,11 +826,12 @@ The second difference is a bit esoteric. Two instances of the same class can acc
 end
 A.new.api(A.new)
 &lt;/code&gt;&lt;/pre&gt;
-Fine for &lt;em&gt;protected&lt;/em&gt; but fail for &lt;em&gt;private&lt;/em&gt;. Well, this kind of protection do not make a real because of it's rareness.
-&lt;br/&gt;&lt;br/&gt;
+
+Fine for &lt;code&gt;protected&lt;/code&gt; but fail for &lt;code&gt;private&lt;/code&gt;. Well, this kind of protection do not make a real because of it's rareness.
+&lt;h3&gt;My conclusion: don't use private at all&lt;/h3&gt;
 
 You might do any decision on the points above.&lt;br/&gt;
-My conclusion is to not use &lt;em&gt;private&lt;/em&gt; at all, because it doesn't give the level of privacy that I expect. &lt;em&gt;private&lt;/em&gt; is not suitable for such an extremely dynamic language as Ruby. 
+My conclusion is to not use &lt;code&gt;private&lt;/code&gt; at all, because it doesn't give the level of privacy that I expect. Difference form &lt;code&gt;protected&lt;/code&gt; is so pure that it do not have any real benefits. 
 
 
 </content>
