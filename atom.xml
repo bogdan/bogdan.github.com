@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2011-07-06T11:47:20+03:00</updated>
+ <updated>2011-07-07T15:14:01+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>GitHub</name>
@@ -352,50 +352,57 @@ In some cases it might be useful not only in the development but in production a
    <link href="http://gusiev.com/2010/11/dynamic-context-in-rspec-dont-repeat-yourself"/>
    <updated>2010-11-03T00:00:00+02:00</updated>
    <id>http://gusiev.com/2010/11/dynamic-context-in-rspec-dont-repeat-yourself</id>
-   <content type="html">Advanced rspec features allow to use very effective technique to organize tests. You are able to construct and define context in more flexible way than before.
-We use to have less problems with subject and behavior. And &lt;strong&gt;context&lt;/strong&gt; is what testing is all about. Just because web apps manage data, behavior seriously depends on current state of the database. 
+   <content type="html">We use to have less problems with subject and behavior when writing our unit tests. And &lt;strong&gt;context&lt;/strong&gt; is what testing is all about.
+ Just because web apps manage data and same method can return different values based on current database state.
+Advanced rspec features allow to use very effective technique to organize tests. 
+Unlike plain tests hierarchy you can nest context in each other that will reflect your non-linear business process.
 &lt;!--more--&gt;
-&lt;br/&gt;&lt;br/&gt;
 
-Well organized contexts makes a real problem of testing. Unlike TestUnit, Rspec examples may have nested contexts and even dynamic contexts with the &lt;em&gt;let&lt;/em&gt; feature. &lt;br/&gt;
-In spite of lazy initialization let blocks they are defined before &lt;em&gt;before each&lt;/em&gt; hook. Understand by example. &lt;br/&gt; &lt;br/&gt;
+&lt;h3&gt;Context callback&lt;/h3&gt;
+Rspec &lt;code&gt;#let&lt;/code&gt; method is used lazy for loading things into context.
+In spite of lazy initialization let blocks they are defined before &lt;code&gt;before each&lt;/code&gt; hook. 
+This allow us to create context callback.
+&lt;br/&gt;&lt;br/&gt;
+Understand by example. 
 In this example orders should be delivered to confirmed customer account just after creation and should not be delivered if the account is not confirmed yet.
 &lt;pre&gt;&lt;code&gt;describe Order do
   context &quot;after create&quot; do #defining a partial context
     before(:each) do
-      subject.customer.confirmed = confirmed
+      subject.customer.confirmed = _confirmed
       subject.save!
     end
 
     context &quot;when customer is confirmed&quot; do 
-      let(:confirmed) { true }
+      let(:_confirmed) { true }
       it { should be_delivered }
     end
     
     context &quot;when customer is not confirmed&quot; do 
-      let(:confirmed) { false }
+      let(:_confirmed) { false }
       it { should_not be_delivered }
     end
   end
 end&lt;/code&gt;&lt;/pre&gt;
 
-Here you can see the partial context definition and custom behavior in two nested context.
-We can call not yet declared function and define it later and differently in different contexts.&lt;br/&gt; &lt;br/&gt;
+Here you can see partial context definition and custom behavior in two nested contexts.
+I used underscore prefix in order to identify the callback method, that is defined differently in different contexts.&lt;br/&gt; &lt;br/&gt;
+This happened because &lt;code&gt;let&lt;/code&gt; as method is defined at once but &lt;code&gt;before&lt;/code&gt; block is called only when &lt;code&gt;it&lt;/code&gt; is reached.
 
-Another example that is kind of pattern matching(erlang term), designed to test utility functions.&lt;br/&gt;
+&lt;h3&gt;Testing utility function&lt;/h3&gt;
+Another example that is a kind of pattern matching(Erlang term), designed to test utility functions.&lt;br/&gt;
 Suppose we have a boolean expression evaluation function:
 &lt;pre&gt;&lt;code&gt;describe Expression
   describe &quot;.run&quot; do
 
     subject { Expression.run(arg) }
 
-    context &quot;with '&amp;' where both true&quot; do
-      let(:arg) { &quot;true &amp; true&quot; }
+    context &quot;with '&amp;amp;' where both true&quot; do
+      let(:arg) { &quot;true &amp;amp; true&quot; }
       it {should be_true}
     end
 
-    context &quot;with '&amp;' where one false&quot; do
-      let(:arg) { &quot;false &amp; true&quot; }
+    context &quot;with '&amp;amp;' where one false&quot; do
+      let(:arg) { &quot;false &amp;amp; true&quot; }
       it {should be_false}
     end
     ........
@@ -403,7 +410,9 @@ Suppose we have a boolean expression evaluation function:
 end&lt;/code&gt;&lt;/pre&gt;
 
 Very good strategy to run same function with different arguments.
-&lt;br/&gt; &lt;br/&gt;
+
+&lt;h3&gt;Summary&lt;/h3&gt;
+
 Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (e.g. for other programming languages), Rspec authors got in deep to the testing problems and invent flexible and elegant syntax.
 </content>
  </entry>
