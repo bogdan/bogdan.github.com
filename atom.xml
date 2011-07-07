@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2011-07-07T15:14:01+03:00</updated>
+ <updated>2011-07-07T15:45:51+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>GitHub</name>
@@ -355,7 +355,7 @@ In some cases it might be useful not only in the development but in production a
    <content type="html">We use to have less problems with subject and behavior when writing our unit tests. And &lt;strong&gt;context&lt;/strong&gt; is what testing is all about.
  Just because web apps manage data and same method can return different values based on current database state.
 Advanced rspec features allow to use very effective technique to organize tests. 
-Unlike plain tests hierarchy you can nest context in each other that will reflect your non-linear business process.
+In order to reflect your non-linear business process in unit tests you can not oly nest contexts in each other but also make your context more dynamic.
 &lt;!--more--&gt;
 
 &lt;h3&gt;Context callback&lt;/h3&gt;
