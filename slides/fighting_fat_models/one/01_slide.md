@@ -31,7 +31,7 @@
 
 ##### Why it should not be in **view**?
 
-#### Because you will burn in **hell** for that
+#### Because your will be  **doom** forever.
 
 
 !SLIDE 
@@ -53,17 +53,33 @@ The problem is to **understand** which one *fit best* for you.
 
 ## What do we expect?
 
+* *Agile* process
 * *Reusability* of the code
-* Context free and easy to *test*
-* Making the logic  **strict**
+* Easy to *test*
+* Make the data safe **strict**
 
 
+!SLIDE 
+### The need of Services
+
+When amount of utils that supports Model goes higher support model with service is good idea.
+
+    @@@ ruby
+
+    # move
+    User.create_from_facebook
+    # to
+    UserService.create_from_facebook
+    # or
+    FacebookService.create_user
 
 !SLIDE 
 
 ## Services
 
-The most common way to extract logic from model:
+The most common way to extract logic from model is create a service.
+
+Service is separated utility class.
 
     @@@ ruby
     module CommentService
@@ -75,17 +91,47 @@ The most common way to extract logic from model:
 
 #### "Я знаю откуда что берется"
 
-!SLIDE 
-### Service implementations
 
-Support model with service is good idea.
+!SLIDE 
+
+## Observers
 
     @@@ ruby
+    class CommentObserver < AR::Observer
+      def after_create(comment)
+        send_comment_notification(comment)
+      end
+    end
 
-    UserService.create_from_facebook
-    # or
-    User.create_from_facebook
+Nothing interesting
 
+
+
+!SLIDE 
+
+### Benefits of model and observer
+
+
+We create default behavior and our data is safe.
+
+Example: Comment can not be created without notification.
+
+    @@@ ruby
+    class Comment < AR::Base
+      def after_create
+        send_comment_notification
+      end
+    end
+
+Reimplement other person's API has more wisdom than invent new one.
+
+!SLIDE 
+
+## **Edge cases** of data creation
+
+
+### In all cases data created in regular way
+### In one edge cases special rules applied
 
 !SLIDE 
 
@@ -103,7 +149,8 @@ Plan A:
       end
     end
 
-#### Method will be a **mess** as number of options goes higher.
+* Method will be a **mess** as number of options goes higher.
+* Don't look very functional stylish
 
 !SLIDE 
 
@@ -121,12 +168,12 @@ Maintenance problems:
 
 * Hard to keep all team informed about all services in the App
 * Don't provide default behavior
-* Need to serve too many parameters as you adapt service for edge cases
+* Hard to support as number of contexts goes higher
 
 
 !SLIDE 
 
-## Observers
+## Observers with option
 
 
     @@@ ruby
@@ -149,29 +196,10 @@ Maintenance problems:
 * Makes the app more fragmented
 * "Not done well in Rails"
 
-
 !SLIDE 
-### Benefits of embed thing to model
-
-
-We create default behavior and our data is safe.
-
-Example: Comment can not be created without notification.
-
-    @@@ ruby
-    class Comment < AR::Base
-      def after_create
-        send_comment_notification
-      end
-    end
-
-Moreover, no new API invented.
-
-!SLIDE 
-
 ### Support parameter in model
 
-Edge cases of data creation. Solved by unpersisted attributes. 
+Solved by not persisted attributes. 
 
     @@@ ruby
     class Comment < AR::Base
@@ -184,6 +212,8 @@ Edge cases of data creation. Solved by unpersisted attributes.
     end
 
 
+The property of default behavior in this example:
+
 * Hey model, create my comment.
   * Ok
 * Hey model, why did you send the notification?
@@ -191,8 +221,18 @@ Edge cases of data creation. Solved by unpersisted attributes.
 * Create model without notification
   * Ok
 
-`#skip_comment_notification` is used only in 20% of cases.
+`#skip_comment_notification` is used only in edge cases.
 
+
+!SLIDE 
+
+## Priorities
+
+####Model stands for **should**
+
+####Service stands for *could*
+
+####Observer stands for *maybe*
 
 !SLIDE 
 ### The model is still **fat**. What to do?
@@ -238,17 +278,10 @@ Traits include all staff that can be defined in model
 
 !SLIDE 
 
-#### Perfect example of Traits is *ActiveRecord*
+#### *ActiveRecord* uses Traits
 ##### If it is *possible* for such a **complicated library** 
 ##### then it is easy for regular projects
 
-!SLIDE 
-
-## Services and Models
-
-####Service stands for *could*
-
-####Model stands for **should**
 
 
 
@@ -264,6 +297,21 @@ Associations is a base for Traits technique.
 * *`has_many`* is usually *better* to create a slice of functionality.
   * Methods with this associations is usually independent from each other.
 
+
+<table>
+<tr>
+<td>belongs_to :company</td>
+<td>belongs_to :location</td>
+</tr>
+<tr>
+<td colspan="2">Job</td>
+</tr>
+<tr>
+<td>has_many :candidates</td>
+<td>has_many :criterias</td>
+</tr>
+
+</table>
 !SLIDE 
 
 
@@ -302,10 +350,12 @@ Associations is a base for Traits technique.
 
 !SLIDE 
 
-### Entreprise world
+### Enterprise world
 
 
-Unlike public web sites that is well focused, Enterprise apps use to do everything.
+*Agile* projects are *well focused*
+
+**Enterprise** apps use to **do everything**.
 
 That is why:
 
@@ -315,27 +365,89 @@ That is why:
 
 !SLIDE 
 
-### There is a need to reuse code in services.
+### When services are getting fatter,
+##### there is a need to 
 ## Extract *Workflow* from service.
 
 !SLIDE 
 
-## Workflow
+## Workflow designed to handle huge updates for data
 
-In two words a huge update for the data.
 
-Workflow is perfoming this update.
+WorkFlow is logic layer controller, because of it's "gathering" role.
 
-Parts of workflow that should be reused are extracted to services.
+Parts of WorkFlow that should be *reused* are extracted to *services*.
+
+
+    @@@ ruby
+    module BillingWorkFlow
+      def self.charge(cycle)
+        cycle.close!
+        cycle.items.each do |item|
+          item.charge!
+        end
+        UserMailer.cycle_charged(cycle).deliver!
+        ProjectService.close_stages(cycle.job)
+        ProjectService.generate_new_cycle(cycle.job)
+        .....
+      end
+    end
+
+
+!SLIDE 
+
+## Improve safety of Workflow
+
+* Workflow method designed to have only one usage.
+* Protect state attribute from mass assignment
+
+!SLIDE 
+
+## Flow nature and Event nature
+
+Flow :
+
+* goes step by step
+* can not be part of each other
+* more related on utils 
+
+Event:
+
+* less care about order
+* one can spawn more than one other events
+* can be parallelized 
+
 
 
 !SLIDE 
 
 ## Super advanced logic infrastructure
 
-![Architecture](architechture.png)
+![Architecture](./file/architechture.png)
 
 
+!SLIDE 
+
+### There is only one 100% reason 
+### when this can be broken?
+
+
+
+!SLIDE 
+
+### Of course this is 
+## Perfomance
+#### Others are doubtful
+
+!SLIDE 
+
+## Summary
+
+Every technique has it's own use case:
+
+* Service for helpers
+* Traits for strict data model
+* Observers for external service notification
 
 !SLIDE 
 
