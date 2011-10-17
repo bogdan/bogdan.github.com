@@ -64,6 +64,46 @@
                     
     <div class="post">
         <h2>
+            <a href='/2010/09/good-passwords-theory'>Good passwords theory</a>
+            <div class="date">30 Sep 2010</div>
+        </h2>
+        All of us are using passwords and most of us are typing them several times a day. And everyone knows the criteria to generate a good password. Random passwords are very strong from protection point of view but not from usability point of view. 
+No body think about password unforgettable-ness and less-painful-to-type-ness. I saw many passwords that are very painful because they are just random. 
+
+And I think it's nice to lose some randomness and make it easier to type and remember.
+There is still a lot of enough strong passwords that match this criteria as well. 
+<!--
+<br/>
+Try to type and remember something like:
+<pre><code>sudosuamigo1;
+s3host-large
+you&me2gether</code></pre>
+Instead of:
+<pre><code>1aWhuyZ
+!nzu?Us0
+n]1m!uaA</code></pre>
+ 
+And you feel much better.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/usability.html">usability</a>
+    
+    <a href="/tags/password.html">password</a>
+    
+    <a href="/tags/security.html">security</a>
+    
+    <a href="/tags/random.html">random</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2010/08/populate-db-pattern-fake-data'>Populate database pattern - why is it so cool?</a>
             <div class="date">26 Aug 2010</div>
         </h2>
@@ -683,79 +723,6 @@ General editing in Vim considered up to every small details. Ask yourself if the
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2009/10/objects-behaviour-inheritance-with-rspec'>Objects behaviour inheritance with RSpec</a>
-            <div class="date">27 Oct 2009</div>
-        </h2>
-        About half of a year ago I was writing about <a href="http://gusiev.com/2009/05/what-do-you-expect-from-interface/">object interface and Liskov Substitution Princeple</a>. In short: Any class instance that extends the base class should pass all <span style="text-decoration: line-through;">unit tests</span> behaviour tests written for base class instance. It was a surprise for me that this concept has already been implemented in RSpec.<br/><br/>
-
-<!--
-My previous article was primary inspired by Java programming language and it's interface concept. Unlike Java, Ruby does not have interfaces, but behaviour inheritance is still actual for both languages. RSpec seems the first testing framework that provide the ability to validate LSP and behavior inheritance with 'it_should_behave_like'. <br/>
-With Ruby modules(mixins) feature we can build reusable code and include it in different classes<a href="http://ruby-doc.org/core/classes/Module.html">(read more)</a>. With RSpec we can bundle the tests as well.<br/>
-
-<br/>
-
-Let's review the following module that uses one of the Rails callback and adds some logging:<br/>
-<pre><code>
-module LoggedModel
-  def after_save
-    super
-    handle_logging
-  end
-end
-</code></pre>
-and the some tests group for this module:<br/>
-<pre><code>
-describe LoggableModel
-  it "should be loggable" do
-    LoggableModel.should ...
-  end
-end</code></pre>
-Now, we have a tested code that is going to be used in many cases like this:<br/>
-<pre><code>class MyModel
-  include LoggableModel
-  def after_save
-    do_some_other_thing
-  end
-end</code></pre>
-
-OK, let's see what we have: after_save in MyModel overwrites after_save in LoggableModel and breaks the logging. This is simplest example when the behavior inheritance may be broken. Rspec shared examples groups allows you to ensure that the code in LoggableModel is used correctly from any inherited class. Let's change the definithin of LoggableModel tests.<br/>
-<pre><code>
-shared_examples_for "logged model" do
-  it "should be loggable" do
-    subject.should...
-  end
-end
-</code>
-</pre>
-'Subject' is the ultimate RSpec magic that let us make a simple abstraction with the tested class and reuse these shared examples in MyModel spec:
-<pre>
-<code>describe MyModel do
-  it_should_behave_like 'loggable model'
-end</code>
-</pre>
-In this way we will rerun the LoggableModel examples for MyModel and make sure that it's behavior wasn't broken.
--->
-        <h4 class="tags">
-    
-    <a href="/tags/test.html">test</a>
-    
-    <a href="/tags/ruby.html">ruby</a>
-    
-    <a href="/tags/rspec.html">rspec</a>
-    
-    <a href="/tags/behaviour.html">behaviour</a>
-    
-    <a href="/tags/inheritance.html">inheritance</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -790,6 +757,10 @@ In this way we will rerun the LoggableModel examples for MyModel and make sure t
                         <ul>
                             
                             <li>
+                                <a href='/2011/09/resque-plugins-framework-scaling'>Resque-way</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2011/07/rspec-context-behavior-subject-slides'>Advanced RSpec Techniques presentation</a>
                             </li>
                             
@@ -803,10 +774,6 @@ In this way we will rerun the LoggableModel examples for MyModel and make sure t
                             
                             <li>
                                 <a href='/2011/05/http-api-logging-rails'>Logging HTTP api calls just like database queries</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2011/05/migrate-wordpress-jekyll-post-preview'>Finally get rid of WordPress and PHP</a>
                             </li>
                             
                         </ul>
