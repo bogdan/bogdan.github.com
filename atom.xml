@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2011-11-07T17:31:54+03:00</updated>
+ <updated>2011-11-07T17:36:16+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>GitHub</name>
@@ -51,13 +51,13 @@
 
 &lt;p&gt;And we can easily split their definition with the following ruby DSL&lt;/p&gt;
 
-&lt;p&gt;Liquid error: undefined method &lt;code&gt;join&amp;#39; for #&amp;lt;String:0x7f89d4533580&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Liquid error: undefined method &lt;code&gt;join&amp;#39; for #&amp;lt;String:0x7f20d8757ee8&amp;gt;&lt;/code&gt;&lt;/p&gt;
 
 &lt;h3 id='grid_instance_api'&gt;Grid instance API&lt;/h3&gt;
 
 &lt;p&gt;And now we can create and manipulate reports:&lt;/p&gt;
 
-&lt;p&gt;Liquid error: undefined method &lt;code&gt;join&amp;#39; for #&amp;lt;String:0x7f89d4532f18&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Liquid error: undefined method &lt;code&gt;join&amp;#39; for #&amp;lt;String:0x7f20d8757998&amp;gt;&lt;/code&gt;&lt;/p&gt;
 
 &lt;h3 id='feel_the_power_and_flexibility_by_examples'&gt;Feel the Power and Flexibility by examples&lt;/h3&gt;
 
