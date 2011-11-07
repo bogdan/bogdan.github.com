@@ -4,7 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
 
-    <title>Bogdan Gusiev's blog</title>
+    <title>
+      
+      Bogdan&quot;s blog
+    </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
     <meta name="keywords" content="activerecord, api, application, bdd, behavior, context, criticism, database, debug, dry, gem, howto, html, idea, java, javascript, named_scope, pattern, programming, query, rails, rspec, ruby, sql, test, usability, vim" />
@@ -41,7 +44,7 @@
 
             <div class="header">
                 <div class="title">
-                    <h1><a href="/">Bogdan Gusiev's blog</a></h1>
+                    <h1><a href="/">Bogdan Gusiev&quot;s blog</a></h1>
                     <h4>How to make your Ruby on Rails application</h4>
                 </div>
 
@@ -132,57 +135,15 @@
 </ul>
 
 <p>And we can easily split their definition with the following ruby DSL</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>SimpleReport</span>
 
-  <span class='kp'>include</span> <span class='no'>Datagrid</span>
+<p>Liquid error: undefined method <code>join&#39; for #&lt;String:0x7f89d4533580&gt;</code></p>
 
-  <span class='n'>scope</span> <span class='k'>do</span>
-    <span class='no'>User</span><span class='o'>.</span><span class='n'>includes</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>)</span>
-  <span class='k'>end</span>
-
-  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:category</span><span class='p'>,</span> <span class='ss'>:enum</span><span class='p'>,</span> <span class='ss'>:select</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='s2'>&quot;first&quot;</span><span class='p'>,</span> <span class='s2'>&quot;second&quot;</span><span class='o'>]</span><span class='p'>)</span>
-  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:group_id</span><span class='p'>,</span> <span class='ss'>:multiple</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span>
-  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:group_name</span><span class='p'>,</span> <span class='ss'>:header</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;Group&quot;</span><span class='p'>)</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>value</span><span class='o'>|</span>
-    <span class='nb'>self</span><span class='o'>.</span><span class='n'>joins</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>)</span><span class='o'>.</span><span class='n'>where</span><span class='p'>(</span><span class='ss'>:groups</span> <span class='o'>=&gt;</span> <span class='p'>{</span><span class='ss'>:name</span> <span class='o'>=&gt;</span> <span class='n'>value</span><span class='p'>})</span>
-  <span class='k'>end</span>
-
-
-  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:name</span><span class='p'>)</span>
-  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>,</span> <span class='ss'>:order</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;groups.name&quot;</span><span class='p'>)</span> <span class='k'>do</span>
-    <span class='nb'>self</span><span class='o'>.</span><span class='n'>group</span><span class='o'>.</span><span class='n'>name</span>
-  <span class='k'>end</span>
-  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:active</span><span class='p'>,</span> <span class='ss'>:header</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;Activated&quot;</span><span class='p'>,</span> <span class='ss'>:order</span> <span class='o'>=&gt;</span> <span class='kp'>false</span><span class='p'>)</span>
-    <span class='o'>!</span><span class='nb'>self</span><span class='o'>.</span><span class='n'>disabled</span>
-  <span class='k'>end</span>
-<span class='k'>end</span>
-</code></pre>
-</div>
 <h3 id='grid_instance_api'>Grid instance API</h3>
 
 <p>And now we can create and manipulate reports:</p>
-<div class='highlight'><pre><code class='ruby'><span class='n'>report</span> <span class='o'>=</span> <span class='no'>SimpleReport</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span>
-        <span class='ss'>:group_id</span>          <span class='o'>=&gt;</span> <span class='o'>[</span><span class='mi'>1</span><span class='p'>,</span><span class='mi'>2</span><span class='o'>]</span><span class='p'>,</span>
-        <span class='ss'>:category</span>          <span class='o'>=&gt;</span> <span class='s2'>&quot;first&quot;</span><span class='p'>,</span>
-        <span class='ss'>:order</span>             <span class='o'>=&gt;</span> <span class='ss'>:group</span><span class='p'>,</span>
-        <span class='ss'>:descending</span>        <span class='o'>=&gt;</span> <span class='kp'>true</span>
-<span class='p'>)</span>
 
-<span class='n'>report</span><span class='o'>.</span><span class='n'>assets</span> <span class='c1'># =&gt; Array of User instances: </span>
-              <span class='c1'># SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count &gt;= 1 AND users.category = &#39;first&#39; ORDER BY groups.name DESC</span>
+<p>Liquid error: undefined method <code>join&#39; for #&lt;String:0x7f89d4532f18&gt;</code></p>
 
-<span class='n'>report</span><span class='o'>.</span><span class='n'>assets</span><span class='o'>.</span><span class='n'>paginate</span><span class='p'>(</span><span class='ss'>:page</span> <span class='o'>=&gt;</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:page</span><span class='o'>]</span><span class='p'>)</span> <span class='c1'># =&gt; Yes, it is</span>
-
-<span class='n'>report</span><span class='o'>.</span><span class='n'>header</span> <span class='c1'># =&gt; [&quot;Group&quot;, &quot;Name&quot;, &quot;Activated&quot;]</span>
-<span class='n'>report</span><span class='o'>.</span><span class='n'>rows</span>   <span class='c1'># =&gt; [</span>
-              <span class='c1'>#      [&quot;Steve&quot;, &quot;Spammers&quot;, true],</span>
-              <span class='c1'>#      [ &quot;John&quot;, &quot;Spoilers&quot;, true],</span>
-              <span class='c1'>#      [&quot;Berry&quot;, &quot;Good people&quot;, false]</span>
-              <span class='c1'>#    ]</span>
-<span class='n'>report</span><span class='o'>.</span><span class='n'>data</span>   <span class='c1'># =&gt; [ header, *rows]</span>
-
-<span class='n'>report</span><span class='o'>.</span><span class='n'>to_csv</span> <span class='c1'># =&gt; Yes, it is</span>
-</code></pre>
-</div>
 <h3 id='feel_the_power_and_flexibility_by_examples'>Feel the Power and Flexibility by examples</h3>
 
 <p>I love flexibility. That is why datagrid has a lot of things for non trivial use cases. In order to proof that I&#8217;ll show you some examples of what you can do:</p>
