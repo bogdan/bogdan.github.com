@@ -4,25 +4,13 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2011-11-11T12:15:35+02:00</updated>
+ <updated>2011-11-14T22:50:25+02:00</updated>
  <id>http://gusiev.com/</id>
  <author>
-   <name>GitHub</name>
-   <email>support@github.com</email>
+   <name>Bogdan Gusiev</name>
+   <email>agresso@gmail.com</email>
  </author>
  
- 
- <entry>
-   <title>Slides: Fighting with fat models</title>
-   <link href="http://gusiev.com/2011/11/slides-rails-fat-model-service-code"/>
-   <updated>2011-11-11T00:00:00+02:00</updated>
-   <id>http://gusiev.com/2011/11/slides-rails-fat-model-service-code</id>
-   <content type="html">&lt;p&gt;Here are my slides from &lt;a href='http://rubyc.eu'&gt;RubyC&lt;/a&gt; conference.&lt;/p&gt;
-
-&lt;p&gt;This presentation covers a hot topic for projects that are more than a year old - it&amp;#8217;s fat models. The problem appear naturally as models are the best place to allocate business logic code. There are number of existing techniques to manage large amount of code in Rails application. But they are suitable only in a half of use cases. For the rest of them we can use &lt;strong&gt;Traits&lt;/strong&gt; pattern that is described well in this presentation.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href='http://gusiev.com/slides/fighting_fat_models/static'&gt;Fighting with fat models&lt;/a&gt;&lt;/strong&gt; &lt;!--more--&gt;&lt;/p&gt;</content>
- </entry>
  
  <entry>
    <title>Resque-way</title>

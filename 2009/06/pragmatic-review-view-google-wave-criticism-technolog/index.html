@@ -12,7 +12,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, api, application, bdd, behavior, context, criticism, database, debug, dry, gem, howto, html, idea, java, javascript, named_scope, pattern, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, vim" />
+    <meta name="keywords" content="activerecord, api, application, bdd, behavior, context, criticism, database, debug, dry, gem, howto, html, idea, java, javascript, named_scope, pattern, programming, query, rails, rspec, ruby, sql, test, usability, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -104,9 +104,9 @@ Let's review the features now:<br/>
             
             <li><span>26 Aug 2010</span> &raquo; <a href="/2010/08/populate-db-pattern-fake-data">Populate database pattern - why is it so cool?</a></li>
             
-            <li><span>08 Jun 2010</span> &raquo; <a href="/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails">Advanced non-flat controllers hierarchy with rails</a></li>
+            <li><span>30 Sep 2010</span> &raquo; <a href="/2010/09/good-passwords-theory">Good passwords theory</a></li>
             
-            <li><span>13 May 2009</span> &raquo; <a href="/2009/05/how-to-choose-a-good-sexy-title-for-your-article">How to choose a sexy title for your article</a></li>
+            <li><span>04 May 2009</span> &raquo; <a href="/2009/05/jboss-seam-usage-makes-the-application-code-crazy">JBoss Seam usage makes the application code crazy!</a></li>
             
         </ul>
     </div>
@@ -140,10 +140,6 @@ Let's review the features now:<br/>
                         <ul>
                             
                             <li>
-                                <a href='/2011/11/slides-rails-fat-model-service-code'>Slides: Fighting with fat models</a>
-                            </li>
-                            
-                            <li>
                                 <a href='/2011/10/resque-plugins-framework-scaling'>Resque-way</a>
                             </li>
                             
@@ -157,6 +153,10 @@ Let's review the features now:<br/>
                             
                             <li>
                                 <a href='/2011/05/dbext-vim-table-names-convention-patch'>Patching dbext vim plugin to support Rails naming conventions</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/05/http-api-logging-rails'>Logging HTTP api calls just like database queries</a>
                             </li>
                             
                         </ul>
@@ -186,7 +186,7 @@ Let's review the features now:<br/>
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 17.6px; line-height:17.6px" rel="tag">debug</a> 
-<a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 19.4px; line-height:19.4px" rel="tag">dry</a> 
+<a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 17.6px; line-height:17.6px" rel="tag">dry</a> 
 <a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 17.6px; line-height:17.6px" rel="tag">gem</a> 
 <a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 19.4px; line-height:19.4px" rel="tag">html</a> 
@@ -197,11 +197,9 @@ Let's review the features now:<br/>
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 26.6px; line-height:26.6px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 24.8px; line-height:24.8px" rel="tag">rails</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 26.6px; line-height:26.6px" rel="tag">ruby</a> 
-<a href="/tags/service.html" title="Pages tagged service" style="font-size: 17.6px; line-height:17.6px" rel="tag">service</a> 
-<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 17.6px; line-height:17.6px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
