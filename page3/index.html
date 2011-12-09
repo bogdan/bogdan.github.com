@@ -10,7 +10,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, api, application, bdd, behavior, context, criticism, database, debug, dry, gem, howto, html, idea, java, javascript, named_scope, pattern, programming, query, rails, rspec, ruby, sql, test, usability, vim" />
+    <meta name="keywords" content="activerecord, api, application, bdd, behavior, context, criticism, database, debug, dry, gem, howto, html, idea, java, javascript, named_scope, pattern, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -65,6 +65,87 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2010/01/sql-queries-activerecord-rails-named-scopes-stack'>Advanced SQL and named scopes stack with ActiveRecord</a>
+            <div class="date">24 Jan 2010</div>
+        </h2>
+        If you ever work with rails application that is a little bit more complex then a simple CRUD you would know that some of the ActiveRecord magic doesn't work for complex SQL queries. I am primary talking about named scopes stack feature.<br/>
+<!--
+<hr/>
+Let's review the following named_scope that suppose to be usable in different combinations with others:
+<pre><code>named_scope :network_of, lambda {|user|
+{
+:select =&gt; "u.*"
+:from =&gt; "users u, followings f1, followings f2",
+:conditions =&gt; "f1.follower_id = #{user.id} AND " + 
+"f1.followed_id = f2.follower_id AND " +
+"f2.followed_id = u.id"
+}</code></pre>
+It suppose to returns all people that are followed by people that are followed by the given person.
+From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL.
+But this solution will have some issues with Active Record named scopes stack magic.
+See that User.network_for(current_user).all(:limit =>5) will result in SQL exception primary because (:limit => 5) doesn't know about the table alias "users u".
+We can not use it in fact.<br/>
+The second problem comes to the foreground when we will try to use ActiveRecord features like
+User.network_for(current_user).all(:include => :orders). ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.<br/>
+The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make "users" table to be the last one declared in :from parameter.
+<pre><code>:select => "users.*"
+:from => "followings f1, followings f2, users",
+:conditions => "f1.follower_id = #{user.id} AND " + 
+"f1.followed_id = f2.follower_id AND " +
+"f2.followed_id = users.id"</code></pre>
+Summary I would say that using :joins instead of :from/:conditions would give more flexibility and stackability to your named scopes but sometimes :from is more clear and here you got the tip how to use it.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/sql.html">sql</a>
+    
+    <a href="/tags/query.html">query</a>
+    
+    <a href="/tags/ruby.html">ruby</a>
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    <a href="/tags/activerecord.html">activerecord</a>
+    
+    <a href="/tags/named_scope.html">named_scope</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/12/vim-as-ruby-on-rails-ide-development-perfomanc'>Vim as IDE - new development era for me</a>
+            <div class="date">01 Dec 2009</div>
+        </h2>
+        I was using Vim to do the minor editing in config files for ages. Vim is advanced on basic navigation and editing operations. However I was always prefer IDE for programming because of it's specific to language navigation('go to definition' feature is awesome!), integrated debugger. But while gaining the experience I noticed that all advanced features began to be less important then basic ones. And you should try Vim if you feel the same.<br/>
+<!--
+<hr/>
+
+The basic concept of vim is that: Vim think in the same way as you do. For example: I want to delete 'd' everything inside 'i' brackets ')' and vim understands my command: di) <br/>
+You shouldn't type a dozen of button to move cursor around and finally delete the selected fragment. 
+It's hard to adapt because people are use to think in the way that there text editor do. Vim does vice versa. Some people are saying that they don't like vim because it make them think a lot. That's wrong! Vim is trying to make you free from thinking about editing and concentrate on the content.<br/>
+
+General editing in Vim considered up to every small details. Ask yourself if there is some usual task that I am doing inefficiently and search the Vim feature to optimize that in 3-5 keys. And in ninety nine percent of cases you will find it as built in vim command or a plugin.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/vim.html">vim</a>
+    
+    <a href="/tags/perfomance.html">perfomance</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2009/10/objects-behaviour-inheritance-with-rspec'>Objects behaviour inheritance with RSpec</a>
@@ -492,96 +573,6 @@ Think twice before switching to Seam.
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2009/04/update-and-create-timestamps-with-mysql'>Update and create timestamps with MySQL</a>
-            <div class="date">30 Apr 2009</div>
-        </h2>
-        A lot of relational tables need created and update timestamps columns. I prefer having them for all tables with no exception. However, most of applications I am working on are running MySQL. MySQL has minor limitation on timestamps. Unfortunately you can create only one time stamp column that has <em> DEFAULT NOW()</em> value. Read more to see how to avoid this limitation. <!--
-<hr/>
-The simplest way to do this is create the following columns in the table:
-<div class="bordered"><code>stamp_created timestamp default now(), 
-stamp_updated timestamp default now() on update now()) </code></div>
-But MySQL will return the following error: <br/> 
-<em>ERROR 1293 (HY000): Incorrect table definition; there can be only one TIMESTAMP column with CURRENT_ in DEFAULT or ON UPDATE clause</em> <br/>
-You can use only one of the definitions in one table. However here is the way how to create both timestamps columns:
-<pre><code> create table test_table( 
-id integer not null auto_increment primary key, 
-stamp_created timestamp default '0000-00-00 00:00:00', 
-stamp_updated timestamp default now() on update now() 
-); </code></pre>
-Note that it is necessary to enter nulls into both columns during "insert":
-<pre><code> mysql&gt; insert into test_table(stamp_created, stamp_updated) values(null, null); 
-Query OK, 1 row affected (0.06 sec)
-mysql&gt; select * from t5; 
-+----+---------------------+---------------------+ 
-| id | stamp_created       | stamp_updated       |
-+----+---------------------+---------------------+
-|  2 | 2009-04-30 09:44:35 | 2009-04-30 09:44:35 |
-+----+---------------------+---------------------+
-2 rows in set (0.00 sec)  
-mysql&gt; update test_table set id = 3 where id = 2; 
-Query OK, 1 row affected (0.05 sec) Rows matched: 1  Changed: 1  Warnings: 0  
-mysql&gt; select * from test_table;
-+----+---------------------+---------------------+
-| id | stamp_created       | stamp_updated       | 
-+----+---------------------+---------------------+ 
-|  3 | 2009-04-30 09:44:35 | 2009-04-30 09:46:59 | 
-+----+---------------------+---------------------+ 
-2 rows in set (0.00 sec)  
-mysql&gt;
-</code></pre>
--->
-        <h4 class="tags">
-    
-    <a href="/tags/howto.html">howto</a>
-    
-    <a href="/tags/mysql.html">mysql</a>
-    
-    <a href="/tags/timestamp.html">timestamp</a>
-    
-    <a href="/tags/database.html">database</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
-    <div class="post">
-        <h2>
-            <a href='/2009/04/some-programming-aphorisms'>Aphorisms about programming</a>
-            <div class="date">29 Apr 2009</div>
-        </h2>
-        I am not clever. I am just yet another way to use google.<br/>
-Good programmer should be lazy.<br/>
-The hole in your pocket is not critical unless you have a hole in your other pocket.<br/>
-<!--
-<hr/>
-Software is like sex - better when it is free. Linus Torvalds.<br/>
-Sometimes the theory meets practice. Practice wins. Always.<br/>
-10% of your zeals brings you 90% of success. Other 90% just 10% of success.<br/>
-About haste: The perfection of a clock is not in the speed of the movement, but in its correctness.<br/>
-Don't be satisfied with an apparent fix; full understanding is the standard.<br/>
-If you only know one language, no matter how well you know it, you're not a great programmer.<br/>
-The only "best practice" you should be using all the time is "Use Your Brain".<br/>
--->
-        <h4 class="tags">
-    
-    <a href="/tags/humor.html">humor</a>
-    
-    <a href="/tags/programming.html">programming</a>
-    
-    <a href="/tags/aphorism.html">aphorism</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -616,6 +607,14 @@ The only "best practice" you should be using all the time is "Use Your Brain".<b
                         <ul>
                             
                             <li>
+                                <a href='/2011/11/development-smtp-server'>Improve your Email delivery code with Mailtrap</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/11/slides-rails-fat-model-service-code'>Slides: Fighting with fat models</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2011/10/resque-plugins-framework-scaling'>Resque-way</a>
                             </li>
                             
@@ -625,14 +624,6 @@ The only "best practice" you should be using all the time is "Use Your Brain".<b
                             
                             <li>
                                 <a href='/2011/06/ruby-datagrid-gem-report'>Reporting made easy by Datagrid gem for Rails</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2011/05/dbext-vim-table-names-convention-patch'>Patching dbext vim plugin to support Rails naming conventions</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2011/05/http-api-logging-rails'>Logging HTTP api calls just like database queries</a>
                             </li>
                             
                         </ul>
@@ -662,7 +653,7 @@ The only "best practice" you should be using all the time is "Use Your Brain".<b
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 17.6px; line-height:17.6px" rel="tag">debug</a> 
-<a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 17.6px; line-height:17.6px" rel="tag">dry</a> 
+<a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 19.4px; line-height:19.4px" rel="tag">dry</a> 
 <a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 17.6px; line-height:17.6px" rel="tag">gem</a> 
 <a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 19.4px; line-height:19.4px" rel="tag">html</a> 
@@ -673,9 +664,11 @@ The only "best practice" you should be using all the time is "Use Your Brain".<b
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 24.8px; line-height:24.8px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 26.6px; line-height:26.6px" rel="tag">rails</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 26.6px; line-height:26.6px" rel="tag">ruby</a> 
+<a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
+<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 17.6px; line-height:17.6px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 

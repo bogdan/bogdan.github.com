@@ -10,7 +10,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, api, application, bdd, behavior, context, criticism, database, debug, dry, gem, howto, html, idea, java, javascript, named_scope, pattern, programming, query, rails, rspec, ruby, sql, test, usability, vim" />
+    <meta name="keywords" content="activerecord, api, application, bdd, behavior, context, criticism, database, debug, dry, gem, howto, html, idea, java, javascript, named_scope, pattern, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -65,6 +65,96 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2009/04/update-and-create-timestamps-with-mysql'>Update and create timestamps with MySQL</a>
+            <div class="date">30 Apr 2009</div>
+        </h2>
+        A lot of relational tables need created and update timestamps columns. I prefer having them for all tables with no exception. However, most of applications I am working on are running MySQL. MySQL has minor limitation on timestamps. Unfortunately you can create only one time stamp column that has <em> DEFAULT NOW()</em> value. Read more to see how to avoid this limitation. <!--
+<hr/>
+The simplest way to do this is create the following columns in the table:
+<div class="bordered"><code>stamp_created timestamp default now(), 
+stamp_updated timestamp default now() on update now()) </code></div>
+But MySQL will return the following error: <br/> 
+<em>ERROR 1293 (HY000): Incorrect table definition; there can be only one TIMESTAMP column with CURRENT_ in DEFAULT or ON UPDATE clause</em> <br/>
+You can use only one of the definitions in one table. However here is the way how to create both timestamps columns:
+<pre><code> create table test_table( 
+id integer not null auto_increment primary key, 
+stamp_created timestamp default '0000-00-00 00:00:00', 
+stamp_updated timestamp default now() on update now() 
+); </code></pre>
+Note that it is necessary to enter nulls into both columns during "insert":
+<pre><code> mysql&gt; insert into test_table(stamp_created, stamp_updated) values(null, null); 
+Query OK, 1 row affected (0.06 sec)
+mysql&gt; select * from t5; 
++----+---------------------+---------------------+ 
+| id | stamp_created       | stamp_updated       |
++----+---------------------+---------------------+
+|  2 | 2009-04-30 09:44:35 | 2009-04-30 09:44:35 |
++----+---------------------+---------------------+
+2 rows in set (0.00 sec)  
+mysql&gt; update test_table set id = 3 where id = 2; 
+Query OK, 1 row affected (0.05 sec) Rows matched: 1  Changed: 1  Warnings: 0  
+mysql&gt; select * from test_table;
++----+---------------------+---------------------+
+| id | stamp_created       | stamp_updated       | 
++----+---------------------+---------------------+ 
+|  3 | 2009-04-30 09:44:35 | 2009-04-30 09:46:59 | 
++----+---------------------+---------------------+ 
+2 rows in set (0.00 sec)  
+mysql&gt;
+</code></pre>
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/howto.html">howto</a>
+    
+    <a href="/tags/mysql.html">mysql</a>
+    
+    <a href="/tags/timestamp.html">timestamp</a>
+    
+    <a href="/tags/database.html">database</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2009/04/some-programming-aphorisms'>Aphorisms about programming</a>
+            <div class="date">29 Apr 2009</div>
+        </h2>
+        I am not clever. I am just yet another way to use google.<br/>
+Good programmer should be lazy.<br/>
+The hole in your pocket is not critical unless you have a hole in your other pocket.<br/>
+<!--
+<hr/>
+Software is like sex - better when it is free. Linus Torvalds.<br/>
+Sometimes the theory meets practice. Practice wins. Always.<br/>
+10% of your zeals brings you 90% of success. Other 90% just 10% of success.<br/>
+About haste: The perfection of a clock is not in the speed of the movement, but in its correctness.<br/>
+Don't be satisfied with an apparent fix; full understanding is the standard.<br/>
+If you only know one language, no matter how well you know it, you're not a great programmer.<br/>
+The only "best practice" you should be using all the time is "Use Your Brain".<br/>
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/humor.html">humor</a>
+    
+    <a href="/tags/programming.html">programming</a>
+    
+    <a href="/tags/aphorism.html">aphorism</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2009/04/ant-task-to-install-tomcat-service'>Ant task to install tomcat service26px</a>
@@ -374,6 +464,14 @@ Here is selenium call method:
                         <ul>
                             
                             <li>
+                                <a href='/2011/11/development-smtp-server'>Improve your Email delivery code with Mailtrap</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/11/slides-rails-fat-model-service-code'>Slides: Fighting with fat models</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2011/10/resque-plugins-framework-scaling'>Resque-way</a>
                             </li>
                             
@@ -383,14 +481,6 @@ Here is selenium call method:
                             
                             <li>
                                 <a href='/2011/06/ruby-datagrid-gem-report'>Reporting made easy by Datagrid gem for Rails</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2011/05/dbext-vim-table-names-convention-patch'>Patching dbext vim plugin to support Rails naming conventions</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2011/05/http-api-logging-rails'>Logging HTTP api calls just like database queries</a>
                             </li>
                             
                         </ul>
@@ -420,7 +510,7 @@ Here is selenium call method:
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 17.6px; line-height:17.6px" rel="tag">debug</a> 
-<a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 17.6px; line-height:17.6px" rel="tag">dry</a> 
+<a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 19.4px; line-height:19.4px" rel="tag">dry</a> 
 <a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 17.6px; line-height:17.6px" rel="tag">gem</a> 
 <a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 19.4px; line-height:19.4px" rel="tag">html</a> 
@@ -431,9 +521,11 @@ Here is selenium call method:
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 24.8px; line-height:24.8px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 26.6px; line-height:26.6px" rel="tag">rails</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 26.6px; line-height:26.6px" rel="tag">ruby</a> 
+<a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
+<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 17.6px; line-height:17.6px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 

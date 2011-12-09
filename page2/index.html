@@ -10,7 +10,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, api, application, bdd, behavior, context, criticism, database, debug, dry, gem, howto, html, idea, java, javascript, named_scope, pattern, programming, query, rails, rspec, ruby, sql, test, usability, vim" />
+    <meta name="keywords" content="activerecord, api, application, bdd, behavior, context, criticism, database, debug, dry, gem, howto, html, idea, java, javascript, named_scope, pattern, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -65,6 +65,138 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2011/03/ajax-jquery-debug-javascript'>Debug ajax requests in more easy way</a>
+            <div class="date">18 Mar 2011</div>
+        </h2>
+        When I have to debug ajax requests, I always feel pain in the ass accessing the exception message and backtrace. It require at least 3 clicks to get them and only in the plain html format, that web framework use to generate. Is it better to see it at once in the browser popup?  
+<!--
+<br/><br/>
+This can be done with Ajax callbacks offered by javascript framework(if yours doesn't - get rid of it). We can catch errors there and display popup. JQuery example with #ajaxError callback that fires on every unsuccessful ajax call:
+<pre><code>(function() {
+      var popup = null;
+      $(document).ajaxError(function(event, xhr, settings, exception) {
+        if (popup) {
+          popup.close();
+          popup = null;
+        }
+        popup = window.open(null, "error", "width=800,height=600");
+        $(popup.document.documentElement).html(xhr.responseText);
+        return true;
+      });
+    }());</code></pre>
+
+Checked in FF and Chrome(IE is not a browser).
+<a href="http://img6.imagebanana.com/img/drl8wpd9/screenshot_014.png">Screenshot</a> with the result. Be aware of browser popup blocker. <br/>
+You always have a control when popup the error. I like it to be "in any case". But You can customize it with <em>xhr.status</em> and <em>if</em> statement on the server side.
+<br/><br/>
+In some cases it might be useful not only in the development but in production as well. But it should be an iframe inside of pretty html layout, so that designers won't blame programmers too much.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/javascript.html">javascript</a>
+    
+    <a href="/tags/jquery.html">jquery</a>
+    
+    <a href="/tags/debug.html">debug</a>
+    
+    <a href="/tags/ajax.html">ajax</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
+            <a href='/2010/11/dynamic-context-in-rspec-dont-repeat-yourself'>Dynamic context in Rspec - don't repeat yourself</a>
+            <div class="date">03 Nov 2010</div>
+        </h2>
+        We use to have less problems with subject and behavior when writing our unit tests. And <strong>context</strong> is what testing is all about.
+ Just because web apps manage data and same method can return different values based on current database state.
+Advanced rspec features allow to use very effective technique to organize tests. 
+In order to reflect your non-linear business process in unit tests you can not oly nest contexts in each other but also make your context more dynamic.
+<!--
+
+<h3>Context callback</h3>
+Rspec <code>#let</code> method is used lazy for loading things into context.
+In spite of lazy initialization let blocks they are defined before <code>before each</code> hook. 
+This allow us to create context callback.
+<br/><br/>
+Understand by example. 
+In this example orders should be delivered to confirmed customer account just after creation and should not be delivered if the account is not confirmed yet.
+<pre><code>describe Order do
+  context "after create" do #defining a partial context
+    before(:each) do
+      subject.customer.confirmed = _confirmed
+      subject.save!
+    end
+
+    context "when customer is confirmed" do 
+      let(:_confirmed) { true }
+      it { should be_delivered }
+    end
+    
+    context "when customer is not confirmed" do 
+      let(:_confirmed) { false }
+      it { should_not be_delivered }
+    end
+  end
+end</code></pre>
+
+Here you can see partial context definition and custom behavior in two nested contexts.
+I used underscore prefix in order to identify the callback method, that is defined differently in different contexts.<br/> <br/>
+This happened because <code>let</code> as method is defined at once but <code>before</code> block is called only when <code>it</code> is reached.
+
+<h3>Testing utility function</h3>
+Another example that is a kind of pattern matching(Erlang term), designed to test utility functions.<br/>
+Suppose we have a boolean expression evaluation function:
+<pre><code>describe Expression
+  describe ".run" do
+
+    subject { Expression.run(arg) }
+
+    context "with '&amp;' where both true" do
+      let(:arg) { "true &amp; true" }
+      it {should be_true}
+    end
+
+    context "with '&amp;' where one false" do
+      let(:arg) { "false &amp; true" }
+      it {should be_false}
+    end
+    ........
+  end
+end</code></pre>
+
+Very good strategy to run same function with different arguments.
+
+<h3>Summary</h3>
+
+Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (e.g. for other programming languages), Rspec authors got in deep to the testing problems and invent flexible and elegant syntax.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/behavior.html">behavior</a>
+    
+    <a href="/tags/rspec.html">rspec</a>
+    
+    <a href="/tags/context.html">context</a>
+    
+    <a href="/tags/test.html">test</a>
+    
+    <a href="/tags/dry.html">dry</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2010/09/good-passwords-theory'>Good passwords theory</a>
@@ -645,87 +777,6 @@ Unfortunately most of the companies are ignoring that simple rule and unfortunat
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2010/01/sql-queries-activerecord-rails-named-scopes-stack'>Advanced SQL and named scopes stack with ActiveRecord</a>
-            <div class="date">24 Jan 2010</div>
-        </h2>
-        If you ever work with rails application that is a little bit more complex then a simple CRUD you would know that some of the ActiveRecord magic doesn't work for complex SQL queries. I am primary talking about named scopes stack feature.<br/>
-<!--
-<hr/>
-Let's review the following named_scope that suppose to be usable in different combinations with others:
-<pre><code>named_scope :network_of, lambda {|user|
-{
-:select =&gt; "u.*"
-:from =&gt; "users u, followings f1, followings f2",
-:conditions =&gt; "f1.follower_id = #{user.id} AND " + 
-"f1.followed_id = f2.follower_id AND " +
-"f2.followed_id = u.id"
-}</code></pre>
-It suppose to returns all people that are followed by people that are followed by the given person.
-From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL.
-But this solution will have some issues with Active Record named scopes stack magic.
-See that User.network_for(current_user).all(:limit =>5) will result in SQL exception primary because (:limit => 5) doesn't know about the table alias "users u".
-We can not use it in fact.<br/>
-The second problem comes to the foreground when we will try to use ActiveRecord features like
-User.network_for(current_user).all(:include => :orders). ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.<br/>
-The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make "users" table to be the last one declared in :from parameter.
-<pre><code>:select => "users.*"
-:from => "followings f1, followings f2, users",
-:conditions => "f1.follower_id = #{user.id} AND " + 
-"f1.followed_id = f2.follower_id AND " +
-"f2.followed_id = users.id"</code></pre>
-Summary I would say that using :joins instead of :from/:conditions would give more flexibility and stackability to your named scopes but sometimes :from is more clear and here you got the tip how to use it.
--->
-        <h4 class="tags">
-    
-    <a href="/tags/sql.html">sql</a>
-    
-    <a href="/tags/query.html">query</a>
-    
-    <a href="/tags/ruby.html">ruby</a>
-    
-    <a href="/tags/rails.html">rails</a>
-    
-    <a href="/tags/activerecord.html">activerecord</a>
-    
-    <a href="/tags/named_scope.html">named_scope</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
-    <div class="post">
-        <h2>
-            <a href='/2009/12/vim-as-ruby-on-rails-ide-development-perfomanc'>Vim as IDE - new development era for me</a>
-            <div class="date">01 Dec 2009</div>
-        </h2>
-        I was using Vim to do the minor editing in config files for ages. Vim is advanced on basic navigation and editing operations. However I was always prefer IDE for programming because of it's specific to language navigation('go to definition' feature is awesome!), integrated debugger. But while gaining the experience I noticed that all advanced features began to be less important then basic ones. And you should try Vim if you feel the same.<br/>
-<!--
-<hr/>
-
-The basic concept of vim is that: Vim think in the same way as you do. For example: I want to delete 'd' everything inside 'i' brackets ')' and vim understands my command: di) <br/>
-You shouldn't type a dozen of button to move cursor around and finally delete the selected fragment. 
-It's hard to adapt because people are use to think in the way that there text editor do. Vim does vice versa. Some people are saying that they don't like vim because it make them think a lot. That's wrong! Vim is trying to make you free from thinking about editing and concentrate on the content.<br/>
-
-General editing in Vim considered up to every small details. Ask yourself if there is some usual task that I am doing inefficiently and search the Vim feature to optimize that in 3-5 keys. And in ninety nine percent of cases you will find it as built in vim command or a plugin.
--->
-        <h4 class="tags">
-    
-    <a href="/tags/vim.html">vim</a>
-    
-    <a href="/tags/perfomance.html">perfomance</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -760,6 +811,14 @@ General editing in Vim considered up to every small details. Ask yourself if the
                         <ul>
                             
                             <li>
+                                <a href='/2011/11/development-smtp-server'>Improve your Email delivery code with Mailtrap</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2011/11/slides-rails-fat-model-service-code'>Slides: Fighting with fat models</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2011/10/resque-plugins-framework-scaling'>Resque-way</a>
                             </li>
                             
@@ -769,14 +828,6 @@ General editing in Vim considered up to every small details. Ask yourself if the
                             
                             <li>
                                 <a href='/2011/06/ruby-datagrid-gem-report'>Reporting made easy by Datagrid gem for Rails</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2011/05/dbext-vim-table-names-convention-patch'>Patching dbext vim plugin to support Rails naming conventions</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2011/05/http-api-logging-rails'>Logging HTTP api calls just like database queries</a>
                             </li>
                             
                         </ul>
@@ -806,7 +857,7 @@ General editing in Vim considered up to every small details. Ask yourself if the
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 17.6px; line-height:17.6px" rel="tag">debug</a> 
-<a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 17.6px; line-height:17.6px" rel="tag">dry</a> 
+<a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 19.4px; line-height:19.4px" rel="tag">dry</a> 
 <a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 17.6px; line-height:17.6px" rel="tag">gem</a> 
 <a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 19.4px; line-height:19.4px" rel="tag">html</a> 
@@ -817,9 +868,11 @@ General editing in Vim considered up to every small details. Ask yourself if the
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 24.8px; line-height:24.8px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 26.6px; line-height:26.6px" rel="tag">rails</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 26.6px; line-height:26.6px" rel="tag">ruby</a> 
+<a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
+<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 17.6px; line-height:17.6px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 

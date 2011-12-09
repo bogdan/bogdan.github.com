@@ -6,7 +6,7 @@
 
     <title>
       
-        Advanced non-flat controllers hierarchy with rails -
+        Improve your Email delivery code with Mailtrap -
       
       Bogdan's blog
     </title>
@@ -68,159 +68,94 @@
                 <div id="content">
                     <div id="post">
     <h2>
-        <a href="/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails">Advanced non-flat controllers hierarchy with rails</a>
-        <div class="date">08 Jun 2010</div>
+        <a href="/2011/11/development-smtp-server">Improve your Email delivery code with Mailtrap</a>
+        <div class="date">18 Nov 2011</div>
     </h2>
-    REST became the best practice for organizing CRUD server side interface. 
-But what to do when we have something more than hello-world application that 
-goes forward from data CRUD and provides many presentations 
-of the same data with different filters and different layouts?
-<!--more-->
-<br/>
+    <p>Today, I want introduce the <a href='http://mailtrap.io'>Mailtrap web service</a> aimed to help developers build and improve their email delivery functionality.</p>
 
-<h3>How the flat controller architecture goes to hell</h3>
+<p>Usually people use same SMTP settings for all environments, but this actually creates many problems in Staging and Development environments. Mailtrap is a special SMTP service for these environments aimed to solve specific problems. <!--more--></p>
 
-Starting from REST-full controller people use to stick to them and add more and more actions to the same class. And that is how the controller code goes to hell:
+<h3 id='problems'>Problems</h3>
 
-<pre><code>class UsersController &lt; ApplicationController
-#
-# Filters
-#
-skip_before_filter :check_user_is_valid, :only =&gt; [:edit, :update]
-before_filter :require_user, :only =&gt; [
-:update, :edit, :settings, :disconnect_twitter, :connect_facebook_account, :google_contacts
-]
+<h4 id='testing_user_registration_is_hell'>Testing user registration is hell</h4>
 
-before_filter :load_user, :except =&gt; [
-:index, :new, :create, :remote_validate_email, :autocomplete_for_user_full_name,
-:remote_validate_facebook_uid, :google_contacts
-]
+<p>In order to register yet another user You need to have new unique email address that should be hosted somewhere.</p>
 
-before_filter :check_permissions, :only =&gt; [ :edit, :update, :settings, :update_photo, :connect_facebook_account ]
+<h4 id='perform_mass_email_sending_is_a_problem_too'>Perform mass email sending is a problem too</h4>
 
-before_filter :load_invitation, :only =&gt; [:new, :create]
-before_filter :ensure_authenticated_to_facebook, :only =&gt; :connect_facebook_account
-before_filter :initialize_form, :only =&gt; [:edit]
+<p>Suppose you have a daily email to all customers and need check if your delivery logic works fine. In this case you need to know what emails were send, which customers received them. And again you need a batch of email addresses to test with.</p>
 
-#
-# And 20 almost independent actions goes here
-# And the twice longer tests file for this controller
-#
+<h4 id='discuss_email_layout_and_functional_problems_with_product_team'>Discuss email layout and functional problems with product team</h4>
 
-end
-</code></pre>
+<p>In order to share email You need to forward it to some inbox or attach to bug ticket as file. This is still not as easy as it could be.</p>
 
-<h3> Namespaces and nesting </h3>
-The root of the problem is in ignoring the following simple rule:
-<strong>The default choice for implementing new feature is do it in other controller</strong>
-It's always better to have 20 controllers with one action then one controller with 20 actions.
-Usually there is no compromise variant. And 20 controllers with one action ain't as bad as you imagine.<br/>
-<br/>
+<h4 id='send_emails_to_real_customers_by_mistake'>Send emails to real customers by mistake</h4>
 
-In order to handle the large number of controller we are actively using the namespaces and nested resources features. Let me give an example: User has many projects, Project belongs to category. We need to list projects per user and per category. In the flat hierarchy you would be confused but namespaces and nesting solves the problem.<br/>
+<p>In some cases copy production database to staging is a good idea. But You have a risk that real emails appear on development servers. You need to take care about that.</p>
 
-<pre><code>map.resources :categories do |c|
-  c.namespace :categories do |categories|
-    categories.resouces :projects
-  end
-end
-map.resources :users do |u|
-  c.namespace :users do |users|
-    users.resouces :projects
-  end
-end
+<p>My personal score is about 2500 emails sent by mistake at a time. Some people I know told me that their personal record is <strong>more than 2 millions emails sent by mistake</strong>. (Share your personal fuckup story in comments.)</p>
 
-class Categories::ProjectsController
+<h3 id='existing_solutions'>Existing solutions</h3>
 
-  def index
-    @projects = ....
-  end
-end
+<p>You can go in many ways to fix the problem e.g.:</p>
 
-class Users::ProjectsController
+<ul>
+<li>setup the script on your smtp server that changes recipient email</li>
 
-  def index
-    @projects = ....
-  end
-end</code></pre>
+<li>use services like mailinator.com (only in some cases)</li>
 
+<li>use custom Ruby specific gems like mail_view or mailcatcher.</li>
+</ul>
 
-Everyone heard about restful authentication but not so many people applied this idea to other not so restful from the first sight things. Like TwitterConnectionController:
+<p>All of them solves only some of the problems described above.</p>
 
-<pre><code>class Users::TwitterConnectionController < ApplicationController
+<h3 id='our_idea'>Our Idea</h3>
 
-  def create
-  end
+<p>Development SMTP service should work in a different way then production one: It should not deliver emails but just gather them in one place and provide a shared access for team to debug it. Mailtrap is the first SMTP service built specifically for this purpose.</p>
+<img src='http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png' style='width: 693px' />
+<p>Unlike many alternative solutions, Mailtrap is platform independent, doesn&#8217;t require any daemon to run and is just an SMTP server from application stand point. All you need to do is <strong>setup host, username and password</strong>.</p>
 
-  def destroy
-  end
-end</code></pre>
+<h3 id='features'>Features</h3>
 
-Many people will be pushing all such staff to UsersController until their editors would run out of memory.
+<p>This is not about high load, not about delivery statistics but about:</p>
 
-<h3>Out of scope</h3>
+<ul>
+<li>
+<p>Ability to access ANY sent email without registration</p>
+</li>
 
-State control actions are not in REST but should be one day. Placing them in the same controller with CRUD is generally a good idea:
+<li>
+<p>Share Email is as easy as copypasting the URL</p>
+</li>
 
-<pre><code>class ArticlesController 
+<li>
+<p>Developer tools for debugging &amp; improving email template:</p>
 
-  def {new, create, update, edit, destroy}
-  end
+<ul>
+<li>Syntax highlight</li>
 
-  def publish
-    @article.publish!
-    redirect_to articles_path
-  end
+<li>Easy view source</li>
 
-end</code></pre>
+<li>Apply CSS reset</li>
+</ul>
+</li>
 
-<h3>Some sugar from generators</h3>
+<li>
+<p>Access to the history</p>
+</li>
+</ul>
 
-Rails <em>generate</em> script supports namespaces very well:
-<pre><code>$ ./script/generate <del>rspec_</del>controller users/categories
-      create  app/controllers/users
-      create  app/helpers/users
-      create  app/views/users/categories
-      create  spec/controllers/users
-      create  spec/helpers/users
-      create  spec/views/users/categories
-      create  spec/controllers/users/categories_controller_spec.rb
-      create  spec/helpers/users/categories_helper_spec.rb
-      create  app/controllers/users/categories_controller.rb
-      create  app/helpers/users/categories_helper.rb</code></pre>
-
-And classes created in appropriate namespace and folder as well as specs for them.
-The only one thing you should do manually is add routes. 
-
-<h3>Drawbacks</h3>
-
-Every engeneering solution has it's drawbacks. While you have different controllers that operates on the same classes you might need to reuse functionality among them.
-I preffer to solve it by mixing in a module:
-<pre><code>class Users::ProjectController
-
- include UserNestedResource
-
-end</code></pre>
-
-Some people use inheritance instead. Both ways are almost the same. Nothing hard here as well.
-
-<h3>Summary</h3>
-
-At the end I 'll just repeat it again:<br/> 
-Default policy for placing two actions that has some kind of connection is <strong>SPLIT</strong>.
-
+<h2 id='try_mailtrap_right_now'>Try <a href='http://mailtrap.io'>Mailtrap</a> right now</h2>
     <h4 class="tags">
     
     
-    <a href="/tags/ruby.html">ruby</a>
+    <a href="/tags/smtp.html">smtp</a>
     
-    <a href="/tags/rails.html">rails</a>
+    <a href="/tags/development.html">development</a>
     
-    <a href="/tags/controller.html">controller</a>
+    <a href="/tags/service.html">service</a>
     
-    <a href="/tags/route.html">route</a>
-    
-    <a href="/tags/architecture.html">architecture</a>
+    <a href="/tags/environment.html">environment</a>
     
 </h4>
 <div class="clear"></div>
@@ -231,19 +166,19 @@ Default policy for placing two actions that has some kind of connection is <stro
         <ul class="posts">
             
                <!-- Exclude self -->
+                <li><span>08 Jun 2010</span> &raquo; <a href="/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails">Advanced non-flat controllers hierarchy with rails</a></li>
+              
+            
+               <!-- Exclude self -->
                 <li><span>26 Aug 2010</span> &raquo; <a href="/2010/08/populate-db-pattern-fake-data">Populate database pattern - why is it so cool?</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>18 Nov 2011</span> &raquo; <a href="/2011/11/development-smtp-server">Improve your Email delivery code with Mailtrap</a></li>
+                <li><span>30 Jun 2010</span> &raquo; <a href="/2010/06/ultimate-rspec-matcher-to-test-validation">Ultimate rspec matcher to test validation</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>27 Oct 2009</span> &raquo; <a href="/2009/10/objects-behaviour-inheritance-with-rspec">Objects behaviour inheritance with RSpec</a></li>
-              
-            
-               <!-- Exclude self -->
-                <li><span>05 Apr 2010</span> &raquo; <a href="/2010/04/ruby18-private-protected-incapsulatio">Encapsulation in Ruby: 'private' doesn't give expected level of privacy</a></li>
+                <li><span>03 Nov 2010</span> &raquo; <a href="/2010/11/dynamic-context-in-rspec-dont-repeat-yourself">Dynamic context in Rspec - don't repeat yourself</a></li>
               
             
         </ul>
@@ -253,8 +188,8 @@ Default policy for placing two actions that has some kind of connection is <stro
 <script type="text/javascript">
     var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
 
-    //var disqus_identifier = '/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails';
-    //var disqus_url = 'http://gusiev.com/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails';
+    //var disqus_identifier = '/2011/11/development-smtp-server';
+    //var disqus_url = 'http://gusiev.com/2011/11/development-smtp-server';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

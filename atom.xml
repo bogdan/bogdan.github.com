@@ -4,13 +4,107 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2011-11-14T22:50:25+02:00</updated>
+ <updated>2011-12-09T13:10:05+02:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
    <email>agresso@gmail.com</email>
  </author>
  
+ 
+ <entry>
+   <title>Improve your Email delivery code with Mailtrap</title>
+   <link href="http://gusiev.com/2011/11/development-smtp-server"/>
+   <updated>2011-11-18T00:00:00+02:00</updated>
+   <id>http://gusiev.com/2011/11/development-smtp-server</id>
+   <content type="html">&lt;p&gt;Today, I want introduce the &lt;a href='http://mailtrap.io'&gt;Mailtrap web service&lt;/a&gt; aimed to help developers build and improve their email delivery functionality.&lt;/p&gt;
+
+&lt;p&gt;Usually people use same SMTP settings for all environments, but this actually creates many problems in Staging and Development environments. Mailtrap is a special SMTP service for these environments aimed to solve specific problems. &lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h3 id='problems'&gt;Problems&lt;/h3&gt;
+
+&lt;h4 id='testing_user_registration_is_hell'&gt;Testing user registration is hell&lt;/h4&gt;
+
+&lt;p&gt;In order to register yet another user You need to have new unique email address that should be hosted somewhere.&lt;/p&gt;
+
+&lt;h4 id='perform_mass_email_sending_is_a_problem_too'&gt;Perform mass email sending is a problem too&lt;/h4&gt;
+
+&lt;p&gt;Suppose you have a daily email to all customers and need check if your delivery logic works fine. In this case you need to know what emails were send, which customers received them. And again you need a batch of email addresses to test with.&lt;/p&gt;
+
+&lt;h4 id='discuss_email_layout_and_functional_problems_with_product_team'&gt;Discuss email layout and functional problems with product team&lt;/h4&gt;
+
+&lt;p&gt;In order to share email You need to forward it to some inbox or attach to bug ticket as file. This is still not as easy as it could be.&lt;/p&gt;
+
+&lt;h4 id='send_emails_to_real_customers_by_mistake'&gt;Send emails to real customers by mistake&lt;/h4&gt;
+
+&lt;p&gt;In some cases copy production database to staging is a good idea. But You have a risk that real emails appear on development servers. You need to take care about that.&lt;/p&gt;
+
+&lt;p&gt;My personal score is about 2500 emails sent by mistake at a time. Some people I know told me that their personal record is &lt;strong&gt;more than 2 millions emails sent by mistake&lt;/strong&gt;. (Share your personal fuckup story in comments.)&lt;/p&gt;
+
+&lt;h3 id='existing_solutions'&gt;Existing solutions&lt;/h3&gt;
+
+&lt;p&gt;You can go in many ways to fix the problem e.g.:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;setup the script on your smtp server that changes recipient email&lt;/li&gt;
+
+&lt;li&gt;use services like mailinator.com (only in some cases)&lt;/li&gt;
+
+&lt;li&gt;use custom Ruby specific gems like mail_view or mailcatcher.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;All of them solves only some of the problems described above.&lt;/p&gt;
+
+&lt;h3 id='our_idea'&gt;Our Idea&lt;/h3&gt;
+
+&lt;p&gt;Development SMTP service should work in a different way then production one: It should not deliver emails but just gather them in one place and provide a shared access for team to debug it. Mailtrap is the first SMTP service built specifically for this purpose.&lt;/p&gt;
+&lt;img src='http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png' style='width: 693px' /&gt;
+&lt;p&gt;Unlike many alternative solutions, Mailtrap is platform independent, doesn&amp;#8217;t require any daemon to run and is just an SMTP server from application stand point. All you need to do is &lt;strong&gt;setup host, username and password&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h3 id='features'&gt;Features&lt;/h3&gt;
+
+&lt;p&gt;This is not about high load, not about delivery statistics but about:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Ability to access ANY sent email without registration&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li&gt;
+&lt;p&gt;Share Email is as easy as copypasting the URL&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li&gt;
+&lt;p&gt;Developer tools for debugging &amp;amp; improving email template:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Syntax highlight&lt;/li&gt;
+
+&lt;li&gt;Easy view source&lt;/li&gt;
+
+&lt;li&gt;Apply CSS reset&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+
+&lt;li&gt;
+&lt;p&gt;Access to the history&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id='try_mailtrap_right_now'&gt;Try &lt;a href='http://mailtrap.io'&gt;Mailtrap&lt;/a&gt; right now&lt;/h2&gt;</content>
+ </entry>
+ 
+ <entry>
+   <title>Slides: Fighting with fat models</title>
+   <link href="http://gusiev.com/2011/11/slides-rails-fat-model-service-code"/>
+   <updated>2011-11-11T00:00:00+02:00</updated>
+   <id>http://gusiev.com/2011/11/slides-rails-fat-model-service-code</id>
+   <content type="html">&lt;p&gt;Here are my slides from &lt;a href='http://rubyc.eu'&gt;RubyC&lt;/a&gt; conference.&lt;/p&gt;
+
+&lt;p&gt;This presentation covers a hot topic for projects that are more than a year old - it&amp;#8217;s fat models. The problem appear naturally as models are the best place to allocate business logic code. There are number of existing techniques to manage large amount of code in Rails application. But they are suitable only in a half of use cases. For the rest of them we can use &lt;strong&gt;Traits&lt;/strong&gt; pattern that is described well in this presentation.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href='http://gusiev.com/slides/fighting_fat_models/static'&gt;Fighting with fat models&lt;/a&gt;&lt;/strong&gt; &lt;!--more--&gt;&lt;/p&gt;</content>
+ </entry>
  
  <entry>
    <title>Resque-way</title>
