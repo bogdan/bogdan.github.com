@@ -4,13 +4,70 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2011-12-09T13:10:05+02:00</updated>
+ <updated>2012-01-12T15:10:54+02:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
    <email>agresso@gmail.com</email>
  </author>
  
+ 
+ <entry>
+   <title>New release of Datagrid: Mongoid, Rails Engines and HTML columns support</title>
+   <link href="http://gusiev.com/2012/01/datagrid-reports-release-gem"/>
+   <updated>2012-01-10T00:00:00+02:00</updated>
+   <id>http://gusiev.com/2012/01/datagrid-reports-release-gem</id>
+   <content type="html">&lt;p&gt;&lt;a href='https://github.com/bogdan/datagrid'&gt;Datagrid&lt;/a&gt; version 0.5.0 has been released.&lt;/p&gt;
+
+&lt;p&gt;Datagrid is a Ruby on Rails plugin that helps you to build and &lt;a href='http://datagrid.heroku.com'&gt;represent table-like data&lt;/a&gt; with:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Customizable filtering&lt;/li&gt;
+
+&lt;li&gt;Columns&lt;/li&gt;
+
+&lt;li&gt;Sort order&lt;/li&gt;
+
+&lt;li&gt;Localization&lt;/li&gt;
+
+&lt;li&gt;Export to CSV&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here are some major features from new release. &lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h3 id='mongoid_support'&gt;Mongoid support&lt;/h3&gt;
+
+&lt;p&gt;Previously Datagrid supported only ActiveRecord ORM. Now Mongoid is also available: &lt;a href='http://datagrid.heroku.com/document_reports'&gt;see the demo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;New datagrid driver architecture allows to add yet another ORM in less then &lt;a href='https://github.com/bogdan/datagrid/blob/master/lib/datagrid/drivers/mongoid.rb'&gt;40 lines of code&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id='html_columns'&gt;HTML columns&lt;/h3&gt;
+
+&lt;p&gt;In order to use view helpers to render columns You can use &lt;code&gt;:html&lt;/code&gt; option. This will call column block in the view context:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='n'&gt;column&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:completed&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:html&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='kp'&gt;true&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt; &lt;span class='o'&gt;|&lt;/span&gt;&lt;span class='n'&gt;asset&lt;/span&gt;&lt;span class='o'&gt;|&lt;/span&gt; &lt;span class='n'&gt;asset&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;completed?&lt;/span&gt; &lt;span class='p'&gt;?&lt;/span&gt; &lt;span class='n'&gt;image_tag&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot;green.gif&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='n'&gt;image_tag&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot;red.gif&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt;
+&lt;span class='c1'&gt;# or do it in partial&lt;/span&gt;
+&lt;span class='n'&gt;column&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:actions&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:html&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='kp'&gt;true&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt; &lt;span class='o'&gt;|&lt;/span&gt;&lt;span class='n'&gt;asset&lt;/span&gt;&lt;span class='o'&gt;|&lt;/span&gt; &lt;span class='n'&gt;render&lt;/span&gt; &lt;span class='ss'&gt;:partial&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;admin/assets/actions&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:object&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='n'&gt;asset&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id='table_customization_with_rails_engines'&gt;Table customization with Rails Engines&lt;/h3&gt;
+
+&lt;p&gt;Rails Engines allows you to embed views into Rails plugins and make them customizable. If You need serious customization of datagrid &lt;code&gt;&amp;lt;table&amp;gt;&lt;/code&gt; and HTML Columns doesn&amp;#8217;t help, you can customize datagrid internal views by running:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='sh'&gt;rake datagrid:copy_partials
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This will create the following files in your Rails root directory:&lt;/p&gt;
+&lt;pre&gt;
+&lt;code&gt;
+|~app/
+| ~views/
+|   ~datagrid/
+|     |-_head.html.erb
+|     |-_row.html.erb
+|     |_table.html.erb
+&lt;/code&gt;
+&lt;/pre&gt;
+&lt;p&gt;Now You are able to customize whatever You want.&lt;/p&gt;</content>
+ </entry>
  
  <entry>
    <title>Improve your Email delivery code with Mailtrap</title>
