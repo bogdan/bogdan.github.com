@@ -6,7 +6,7 @@
 
     <title>
       
-        Posts tagged "perfomance" -
+        New Rails Release with a few features from me -
       
       Bogdan's blog
     </title>
@@ -66,9 +66,139 @@
             <div id="main">
 
                 <div id="content">
-                        <h1 id="perfomance">Posts tagged "perfomance"</h1>
-<ul class="posts">        <li><a href="/2009/12/vim-as-ruby-on-rails-ide-development-perfomanc">Vim as IDE - new development era for me</a></li>
+                    <div id="post">
+    <h2>
+        <a href="/2012/01/rails-32-features-changelog">New Rails Release with a few features from me</a>
+        <div class="date">23 Jan 2012</div>
+    </h2>
+    <p>Upcoming Rails 3.2 release has many very useful features.</p>
+
+<p>Some of them are coming from me:</p>
+
+<ul>
+<li>ActiveRecord #pluck method</li>
+
+<li>Strict validation concept</li>
+
+<li>Customizable mass assignment sanitizer behavior</li>
+
+<li>Gotcha for <code>select[multiple]</code> tag</li>
 </ul>
+<!--more-->
+<h2 id='pluck_method'>Pluck method</h2>
+
+<p>People around made a <a href='https://github.com/rails/rails/commit/a382d60f6abc94b6a965525872f858e48abc00de'>lot of PR on it</a>. So, You probably already heard about it.</p>
+
+<p><code>pluck</code> can be used to query a single column from the underlying table of a model. It accepts a column name as argument and returns an array of values of the specified column with the corresponding data type.</p>
+<div class='highlight'><pre><code class='ruby'><span class='no'>Client</span><span class='o'>.</span><span class='n'>where</span><span class='p'>(</span><span class='ss'>:active</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span><span class='o'>.</span><span class='n'>pluck</span><span class='p'>(</span><span class='ss'>:id</span><span class='p'>)</span>
+<span class='c1'># SELECT id FROM clients WHERE active = 1</span>
+
+<span class='no'>Client</span><span class='o'>.</span><span class='n'>uniq</span><span class='o'>.</span><span class='n'>pluck</span><span class='p'>(</span><span class='ss'>:role</span><span class='p'>)</span>
+<span class='c1'># SELECT DISTINCT role FROM clients</span>
+</code></pre>
+</div>
+<p><a href='http://edgeguides.rubyonrails.org/active_record_querying.html#pluck'>Pluck in Rails guides</a></p>
+
+<h2 id='strict_validation_concept'>Strict validation concept</h2>
+
+<p>Some validation are not connected with end user and breaking it is more likely a bug than problem with user input. A few constraints can be embed to DB(like foreign keys), but most of them can not. And it&#8217;s a good idea to use AM validators to do such checks as well.</p>
+
+<p>Use case:</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Article</span> <span class='o'>&lt;</span> <span class='no'>AR</span><span class='o'>::</span><span class='n'>B</span>
+  <span class='n'>validates</span> <span class='ss'>:author</span><span class='p'>,</span> <span class='ss'>:presence</span> <span class='o'>=&gt;</span> <span class='kp'>true</span>
+<span class='k'>end</span>
+</code></pre>
+</div>
+<p><code>#author</code> is usually set in controller from <code>current_user</code>. If somebody forgets to do it - user see error: <code>Author cann&#39;t be blank</code>. And it is not right to show error message to user that he is not able to fix. More over DEV team is not notified about the problem.</p>
+
+<p>In order to fix that You can use <a href='https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2'>validate! method</a> that generates validator that always raises exception when fails:</p>
+<div class='highlight'><pre><code class='ruby'>  <span class='n'>validates!</span> <span class='ss'>:author</span><span class='p'>,</span> <span class='ss'>:presence</span> <span class='o'>=&gt;</span> <span class='kp'>true</span>
+</code></pre>
+</div>
+<h2 id='customizing_mass_assignment_sanitizer'>Customizing Mass Assignment Sanitizer</h2>
+
+<p>Added an ability to specify <a href='https://github.com/rails/rails/commit/aa2639e746d8af5d7673bbbbbccbe868edeb0161'>your own behavior on mass assignment protection</a>, controlled by option:</p>
+<div class='highlight'><pre><code class='ruby'><span class='no'>ActiveModel</span><span class='o'>::</span><span class='no'>MassAssignmentSecurity</span><span class='o'>.</span><span class='n'>mass_assignment_sanitizer</span>
+</code></pre>
+</div>
+<p>The main idea behind this change is to make Mass Assignment Sanitizer to raise exceptions in development and test environments while leaving logging behavior in production. This will be the <a href='https://github.com/rails/rails/commit/0fab8c388ea9cfcace0907102697c78a68762be3'>default Rails application template</a> in version 3.2. It will allow to detect mass assignment protection issues caused by bug in code more effectively before they will be deployed to production.</p>
+
+<h2 id='power_hacking_selectmultiple'>Power hacking select[multiple]</h2>
+
+<p>Quote from Rails documentation that comes along with <a href='https://github.com/rails/rails/commit/faba406fa15251cdc9588364d23c687a14ed6885'>the patch</a>:</p>
+
+<p>The HTML specification says:</p>
+
+<p>When <code>multiple</code> parameter passed to select and all options got deselected web browsers do not send any value to server. Unfortunately this introduces a gotcha: if an <code>User</code> model has many <code>roles</code> and have <code>role_ids</code> accessor, and in the form that edits roles of the user the user deselects all roles from <code>role_ids</code> multiple select box, no <code>role_ids</code> parameter is sent. So, any mass-assignment idiom like</p>
+
+<p><div class='highlight'><pre><code class='ruby'>  <span class='vi'>@user</span><span class='o'>.</span><span class='n'>update_attributes</span><span class='p'>(</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:user</span><span class='o'>]</span><span class='p'>)</span>
+</code></pre>
+</div></p>
+
+<p>wouldn&#8217;t update roles.</p>
+
+<p>To prevent this the helper generates an auxiliary hidden field before every multiple select. The hidden field has the same name as multiple select and blank value.</p>
+<div class='highlight'><pre><code class='html'><span class='nt'>&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;hidden&quot;</span> <span class='na'>name=</span><span class='s'>&quot;user[role_ids]&quot;</span> <span class='na'>value=</span><span class='s'>&quot;&quot;</span><span class='nt'>/&gt;</span>
+<span class='nt'>&lt;select</span> <span class='na'>id=</span><span class='s'>&quot;user_role_ids&quot;</span> <span class='na'>name=</span><span class='s'>&quot;user[role_ids]&quot;</span> <span class='na'>multiple=</span><span class='s'>&quot;multiple&quot;</span><span class='nt'>&gt;</span>
+  ....
+<span class='nt'>&lt;/select&gt;</span>
+</code></pre>
+</div>
+<p>This way, the client either sends only the hidden field (representing the deselected multiple select box), or both fields. Since the HTML specification says key/value pairs have to be sent in the same order they appear in the form, and parameters extraction gets the last occurrence of any repeated key in the query string, that works for ordinary forms.</p>
+
+<p>Unfortunately this trick can introduce a side effects described well in this <a href='http://stackoverflow.com/questions/8929230/why-is-the-first-element-always-blank-in-my-rails-multi-select-using-an-embedde'>stackoverflow question</a>. If you know an effective way to fix that - let me know.</p>
+
+<h4 id='have_fun_with_upgrading'>Have fun with upgrading</h4>
+    <h4 class="tags">
+    
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    <a href="/tags/changelog.html">changelog</a>
+    
+    <a href="/tags/contribution.html">contribution</a>
+    
+</h4>
+<div class="clear"></div>
+
+
+    <div id="related">
+        <h3>Related Posts</h3>
+        <ul class="posts">
+            
+               <!-- Exclude self -->
+                <li><span>18 Nov 2011</span> &raquo; <a href="/2011/11/development-smtp-server">Improve your Email delivery code with Mailtrap</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>08 Jun 2010</span> &raquo; <a href="/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails">Advanced non-flat controllers hierarchy with rails</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>26 Aug 2010</span> &raquo; <a href="/2010/08/populate-db-pattern-fake-data">Populate database pattern - why is it so cool?</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>26 Jun 2011</span> &raquo; <a href="/2011/06/ruby-datagrid-gem-report">Reporting made easy by Datagrid gem for Rails</a></li>
+              
+            
+        </ul>
+    </div>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
+
+    //var disqus_identifier = '/2012/01/rails-32-features-changelog';
+    //var disqus_url = 'http://gusiev.com/2012/01/rails-32-features-changelog';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+</div>
 
 
                 </div>
