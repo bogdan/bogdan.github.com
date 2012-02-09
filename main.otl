@@ -1,0 +1,27 @@
+OSS
+	datagrid
+		Resolve problem with HTML and CSV columns
+	js-routes
+		Investigate why Travis build still failing
+	AjaxSubmit
+		Demo Styling
+		Readme
+		Try in interstellar
+	Rails
+		Remove run_callbacks second argument
+		AM::Errors#to_json: add option to support full messages
+		Decide what to do with select[multiple]
+	Rspec-rails
+		Remove subshell on rake spec
+Mailtrap
+	Impetus
+	Video tutorial wit Sergey
+Config
+	Vim
+		Investigate why Rlog doesn't have highlight
+Blog
+	Article about ActiveSupport::Callbacks
+	Article about Ajax Submit
+	Attract right person?
+
+

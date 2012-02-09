@@ -10,7 +10,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, api, application, bdd, behavior, changelog, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, named_scope, pattern, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, vim" />
+    <meta name="keywords" content="activerecord, api, application, bdd, behavior, changelog, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, pattern, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -45,7 +45,7 @@
             <div class="header">
                 <div class="title">
                     <h1><a href="/">Bogdan Gusiev's blog</a></h1>
-                    <h4>How to make your Ruby on Rails application</h4>
+                    <h4>How to make good software for people</h4>
                 </div>
 
                 <div class="pages">
@@ -70,7 +70,7 @@
             <a href='/2012/01/rails-32-features-changelog'>New Rails Release with a few features from me</a>
             <div class="date">23 Jan 2012</div>
         </h2>
-        <p>Upcoming Rails 3.2 release has many very useful features.</p>
+        <p>Upcoming Rails 3.2 release has many useful features.</p>
 
 <p>Some of them are coming from me:</p>
 
@@ -83,6 +83,8 @@
 
 <li>Gotcha for <code>select[multiple]</code> tag</li>
 </ul>
+
+<p>Here is a more detailed description than in the <a href='https://gist.github.com/1472145'>Changelog</a>.</p>
 <!--
 <h2 id='pluck_method'>Pluck method</h2>
 
@@ -106,12 +108,20 @@
 <div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Article</span> <span class='o'>&lt;</span> <span class='no'>AR</span><span class='o'>::</span><span class='n'>B</span>
   <span class='n'>validates</span> <span class='ss'>:author</span><span class='p'>,</span> <span class='ss'>:presence</span> <span class='o'>=&gt;</span> <span class='kp'>true</span>
 <span class='k'>end</span>
+
+<span class='n'>u</span> <span class='o'>=</span> <span class='no'>Article</span><span class='o'>.</span><span class='n'>new</span>
+<span class='n'>u</span><span class='o'>.</span><span class='n'>save</span> <span class='c1'># =&gt; false</span>
 </code></pre>
 </div>
 <p><code>#author</code> is usually set in controller from <code>current_user</code>. If somebody forgets to do it - user see error: <code>Author cann&#39;t be blank</code>. And it is not right to show error message to user that he is not able to fix. More over DEV team is not notified about the problem.</p>
 
 <p>In order to fix that You can use <a href='https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2'>validate! method</a> that generates validator that always raises exception when fails:</p>
-<div class='highlight'><pre><code class='ruby'>  <span class='n'>validates!</span> <span class='ss'>:author</span><span class='p'>,</span> <span class='ss'>:presence</span> <span class='o'>=&gt;</span> <span class='kp'>true</span>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>User</span> <span class='o'>&lt;</span> <span class='no'>AR</span><span class='o'>::</span><span class='no'>Base</span>
+  <span class='n'>validates!</span> <span class='ss'>:author</span><span class='p'>,</span> <span class='ss'>:presence</span> <span class='o'>=&gt;</span> <span class='kp'>true</span>
+<span class='k'>end</span>
+
+<span class='n'>u</span> <span class='o'>=</span> <span class='no'>User</span><span class='o'>.</span><span class='n'>new</span>
+<span class='n'>u</span><span class='o'>.</span><span class='n'>save</span> <span class='c1'># raises ActiveModel::StrictValidationFailed</span>
 </code></pre>
 </div>
 <h2 id='customizing_mass_assignment_sanitizer'>Customizing Mass Assignment Sanitizer</h2>
@@ -206,7 +216,7 @@
 <div class='highlight'><pre><code class='sh'>rake datagrid:copy_partials
 </code></pre>
 </div>
-<p>This will create the following files in your rails root directory:</p>
+<p>This will create the following files in your Rails root directory:</p>
 <pre>
 <code>
 |~app/
@@ -778,7 +788,6 @@ Net::HTTP.colorize = true
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
 <a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 21.2px; line-height:21.2px" rel="tag">javascript</a> 
-<a href="/tags/named_scope.html" title="Pages tagged named_scope" style="font-size: 17.6px; line-height:17.6px" rel="tag">named_scope</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 

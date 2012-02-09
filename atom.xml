@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2012-02-05T11:49:31+02:00</updated>
+ <updated>2012-02-09T12:38:16+02:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
@@ -17,7 +17,7 @@
    <link href="http://gusiev.com/2012/01/rails-32-features-changelog"/>
    <updated>2012-01-23T00:00:00+02:00</updated>
    <id>http://gusiev.com/2012/01/rails-32-features-changelog</id>
-   <content type="html">&lt;p&gt;Upcoming Rails 3.2 release has many very useful features.&lt;/p&gt;
+   <content type="html">&lt;p&gt;Upcoming Rails 3.2 release has many useful features.&lt;/p&gt;
 
 &lt;p&gt;Some of them are coming from me:&lt;/p&gt;
 
@@ -30,6 +30,8 @@
 
 &lt;li&gt;Gotcha for &lt;code&gt;select[multiple]&lt;/code&gt; tag&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;p&gt;Here is a more detailed description than in the &lt;a href='https://gist.github.com/1472145'&gt;Changelog&lt;/a&gt;.&lt;/p&gt;
 &lt;!--more--&gt;
 &lt;h2 id='pluck_method'&gt;Pluck method&lt;/h2&gt;
 
@@ -53,12 +55,20 @@
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='k'&gt;class&lt;/span&gt; &lt;span class='nc'&gt;Article&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;&lt;/span&gt; &lt;span class='no'&gt;AR&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='n'&gt;B&lt;/span&gt;
   &lt;span class='n'&gt;validates&lt;/span&gt; &lt;span class='ss'&gt;:author&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:presence&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='kp'&gt;true&lt;/span&gt;
 &lt;span class='k'&gt;end&lt;/span&gt;
+
+&lt;span class='n'&gt;u&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='no'&gt;Article&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;new&lt;/span&gt;
+&lt;span class='n'&gt;u&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;save&lt;/span&gt; &lt;span class='c1'&gt;# =&amp;gt; false&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;#author&lt;/code&gt; is usually set in controller from &lt;code&gt;current_user&lt;/code&gt;. If somebody forgets to do it - user see error: &lt;code&gt;Author cann&amp;#39;t be blank&lt;/code&gt;. And it is not right to show error message to user that he is not able to fix. More over DEV team is not notified about the problem.&lt;/p&gt;
 
 &lt;p&gt;In order to fix that You can use &lt;a href='https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2'&gt;validate! method&lt;/a&gt; that generates validator that always raises exception when fails:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;  &lt;span class='n'&gt;validates!&lt;/span&gt; &lt;span class='ss'&gt;:author&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:presence&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='kp'&gt;true&lt;/span&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='k'&gt;class&lt;/span&gt; &lt;span class='nc'&gt;User&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;&lt;/span&gt; &lt;span class='no'&gt;AR&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;Base&lt;/span&gt;
+  &lt;span class='n'&gt;validates!&lt;/span&gt; &lt;span class='ss'&gt;:author&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:presence&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='kp'&gt;true&lt;/span&gt;
+&lt;span class='k'&gt;end&lt;/span&gt;
+
+&lt;span class='n'&gt;u&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='no'&gt;User&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;new&lt;/span&gt;
+&lt;span class='n'&gt;u&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;save&lt;/span&gt; &lt;span class='c1'&gt;# raises ActiveModel::StrictValidationFailed&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;h2 id='customizing_mass_assignment_sanitizer'&gt;Customizing Mass Assignment Sanitizer&lt;/h2&gt;
@@ -140,7 +150,7 @@
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='sh'&gt;rake datagrid:copy_partials
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;This will create the following files in your rails root directory:&lt;/p&gt;
+&lt;p&gt;This will create the following files in your Rails root directory:&lt;/p&gt;
 &lt;pre&gt;
 &lt;code&gt;
 |~app/
@@ -1114,37 +1124,30 @@ Unfortunately most of the companies are ignoring that simple rule and unfortunat
  </entry>
  
  <entry>
-   <title>Advanced SQL and named scopes stack with ActiveRecord</title>
+   <title>Advanced SQL and scopes stack with ActiveRecord</title>
    <link href="http://gusiev.com/2010/01/sql-queries-activerecord-rails-named-scopes-stack"/>
    <updated>2010-01-24T00:00:00+02:00</updated>
    <id>http://gusiev.com/2010/01/sql-queries-activerecord-rails-named-scopes-stack</id>
-   <content type="html">If you ever work with rails application that is a little bit more complex then a simple CRUD you would know that some of the ActiveRecord magic doesn't work for complex SQL queries. I am primary talking about named scopes stack feature.&lt;br/&gt;
-&lt;!--more--&gt;
-&lt;hr/&gt;
-Let's review the following named_scope that suppose to be usable in different combinations with others:
-&lt;pre&gt;&lt;code&gt;named_scope :network_of, lambda {|user|
-{
-:select =&amp;gt; &quot;u.*&quot;
-:from =&amp;gt; &quot;users u, followings f1, followings f2&quot;,
-:conditions =&amp;gt; &quot;f1.follower_id = #{user.id} AND &quot; + 
-&quot;f1.followed_id = f2.follower_id AND &quot; +
-&quot;f2.followed_id = u.id&quot;
-}&lt;/code&gt;&lt;/pre&gt;
-It suppose to returns all people that are followed by people that are followed by the given person.
-From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL.
-But this solution will have some issues with Active Record named scopes stack magic.
-See that User.network_for(current_user).all(:limit =&gt;5) will result in SQL exception primary because (:limit =&gt; 5) doesn't know about the table alias &quot;users u&quot;.
-We can not use it in fact.&lt;br/&gt;
-The second problem comes to the foreground when we will try to use ActiveRecord features like
-User.network_for(current_user).all(:include =&gt; :orders). ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.&lt;br/&gt;
-The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make &quot;users&quot; table to be the last one declared in :from parameter.
-&lt;pre&gt;&lt;code&gt;:select =&gt; &quot;users.*&quot;
-:from =&gt; &quot;followings f1, followings f2, users&quot;,
-:conditions =&gt; &quot;f1.follower_id = #{user.id} AND &quot; + 
-&quot;f1.followed_id = f2.follower_id AND &quot; +
-&quot;f2.followed_id = users.id&quot;&lt;/code&gt;&lt;/pre&gt;
-Summary I would say that using :joins instead of :from/:conditions would give more flexibility and stackability to your named scopes but sometimes :from is more clear and here you got the tip how to use it.
-</content>
+   <content type="html">&lt;p&gt;If you ever work with rails application that is a little bit more complex than a simple CRUD you would know that some of the ActiveRecord magic doesn&amp;#8217;t work for complex SQL queries. I am primary talking about scopes stack feature.&lt;br /&gt; &lt;!--more--&gt; &lt;hr /&gt; Let&amp;#8217;s review the following scope that suppose to be usable in different combinations with others:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='n'&gt;scope&lt;/span&gt; &lt;span class='ss'&gt;:network_of&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='nb'&gt;lambda&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='o'&gt;|&lt;/span&gt;&lt;span class='n'&gt;user&lt;/span&gt;&lt;span class='o'&gt;|&lt;/span&gt;
+&lt;span class='p'&gt;{&lt;/span&gt;
+&lt;span class='ss'&gt;:select&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;u.*&amp;quot;&lt;/span&gt;
+&lt;span class='ss'&gt;:from&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;users u, followings f1, followings f2&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt;
+&lt;span class='ss'&gt;:conditions&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;f1.follower_id = &lt;/span&gt;&lt;span class='si'&gt;#{&lt;/span&gt;&lt;span class='n'&gt;user&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;id&lt;/span&gt;&lt;span class='si'&gt;}&lt;/span&gt;&lt;span class='s2'&gt; AND &amp;quot;&lt;/span&gt; &lt;span class='o'&gt;+&lt;/span&gt; 
+&lt;span class='s2'&gt;&amp;quot;f1.followed_id = f2.follower_id AND &amp;quot;&lt;/span&gt; &lt;span class='o'&gt;+&lt;/span&gt;
+&lt;span class='s2'&gt;&amp;quot;f2.followed_id = u.id&amp;quot;&lt;/span&gt;
+&lt;span class='p'&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;It suppose to returns all people that are followed by people that are followed by the given person(second circle). From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL. But this solution will have some issues with Active Record scopes stack magic. See that &lt;code&gt;User.network_for(current_user).all(:limit =&amp;gt;5)&lt;/code&gt; will result in SQL exception primary because &lt;code&gt;:limit =&amp;gt; 5&lt;/code&gt; doesn&amp;#8217;t know about the table alias &lt;code&gt;users u&lt;/code&gt;. We can not use it in fact.&lt;br /&gt; The second problem comes to the foreground when we will try to use ActiveRecord features like &lt;code&gt;User.network_for(current_user).all(:include =&amp;gt; :orders)&lt;/code&gt;. ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.&lt;br /&gt; The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make &amp;#8220;users&amp;#8221; table to be the last one declared in :from parameter.&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='ss'&gt;:select&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;users.*&amp;quot;&lt;/span&gt;
+&lt;span class='ss'&gt;:from&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;followings f1, followings f2, users&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt;
+&lt;span class='ss'&gt;:conditions&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;f1.follower_id = &lt;/span&gt;&lt;span class='si'&gt;#{&lt;/span&gt;&lt;span class='n'&gt;user&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;id&lt;/span&gt;&lt;span class='si'&gt;}&lt;/span&gt;&lt;span class='s2'&gt; AND &amp;quot;&lt;/span&gt; &lt;span class='o'&gt;+&lt;/span&gt; 
+&lt;span class='s2'&gt;&amp;quot;f1.followed_id = f2.follower_id AND &amp;quot;&lt;/span&gt; &lt;span class='o'&gt;+&lt;/span&gt;
+&lt;span class='s2'&gt;&amp;quot;f2.followed_id = users.id&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Summary I would say that using &lt;code&gt;:joins&lt;/code&gt; instead of &lt;code&gt;:from/:conditions&lt;/code&gt; would give more flexibility and stackability to your scopes but sometimes &lt;code&gt;:from&lt;/code&gt; is more clear and here you got the tip how to use it.&lt;/p&gt;</content>
  </entry>
  
  <entry>
@@ -1172,7 +1175,7 @@ General editing in Vim considered up to every small details. Ask yourself if the
    <content type="html">About half of a year ago I was writing about &lt;a href=&quot;http://gusiev.com/2009/05/what-do-you-expect-from-interface/&quot;&gt;object interface and Liskov Substitution Princeple&lt;/a&gt;. In short: Any class instance that extends the base class should pass all &lt;span style=&quot;text-decoration: line-through;&quot;&gt;unit tests&lt;/span&gt; behaviour tests written for base class instance. It was a surprise for me that this concept has already been implemented in RSpec.&lt;br/&gt;&lt;br/&gt;
 
 &lt;!--more--&gt;
-My previous article was primary inspired by Java programming language and it's interface concept. Unlike Java, Ruby does not have interfaces, but behaviour inheritance is still actual for both languages. RSpec seems the first testing framework that provide the ability to validate LSP and behavior inheritance with 'it_should_behave_like'. &lt;br/&gt;
+My previous article was primary inspired by Java programming language and it's interface concept. Unlike Java, Ruby does not have interfaces, but behaviour inheritance is still actual for both languages. RSpec seems the first testing framework that provide the ability to validate LSP and behavior inheritance with &lt;code&gt;it_should_behave_like&lt;/code&gt;. &lt;br/&gt;
 With Ruby modules(mixins) feature we can build reusable code and include it in different classes&lt;a href=&quot;http://ruby-doc.org/core/classes/Module.html&quot;&gt;(read more)&lt;/a&gt;. With RSpec we can bundle the tests as well.&lt;br/&gt;
 
 &lt;br/&gt;
