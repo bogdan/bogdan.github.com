@@ -4,13 +4,101 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2012-02-09T12:41:47+02:00</updated>
+ <updated>2012-03-11T14:08:01+02:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
    <email>agresso@gmail.com</email>
  </author>
  
+ 
+ <entry>
+   <title>Web Forms 2.0: Submit with Ajax and Client Side Validation</title>
+   <link href="http://gusiev.com/2012/03/javascript-ajax-submit-form-validation"/>
+   <updated>2012-03-01T00:00:00+02:00</updated>
+   <id>http://gusiev.com/2012/03/javascript-ajax-submit-form-validation</id>
+   <content type="html">&lt;p&gt;Web 2.0 world force us to build Forms in a new level of quality. AJAX and dynamic HTML changes a way how forms should work internally. Let&amp;#8217;s call it Forms 2.0. And of course this facts bring a lot of complexity every time we deal with forms. Sometimes such form makes a real problem comparing to regular Web 1.0 form. Here will be a talk how to make Forms 2.0 as simple as Forms 1.0.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h2 id='sumbit_with_ajax'&gt;Sumbit with Ajax&lt;/h2&gt;
+
+&lt;p&gt;Submit a form with AJAX have never been a problem:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='js'&gt;&lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;.&lt;/span&gt;&lt;span class='nx'&gt;ajax&lt;/span&gt;&lt;span class='p'&gt;({&lt;/span&gt;
+  &lt;span class='nx'&gt;url&lt;/span&gt;&lt;span class='o'&gt;:&lt;/span&gt; &lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='nx'&gt;form&lt;/span&gt;&lt;span class='p'&gt;).&lt;/span&gt;&lt;span class='nx'&gt;attr&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s1'&gt;&amp;#39;action&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt;
+  &lt;span class='nx'&gt;data&lt;/span&gt;&lt;span class='o'&gt;:&lt;/span&gt; &lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='nx'&gt;form&lt;/span&gt;&lt;span class='p'&gt;).&lt;/span&gt;&lt;span class='nx'&gt;serialize&lt;/span&gt;&lt;span class='p'&gt;(),&lt;/span&gt;
+  &lt;span class='nx'&gt;type&lt;/span&gt;&lt;span class='o'&gt;:&lt;/span&gt; &lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='nx'&gt;form&lt;/span&gt;&lt;span class='p'&gt;).&lt;/span&gt;&lt;span class='nx'&gt;attr&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s1'&gt;&amp;#39;method&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt;
+  &lt;span class='nx'&gt;success&lt;/span&gt;&lt;span class='o'&gt;:&lt;/span&gt; &lt;span class='kd'&gt;function&lt;/span&gt; &lt;span class='p'&gt;()&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;
+    &lt;span class='c1'&gt;//do&lt;/span&gt;
+  &lt;span class='p'&gt;}&lt;/span&gt;
+&lt;span class='p'&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;More over submit with AJAX doesn&amp;#8217;t require to rerender a page if it was not successfull: less server load and no need to support &amp;#8216;new&amp;#8217; and &amp;#8216;edit&amp;#8217; mode in HTML template. Problem that comes up with ajax submit is Validation. If you ever find yourself stuck with syncing client and server side validation or bug that form doesn&amp;#8217;t have some data that was there before submit then you know what I am talking about too.&lt;/p&gt;
+
+&lt;h2 id='solving_validation_problem'&gt;Solving validation problem&lt;/h2&gt;
+
+&lt;p&gt;There are number of visions in the Ruby community on how to solve the problem: some people prefer stay with Forms 1.0. Some people generate JavaScript validators based on ActiveModel validators. Other guys write their own validation in JavaScript and perform it on both client and server side. The complexity of all these solution goes beyond believe. And here I am going to describe much simpler way of doing it.&lt;/p&gt;
+
+&lt;p&gt;What if we pass the validation result as JSON from backend in a simple key:value format like:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='js'&gt;&lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='nx'&gt;email&lt;/span&gt;&lt;span class='o'&gt;:&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;is not valid&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='nx'&gt;password&lt;/span&gt;&lt;span class='o'&gt;:&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;is too short&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;It&amp;#8217;s fast as wind and easy to implement:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;No SQL queries during validation request * Except uniqueness, that is more likely a feature than a problem&lt;/li&gt;
+
+&lt;li&gt;No Rendering just small JSON object as response&lt;/li&gt;
+
+&lt;li&gt;No additional controller action - just modify existing one&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id='from_assumptions_to_coding'&gt;From Assumptions to Coding&lt;/h2&gt;
+
+&lt;p&gt;As we agreed - controller should return JSON instead of HTML:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='diff'&gt; class UsersController &amp;lt; ApplicationController
+   def create
+     @user = User.new(params[:user])
+     if @user.save
+&lt;span class='gd'&gt;-      render :action =&amp;gt; :new&lt;/span&gt;
+&lt;span class='gi'&gt;+      render :json =&amp;gt; {:errors =&amp;gt; user.errors}&lt;/span&gt;
+     else
+&lt;span class='gd'&gt;-      redirect_to root_path&lt;/span&gt;
+&lt;span class='gi'&gt;+      render :json =&amp;gt; {:redirect =&amp;gt; root_path}&lt;/span&gt;
+     end
+   end
+ end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;All we need to do after that is just assign errors to the form to the prepared spots identified with HTML5 custom attribute:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='diff'&gt; &amp;lt;form id=&amp;quot;new_user&amp;quot; action=&amp;quot;/users&amp;quot; method=&amp;quot;post&amp;quot;&amp;gt;
+&lt;span class='gd'&gt;-  &amp;lt;div class=&amp;quot;field&amp;quot;&amp;gt;&lt;/span&gt;
+&lt;span class='gi'&gt;+  &amp;lt;div class=&amp;quot;field&amp;quot; validate=&amp;quot;email&amp;quot;&amp;gt;&lt;/span&gt;
+     &amp;lt;label for=&amp;quot;user_email&amp;quot;&amp;gt;Email&amp;lt;/label&amp;gt;&amp;lt;br /&amp;gt;
+     &amp;lt;input id=&amp;quot;user_email&amp;quot; name=&amp;quot;user[email]&amp;quot; type=&amp;quot;text&amp;quot; /&amp;gt;
+   &amp;lt;/div&amp;gt;
+&lt;span class='gd'&gt;-  &amp;lt;div class=&amp;quot;field&amp;quot;&amp;gt;&lt;/span&gt;
+&lt;span class='gi'&gt;+  &amp;lt;div class=&amp;quot;field&amp;quot; validate=&amp;quot;password&amp;quot;&amp;gt;&lt;/span&gt;
+     &amp;lt;label for=&amp;quot;user_password&amp;quot;&amp;gt;Password&amp;lt;/label&amp;gt;&amp;lt;br /&amp;gt;
+     &amp;lt;input id=&amp;quot;user_password&amp;quot; name=&amp;quot;user[password]&amp;quot; type=&amp;quot;password&amp;quot; /&amp;gt;
+   &amp;lt;/div&amp;gt;
+   &amp;lt;div class=&amp;quot;actions&amp;quot;&amp;gt;
+     &amp;lt;input name=&amp;quot;commit&amp;quot; type=&amp;quot;submit&amp;quot; value=&amp;quot;Create User&amp;quot; /&amp;gt;
+   &amp;lt;/div&amp;gt;
+ &amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;All the dirty work can be done by &lt;a href='https://github.com/bogdan/ajaxsubmit'&gt;AjaxSubmit&lt;/a&gt; library that implements all the ideas described above:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='js'&gt;&lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s1'&gt;&amp;#39;#new_user&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;).&lt;/span&gt;&lt;span class='nx'&gt;ajaxForm&lt;/span&gt;&lt;span class='p'&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;The main goal reached: Make super modern AJAX form is as easy as regular form. If you still can&amp;#8217;t believe that it is so easy - check out &lt;a href='http://ajaxsubmit.heroku.com'&gt;LIVE demo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id='ajaxsubmit_is_it_flexible'&gt;AjaxSubmit: Is it flexible?&lt;/h2&gt;
+
+&lt;p&gt;AjaxSubmit is a library that has 2 years of experience behind. About 7 different engineers made their contribution during this time. Take a look at the &lt;a href='https://github.com/bogdan/ajaxsubmit#readme'&gt;Read Me&lt;/a&gt; for more information about API, callbacks and configuration options.&lt;/p&gt;
+
+&lt;p&gt;You can also checkout &lt;a href='http://mailtrap.io'&gt;Mailtrap&lt;/a&gt; that is a perfect example of how your site could look like with this library in every web form.&lt;/p&gt;</content>
+ </entry>
  
  <entry>
    <title>New Rails Release with a few features from me</title>

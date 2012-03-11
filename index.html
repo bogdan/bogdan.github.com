@@ -10,7 +10,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, api, application, bdd, behavior, changelog, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, pattern, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, vim" />
+    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, jquery, pattern, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -65,6 +65,113 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2012/03/javascript-ajax-submit-form-validation'>Web Forms 2.0: Submit with Ajax and Client Side Validation</a>
+            <div class="date">01 Mar 2012</div>
+        </h2>
+        <p>Web 2.0 world force us to build Forms in a new level of quality. AJAX and dynamic HTML changes a way how forms should work internally. Let&#8217;s call it Forms 2.0. And of course this facts bring a lot of complexity every time we deal with forms. Sometimes such form makes a real problem comparing to regular Web 1.0 form. Here will be a talk how to make Forms 2.0 as simple as Forms 1.0.</p>
+<!--
+<h2 id='sumbit_with_ajax'>Sumbit with Ajax</h2>
+
+<p>Submit a form with AJAX have never been a problem:</p>
+<div class='highlight'><pre><code class='js'><span class='nx'>$</span><span class='p'>.</span><span class='nx'>ajax</span><span class='p'>({</span>
+  <span class='nx'>url</span><span class='o'>:</span> <span class='nx'>$</span><span class='p'>(</span><span class='nx'>form</span><span class='p'>).</span><span class='nx'>attr</span><span class='p'>(</span><span class='s1'>&#39;action&#39;</span><span class='p'>),</span>
+  <span class='nx'>data</span><span class='o'>:</span> <span class='nx'>$</span><span class='p'>(</span><span class='nx'>form</span><span class='p'>).</span><span class='nx'>serialize</span><span class='p'>(),</span>
+  <span class='nx'>type</span><span class='o'>:</span> <span class='nx'>$</span><span class='p'>(</span><span class='nx'>form</span><span class='p'>).</span><span class='nx'>attr</span><span class='p'>(</span><span class='s1'>&#39;method&#39;</span><span class='p'>),</span>
+  <span class='nx'>success</span><span class='o'>:</span> <span class='kd'>function</span> <span class='p'>()</span> <span class='p'>{</span>
+    <span class='c1'>//do</span>
+  <span class='p'>}</span>
+<span class='p'>});</span>
+</code></pre>
+</div>
+<p>More over submit with AJAX doesn&#8217;t require to rerender a page if it was not successfull: less server load and no need to support &#8216;new&#8217; and &#8216;edit&#8217; mode in HTML template. Problem that comes up with ajax submit is Validation. If you ever find yourself stuck with syncing client and server side validation or bug that form doesn&#8217;t have some data that was there before submit then you know what I am talking about too.</p>
+
+<h2 id='solving_validation_problem'>Solving validation problem</h2>
+
+<p>There are number of visions in the Ruby community on how to solve the problem: some people prefer stay with Forms 1.0. Some people generate JavaScript validators based on ActiveModel validators. Other guys write their own validation in JavaScript and perform it on both client and server side. The complexity of all these solution goes beyond believe. And here I am going to describe much simpler way of doing it.</p>
+
+<p>What if we pass the validation result as JSON from backend in a simple key:value format like:</p>
+<div class='highlight'><pre><code class='js'><span class='p'>{</span><span class='nx'>email</span><span class='o'>:</span> <span class='s2'>&quot;is not valid&quot;</span><span class='p'>,</span> <span class='nx'>password</span><span class='o'>:</span> <span class='s2'>&quot;is too short&quot;</span><span class='p'>}</span>
+</code></pre>
+</div>
+<p>It&#8217;s fast as wind and easy to implement:</p>
+
+<ul>
+<li>No SQL queries during validation request * Except uniqueness, that is more likely a feature than a problem</li>
+
+<li>No Rendering just small JSON object as response</li>
+
+<li>No additional controller action - just modify existing one</li>
+</ul>
+
+<h2 id='from_assumptions_to_coding'>From Assumptions to Coding</h2>
+
+<p>As we agreed - controller should return JSON instead of HTML:</p>
+<div class='highlight'><pre><code class='diff'> class UsersController &lt; ApplicationController
+   def create
+     @user = User.new(params[:user])
+     if @user.save
+<span class='gd'>-      render :action =&gt; :new</span>
+<span class='gi'>+      render :json =&gt; {:errors =&gt; user.errors}</span>
+     else
+<span class='gd'>-      redirect_to root_path</span>
+<span class='gi'>+      render :json =&gt; {:redirect =&gt; root_path}</span>
+     end
+   end
+ end
+</code></pre>
+</div>
+<p>All we need to do after that is just assign errors to the form to the prepared spots identified with HTML5 custom attribute:</p>
+<div class='highlight'><pre><code class='diff'> &lt;form id=&quot;new_user&quot; action=&quot;/users&quot; method=&quot;post&quot;&gt;
+<span class='gd'>-  &lt;div class=&quot;field&quot;&gt;</span>
+<span class='gi'>+  &lt;div class=&quot;field&quot; validate=&quot;email&quot;&gt;</span>
+     &lt;label for=&quot;user_email&quot;&gt;Email&lt;/label&gt;&lt;br /&gt;
+     &lt;input id=&quot;user_email&quot; name=&quot;user[email]&quot; type=&quot;text&quot; /&gt;
+   &lt;/div&gt;
+<span class='gd'>-  &lt;div class=&quot;field&quot;&gt;</span>
+<span class='gi'>+  &lt;div class=&quot;field&quot; validate=&quot;password&quot;&gt;</span>
+     &lt;label for=&quot;user_password&quot;&gt;Password&lt;/label&gt;&lt;br /&gt;
+     &lt;input id=&quot;user_password&quot; name=&quot;user[password]&quot; type=&quot;password&quot; /&gt;
+   &lt;/div&gt;
+   &lt;div class=&quot;actions&quot;&gt;
+     &lt;input name=&quot;commit&quot; type=&quot;submit&quot; value=&quot;Create User&quot; /&gt;
+   &lt;/div&gt;
+ &lt;/form&gt;
+</code></pre>
+</div>
+<p>All the dirty work can be done by <a href='https://github.com/bogdan/ajaxsubmit'>AjaxSubmit</a> library that implements all the ideas described above:</p>
+<div class='highlight'><pre><code class='js'><span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;#new_user&#39;</span><span class='p'>).</span><span class='nx'>ajaxForm</span><span class='p'>();</span>
+</code></pre>
+</div>
+<p>The main goal reached: Make super modern AJAX form is as easy as regular form. If you still can&#8217;t believe that it is so easy - check out <a href='http://ajaxsubmit.heroku.com'>LIVE demo</a>.</p>
+
+<h2 id='ajaxsubmit_is_it_flexible'>AjaxSubmit: Is it flexible?</h2>
+
+<p>AjaxSubmit is a library that has 2 years of experience behind. About 7 different engineers made their contribution during this time. Take a look at the <a href='https://github.com/bogdan/ajaxsubmit#readme'>Read Me</a> for more information about API, callbacks and configuration options.</p>
+
+<p>You can also checkout <a href='http://mailtrap.io'>Mailtrap</a> that is a perfect example of how your site could look like with this library in every web form.</p>-->
+        <h4 class="tags">
+    
+    <a href="/tags/javascript.html">javascript</a>
+    
+    <a href="/tags/ajax.html">ajax</a>
+    
+    <a href="/tags/forms.html">forms</a>
+    
+    <a href="/tags/validation.html">validation</a>
+    
+    <a href="/tags/html.html">html</a>
+    
+    <a href="/tags/jquery.html">jquery</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2012/01/rails-32-features-changelog'>New Rails Release with a few features from me</a>
@@ -645,67 +752,6 @@ Net::HTTP.colorize = true
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2011/05/migrate-wordpress-jekyll-post-preview'>Finally get rid of WordPress and PHP</a>
-            <div class="date">20 May 2011</div>
-        </h2>
-        <p>After a few tries migrate to blog engine with programming language I know well, I finally found <a href='http://github.com/mojombo/jekyll'>jekyll</a> - lightweight static site generator. My main concerns in this choice was:</p>
-
-<ul>
-<li>Edit posts in my favorite text editor with favorite markup</li>
-
-<li>NO PHP</li>
-
-<li>Syntax highlight out of the box</li>
-</ul>
-<!--
-<h3 id='migration_from_wordpress'>Migration from WordPress</h3>
-
-<p>Three main migration points was:</p>
-
-<ul>
-<li>Posts that was migrated with <a href='http://google.com/search?q=wordpress%20jekyll%20migrate'>several lines of ruby code</a></li>
-
-<li>Comments that imported to <a href='http://wordpress.org/extend/plugins/disqus-comment-system/'>disqus</a> as jekyll is static site engine so the comments should be hosted somewhere else</li>
-
-<li>Generate <a href='http://www.google.com.ua/search?sourceid=chrome&amp;client=ubuntu&amp;channel=cs&amp;ie=UTF-8&amp;q=jekyll+tag+cloud'>tag cloud and posts by tag pages</a> that also have a lot of workarounds in the web</li>
-</ul>
-
-<p>One problem I am currently have is &#8220;post preview&#8221; feature that is currently unsupported in jekyll. My current approach for this looks like this:</p>
-
-<pre><code>post.content | replace_first:&#39;&lt;!--more--&gt;&#39;,&#39;&lt;!--&#39; | append:&#39;--&gt;&#39; </code></pre>
-
-<h3 id='problems'>Problems</h3>
-
-<p>Jekyll looks not very extensible. Some methods are not available in the API. Example: integrate SASS require more pain the ass than it should be. I am planning to fix that in a few days. Another problem I ran into is that github native support don&#8217;t allow you any extension. My suggestion is to generate static content locally with your own code on top of jekyll and upload static content to git repository.</p>
-
-<p>Currently I build site locally from <a href='http://github.com/bogdan/blog'>source code</a> and push static content into <a href='http://github.com/bogdan/bogdan.github.com'>separated repository</a>.</p>
-
-<h3 id='result'>Result</h3>
-
-<p>About 12 hours of work to transfer 30 posts and their comments. Reworked site design to be more clean.</p>-->
-        <h4 class="tags">
-    
-    <a href="/tags/jekyll.html">jekyll</a>
-    
-    <a href="/tags/wordpress.html">wordpress</a>
-    
-    <a href="/tags/php.html">php</a>
-    
-    <a href="/tags/migration.html">migration</a>
-    
-    <a href="/tags/liquid.html">liquid</a>
-    
-    <a href="/tags/criticism.html">criticism</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -732,6 +778,10 @@ Net::HTTP.colorize = true
                         <ul>
                             
                             <li>
+                                <a href='/2012/03/javascript-ajax-submit-form-validation'>Web Forms 2.0: Submit with Ajax and Client Side Validation</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2012/01/rails-32-features-changelog'>New Rails Release with a few features from me</a>
                             </li>
                             
@@ -745,10 +795,6 @@ Net::HTTP.colorize = true
                             
                             <li>
                                 <a href='/2011/11/slides-rails-fat-model-service-code'>Slides: Fighting with fat models</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2011/10/resque-plugins-framework-scaling'>Resque-way</a>
                             </li>
                             
                         </ul>
@@ -770,6 +816,7 @@ Net::HTTP.colorize = true
                     <div class="sidebarbox tag-cloud">
                         <h2>Browse by tags</h2>
                         <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 21.2px; line-height:21.2px" rel="tag">activerecord</a> 
+<a href="/tags/ajax.html" title="Pages tagged ajax" style="font-size: 17.6px; line-height:17.6px" rel="tag">ajax</a> 
 <a href="/tags/api.html" title="Pages tagged api" style="font-size: 17.6px; line-height:17.6px" rel="tag">api</a> 
 <a href="/tags/application.html" title="Pages tagged application" style="font-size: 17.6px; line-height:17.6px" rel="tag">application</a> 
 <a href="/tags/bdd.html" title="Pages tagged bdd" style="font-size: 17.6px; line-height:17.6px" rel="tag">bdd</a> 
@@ -784,10 +831,11 @@ Net::HTTP.colorize = true
 <a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 19.4px; line-height:19.4px" rel="tag">dry</a> 
 <a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 19.4px; line-height:19.4px" rel="tag">gem</a> 
 <a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
-<a href="/tags/html.html" title="Pages tagged html" style="font-size: 19.4px; line-height:19.4px" rel="tag">html</a> 
+<a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 21.2px; line-height:21.2px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 23.0px; line-height:23.0px" rel="tag">javascript</a> 
+<a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
@@ -799,6 +847,7 @@ Net::HTTP.colorize = true
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
+<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 17.6px; line-height:17.6px" rel="tag">validation</a> 
 <a href="/tags/vim.html" title="Pages tagged vim" style="font-size: 17.6px; line-height:17.6px" rel="tag">vim</a> 
 
                     </div>

@@ -1,27 +1,66 @@
+V
+	Three tennis balls
 OSS
 	datagrid
 		Resolve problem with HTML and CSV columns
 	js-routes
-		Investigate why Travis build still failing
 	AjaxSubmit
-		Demo Styling
-		Readme
-		Try in interstellar
+		Update library in demo
+		Skins
+			Like in interstellar
+			Minimalistic
+		Explore alternatives
+			https://github.com/bcardarella/client_side_validations/
+			Guy from engineyard's validation
+	    
 	Rails
-		Remove run_callbacks second argument
-		AM::Errors#to_json: add option to support full messages
 		Decide what to do with select[multiple]
+		Journey: Try to remove SLASH and DOT node type
+		Investigate mass assignment protection performance issue
 	Rspec-rails
 		Remove subshell on rake spec
+	Poland conference
+		Keep thinking how to do it
+	Vim execute plugin
+	DiffBench performance tool
 Mailtrap
 	Impetus
-	Video tutorial wit Sergey
-Config
+	Video tutorial rework
+		Voice support
+	Setup a schema to notify users about some news
+	Advertise AjaxSubmit
+	To SI
+		Nice icon for settings
+		Nice styling of txt/html view switch
+		Long title names
+Configuration
 	Vim
 		Investigate why Rlog doesn't have highlight
+	Skype
+		Investigate with strace
 Blog
 	Article about ActiveSupport::Callbacks
 	Article about Ajax Submit
 	Attract right person?
 
+New job
+	Try out Rspec master class
+	Try out consultancy
+
+Poland
+	Chocolate for Ela
+	Respond to Ela
+	Pay for ticket
+	Choose bus or train
+	Pay for hostel
+	Krakow map
+	Get visa
+		Strahovka
+		Anketa
+		Priglashenie
+		Photo + Passport
+	
+	Trip
+		Conference plan
+		Cash
 

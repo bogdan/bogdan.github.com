@@ -6,7 +6,7 @@
 
     <title>
       
-        Posts tagged "inheritance" -
+        Web Forms 2.0: Submit with Ajax and Client Side Validation -
       
       Bogdan's blog
     </title>
@@ -66,11 +66,148 @@
             <div id="main">
 
                 <div id="content">
-                        <h1 id="inheritance">Posts tagged "inheritance"</h1>
-<ul class="posts">        <li>
-          <a href="/2009/10/objects-behaviour-inheritance-with-rspec">Objects behaviour inheritance with RSpec</a> - 27 Oct 2009
-        </li>
+                    <div id="post">
+    <h2>
+        <a href="/2012/03/javascript-ajax-submit-form-validation">Web Forms 2.0: Submit with Ajax and Client Side Validation</a>
+        <div class="date">01 Mar 2012</div>
+    </h2>
+    <p>Web 2.0 world force us to build Forms in a new level of quality. AJAX and dynamic HTML changes a way how forms should work internally. Let&#8217;s call it Forms 2.0. And of course this facts bring a lot of complexity every time we deal with forms. Sometimes such form makes a real problem comparing to regular Web 1.0 form. Here will be a talk how to make Forms 2.0 as simple as Forms 1.0.</p>
+<!--more-->
+<h2 id='sumbit_with_ajax'>Sumbit with Ajax</h2>
+
+<p>Submit a form with AJAX have never been a problem:</p>
+<div class='highlight'><pre><code class='js'><span class='nx'>$</span><span class='p'>.</span><span class='nx'>ajax</span><span class='p'>({</span>
+  <span class='nx'>url</span><span class='o'>:</span> <span class='nx'>$</span><span class='p'>(</span><span class='nx'>form</span><span class='p'>).</span><span class='nx'>attr</span><span class='p'>(</span><span class='s1'>&#39;action&#39;</span><span class='p'>),</span>
+  <span class='nx'>data</span><span class='o'>:</span> <span class='nx'>$</span><span class='p'>(</span><span class='nx'>form</span><span class='p'>).</span><span class='nx'>serialize</span><span class='p'>(),</span>
+  <span class='nx'>type</span><span class='o'>:</span> <span class='nx'>$</span><span class='p'>(</span><span class='nx'>form</span><span class='p'>).</span><span class='nx'>attr</span><span class='p'>(</span><span class='s1'>&#39;method&#39;</span><span class='p'>),</span>
+  <span class='nx'>success</span><span class='o'>:</span> <span class='kd'>function</span> <span class='p'>()</span> <span class='p'>{</span>
+    <span class='c1'>//do</span>
+  <span class='p'>}</span>
+<span class='p'>});</span>
+</code></pre>
+</div>
+<p>More over submit with AJAX doesn&#8217;t require to rerender a page if it was not successfull: less server load and no need to support &#8216;new&#8217; and &#8216;edit&#8217; mode in HTML template. Problem that comes up with ajax submit is Validation. If you ever find yourself stuck with syncing client and server side validation or bug that form doesn&#8217;t have some data that was there before submit then you know what I am talking about too.</p>
+
+<h2 id='solving_validation_problem'>Solving validation problem</h2>
+
+<p>There are number of visions in the Ruby community on how to solve the problem: some people prefer stay with Forms 1.0. Some people generate JavaScript validators based on ActiveModel validators. Other guys write their own validation in JavaScript and perform it on both client and server side. The complexity of all these solution goes beyond believe. And here I am going to describe much simpler way of doing it.</p>
+
+<p>What if we pass the validation result as JSON from backend in a simple key:value format like:</p>
+<div class='highlight'><pre><code class='js'><span class='p'>{</span><span class='nx'>email</span><span class='o'>:</span> <span class='s2'>&quot;is not valid&quot;</span><span class='p'>,</span> <span class='nx'>password</span><span class='o'>:</span> <span class='s2'>&quot;is too short&quot;</span><span class='p'>}</span>
+</code></pre>
+</div>
+<p>It&#8217;s fast as wind and easy to implement:</p>
+
+<ul>
+<li>No SQL queries during validation request * Except uniqueness, that is more likely a feature than a problem</li>
+
+<li>No Rendering just small JSON object as response</li>
+
+<li>No additional controller action - just modify existing one</li>
 </ul>
+
+<h2 id='from_assumptions_to_coding'>From Assumptions to Coding</h2>
+
+<p>As we agreed - controller should return JSON instead of HTML:</p>
+<div class='highlight'><pre><code class='diff'> class UsersController &lt; ApplicationController
+   def create
+     @user = User.new(params[:user])
+     if @user.save
+<span class='gd'>-      render :action =&gt; :new</span>
+<span class='gi'>+      render :json =&gt; {:errors =&gt; user.errors}</span>
+     else
+<span class='gd'>-      redirect_to root_path</span>
+<span class='gi'>+      render :json =&gt; {:redirect =&gt; root_path}</span>
+     end
+   end
+ end
+</code></pre>
+</div>
+<p>All we need to do after that is just assign errors to the form to the prepared spots identified with HTML5 custom attribute:</p>
+<div class='highlight'><pre><code class='diff'> &lt;form id=&quot;new_user&quot; action=&quot;/users&quot; method=&quot;post&quot;&gt;
+<span class='gd'>-  &lt;div class=&quot;field&quot;&gt;</span>
+<span class='gi'>+  &lt;div class=&quot;field&quot; validate=&quot;email&quot;&gt;</span>
+     &lt;label for=&quot;user_email&quot;&gt;Email&lt;/label&gt;&lt;br /&gt;
+     &lt;input id=&quot;user_email&quot; name=&quot;user[email]&quot; type=&quot;text&quot; /&gt;
+   &lt;/div&gt;
+<span class='gd'>-  &lt;div class=&quot;field&quot;&gt;</span>
+<span class='gi'>+  &lt;div class=&quot;field&quot; validate=&quot;password&quot;&gt;</span>
+     &lt;label for=&quot;user_password&quot;&gt;Password&lt;/label&gt;&lt;br /&gt;
+     &lt;input id=&quot;user_password&quot; name=&quot;user[password]&quot; type=&quot;password&quot; /&gt;
+   &lt;/div&gt;
+   &lt;div class=&quot;actions&quot;&gt;
+     &lt;input name=&quot;commit&quot; type=&quot;submit&quot; value=&quot;Create User&quot; /&gt;
+   &lt;/div&gt;
+ &lt;/form&gt;
+</code></pre>
+</div>
+<p>All the dirty work can be done by <a href='https://github.com/bogdan/ajaxsubmit'>AjaxSubmit</a> library that implements all the ideas described above:</p>
+<div class='highlight'><pre><code class='js'><span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;#new_user&#39;</span><span class='p'>).</span><span class='nx'>ajaxForm</span><span class='p'>();</span>
+</code></pre>
+</div>
+<p>The main goal reached: Make super modern AJAX form is as easy as regular form. If you still can&#8217;t believe that it is so easy - check out <a href='http://ajaxsubmit.heroku.com'>LIVE demo</a>.</p>
+
+<h2 id='ajaxsubmit_is_it_flexible'>AjaxSubmit: Is it flexible?</h2>
+
+<p>AjaxSubmit is a library that has 2 years of experience behind. About 7 different engineers made their contribution during this time. Take a look at the <a href='https://github.com/bogdan/ajaxsubmit#readme'>Read Me</a> for more information about API, callbacks and configuration options.</p>
+
+<p>You can also checkout <a href='http://mailtrap.io'>Mailtrap</a> that is a perfect example of how your site could look like with this library in every web form.</p>
+    <h4 class="tags">
+    
+    
+    <a href="/tags/javascript.html">javascript</a>
+    
+    <a href="/tags/ajax.html">ajax</a>
+    
+    <a href="/tags/forms.html">forms</a>
+    
+    <a href="/tags/validation.html">validation</a>
+    
+    <a href="/tags/html.html">html</a>
+    
+    <a href="/tags/jquery.html">jquery</a>
+    
+</h4>
+<div class="clear"></div>
+
+
+    <div id="related">
+        <h3>Related Posts</h3>
+        <ul class="posts">
+            
+               <!-- Exclude self -->
+                <li><span>23 Jan 2012</span> &raquo; <a href="/2012/01/rails-32-features-changelog">New Rails Release with a few features from me</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>08 Jun 2010</span> &raquo; <a href="/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails">Advanced non-flat controllers hierarchy with rails</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>26 Aug 2010</span> &raquo; <a href="/2010/08/populate-db-pattern-fake-data">Populate database pattern - why is it so cool?</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>18 Nov 2011</span> &raquo; <a href="/2011/11/development-smtp-server">Improve your Email delivery code with Mailtrap</a></li>
+              
+            
+        </ul>
+    </div>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
+
+    //var disqus_identifier = '/2012/03/javascript-ajax-submit-form-validation';
+    //var disqus_url = 'http://gusiev.com/2012/03/javascript-ajax-submit-form-validation';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+</div>
 
 
                 </div>
