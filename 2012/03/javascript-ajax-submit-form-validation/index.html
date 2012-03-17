@@ -113,11 +113,11 @@
    def create
      @user = User.new(params[:user])
      if @user.save
-<span class='gd'>-      render :action =&gt; :new</span>
-<span class='gi'>+      render :json =&gt; {:errors =&gt; user.errors}</span>
-     else
 <span class='gd'>-      redirect_to root_path</span>
 <span class='gi'>+      render :json =&gt; {:redirect =&gt; root_path}</span>
+     else
+<span class='gd'>-      render :action =&gt; :new</span>
+<span class='gi'>+      render :json =&gt; {:errors =&gt; user.errors}</span>
      end
    end
  end
