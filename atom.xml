@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2012-03-17T08:46:49+02:00</updated>
+ <updated>2012-03-29T12:02:05+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
@@ -298,7 +298,7 @@
 &lt;h3 id='our_idea'&gt;Our Idea&lt;/h3&gt;
 
 &lt;p&gt;Development SMTP service should work in a different way then production one: It should not deliver emails but just gather them in one place and provide a shared access for team to debug it. Mailtrap is the first SMTP service built specifically for this purpose.&lt;/p&gt;
-&lt;img style='width: 693px' src='http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png' /&gt;
+&lt;img src='http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png' style='width: 693px' /&gt;
 &lt;p&gt;Unlike many alternative solutions, Mailtrap is platform independent, doesn&amp;#8217;t require any daemon to run and is just an SMTP server from application stand point. All you need to do is &lt;strong&gt;setup host, username and password&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;h3 id='features'&gt;Features&lt;/h3&gt;
