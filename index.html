@@ -10,7 +10,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, jquery, pattern, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
+    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, jquery, patch, pattern, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -67,6 +67,107 @@
                     
     <div class="post">
         <h2>
+            <a href='/2012/05/benchmark-performance-patch-ruby-diff'>Benchmark your performance patches</a>
+            <div class="date">01 May 2012</div>
+        </h2>
+        <p>After a dozen performance patches to many gems want to share some practical experience I gain. Tools I&#8217;ve picked up was <strong>perftools.rb</strong> and ruby <strong>built-in benchmark</strong> library. They are fit well for cases when optimization stays at Ruby level and doesn&#8217;t require to fix something in native extensions or dig into IO operations.</p>
+<!--
+<p>General flow on how to tackle performance is clear:</p>
+
+<ul>
+<li><a href='https://github.com/tmm1/perftools.rb'>perftools.rb</a> shows slow method calls in a nice call graph format.</li>
+
+<li><a href='http://ruby-doc.org/stdlib-1.9.2/libdoc/benchmark/rdoc/Benchmark.html'>Benchmark</a> proves that we made an improvement.</li>
+</ul>
+
+<p>Perftools does all the hard work for you.</p>
+
+<pre><code>require &#39;perftools&#39;
+PerfTools::CpuProfiler.start(&quot;/tmp/profile_result&quot;) do
+  # code to profile
+end</code></pre>
+
+<p>Run test and open result:</p>
+
+<pre><code>gem install perftools.rb
+ruby test.rb
+pprof.rb --gif /tmp/profile_result &gt; /tmp/profile_result.gif
+$IMAGE_VIEWER /tmp/profile_result.gif </code></pre>
+
+<p>Example output: <strong>Rails route generator call graph</strong></p>
+<a href='http://postimage.org/image/fy4fxhzvr/full/'>
+  <img src='/images/perf_sample.gif' width='600px' />
+</a>
+<p>Here is short instruction how to read call graph:</p>
+
+<p>Each block represents a method that was called. Percentage in a block shows how much time was spend in current method with and without all it&#8217;s nested calls comparing to overall time. Arrow with number shows how many times parent method called it&#8217;s children method.</p>
+
+<p>That&#8217;s it. All you need to do now is find blocks with most percentage and try reduce them.</p>
+
+<p>This flow works fine till the moment when benchmark results before and after patch should be compared. Ruby Benchmark can not merge them together and represent in a human readable form like this:</p>
+
+<pre><code>Running benchmark with current working tree
+Checkout HEAD^
+Running benchmark with HEAD^
+Checkout to previous HEAD again
+
+                    user     system      total        real
+----------------------------------headers parsing when long
+After patch:    0.100000   0.000000   0.100000 (  0.089926)
+Before patch:   0.700000   0.000000   0.700000 (  0.697444)
+
+----------------------------------headers parsing when tiny
+After patch:    0.000000   0.000000   0.000000 (  0.009930)
+Before patch:   0.020000   0.000000   0.020000 (  0.024283)
+
+---------------------------------headers parsing when empty
+After patch:    0.010000   0.000000   0.010000 (  0.002160)
+Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
+
+<p>So, decided to create a library that fixes this problem. Try out <strong><a href='https://github.com/bogdan/diffbench'>DiffBench</a></strong> if you ever come up with performance patch.</p>
+
+<p>DiffBench in action examples:</p>
+
+<ul>
+<li>
+<p>Rails</p>
+
+<ul>
+<li>ActiveRecord - <a href='https://github.com/rails/rails/pull/5467'>#5467</a></li>
+
+<li>ActiveModel - <a href='https://github.com/rails/rails/pull/5431'>#5431</a></li>
+
+<li>ActiveSupport - <a href='https://github.com/rails/rails/pull/4493'>#4493</a></li>
+
+<li>ActionPack - <a href='https://github.com/rails/rails/pull/5957'>#5957</a></li>
+</ul>
+</li>
+
+<li>
+<p>Mail - <a href='https://github.com/mikel/mail/pull/369'>#396</a>, <a href='https://github.com/mikel/mail/pull/366'>#366</a></p>
+</li>
+</ul>-->
+        <h4 class="tags">
+    
+    <a href="/tags/gem.html">gem</a>
+    
+    <a href="/tags/contribution.html">contribution</a>
+    
+    <a href="/tags/performance.html">performance</a>
+    
+    <a href="/tags/callgraph.html">callgraph</a>
+    
+    <a href="/tags/patch.html">patch</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2012/03/javascript-ajax-submit-form-validation'>Web Forms 2.0: Submit with Ajax and Client Side Validation</a>
             <div class="date">01 Mar 2012</div>
         </h2>
@@ -75,16 +176,7 @@
 <h2 id='sumbit_with_ajax'>Sumbit with Ajax</h2>
 
 <p>Submit a form with AJAX have never been a problem:</p>
-<div class='highlight'><pre><code class='js'><span class='nx'>$</span><span class='p'>.</span><span class='nx'>ajax</span><span class='p'>({</span>
-  <span class='nx'>url</span><span class='o'>:</span> <span class='nx'>$</span><span class='p'>(</span><span class='nx'>form</span><span class='p'>).</span><span class='nx'>attr</span><span class='p'>(</span><span class='s1'>&#39;action&#39;</span><span class='p'>),</span>
-  <span class='nx'>data</span><span class='o'>:</span> <span class='nx'>$</span><span class='p'>(</span><span class='nx'>form</span><span class='p'>).</span><span class='nx'>serialize</span><span class='p'>(),</span>
-  <span class='nx'>type</span><span class='o'>:</span> <span class='nx'>$</span><span class='p'>(</span><span class='nx'>form</span><span class='p'>).</span><span class='nx'>attr</span><span class='p'>(</span><span class='s1'>&#39;method&#39;</span><span class='p'>),</span>
-  <span class='nx'>success</span><span class='o'>:</span> <span class='kd'>function</span> <span class='p'>()</span> <span class='p'>{</span>
-    <span class='c1'>//do</span>
-  <span class='p'>}</span>
-<span class='p'>});</span>
-</code></pre>
-</div>
+
 <p>More over submit with AJAX doesn&#8217;t require to rerender a page if it was not successfull: less server load and no need to support &#8216;new&#8217; and &#8216;edit&#8217; mode in HTML template. Problem that comes up with ajax submit is Validation. If you ever find yourself stuck with syncing client and server side validation or bug that form doesn&#8217;t have some data that was there before submit then you know what I am talking about too.</p>
 
 <h2 id='solving_validation_problem'>Solving validation problem</h2>
@@ -92,9 +184,7 @@
 <p>There are number of visions in the Ruby community on how to solve the problem: some people prefer stay with Forms 1.0. Some people generate JavaScript validators based on ActiveModel validators. Other guys write their own validation in JavaScript and perform it on both client and server side. The complexity of all these solution goes beyond believe. And here I am going to describe much simpler way of doing it.</p>
 
 <p>What if we pass the validation result as JSON from backend in a simple key:value format like:</p>
-<div class='highlight'><pre><code class='js'><span class='p'>{</span><span class='nx'>email</span><span class='o'>:</span> <span class='s2'>&quot;is not valid&quot;</span><span class='p'>,</span> <span class='nx'>password</span><span class='o'>:</span> <span class='s2'>&quot;is too short&quot;</span><span class='p'>}</span>
-</code></pre>
-</div>
+
 <p>It&#8217;s fast as wind and easy to implement:</p>
 
 <ul>
@@ -108,42 +198,11 @@
 <h2 id='from_assumptions_to_coding'>From Assumptions to Coding</h2>
 
 <p>As we agreed - controller should return JSON instead of HTML:</p>
-<div class='highlight'><pre><code class='diff'> class UsersController &lt; ApplicationController
-   def create
-     @user = User.new(params[:user])
-     if @user.save
-<span class='gd'>-      redirect_to root_path</span>
-<span class='gi'>+      render :json =&gt; {:redirect =&gt; root_path}</span>
-     else
-<span class='gd'>-      render :action =&gt; :new</span>
-<span class='gi'>+      render :json =&gt; {:errors =&gt; user.errors}</span>
-     end
-   end
- end
-</code></pre>
-</div>
+
 <p>All we need to do after that is just assign errors to the form to the prepared spots identified with HTML5 custom attribute:</p>
-<div class='highlight'><pre><code class='diff'> &lt;form id=&quot;new_user&quot; action=&quot;/users&quot; method=&quot;post&quot;&gt;
-<span class='gd'>-  &lt;div class=&quot;field&quot;&gt;</span>
-<span class='gi'>+  &lt;div class=&quot;field&quot; validate=&quot;email&quot;&gt;</span>
-     &lt;label for=&quot;user_email&quot;&gt;Email&lt;/label&gt;&lt;br /&gt;
-     &lt;input id=&quot;user_email&quot; name=&quot;user[email]&quot; type=&quot;text&quot; /&gt;
-   &lt;/div&gt;
-<span class='gd'>-  &lt;div class=&quot;field&quot;&gt;</span>
-<span class='gi'>+  &lt;div class=&quot;field&quot; validate=&quot;password&quot;&gt;</span>
-     &lt;label for=&quot;user_password&quot;&gt;Password&lt;/label&gt;&lt;br /&gt;
-     &lt;input id=&quot;user_password&quot; name=&quot;user[password]&quot; type=&quot;password&quot; /&gt;
-   &lt;/div&gt;
-   &lt;div class=&quot;actions&quot;&gt;
-     &lt;input name=&quot;commit&quot; type=&quot;submit&quot; value=&quot;Create User&quot; /&gt;
-   &lt;/div&gt;
- &lt;/form&gt;
-</code></pre>
-</div>
+
 <p>All the dirty work can be done by <a href='https://github.com/bogdan/ajaxsubmit'>AjaxSubmit</a> library that implements all the ideas described above:</p>
-<div class='highlight'><pre><code class='js'><span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;#new_user&#39;</span><span class='p'>).</span><span class='nx'>ajaxForm</span><span class='p'>();</span>
-</code></pre>
-</div>
+
 <p>The main goal reached: Make super modern AJAX form is as easy as regular form. If you still can&#8217;t believe that it is so easy - check out <a href='http://ajaxsubmit.heroku.com'>LIVE demo</a>.</p>
 
 <h2 id='ajaxsubmit_is_it_flexible'>AjaxSubmit: Is it flexible?</h2>
@@ -198,13 +257,7 @@
 <p>People around made a <a href='https://github.com/rails/rails/commit/a382d60f6abc94b6a965525872f858e48abc00de'>lot of PR on it</a>. So, You probably already heard about it.</p>
 
 <p><code>pluck</code> can be used to query a single column from the underlying table of a model. It accepts a column name as argument and returns an array of values of the specified column with the corresponding data type.</p>
-<div class='highlight'><pre><code class='ruby'><span class='no'>Client</span><span class='o'>.</span><span class='n'>where</span><span class='p'>(</span><span class='ss'>:active</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span><span class='o'>.</span><span class='n'>pluck</span><span class='p'>(</span><span class='ss'>:id</span><span class='p'>)</span>
-<span class='c1'># SELECT id FROM clients WHERE active = 1</span>
 
-<span class='no'>Client</span><span class='o'>.</span><span class='n'>uniq</span><span class='o'>.</span><span class='n'>pluck</span><span class='p'>(</span><span class='ss'>:role</span><span class='p'>)</span>
-<span class='c1'># SELECT DISTINCT role FROM clients</span>
-</code></pre>
-</div>
 <p><a href='http://edgeguides.rubyonrails.org/active_record_querying.html#pluck'>Pluck in Rails guides</a></p>
 
 <h2 id='strict_validation_concept'>Strict validation concept</h2>
@@ -212,31 +265,15 @@
 <p>Some validation are not connected with end user and breaking it is more likely a bug than problem with user input. A few constraints can be embed to DB(like foreign keys), but most of them can not. And it&#8217;s a good idea to use AM validators to do such checks as well.</p>
 
 <p>Use case:</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Article</span> <span class='o'>&lt;</span> <span class='no'>AR</span><span class='o'>::</span><span class='n'>B</span>
-  <span class='n'>validates</span> <span class='ss'>:author</span><span class='p'>,</span> <span class='ss'>:presence</span> <span class='o'>=&gt;</span> <span class='kp'>true</span>
-<span class='k'>end</span>
 
-<span class='n'>u</span> <span class='o'>=</span> <span class='no'>Article</span><span class='o'>.</span><span class='n'>new</span>
-<span class='n'>u</span><span class='o'>.</span><span class='n'>save</span> <span class='c1'># =&gt; false</span>
-</code></pre>
-</div>
 <p><code>#author</code> is usually set in controller from <code>current_user</code>. If somebody forgets to do it - user see error: <code>Author cann&#39;t be blank</code>. And it is not right to show error message to user that he is not able to fix. More over DEV team is not notified about the problem.</p>
 
 <p>In order to fix that You can use <a href='https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2'>validate! method</a> that generates validator that always raises exception when fails:</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>User</span> <span class='o'>&lt;</span> <span class='no'>AR</span><span class='o'>::</span><span class='no'>Base</span>
-  <span class='n'>validates!</span> <span class='ss'>:author</span><span class='p'>,</span> <span class='ss'>:presence</span> <span class='o'>=&gt;</span> <span class='kp'>true</span>
-<span class='k'>end</span>
 
-<span class='n'>u</span> <span class='o'>=</span> <span class='no'>User</span><span class='o'>.</span><span class='n'>new</span>
-<span class='n'>u</span><span class='o'>.</span><span class='n'>save</span> <span class='c1'># raises ActiveModel::StrictValidationFailed</span>
-</code></pre>
-</div>
 <h2 id='customizing_mass_assignment_sanitizer'>Customizing Mass Assignment Sanitizer</h2>
 
 <p>Added an ability to specify <a href='https://github.com/rails/rails/commit/aa2639e746d8af5d7673bbbbbccbe868edeb0161'>your own behavior on mass assignment protection</a>, controlled by option:</p>
-<div class='highlight'><pre><code class='ruby'><span class='no'>ActiveModel</span><span class='o'>::</span><span class='no'>MassAssignmentSecurity</span><span class='o'>.</span><span class='n'>mass_assignment_sanitizer</span>
-</code></pre>
-</div>
+
 <p>The main idea behind this change is to make Mass Assignment Sanitizer to raise exceptions in development and test environments while leaving logging behavior in production. This will be the <a href='https://github.com/rails/rails/commit/0fab8c388ea9cfcace0907102697c78a68762be3'>default Rails application template</a> in version 3.2. It will allow to detect mass assignment protection issues caused by bug in code more effectively before they will be deployed to production.</p>
 
 <h2 id='power_hacking_selectmultiple'>Power hacking select[multiple]</h2>
@@ -247,19 +284,10 @@
 
 <p>When <code>multiple</code> parameter passed to select and all options got deselected web browsers do not send any value to server. Unfortunately this introduces a gotcha: if an <code>User</code> model has many <code>roles</code> and have <code>role_ids</code> accessor, and in the form that edits roles of the user the user deselects all roles from <code>role_ids</code> multiple select box, no <code>role_ids</code> parameter is sent. So, any mass-assignment idiom like</p>
 
-<p><div class='highlight'><pre><code class='ruby'>  <span class='vi'>@user</span><span class='o'>.</span><span class='n'>update_attributes</span><span class='p'>(</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:user</span><span class='o'>]</span><span class='p'>)</span>
-</code></pre>
-</div></p>
-
 <p>wouldn&#8217;t update roles.</p>
 
 <p>To prevent this the helper generates an auxiliary hidden field before every multiple select. The hidden field has the same name as multiple select and blank value.</p>
-<div class='highlight'><pre><code class='html'><span class='nt'>&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;hidden&quot;</span> <span class='na'>name=</span><span class='s'>&quot;user[role_ids]&quot;</span> <span class='na'>value=</span><span class='s'>&quot;&quot;</span><span class='nt'>/&gt;</span>
-<span class='nt'>&lt;select</span> <span class='na'>id=</span><span class='s'>&quot;user_role_ids&quot;</span> <span class='na'>name=</span><span class='s'>&quot;user[role_ids]&quot;</span> <span class='na'>multiple=</span><span class='s'>&quot;multiple&quot;</span><span class='nt'>&gt;</span>
-  ....
-<span class='nt'>&lt;/select&gt;</span>
-</code></pre>
-</div>
+
 <p>This way, the client either sends only the hidden field (representing the deselected multiple select box), or both fields. Since the HTML specification says key/value pairs have to be sent in the same order they appear in the form, and parameters extraction gets the last occurrence of any repeated key in the query string, that works for ordinary forms.</p>
 
 <p>Unfortunately this trick can introduce a side effects described well in this <a href='http://stackoverflow.com/questions/8929230/why-is-the-first-element-always-blank-in-my-rails-multi-select-using-an-embedde'>stackoverflow question</a>. If you know an effective way to fix that - let me know.</p>
@@ -312,17 +340,11 @@
 <h3 id='html_columns'>HTML columns</h3>
 
 <p>In order to use view helpers to render columns You can use <code>:html</code> option. This will call column block in the view context:</p>
-<div class='highlight'><pre><code class='ruby'><span class='n'>column</span><span class='p'>(</span><span class='ss'>:completed</span><span class='p'>,</span> <span class='ss'>:html</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span> <span class='p'>{</span> <span class='o'>|</span><span class='n'>asset</span><span class='o'>|</span> <span class='n'>asset</span><span class='o'>.</span><span class='n'>completed?</span> <span class='p'>?</span> <span class='n'>image_tag</span><span class='p'>(</span><span class='s2'>&quot;green.gif&quot;</span><span class='p'>)</span> <span class='p'>:</span> <span class='n'>image_tag</span><span class='p'>(</span><span class='s2'>&quot;red.gif&quot;</span><span class='p'>)</span> <span class='p'>}</span>
-<span class='c1'># or do it in partial</span>
-<span class='n'>column</span><span class='p'>(</span><span class='ss'>:actions</span><span class='p'>,</span> <span class='ss'>:html</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span> <span class='p'>{</span> <span class='o'>|</span><span class='n'>asset</span><span class='o'>|</span> <span class='n'>render</span> <span class='ss'>:partial</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;admin/assets/actions&quot;</span><span class='p'>,</span> <span class='ss'>:object</span> <span class='o'>=&gt;</span> <span class='n'>asset</span> <span class='p'>}</span>
-</code></pre>
-</div>
+
 <h3 id='table_customization_with_rails_engines'>Table customization with Rails Engines</h3>
 
 <p>Rails Engines allows you to embed views into Rails plugins and make them customizable. If You need serious customization of datagrid <code>&lt;table&gt;</code> and HTML Columns doesn&#8217;t help, you can customize datagrid internal views by running:</p>
-<div class='highlight'><pre><code class='sh'>rake datagrid:copy_partials
-</code></pre>
-</div>
+
 <p>This will create the following files in your Rails root directory:</p>
 <pre>
 <code>
@@ -398,7 +420,7 @@
 <h3 id='our_idea'>Our Idea</h3>
 
 <p>Development SMTP service should work in a different way then production one: It should not deliver emails but just gather them in one place and provide a shared access for team to debug it. Mailtrap is the first SMTP service built specifically for this purpose.</p>
-<img style='width: 693px' src='http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png' />
+<img src='http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png' style='width: 693px' />
 <p>Unlike many alternative solutions, Mailtrap is platform independent, doesn&#8217;t require any daemon to run and is just an SMTP server from application stand point. All you need to do is <strong>setup host, username and password</strong>.</p>
 
 <h3 id='features'>Features</h3>
@@ -548,57 +570,11 @@
 </ul>
 
 <p>And we can easily split their definition with the following ruby DSL</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>SimpleReport</span>
 
-  <span class='kp'>include</span> <span class='no'>Datagrid</span>
-
-  <span class='n'>scope</span> <span class='k'>do</span>
-    <span class='no'>User</span><span class='o'>.</span><span class='n'>includes</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>)</span>
-  <span class='k'>end</span>
-
-  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:category</span><span class='p'>,</span> <span class='ss'>:enum</span><span class='p'>,</span> <span class='ss'>:select</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='s2'>&quot;first&quot;</span><span class='p'>,</span> <span class='s2'>&quot;second&quot;</span><span class='o'>]</span><span class='p'>)</span>
-  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:group_id</span><span class='p'>,</span> <span class='ss'>:multiple</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span>
-  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:group_name</span><span class='p'>,</span> <span class='ss'>:header</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;Group&quot;</span><span class='p'>)</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>value</span><span class='o'>|</span>
-    <span class='nb'>self</span><span class='o'>.</span><span class='n'>joins</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>)</span><span class='o'>.</span><span class='n'>where</span><span class='p'>(</span><span class='ss'>:groups</span> <span class='o'>=&gt;</span> <span class='p'>{</span><span class='ss'>:name</span> <span class='o'>=&gt;</span> <span class='n'>value</span><span class='p'>})</span>
-  <span class='k'>end</span>
-
-
-  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:name</span><span class='p'>)</span>
-  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>,</span> <span class='ss'>:order</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;groups.name&quot;</span><span class='p'>)</span> <span class='k'>do</span>
-    <span class='nb'>self</span><span class='o'>.</span><span class='n'>group</span><span class='o'>.</span><span class='n'>name</span>
-  <span class='k'>end</span>
-  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:active</span><span class='p'>,</span> <span class='ss'>:header</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;Activated&quot;</span><span class='p'>,</span> <span class='ss'>:order</span> <span class='o'>=&gt;</span> <span class='kp'>false</span><span class='p'>)</span>
-    <span class='o'>!</span><span class='nb'>self</span><span class='o'>.</span><span class='n'>disabled</span>
-  <span class='k'>end</span>
-<span class='k'>end</span>
-</code></pre>
-</div>
 <h3 id='grid_instance_api'>Grid instance API</h3>
 
 <p>And now we can create and manipulate reports:</p>
-<div class='highlight'><pre><code class='ruby'><span class='n'>report</span> <span class='o'>=</span> <span class='no'>SimpleReport</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span>
-        <span class='ss'>:group_id</span>          <span class='o'>=&gt;</span> <span class='o'>[</span><span class='mi'>1</span><span class='p'>,</span><span class='mi'>2</span><span class='o'>]</span><span class='p'>,</span>
-        <span class='ss'>:category</span>          <span class='o'>=&gt;</span> <span class='s2'>&quot;first&quot;</span><span class='p'>,</span>
-        <span class='ss'>:order</span>             <span class='o'>=&gt;</span> <span class='ss'>:group</span><span class='p'>,</span>
-        <span class='ss'>:descending</span>        <span class='o'>=&gt;</span> <span class='kp'>true</span>
-<span class='p'>)</span>
 
-<span class='n'>report</span><span class='o'>.</span><span class='n'>assets</span> <span class='c1'># =&gt; Array of User instances: </span>
-              <span class='c1'># SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count &gt;= 1 AND users.category = &#39;first&#39; ORDER BY groups.name DESC</span>
-
-<span class='n'>report</span><span class='o'>.</span><span class='n'>assets</span><span class='o'>.</span><span class='n'>paginate</span><span class='p'>(</span><span class='ss'>:page</span> <span class='o'>=&gt;</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:page</span><span class='o'>]</span><span class='p'>)</span> <span class='c1'># =&gt; Yes, it is</span>
-
-<span class='n'>report</span><span class='o'>.</span><span class='n'>header</span> <span class='c1'># =&gt; [&quot;Group&quot;, &quot;Name&quot;, &quot;Activated&quot;]</span>
-<span class='n'>report</span><span class='o'>.</span><span class='n'>rows</span>   <span class='c1'># =&gt; [</span>
-              <span class='c1'>#      [&quot;Steve&quot;, &quot;Spammers&quot;, true],</span>
-              <span class='c1'>#      [ &quot;John&quot;, &quot;Spoilers&quot;, true],</span>
-              <span class='c1'>#      [&quot;Berry&quot;, &quot;Good people&quot;, false]</span>
-              <span class='c1'>#    ]</span>
-<span class='n'>report</span><span class='o'>.</span><span class='n'>data</span>   <span class='c1'># =&gt; [ header, *rows]</span>
-
-<span class='n'>report</span><span class='o'>.</span><span class='n'>to_csv</span> <span class='c1'># =&gt; Yes, it is</span>
-</code></pre>
-</div>
 <h3 id='feel_the_power_and_flexibility_by_examples'>Feel the Power and Flexibility by examples</h3>
 
 <p>I love flexibility. That is why datagrid has a lot of things for non trivial use cases. In order to proof that I&#8217;ll show you some examples of what you can do:</p>
@@ -699,59 +675,6 @@ let g:dbext_table_names_case = 2
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2011/05/http-api-logging-rails'>Logging HTTP api calls just like database queries</a>
-            <div class="date">24 May 2011</div>
-        </h2>
-        Http api calls are pretty similar to SQL queries - they query data from external source to process them in ruby space. So I think it's a good idea to log them just like ActiveRecord does with SQL queries. 
-<pre><code>  Location Load (25.1ms)   SELECT * FROM "locations" WHERE ("locations"."id" = 2548) ORDER BY title</code></pre>
-
-<!--
-This simple peace of code could be very helpful in case of 
-<a href="http://github.com/railsware/http_logger">
-    debugging HTTP api in ruby</a>.
-<a href="https://github.com/railsware/http_logger/blob/master/screenshots/solr.png">Screenshot</a> with the result
-
-
-Installation is simple:
-
-<pre><code>gem install http_logger</code></pre>
-
-And:
-
-<pre><code>require 'http_logger'
-
-Net::HTTP.logger = Logger.new(...) 
-    # Default: Rails.logger if defined?(Rails)
-
-Net::HTTP.colorize = true 
-    # Default: true</code></pre>
-
--->
-        <h4 class="tags">
-    
-    <a href="/tags/api.html">api</a>
-    
-    <a href="/tags/http.html">http</a>
-    
-    <a href="/tags/logging.html">logging</a>
-    
-    <a href="/tags/ruby.html">ruby</a>
-    
-    <a href="/tags/rails.html">rails</a>
-    
-    <a href="/tags/debug.html">debug</a>
-    
-    <a href="/tags/gem.html">gem</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -778,6 +701,10 @@ Net::HTTP.colorize = true
                         <ul>
                             
                             <li>
+                                <a href='/2012/05/benchmark-performance-patch-ruby-diff'>Benchmark your performance patches</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2012/03/javascript-ajax-submit-form-validation'>Web Forms 2.0: Submit with Ajax and Client Side Validation</a>
                             </li>
                             
@@ -791,10 +718,6 @@ Net::HTTP.colorize = true
                             
                             <li>
                                 <a href='/2011/11/development-smtp-server'>Improve your Email delivery code with Mailtrap</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2011/11/slides-rails-fat-model-service-code'>Slides: Fighting with fat models</a>
                             </li>
                             
                         </ul>
@@ -823,19 +746,20 @@ Net::HTTP.colorize = true
 <a href="/tags/behavior.html" title="Pages tagged behavior" style="font-size: 19.4px; line-height:19.4px" rel="tag">behavior</a> 
 <a href="/tags/changelog.html" title="Pages tagged changelog" style="font-size: 17.6px; line-height:17.6px" rel="tag">changelog</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
-<a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 17.6px; line-height:17.6px" rel="tag">contribution</a> 
+<a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 19.4px; line-height:19.4px" rel="tag">contribution</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 17.6px; line-height:17.6px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 17.6px; line-height:17.6px" rel="tag">debug</a> 
 <a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 19.4px; line-height:19.4px" rel="tag">dry</a> 
-<a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 19.4px; line-height:19.4px" rel="tag">gem</a> 
+<a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 21.2px; line-height:21.2px" rel="tag">gem</a> 
 <a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
 <a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 23.0px; line-height:23.0px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
+<a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 

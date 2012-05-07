@@ -6,7 +6,7 @@
 
     <title>
       
-        Posts tagged "privacy" -
+        Benchmark your performance patches -
       
       Bogdan's blog
     </title>
@@ -66,11 +66,142 @@
             <div id="main">
 
                 <div id="content">
-                        <h1 id="privacy">Posts tagged "privacy"</h1>
-<ul class="posts">        <li>
-          <a href="/2010/04/ruby18-private-protected-incapsulatio">Encapsulation in Ruby: 'private' doesn't give expected level of privacy</a> - 05 Apr 2010
-        </li>
+                    <div id="post">
+    <h2>
+        <a href="/2012/05/benchmark-performance-patch-ruby-diff">Benchmark your performance patches</a>
+        <div class="date">01 May 2012</div>
+    </h2>
+    <p>After a dozen performance patches to many gems want to share some practical experience I gain. Tools I&#8217;ve picked up was <strong>perftools.rb</strong> and ruby <strong>built-in benchmark</strong> library. They are fit well for cases when optimization stays at Ruby level and doesn&#8217;t require to fix something in native extensions or dig into IO operations.</p>
+<!--more-->
+<p>General flow on how to tackle performance is clear:</p>
+
+<ul>
+<li><a href='https://github.com/tmm1/perftools.rb'>perftools.rb</a> shows slow method calls in a nice call graph format.</li>
+
+<li><a href='http://ruby-doc.org/stdlib-1.9.2/libdoc/benchmark/rdoc/Benchmark.html'>Benchmark</a> proves that we made an improvement.</li>
 </ul>
+
+<p>Perftools does all the hard work for you.</p>
+
+<pre><code>require &#39;perftools&#39;
+PerfTools::CpuProfiler.start(&quot;/tmp/profile_result&quot;) do
+  # code to profile
+end</code></pre>
+
+<p>Run test and open result:</p>
+
+<pre><code>gem install perftools.rb
+ruby test.rb
+pprof.rb --gif /tmp/profile_result &gt; /tmp/profile_result.gif
+$IMAGE_VIEWER /tmp/profile_result.gif </code></pre>
+
+<p>Example output: <strong>Rails route generator call graph</strong></p>
+<a href='http://postimage.org/image/fy4fxhzvr/full/'>
+  <img src='/images/perf_sample.gif' width='600px' />
+</a>
+<p>Here is short instruction how to read call graph:</p>
+
+<p>Each block represents a method that was called. Percentage in a block shows how much time was spend in current method with and without all it&#8217;s nested calls comparing to overall time. Arrow with number shows how many times parent method called it&#8217;s children method.</p>
+
+<p>That&#8217;s it. All you need to do now is find blocks with most percentage and try reduce them.</p>
+
+<p>This flow works fine till the moment when benchmark results before and after patch should be compared. Ruby Benchmark can not merge them together and represent in a human readable form like this:</p>
+
+<pre><code>Running benchmark with current working tree
+Checkout HEAD^
+Running benchmark with HEAD^
+Checkout to previous HEAD again
+
+                    user     system      total        real
+----------------------------------headers parsing when long
+After patch:    0.100000   0.000000   0.100000 (  0.089926)
+Before patch:   0.700000   0.000000   0.700000 (  0.697444)
+
+----------------------------------headers parsing when tiny
+After patch:    0.000000   0.000000   0.000000 (  0.009930)
+Before patch:   0.020000   0.000000   0.020000 (  0.024283)
+
+---------------------------------headers parsing when empty
+After patch:    0.010000   0.000000   0.010000 (  0.002160)
+Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
+
+<p>So, decided to create a library that fixes this problem. Try out <strong><a href='https://github.com/bogdan/diffbench'>DiffBench</a></strong> if you ever come up with performance patch.</p>
+
+<p>DiffBench in action examples:</p>
+
+<ul>
+<li>
+<p>Rails</p>
+
+<ul>
+<li>ActiveRecord - <a href='https://github.com/rails/rails/pull/5467'>#5467</a></li>
+
+<li>ActiveModel - <a href='https://github.com/rails/rails/pull/5431'>#5431</a></li>
+
+<li>ActiveSupport - <a href='https://github.com/rails/rails/pull/4493'>#4493</a></li>
+
+<li>ActionPack - <a href='https://github.com/rails/rails/pull/5957'>#5957</a></li>
+</ul>
+</li>
+
+<li>
+<p>Mail - <a href='https://github.com/mikel/mail/pull/369'>#396</a>, <a href='https://github.com/mikel/mail/pull/366'>#366</a></p>
+</li>
+</ul>
+    <h4 class="tags">
+    
+    
+    <a href="/tags/gem.html">gem</a>
+    
+    <a href="/tags/contribution.html">contribution</a>
+    
+    <a href="/tags/performance.html">performance</a>
+    
+    <a href="/tags/callgraph.html">callgraph</a>
+    
+    <a href="/tags/patch.html">patch</a>
+    
+</h4>
+<div class="clear"></div>
+
+
+    <div id="related">
+        <h3>Related Posts</h3>
+        <ul class="posts">
+            
+               <!-- Exclude self -->
+                <li><span>01 Mar 2012</span> &raquo; <a href="/2012/03/javascript-ajax-submit-form-validation">Web Forms 2.0: Submit with Ajax and Client Side Validation</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>23 Jan 2012</span> &raquo; <a href="/2012/01/rails-32-features-changelog">New Rails Release with a few features from me</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>26 Aug 2010</span> &raquo; <a href="/2010/08/populate-db-pattern-fake-data">Populate database pattern - why is it so cool?</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>18 Nov 2011</span> &raquo; <a href="/2011/11/development-smtp-server">Improve your Email delivery code with Mailtrap</a></li>
+              
+            
+        </ul>
+    </div>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
+
+    //var disqus_identifier = '/2012/05/benchmark-performance-patch-ruby-diff';
+    //var disqus_url = 'http://gusiev.com/2012/05/benchmark-performance-patch-ruby-diff';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+</div>
 
 
                 </div>

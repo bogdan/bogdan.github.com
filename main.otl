@@ -1,5 +1,6 @@
 V
 	Elizabeth Adler Prevage
+	Fish knife
 OSS
 	datagrid
 		Resolve problem with HTML and CSV columns
@@ -7,54 +8,50 @@ OSS
 		Fix pending tests
 	AjaxSubmit
 		http://www.1stwebdesigner.com/css/best-ajax-css-forms-tips-trends-techniques/
-		Add options
-			url
-			type
-			data
-		Multiple errors
-		Skins
-			Like in interstellar
-		js-show
-		Demo: Tweet to download button
-		select + .validation-block {
-			background-image: none; }
-	    
+		Promote
+			Ask SI to promote through design modo
+			js-show
 	Rails
 		Journey: Try to remove SLASH and DOT node type
 		AM::Errors#add!
+		#to_param implementation: use #to_param internally
+			Resolve circular dependency between to_param and to_query
+		Make uniq/pluck combination work on collection association
+		Rework bulk_migration to be always true
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
 	DiffBench performance tool
 		Advertise:
-			dzone
-			reddit
 			rubyshow
 			hackernews
-		Make test suite less noisy
+
+
+Get a new idea
+	What to do next?
+		Twithub
+		Interstellar clone
+		Twitter bots
 Mailtrap
+	Send email to Tsvetuhin
+	HTML strip out warnings
 	Video tutorial rework
 		Voice support
+	Use Resque
+		To track failed emails
+	Write email to tsvetuhin
 Configuration
 	Vim
 		Investigate why Rlog doesn't have highlight
-		Try vim-rspec
 	Skype
 		Investigate with strace
-	
 Blog
 	Article about ActiveSupport::Callbacks
 		Push for review
+	Assumption driven development
+	Benchmark your patches
+	PAEI model in programming
 The art of programming
 	Prepare Rspec master class
 		Propose Rspec master class to Lori
-
-Slavik migration
-	Mailtrap:
-		Responsibility:
-			RW provide infrastructure
-			BG support customers
-			BG do features
-		Benefits
-			RW do it's own marketing 
-			BG gets profit
+	Resque master classes
