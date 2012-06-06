@@ -4,13 +4,110 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2012-05-07T18:16:38+03:00</updated>
+ <updated>2012-06-06T10:15:12+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
    <email>agresso@gmail.com</email>
  </author>
  
+ 
+ <entry>
+   <title>Assumption Driven Approach</title>
+   <link href="http://gusiev.com/2012/06/assumption-driven-development"/>
+   <updated>2012-06-06T00:00:00+03:00</updated>
+   <id>http://gusiev.com/2012/06/assumption-driven-development</id>
+   <content type="html">&lt;p&gt;This post shows some examples of how things can go wrong way because of people actions based on assumptions but not on facts. It is more conceptual than practical, so be patient and don&amp;#8217;t blame my grammar mistakes too much. &lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h3 id='evil_of_assumptions'&gt;Evil of assumptions&lt;/h3&gt;
+
+&lt;p&gt;This is my favorite example of how wrong assumption can be:&lt;/p&gt;
+
+&lt;p&gt;Very popular ruby questions for newbies:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;What is the difference between `private` and `protected` methods?&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Question seems good and reasonable. But most people don&amp;#8217;t know the right answer even after years with ruby. Most people assume that &lt;code&gt;private&lt;/code&gt; methods can not be called from inherited classes, but &lt;code&gt;protected&lt;/code&gt; can be.&lt;/p&gt;
+
+&lt;p&gt;But that&amp;#8217;s only an assumption. Have you ever tried to ensure that it&amp;#8217;s right? The answer is: &lt;strong&gt;This is not true&lt;/strong&gt;. Private method can be called from inherited class in the same way as protected.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class A
+  private
+  def a
+    puts &amp;#39;hello&amp;#39;
+  end
+end
+
+class B &amp;lt; A
+  def b
+    a
+  end
+end
+
+B.new.b # No Exception here&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href='http://gusiev.com/2010/04/ruby18-private-protected-incapsulatio/'&gt;More about private and public methods here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This is good example on how myths can spread the world: Almost every person is surprised by the output of program above.&lt;/p&gt;
+
+&lt;p&gt;This makes me feel that many interviewers ask questions while don&amp;#8217;t know what they are asking about. From this point I can state that a lot of ruby interviews goes in a wrong direction by providing an assumption as a fact.&lt;/p&gt;
+
+&lt;h3 id='class_variables_assumption'&gt;Class variables assumption&lt;/h3&gt;
+
+&lt;p&gt;Yet another assumption that can be made based on ruby documentation is connected with ruby class variables:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class A
+  @@x = 2
+  def self.pr
+    @@x
+  end
+end
+
+class B &amp;lt; A
+  @@x = 5
+end
+
+puts B.pr
+puts A.pr&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can assume that last two lines produce 5 and 2, but they both produce 5. Because class variables are shared across all classes.&lt;/p&gt;
+
+&lt;h3 id='assumption_example_in_the_performance_field'&gt;Assumption example in the performance field&lt;/h3&gt;
+
+&lt;p&gt;Most popular assumptions field is performance. And here we come up with the most recent bad assumption example:&lt;/p&gt;
+
+&lt;p&gt;Ruby 2.0 offers lazy enumeration feature.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(1...100000).to_a.lazy.select{|a| a.odd? }.map{|a| a**2}.to_a&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In short: there will be only one iteration over an array with no intermediate array between &lt;code&gt;select&lt;/code&gt; and &lt;code&gt;map&lt;/code&gt;. If you are an assumption-driven person, you already assumed that &lt;code&gt;#lazy&lt;/code&gt; not only saves your memory, but also improve performance.&lt;/p&gt;
+
+&lt;p&gt;And problem is that it is not true. &lt;a href='https://bugs.ruby-lang.org/issues/6183'&gt;&lt;code&gt;#lazy&lt;/code&gt; is very slow&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id='how_to_use_assumption_in_a_right_way'&gt;How to use assumption in a right way?&lt;/h3&gt;
+
+&lt;p&gt;Why we are still using assumptions a lot? Because they are cheap: they allow us to move faster without proofing that we are moving the right direction.&lt;/p&gt;
+
+&lt;p&gt;Here are some MUSTs that we need to follow:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Always make sure that you are 100% right when you are interviewing other person.&lt;/li&gt;
+
+&lt;li&gt;Never make assumptions in performance field.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And here are some more conceptual advices:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Make assumptions depend on facts, but not other assumptions.&lt;/li&gt;
+
+&lt;li&gt;Prove any assumption with fact before going with another assumption&lt;/li&gt;
+
+&lt;li&gt;Do not tell people about assumptions as if they are facts.&lt;/li&gt;
+
+&lt;li&gt;When we can&amp;#8217;t make a good assumption from the beginning, maybe it&amp;#8217;s time to gather more facts&lt;/li&gt;
+&lt;/ul&gt;</content>
+ </entry>
  
  <entry>
    <title>Benchmark your performance patches</title>
