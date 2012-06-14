@@ -38,6 +38,14 @@
     </head>
 
     <body>
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=354906294546402";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
         <a href="http://github.com/bogdan" class="fork">
             <img src="/images/fork.png"/>
         </a>
@@ -134,6 +142,20 @@ Very good strategy to run same function with different arguments.
 
 Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (e.g. for other programming languages), Rspec authors got in deep to the testing problems and invent flexible and elegant syntax.
 
+    <div class="left">
+      <table class="post-social-share">
+        <tr>
+          <td>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Dynamic context in Rspec - don't repeat yourself" data-via="bgusiev" data-url="http://gusiev.com/2010/11/dynamic-context-in-rspec-dont-repeat-yourself">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </td>
+          <td>
+            <div class="fb-like" data-href="http://gusiev.com/2010/11/dynamic-context-in-rspec-dont-repeat-yourself" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
     <h4 class="tags">
     
     
@@ -149,7 +171,6 @@ Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (
     
 </h4>
 <div class="clear"></div>
-
 
     <div id="related">
         <h3>Related Posts</h3>

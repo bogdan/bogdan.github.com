@@ -1,16 +1,21 @@
 V
 	Elizabeth Adler Prevage
 	Fish knife
+	Trempels
+	Earthen pot
 OSS
+	Javascript ajax debug script
+		Promote somewhere
+		Maybe blog post?
 	datagrid
 		Resolve problem with HTML and CSV columns
-	js-routes
-		Fix pending tests
 	AjaxSubmit
 		http://www.1stwebdesigner.com/css/best-ajax-css-forms-tips-trends-techniques/
 		Promote
 			Ask SI to promote through design modo
 			js-show
+		Take a look at rails-ujs
+			Find posibilities to reuse that API
 	Rails
 		Journey: Try to remove SLASH and DOT node type
 		AM::Errors#add!
@@ -24,24 +29,19 @@ OSS
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
-	DiffBench performance tool
-		Advertise:
-			rubyshow
-			hackernews
 	Poltergeist
 		Improve a way to testClick
-		
-
+		Investigate timeouts
+	Tweethub
+		Find a way to promote
+		Review a list of event types
 
 Get a new idea
 	What to do next?
-		Twithub
 		Interstellar clone
 		Twitter bots
 	Investigate kickstarter
 		Try out new generation text editor idea
-	Tweethub
-		Setup production
 Mailtrap
 	Send email to Tsvetuhin
 	HTML strip out warnings
@@ -49,7 +49,6 @@ Mailtrap
 		Voice support
 	Use Resque
 		To track failed emails
-	Write email to tsvetuhin
 Configuration
 	Vim
 		Investigate why Rlog doesn't have highlight
@@ -57,10 +56,8 @@ Configuration
 		Investigate with strace
 Blog
 	Article about ActiveSupport::Callbacks
-		Push for review
-	Assumption driven development
-	Benchmark your patches
 	PAEI model in programming
+
 The art of programming
 	Prepare Rspec master class
 		Propose Rspec master class to Lori

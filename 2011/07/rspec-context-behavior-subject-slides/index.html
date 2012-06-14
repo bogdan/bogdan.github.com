@@ -38,6 +38,14 @@
     </head>
 
     <body>
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=354906294546402";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
         <a href="http://github.com/bogdan" class="fork">
             <img src="/images/fork.png"/>
         </a>
@@ -74,6 +82,20 @@
     <p>I&#8217;ve always pay attention to Rspec and posted some articles about <a href='/tags/rspec.html'>Advanced Rspec features</a>. Right now about 2k tests written by me personally in 3 years of development with Rails.</p>
 
 <p>Here is the slides from my talk about all invented patterns and best practices: <br /> <strong><a href='http://gusiev.com/dorspec#1'>Do rspec: fogotten features of RSpec</a></strong> <!--more--></p>
+    <div class="left">
+      <table class="post-social-share">
+        <tr>
+          <td>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Advanced RSpec Techniques presentation" data-via="bgusiev" data-url="http://gusiev.com/2011/07/rspec-context-behavior-subject-slides">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </td>
+          <td>
+            <div class="fb-like" data-href="http://gusiev.com/2011/07/rspec-context-behavior-subject-slides" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
     <h4 class="tags">
     
     
@@ -91,7 +113,6 @@
     
 </h4>
 <div class="clear"></div>
-
 
     <div id="related">
         <h3>Related Posts</h3>

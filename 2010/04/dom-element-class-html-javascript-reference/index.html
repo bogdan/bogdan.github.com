@@ -38,6 +38,14 @@
     </head>
 
     <body>
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=354906294546402";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
         <a href="http://github.com/bogdan" class="fork">
             <img src="/images/fork.png"/>
         </a>
@@ -96,6 +104,20 @@ Yes, sometimes it may look like:
 <pre><code>&lt;input type='button' class="js-follow-button follow-button"&gt; Follow this person &lt;/input&gt;</code></pre>
 But that makes sense to eliminate maintenance problem described above.
 
+    <div class="left">
+      <table class="post-social-share">
+        <tr>
+          <td>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="DOM element class - css reference or javascript reference?" data-via="bgusiev" data-url="http://gusiev.com/2010/04/dom-element-class-html-javascript-reference">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </td>
+          <td>
+            <div class="fb-like" data-href="http://gusiev.com/2010/04/dom-element-class-html-javascript-reference" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
     <h4 class="tags">
     
     
@@ -113,7 +135,6 @@ But that makes sense to eliminate maintenance problem described above.
     
 </h4>
 <div class="clear"></div>
-
 
     <div id="related">
         <h3>Related Posts</h3>

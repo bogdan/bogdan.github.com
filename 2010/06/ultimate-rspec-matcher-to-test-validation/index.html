@@ -38,6 +38,14 @@
     </head>
 
     <body>
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=354906294546402";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
         <a href="http://github.com/bogdan" class="fork">
             <img src="/images/fork.png"/>
         </a>
@@ -103,6 +111,20 @@ end</code></pre>
 <h3> Summary </h3>
 Custom matcher is just 50 lines of code that make your life much easier. Do not scare to write your own. Custom matcher to test ActiveRecord#named_scope coming soon.
 
+    <div class="left">
+      <table class="post-social-share">
+        <tr>
+          <td>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Ultimate rspec matcher to test validation" data-via="bgusiev" data-url="http://gusiev.com/2010/06/ultimate-rspec-matcher-to-test-validation">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </td>
+          <td>
+            <div class="fb-like" data-href="http://gusiev.com/2010/06/ultimate-rspec-matcher-to-test-validation" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
     <h4 class="tags">
     
     
@@ -118,7 +140,6 @@ Custom matcher is just 50 lines of code that make your life much easier. Do not 
     
 </h4>
 <div class="clear"></div>
-
 
     <div id="related">
         <h3>Related Posts</h3>

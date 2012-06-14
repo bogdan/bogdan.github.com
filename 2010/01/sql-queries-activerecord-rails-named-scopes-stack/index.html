@@ -38,6 +38,14 @@
     </head>
 
     <body>
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=354906294546402";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
         <a href="http://github.com/bogdan" class="fork">
             <img src="/images/fork.png"/>
         </a>
@@ -76,6 +84,20 @@
 <p>It suppose to returns all people that are followed by people that are followed by the given person(second circle). From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL. But this solution will have some issues with Active Record scopes stack magic. See that <code>User.network_for(current_user).all(:limit =&gt;5)</code> will result in SQL exception primary because <code>:limit =&gt; 5</code> doesn&#8217;t know about the table alias <code>users u</code>. We can not use it in fact.<br /> The second problem comes to the foreground when we will try to use ActiveRecord features like <code>User.network_for(current_user).all(:include =&gt; :orders)</code>. ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.<br /> The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make &#8220;users&#8221; table to be the last one declared in :from parameter.</p>
 
 <p>Summary I would say that using <code>:joins</code> instead of <code>:from/:conditions</code> would give more flexibility and stackability to your scopes but sometimes <code>:from</code> is more clear and here you got the tip how to use it.</p>
+    <div class="left">
+      <table class="post-social-share">
+        <tr>
+          <td>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Advanced SQL and scopes stack with ActiveRecord" data-via="bgusiev" data-url="http://gusiev.com/2010/01/sql-queries-activerecord-rails-named-scopes-stack">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </td>
+          <td>
+            <div class="fb-like" data-href="http://gusiev.com/2010/01/sql-queries-activerecord-rails-named-scopes-stack" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
     <h4 class="tags">
     
     
@@ -93,7 +115,6 @@
     
 </h4>
 <div class="clear"></div>
-
 
     <div id="related">
         <h3>Related Posts</h3>

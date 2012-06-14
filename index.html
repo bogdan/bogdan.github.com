@@ -36,6 +36,14 @@
     </head>
 
     <body>
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=354906294546402";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
         <a href="http://github.com/bogdan" class="fork">
             <img src="/images/fork.png"/>
         </a>
@@ -617,7 +625,7 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
             <a href='/2011/10/resque-plugins-framework-scaling'>Resque-way</a>
             <div class="date">17 Oct 2011</div>
         </h2>
-        <p><a href='http://www.engineyard.com/blog/2011/the-resque-way/'>My article about Resque</a> was posted on Engine Yard last week. It has very good notes from EY engineers and doesn&#8217;t have my regullar grammar mistakes. Enjoy your reading. <!--</p>-->
+        <p><a href='http://www.engineyard.com/blog/2011/the-resque-way/'>My article about Resque</a> was posted on Engine Yard last week. It has very good notes from EY engineers and doesn&#8217;t have my regular grammar mistakes. Enjoy your reading. <!--</p>-->
         <h4 class="tags">
     
     <a href="/tags/resque.html">resque</a>

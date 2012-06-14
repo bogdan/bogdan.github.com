@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2012-06-06T10:15:12+03:00</updated>
+ <updated>2012-06-14T14:39:22+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
@@ -453,7 +453,7 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)&lt;/code&gt;&lt;/pre
    <link href="http://gusiev.com/2011/10/resque-plugins-framework-scaling"/>
    <updated>2011-10-17T00:00:00+03:00</updated>
    <id>http://gusiev.com/2011/10/resque-plugins-framework-scaling</id>
-   <content type="html">&lt;p&gt;&lt;a href='http://www.engineyard.com/blog/2011/the-resque-way/'&gt;My article about Resque&lt;/a&gt; was posted on Engine Yard last week. It has very good notes from EY engineers and doesn&amp;#8217;t have my regullar grammar mistakes. Enjoy your reading. &lt;!--more--&gt;&lt;/p&gt;</content>
+   <content type="html">&lt;p&gt;&lt;a href='http://www.engineyard.com/blog/2011/the-resque-way/'&gt;My article about Resque&lt;/a&gt; was posted on Engine Yard last week. It has very good notes from EY engineers and doesn&amp;#8217;t have my regular grammar mistakes. Enjoy your reading. &lt;!--more--&gt;&lt;/p&gt;</content>
  </entry>
  
  <entry>

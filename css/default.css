@@ -36,6 +36,12 @@ h1 a, h2 a, h3 a {
   color: #ff4444;
   text-decoration: none; }
 
+.left {
+  float: left; }
+
+.right {
+  float: right; }
+
 .date {
   font-size: 16px; }
 
@@ -78,6 +84,9 @@ ul li {
     margin-top: 10px;
     display: inline-block;
     float: right; }
+
+.post-social-share {
+  margin-top: 8px; }
 
 h4.tags {
   margin: 10px 0;
