@@ -75,6 +75,71 @@
                     
     <div class="post">
         <h2>
+            <a href='/2011/06/ruby-datagrid-gem-report'>Reporting made easy by Datagrid gem for Rails</a>
+            <div class="date">26 Jun 2011</div>
+        </h2>
+        <p>4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about <a href='https://github.com/bogdan/datagrid'>perfect report gem</a> that would provide easy DSL for making filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head and now finally I have enough knowledge and opportunities to build such tool.</p>
+<!--
+<h3 id='defining_a_grid'>Defining a grid</h3>
+
+<p>The idea of Datagrid DSL is to define a scope of ActiveRecord models and define different independent criterias to filter this scope. Than convert filtered data to table view with defined columns. So, typical datagrid report consists of:</p>
+
+<ul>
+<li>A scope of records to query data</li>
+
+<li>Filters with parameters to make a subsets of this data</li>
+
+<li>Columns to display this data</li>
+</ul>
+
+<p>And we can easily split their definition with the following ruby DSL</p>
+
+<h3 id='grid_instance_api'>Grid instance API</h3>
+
+<p>And now we can create and manipulate reports:</p>
+
+<h3 id='feel_the_power_and_flexibility_by_examples'>Feel the Power and Flexibility by examples</h3>
+
+<p>I love flexibility. That is why datagrid has a lot of things for non trivial use cases. In order to proof that I&#8217;ll show you some examples of what you can do:</p>
+
+<ul>
+<li><a href='https://gist.github.com/7ba4267aa25b6e37eb44'>Range filters</a></li>
+
+<li><a href='https://gist.github.com/4e84d2dad2f2362a9ab4'>Time sheets aggregation report</a></li>
+
+<li><a href='https://gist.github.com/8b91694edec900de84be'>Daily statistics</a></li>
+
+<li><a href='https://gist.github.com/106acfc3fe689564896c'>Extending built in methods</a></li>
+</ul>
+
+<h3 id='documentation'>Documentation</h3>
+
+<p><a href='https://github.com/bogdan/datagrid/wiki'>Datagrid WIKI</a> is main documentation source of the gem. Also feel free to ask questions right after this post.</p>
+
+<h3 id='in_my_todo_list'>In my TODO list</h3>
+
+<p>Current version of datagrid gem have fully document back-end staff. It&#8217;s production ready - we are running three projects that use datagrid. Now I am working on front-end that is already part of the distribution, but not yet documented.</p>-->
+        <h4 class="tags">
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    <a href="/tags/activerecord.html">activerecord</a>
+    
+    <a href="/tags/datagrid.html">datagrid</a>
+    
+    <a href="/tags/gem.html">gem</a>
+    
+    <a href="/tags/report.html">report</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2011/05/dbext-vim-table-names-convention-patch'>Patching dbext vim plugin to support Rails naming conventions</a>
             <div class="date">30 May 2011</div>
         </h2>
@@ -608,101 +673,6 @@ I beleive that Populator should be a part of the build of every project. Yes, it
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2010/07/bdd-rspec-matcher-to-test-named_scope-scoped-rails-3'>Ultimate rspec matcher to test named_scope or scoped</a>
-            <div class="date">11 Jul 2010</div>
-        </h2>
-        After having a good practice on using <a href="http://gusiev.com/2010/06/ultimate-rspec-matcher-to-test-validation/">Ultimate rspec matcher to test validation</a> I think it's time to implement one for testing named scopes - custom finders. Testing these finders is daily task. Here is how it can be done with minimum amount of code and maximum readability.
-<!--
-<h3>Discovery <del>(Animal Planet)</del></h3>
-
-What do we expect from the custom finder?
-We expect that it should find assets A, B, C and should not find assets D, E, F.
-And sometimes the order is important: it should find A, B C with exact order.
-
-With respect to <em>let</em> rspec feature let's take an example: Product has and belongs to many categories. We need to have a scope to filter products within the specified category:
-
-<pre><code>describe "#by_category_id" do
-      let(:given_category) do 
-        Factory.create(:given_category)
-      end
- 
-
-      let(:product_in_given_category) do
-        Factory.create(
-          :product,
-          :categories => [category]
-        )
-      end
-
-      let(:product_not_in_given_category) do
-        Factory.create(
-          :product,
-          :categories => [Factory.create(:category)]
-        )
-      end
-
-      # This might be tricky to redefine subject as the finder result
-      # but in this way we can delegate the matcher to subject and 
-      # avoid writing test descriptions.
-      subject { Product.by_category_id(given_category.id) }
-
-      it { should discover(product_in_given_category) }
-      it { should_not discover(product_not_in_given_category) }
-
-    end
-</code></pre> 
-
-Factory girl was used in this example because factories kickass when we test finders. As you can see the example has a perfect readability with no one line of plain English text. I didn't include the description in my examples but you can easily make them if they make sense for you.<br/>
-Note: Be aware of the lazy loading of your finder. <em>let</em> is initialized lazy too. You should make sure it is called before the actual query to the database.
-If you don't want to care about lazy loading their is <em>let!</em> method that could be easily copy-pasted from Rspec 2.0. Unlike <em>let</em> it doesn't have lazy initialization:
-<pre><code>def let!(name, &block)
-  let(name, &block)
-  before { __send__(name) } 
-end
-</code></pre>
-
-<h3>Testing sort order</h3>
-
-If the ordering is done in non-trivial way let's <em>discover.with_exact_order</em>. 
-<pre><code>describe "#most_commented named scope" do
-  let(:uncommented_post) { Factory.create(:post)}
-  let!(:less_commented_post) { Factory.create(:post, :comments => [Factory.build(:comment)])}
-  let!(:more_commented_post) { 
-    Factory.create(:post, :comments => [Factory.build(:comment), Factory.build(:comment)])}
-  }
-
-  subject { described_class.most_commented }
- it {should discover(more_commented_post, less_commented_post).with_exact_order }
- it {should_not discover(uncommented_post) }
-end</code></pre>
-
-Be careful with default order. MySQL and Postgres sort objects as they were created by default.
-That is why generate objects in reverse order e.g. <em>less_commented_post</em> before <em>more_commented_post</em> is important to make sure that ordering is your code behavior rather than default db behavior.
- 
-<h3> Summary </h3>
-I 've add this matcher to the <a href="http://gusiev.com/2010/06/ultimate-rspec-matcher-to-test-validation/">previous one</a>. Both matchers are available here <a href="http://github.com/bogdan/accept_values_for">accept_values_for</a>. Let's start thinking of what else we can do.
--->
-        <h4 class="tags">
-    
-    <a href="/tags/bdd.html">bdd</a>
-    
-    <a href="/tags/rspec.html">rspec</a>
-    
-    <a href="/tags/activerecord.html">activerecord</a>
-    
-    <a href="/tags/named_scope.html">named_scope</a>
-    
-    <a href="/tags/matcher.html">matcher</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -737,6 +707,10 @@ I 've add this matcher to the <a href="http://gusiev.com/2010/06/ultimate-rspec-
                         <ul>
                             
                             <li>
+                                <a href='/2012/06/javascript-ajax-debug-popup-response'>How many clicks do you need to debug ajax request?</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2012/06/assumption-driven-development'>Assumption Driven Approach</a>
                             </li>
                             
@@ -750,10 +724,6 @@ I 've add this matcher to the <a href="http://gusiev.com/2010/06/ultimate-rspec-
                             
                             <li>
                                 <a href='/2012/01/rails-32-features-changelog'>New Rails Release with a few features from me</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/01/datagrid-reports-release-gem'>New release of Datagrid: Mongoid, Rails Engines and HTML columns support</a>
                             </li>
                             
                         </ul>
@@ -775,7 +745,7 @@ I 've add this matcher to the <a href="http://gusiev.com/2010/06/ultimate-rspec-
                     <div class="sidebarbox tag-cloud">
                         <h2>Browse by tags</h2>
                         <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 21.2px; line-height:21.2px" rel="tag">activerecord</a> 
-<a href="/tags/ajax.html" title="Pages tagged ajax" style="font-size: 17.6px; line-height:17.6px" rel="tag">ajax</a> 
+<a href="/tags/ajax.html" title="Pages tagged ajax" style="font-size: 19.4px; line-height:19.4px" rel="tag">ajax</a> 
 <a href="/tags/api.html" title="Pages tagged api" style="font-size: 17.6px; line-height:17.6px" rel="tag">api</a> 
 <a href="/tags/application.html" title="Pages tagged application" style="font-size: 17.6px; line-height:17.6px" rel="tag">application</a> 
 <a href="/tags/bdd.html" title="Pages tagged bdd" style="font-size: 17.6px; line-height:17.6px" rel="tag">bdd</a> 
@@ -786,14 +756,14 @@ I 've add this matcher to the <a href="http://gusiev.com/2010/06/ultimate-rspec-
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 17.6px; line-height:17.6px" rel="tag">datagrid</a> 
-<a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 17.6px; line-height:17.6px" rel="tag">debug</a> 
+<a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
 <a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 19.4px; line-height:19.4px" rel="tag">dry</a> 
 <a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 21.2px; line-height:21.2px" rel="tag">gem</a> 
 <a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 23.0px; line-height:23.0px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 24.8px; line-height:24.8px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 

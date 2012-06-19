@@ -6,7 +6,7 @@
 
     <title>
       
-        Posts tagged "design" -
+        How many clicks do you need to debug ajax request? -
       
       Bogdan's blog
     </title>
@@ -74,11 +74,101 @@
             <div id="main">
 
                 <div id="content">
-                        <h1 id="design">Posts tagged "design"</h1>
-<ul class="posts">        <li>
-          <a href="/2010/03/quality-develop-application-improve-usability-design">A dream to develop application that I will use</a> - 29 Mar 2010
-        </li>
-</ul>
+                    <div id="post">
+    <h2>
+        <a href="/2012/06/javascript-ajax-debug-popup-response">How many clicks do you need to debug ajax request?</a>
+        <div class="date">16 Jun 2012</div>
+    </h2>
+    <p>Here I am gonna use Chrome browser as an example:</p>
+
+<ol>
+<li>Open context menu</li>
+
+<li>Click inspect element.</li>
+
+<li>Click &#8220;Network&#8221; tab</li>
+
+<li>Spawn again an ajax request (at least one click. Sometimes more)</li>
+
+<li>Click on failed request at Network tab</li>
+
+<li>Click &#8220;Preview&#8221; or &#8220;Response&#8221; subtab</li>
+</ol>
+<!--more--><a href='http://i.imm.io/skBN.png'>
+  <img src='http://i.imm.io/skBN.png' width='400px' />
+</a>
+<h3 id='this_should_change'>THIS SHOULD CHANGE</h3>
+
+<p>With <a href='https://github.com/bogdan/jquery-ajax-debug'>this tiny script</a> you don&#8217;t need any: Error response will be displayed in Popup at once after it occur.</p>
+<a href='http://i.imm.io/skDh.png'>
+  <img src='http://i.imm.io/skDh.png' width='400px' />
+</a>
+    <div class="clear"></div>
+    <div class="left">
+      <table class="post-social-share">
+        <tr>
+          <td>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="How many clicks do you need to debug ajax request?" data-via="bgusiev" data-url="http://gusiev.com/2012/06/javascript-ajax-debug-popup-response">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </td>
+          <td>
+            <div class="fb-like" data-href="http://gusiev.com/2012/06/javascript-ajax-debug-popup-response" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <h4 class="tags">
+    
+    
+    <a href="/tags/javascript.html">javascript</a>
+    
+    <a href="/tags/debug.html">debug</a>
+    
+    <a href="/tags/ajax.html">ajax</a>
+    
+    <a href="/tags/efficiency.html">efficiency</a>
+    
+</h4>
+<div class="clear"></div>
+
+    <div id="related">
+        <h3>Related Posts</h3>
+        <ul class="posts">
+            
+               <!-- Exclude self -->
+                <li><span>18 Mar 2011</span> &raquo; <a href="/2011/03/ajax-jquery-debug-javascript">Debug ajax requests in more easy way</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>01 Mar 2012</span> &raquo; <a href="/2012/03/javascript-ajax-submit-form-validation">Web Forms 2.0: Submit with Ajax and Client Side Validation</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>20 Apr 2010</span> &raquo; <a href="/2010/04/dom-element-class-html-javascript-reference">DOM element class - css reference or javascript reference?</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>26 Aug 2010</span> &raquo; <a href="/2010/08/populate-db-pattern-fake-data">Populate database pattern - why is it so cool?</a></li>
+              
+            
+        </ul>
+    </div>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
+
+    //var disqus_identifier = '/2012/06/javascript-ajax-debug-popup-response';
+    //var disqus_url = 'http://gusiev.com/2012/06/javascript-ajax-debug-popup-response';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+</div>
 
 
                 </div>
