@@ -4,9 +4,7 @@ V
 	Trempels
 	Earthen pot
 OSS
-	Javascript ajax debug script
-		Promote somewhere
-		Maybe blog post?
+	Pivotal-Commit
 	datagrid
 		Resolve problem with HTML and CSV columns
 	AjaxSubmit
@@ -16,39 +14,55 @@ OSS
 			js-show
 		Take a look at rails-ujs
 			Find posibilities to reuse that API
+		ajaxsubmit-rails
 	Rails
+		AS::Callbacks: deprecate autodefine around when before and after present
 		Journey: Try to remove SLASH and DOT node type
 		AM::Errors#add!
 		#to_param implementation: use #to_param internally
 			Resolve circular dependency between to_param and to_query
 		Make uniq/pluck combination work on collection association
-		Rework bulk_migration to be always true
+		Ask for feedback on bulk_migration
 		/rails/generate/model User name:string
 		/rails/rake db:migrate
-		Strict validation: allow custom exception
+		Check SQL select * from pv where price <= Infinity
+		Make rails raise exception if asset is used directly but not precompiled
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
 	Poltergeist
-		Investigate timeouts
 	Tweethub
 		Find a way to promote
+			Contact Github
+			Blog post
+			ruby5
+			rubyflow
+			dzone
+			hackernews
+			reddit
 		Review a list of event types
 
 Get a new idea
-	What to do next?
-		Interstellar clone
-		Twitter bots
+	Interstellar clone
+	Twitter bots
+		What to post?
 	Investigate kickstarter
-		Try out new generation text editor idea
+		May be it needs to be investigated again?
+	Text editor with AST support
 	Norka
+		Investigate screen scrapping compatibilities
+		Invent UI
+	Bug tracker with tree support
+		Discuss with Alan
+	Document to txt conversion service
+		Find clients
+		Investigate already existing services
+	Reporting service
+		Rethink what Allan said
 Mailtrap
-	Send email to Tsvetuhin
-	HTML strip out warnings
-	Video tutorial rework
-		Voice support
-	Use Resque
-		To track failed emails
+	Decide what to do with Vitya
+
+
 Configuration
 	Vim
 		Investigate why Rlog doesn't have highlight
@@ -57,6 +71,11 @@ Configuration
 Blog
 	Article about ActiveSupport::Callbacks
 	PAEI model in programming
+	Tweethub blog post
+	Ajax debug article
+		javascriptshow
+		plugins.jquery.com
+
 
 The art of programming
 	Prepare Rspec master class
