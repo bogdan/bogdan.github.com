@@ -88,6 +88,9 @@ ul li {
 .post-social-share {
   margin-top: 8px; }
 
+a.for-people {
+  color: #ff1111; }
+
 h4.tags {
   margin: 10px 0;
   float: right; }
