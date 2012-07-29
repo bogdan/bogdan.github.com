@@ -106,11 +106,17 @@
 <h3 id='html_columns'>HTML columns</h3>
 
 <p>In order to use view helpers to render columns You can use <code>:html</code> option. This will call column block in the view context:</p>
-
+<div class='highlight'><pre><code class='ruby'><span class='n'>column</span><span class='p'>(</span><span class='ss'>:completed</span><span class='p'>,</span> <span class='ss'>:html</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span> <span class='p'>{</span> <span class='o'>|</span><span class='n'>asset</span><span class='o'>|</span> <span class='n'>asset</span><span class='o'>.</span><span class='n'>completed?</span> <span class='p'>?</span> <span class='n'>image_tag</span><span class='p'>(</span><span class='s2'>&quot;green.gif&quot;</span><span class='p'>)</span> <span class='p'>:</span> <span class='n'>image_tag</span><span class='p'>(</span><span class='s2'>&quot;red.gif&quot;</span><span class='p'>)</span> <span class='p'>}</span>
+<span class='c1'># or do it in partial</span>
+<span class='n'>column</span><span class='p'>(</span><span class='ss'>:actions</span><span class='p'>,</span> <span class='ss'>:html</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span> <span class='p'>{</span> <span class='o'>|</span><span class='n'>asset</span><span class='o'>|</span> <span class='n'>render</span> <span class='ss'>:partial</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;admin/assets/actions&quot;</span><span class='p'>,</span> <span class='ss'>:object</span> <span class='o'>=&gt;</span> <span class='n'>asset</span> <span class='p'>}</span>
+</code></pre>
+</div>
 <h3 id='table_customization_with_rails_engines'>Table customization with Rails Engines</h3>
 
 <p>Rails Engines allows you to embed views into Rails plugins and make them customizable. If You need serious customization of datagrid <code>&lt;table&gt;</code> and HTML Columns doesn&#8217;t help, you can customize datagrid internal views by running:</p>
-
+<div class='highlight'><pre><code class='sh'>rake datagrid:copy_partials
+</code></pre>
+</div>
 <p>This will create the following files in your Rails root directory:</p>
 <pre>
 <code>
@@ -133,6 +139,11 @@
           </td>
           <td>
             <div class="fb-like" data-href="http://gusiev.com/2012/01/datagrid-reports-release-gem" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+          </td>
+          <td>
+            <div class="reddit-button">
+              <script type="text/javascript" src="http://www.reddit.com/static/button/button1.js"></script>
+            </div>
           </td>
         </tr>
       </table>
