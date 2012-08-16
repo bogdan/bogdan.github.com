@@ -75,6 +75,67 @@
                     
     <div class="post">
         <h2>
+            <a href='/2010/08/populate-db-pattern-fake-data'>Populate database pattern - why is it so cool?</a>
+            <div class="date">26 Aug 2010</div>
+        </h2>
+        Once my co-worker propose an idea to fill database with some fake data because we didn't have a  gui forms yet and we have to show something that works to customer. That was a start for great pattern - <strong>populator</strong>.
+<!--
+
+<h3>Advantages</h3>
+Later we didn't drop that functionality because it was helpful for everyone to always see what's new appear in application. And we find more and more useful aspects of having populator. It was so easy to attach new people to project because we deliver a short set of data within a source code that demonstrates everything we have in our app. Now whole team has a full data set and see if any page doesn't work because of a side effect. Frontend people feel more comfortable with populator because they don't care of how to create many assets in order to see pagination and things like that . Also UI issues became easier to detect because every element present on a screen for every person letting him detect browser specific bugs. 
+
+<h3> Implementation</h3>
+
+I won't recommend any specific library to populate the db except the one to generate fake(Lorem ipsum) content. We prefer <a href="http://github.com/stympy/faker">Faker</a> but that is up to personal choice.
+Important note is that inserting data directly into db is bad idea because all application logic is ignored in this case: validation will be ignored and counters cache might be broken. That is why Populate gem is not recommended.<br/><br/>
+One nice improvement we made is pass _SCALE_ parameter to populator in order to control how many objects should be generated. Use minimal amount if you need to test that populator works and regular amount to get working system.<br/>
+Another good idea is soft save(ignore if not valid) and output the number of created objects after at the end. This letting you if something went wrong during populate process.<br/>
+<br/>
+Here is an example of how it may look like:
+<pre><code>User.transaction do
+  # apply the SCALE parameter to the argument. 
+  # Default SCALE is 10 so 10 * 1 = 10. 
+  # Generate 10 users by default
+  scale(1).times do 
+    user = User.new
+    user.email = Faker::Internet.email
+    user.first_name = Faker::Name.first_name
+    user.last_name = Faker::Name.last_name
+    user.password = user.password_confirmation = 'monkey'
+    user.save # this may be false in case of uniqueness restriction or other problems
+  end
+end
+
+
+users = User.all
+puts "Users: #{users.count}" # make sure we actually made some users </code></pre>
+
+<h3>At the end</h3>
+I beleive that Populator should be a part of the build of every project. Yes, it needs some support but in fact it saves lots and lots of time.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/database.html">database</a>
+    
+    <a href="/tags/ruby.html">ruby</a>
+    
+    <a href="/tags/pattern.html">pattern</a>
+    
+    <a href="/tags/populate.html">populate</a>
+    
+    <a href="/tags/fake.html">fake</a>
+    
+    <a href="/tags/data.html">data</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2010/07/bdd-rspec-matcher-to-test-named_scope-scoped-rails-3'>Ultimate rspec matcher to test named_scope or scoped</a>
             <div class="date">11 Jul 2010</div>
         </h2>
@@ -699,58 +760,6 @@ In this way we will rerun the LoggableModel examples for MyModel and make sure t
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2009/07/computer-science-programming-criticism-object-database-design'>Computer science ain't as good as it should be</a>
-            <div class="date">30 Jul 2009</div>
-        </h2>
-        When I start studying computer science in the University class I truly believe that it is all I need to get started writing good programs. Algorithms > Functional programming > OOP > Databases > MVC is a step-by-step path of all people that learn programming of the web application. But...
-<!--
-<br/><br/>
-Programming basics like conditions, variables, cycles and functions are mandatory for everyone just like writing and speaking for a baby.<br/> 
-
-But more advanced knowledge are less useful and optional. All of these:
-<ul>
-	<li>Object hierarchy</li>
-	<li>Normalized database model</li>
-</ul>
-are turned into dust by more important
-<ul>
-	<li>Do it as fast as possible</li>
-	<li>Customer wants!</li>
-</ul>
-
-Each framework declare it's own way to organize the application Classes. If you are working on CRUD(create-read-update-delete) data application you don't need to think about object hierarchy yourself anymore. All you need to do is understand where you need place the function that handle data processing. And the principles a well declined in the framework manual. 
-Normalized database is only a myth in a real world application. In 80% of cases the database design is evident to the developer. In other 20% the database couldn't be normalized at all.<br/>
-<br/>
-
-When you start learning programming try to let your knowledge be "moved to production" as fast as possible. In other words: Have a programming practice as fast as possible and you will understand what kind of programming theory you really need. Concentrate your education on all cases you met and avoid learning things that you could possible come across.   
-
-
-
-
-
-
--->
-        <h4 class="tags">
-    
-    <a href="/tags/programming.html">programming</a>
-    
-    <a href="/tags/database.html">database</a>
-    
-    <a href="/tags/criticism.html">criticism</a>
-    
-    <a href="/tags/science.html">science</a>
-    
-    <a href="/tags/oop.html">oop</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -785,6 +794,10 @@ When you start learning programming try to let your knowledge be "moved to produ
                         <ul>
                             
                             <li>
+                                <a href='/2012/07/postgresql-full-text-search-solr'>Full text search - Solr(Sunspot) vs PostgreSQL</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2012/06/javascript-ajax-debug-popup-response'>How many clicks do you need to debug ajax request?</a>
                             </li>
                             
@@ -798,10 +811,6 @@ When you start learning programming try to let your knowledge be "moved to produ
                             
                             <li>
                                 <a href='/2012/03/javascript-ajax-submit-form-validation'>Web Forms 2.0: Submit with Ajax and Client Side Validation</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/01/rails-32-features-changelog'>New Rails Release with a few features from me</a>
                             </li>
                             
                         </ul>

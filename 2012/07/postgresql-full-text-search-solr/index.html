@@ -6,7 +6,7 @@
 
     <title>
       
-        DOM element class - css reference or javascript reference? -
+        Full text search - Solr(Sunspot) vs PostgreSQL -
       
       Bogdan's blog
     </title>
@@ -76,44 +76,131 @@
                 <div id="content">
                     <div id="post">
     <h2>
-        <a href="/2010/04/dom-element-class-html-javascript-reference">DOM element class - css reference or javascript reference?</a>
-        <div class="date">20 Apr 2010</div>
+        <a href="/2012/07/postgresql-full-text-search-solr">Full text search - Solr(Sunspot) vs PostgreSQL</a>
+        <div class="date">30 Jul 2012</div>
     </h2>
-    Designer have used element class attribute for CSS styling for ages. Nowadays classes are also used in javascript selectors. This overlapping cause additional problems: Changes in js may cause broken design and changes in design may cause broken js. The last one may be hard to detect especially when design and css are handled by different person.
-<!--more-->
-<hr/>
-Element class seems the best way to query the element from DOM in js code. Other variants like it's relative possition to other elements are very fragile. Let's say that we have the following DOM:
-<pre><code>&lt;a&gt; Delete&lt;/a&gt;
-&lt;a&gt; Edit&lt;/a&gt;</code></pre>
-And both links are handled with javascript. How would you separate them? 
+    <p>This is short notes about my experience with full text search based on PostgreSQL and Solr. Solr was primary used with a help of <a href='https://github.com/sunspot/sunspot'>Sunspot gem</a> that was definitely a good idea, but unfortunately caused some drawbacks. PostgreSQL provides full text search out of the box and to my opinion doesn&#8217;t need any additional ruby specific tools other than ORM. <!--more--></p>
+
+<h2 id='tldr'>TL;DR</h2>
+
+<p>PostgreSQL approach is simple and fit well to agile project. Solr is pretty powerful, but you need to pay for that power. And this is significant cost. Think twice if you really need this power from the first day of full text search in your project.</p>
+
+<h2 id='search_index'>Search index</h2>
+
+<p>Solr search index is something you create almost manually by defining a new data schema. Sunspot sets <code>after_save</code> hooks to your model to update it&#8217;s solr index.</p>
+
+<p>Here is an example of schema definition based on Sunspot gem:</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Product</span> <span class='o'>&lt;</span> <span class='no'>ActiveRecord</span><span class='o'>::</span><span class='no'>Base</span>
+  <span class='n'>searchable</span> <span class='k'>do</span>
+    <span class='n'>text</span> <span class='ss'>:title</span>
+    <span class='n'>text</span> <span class='ss'>:material</span>
+    <span class='n'>text</span> <span class='ss'>:category</span> <span class='k'>do</span>
+      <span class='n'>category</span><span class='o'>.</span><span class='n'>title</span>
+    <span class='k'>end</span>
+    <span class='n'>text</span> <span class='ss'>:brand</span> <span class='k'>do</span>
+      <span class='n'>brand</span><span class='o'>.</span><span class='n'>title</span>
+    <span class='k'>end</span>
+  <span class='k'>end</span> <span class='c1'># do</span>
+<span class='k'>end</span>
+</code></pre>
+</div>
+<p>PostgreSQL search index might be yet another column in the database, set by pre save hook:</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Product</span> <span class='o'>&lt;</span> <span class='no'>ActiveRecord</span><span class='o'>::</span><span class='no'>Base</span>
+
+  <span class='n'>before_validation</span> <span class='ss'>:set_searchable_content</span>
+  <span class='kp'>protected</span>
+  <span class='k'>def</span> <span class='nf'>set_searchable_content</span>
+    <span class='nb'>self</span><span class='o'>.</span><span class='n'>searchable_content</span> <span class='o'>=</span> <span class='o'>[</span><span class='n'>title</span><span class='p'>,</span> <span class='n'>material</span><span class='p'>,</span> <span class='n'>category</span><span class='o'>.</span><span class='n'>title</span><span class='p'>,</span> <span class='n'>brand</span><span class='o'>.</span><span class='n'>title</span><span class='o'>].</span><span class='n'>join</span><span class='p'>(</span><span class='s2'>&quot; &quot;</span><span class='p'>)</span>
+  <span class='k'>end</span>
+<span class='k'>end</span>
+</code></pre>
+</div>
+<p>And don&#8217;t forget about database index:</p>
+<div class='highlight'><pre><code class='sql'><span class='k'>CREATE</span> <span class='k'>INDEX</span> <span class='n'>source_idx</span> <span class='k'>ON</span> <span class='n'>products</span> <span class='k'>USING</span> <span class='n'>gin</span><span class='p'>(</span><span class='n'>to_tsvector</span><span class='p'>(</span><span class='s1'>&#39;english&#39;</span><span class='p'>,</span> <span class='n'>searchable_content</span><span class='p'>));</span> 
+</code></pre>
+</div>
+<p>While this is very basic use case, it shows up the direction where your code will go in each variant.</p>
+
 <ul>
-	<li><strong>By order</strong>(first, second) will cause problems if designer would like to change the order.</li>
-	<li><strong>By id</strong> will fail if you would have a list of elements where each has these links</li>
-	<li><strong>By label</strong> is just a fuck up and won't work for multi language application</li>
+<li>Advanced high level DSL with a lot of &#8220;unknown unknowns&#8221; in Solr case</li>
+
+<li>Just ruby code that everyone would understand from the first look in case of Postgres</li>
 </ul>
-The only one variant that provide the best stability is reference <strong>By class</strong>.
-But as stated above class also serves for another purpose - styling. 
 
-The thing that might help is a special prefix(for example "js") for all 'JavaScript classes'.
-Like:
-<pre><code>&lt;a class="js-new-comment big-blue-button"&gt; New Comment &lt;/a&gt;</code></pre>
+<p>As an example of how you would solve more advanced problem, I want to show facet search implementation:</p>
+<div class='highlight'><pre><code class='ruby'><span class='c1'># Suppose to receive a list of ids to count between different categories</span>
+<span class='k'>def</span> <span class='nc'>self</span><span class='o'>.</span><span class='nf'>search_facets</span><span class='p'>(</span><span class='n'>ids</span><span class='p'>)</span>
+  <span class='k'>return</span> <span class='o'>[]</span> <span class='k'>if</span> <span class='n'>ids</span><span class='o'>.</span><span class='n'>blank?</span>
+  <span class='no'>ProductCategory</span><span class='o'>.</span><span class='n'>select</span><span class='p'>(</span><span class='s2'>&quot;product_categories.id, count(product_categories.id) as product_count&quot;</span><span class='p'>)</span><span class='o'>.</span>
+     <span class='n'>joins</span><span class='p'>(</span><span class='ss'>:products</span><span class='p'>)</span><span class='o'>.</span>
+     <span class='n'>where</span><span class='p'>(</span><span class='s2'>&quot;products.id&quot;</span> <span class='o'>=&gt;</span> <span class='n'>ids</span><span class='p'>)</span><span class='o'>.</span>
+     <span class='n'>group</span><span class='p'>(</span><span class='s2'>&quot;product_categories.id&quot;</span><span class='p'>)</span><span class='o'>.</span>
+<span class='k'>end</span>
+</code></pre>
+</div>
+<p>While Solr based facet would be easier:</p>
+<div class='highlight'><pre><code class='ruby'><span class='no'>Product</span><span class='o'>.</span><span class='n'>search</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>s</span><span class='o'>|</span>
+  <span class='n'>s</span><span class='o'>.</span><span class='n'>keywords</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:query</span><span class='o'>]</span>
+  <span class='n'>s</span><span class='o'>.</span><span class='n'>facet</span> <span class='ss'>:category_id</span>
+  <span class='n'>s</span><span class='o'>.</span><span class='n'>paginate</span> <span class='ss'>:page</span> <span class='o'>=&gt;</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:page</span><span class='o'>]</span><span class='p'>,</span> <span class='ss'>:per_page</span> <span class='o'>=&gt;</span> <span class='mi'>10</span>
+<span class='k'>end</span>
+</code></pre>
+</div>
+<p>At first look you might say that Solr way is more clear, but you still don&#8217;t know what it does in deep details. Sunspot gives DSL is yet another language to query data. It includes all types of operations (e.g. <a href='https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields'>comparison operators</a>, while postgres lets use SQL - language you should know already.</p>
 
-And the convention that classes with prefix should only be used in javascript selectors and classes without prefix in CSS.
-<br/><br/>
-Yes, sometimes it may look like:
-<pre><code>&lt;input type='button' class="js-follow-button follow-button"&gt; Follow this person &lt;/input&gt;</code></pre>
-But that makes sense to eliminate maintenance problem described above.
+<p>There is also easy to spot that Solr and Sunspot tool chain brings more features to you out of the box. But this is where Solr advantages ends. Note stat Solr config file is not as readable as Sunspot DSL. Here is a short example that tells Solr to do some string transformation before create a search index:</p>
+<div class='highlight'><pre><code class='xml'><span class='nt'>&lt;fieldType</span> <span class='na'>name=</span><span class='s'>&quot;text&quot;</span> <span class='na'>class=</span><span class='s'>&quot;solr.TextField&quot;</span> <span class='na'>omitNorms=</span><span class='s'>&quot;false&quot;</span><span class='nt'>&gt;</span>
+  <span class='nt'>&lt;analyzer&gt;</span>
+    <span class='nt'>&lt;tokenizer</span> <span class='na'>class=</span><span class='s'>&quot;solr.StandardTokenizerFactory&quot;</span><span class='nt'>/&gt;</span>
+    <span class='c'>&lt;!-- remove punctualtion --&gt;</span>
+    <span class='nt'>&lt;filter</span> <span class='na'>class=</span><span class='s'>&quot;solr.StandardFilterFactory&quot;</span><span class='nt'>/&gt;</span>
+    <span class='c'>&lt;!-- lower case letters --&gt;</span>
+    <span class='nt'>&lt;filter</span> <span class='na'>class=</span><span class='s'>&quot;solr.LowerCaseFilterFactory&quot;</span><span class='nt'>/&gt;</span>
+    <span class='c'>&lt;!-- language semantic support --&gt;</span>
+    <span class='nt'>&lt;filter</span> <span class='na'>class=</span><span class='s'>&quot;solr.SnowballPorterFilterFactory&quot;</span> <span class='na'>language=</span><span class='s'>&quot;English&quot;</span><span class='nt'>/&gt;</span>
+  <span class='nt'>&lt;/analyzer&gt;</span>
+<span class='nt'>&lt;/fieldType&gt;</span>
+</code></pre>
+</div>
+<p>When you go deeper into solr you might need to deal with configs like example above. While in case of PostgreSQL you can do any string transformation using ruby.</p>
 
+<h2 id='deployment_and_testing'>Deployment and Testing</h2>
+
+<p>Solr is a standalone application and you need to take care about Solr configuration. It is a part of a code since some search business logic depends on it. This might require:</p>
+
+<ul>
+<li>different solr config files across different branches</li>
+
+<li>test suite that covers some config options</li>
+
+<li>different solr instances launched for development and test environments</li>
+
+<li>a need to rebuild search index when you switch branches</li>
+</ul>
+
+<p>Postgres built in search doesn&#8217;t have these problems at all. This will give a significant performance boost in agile process. Deployment, testing and switching branches doesn&#8217;t require any full text search specific action.</p>
+
+<h2 id='reindex_process'>Reindex process</h2>
+
+<p>Reindex complexity comes from several factors.</p>
+
+<p>First of them is complicated search index that cover more than one model (Ex: <code>Product.belongs_to :brand</code> and <code>Brand#title</code> should be a part of <code>Product</code> index). It makes both approaches more complex as business logic becomes more complex.</p>
+
+<p>But in case of Solr this is not the only one thing to care. With database size growth you gain more problems. Solr index do not have that nice migration mechanism and dump transfer tools as Relational databases. No matter which gem you will use to connect Solr and Relational database: you need to take care when search index schema changes.</p>
+
+<h2 id='conclusion'>Conclusion</h2>
+
+<p>Conceptually I would like my database to respond for every data search operation e.g. full text search. This is where PostgreSQL is going. But this feature is not that strong now e.g. it still lacks spell checking and result highlight features. Solr is old school tool having all full text search features you ever imagine, but it&#8217;s heavy configuration file and technology stack should be easier.</p>
     <div class="clear"></div>
     <div class="left">
       <table class="post-social-share">
         <tr>
           <td>
-            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="DOM element class - css reference or javascript reference?" data-via="bgusiev" data-url="http://gusiev.com/2010/04/dom-element-class-html-javascript-reference">Tweet</a>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Full text search - Solr(Sunspot) vs PostgreSQL" data-via="bgusiev" data-url="http://gusiev.com/2012/07/postgresql-full-text-search-solr">Tweet</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
           </td>
           <td>
-            <div class="fb-like" data-href="http://gusiev.com/2010/04/dom-element-class-html-javascript-reference" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+            <div class="fb-like" data-href="http://gusiev.com/2012/07/postgresql-full-text-search-solr" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
           </td>
           <td>
             <div class="reddit-button">
@@ -127,17 +214,15 @@ But that makes sense to eliminate maintenance problem described above.
     <h4 class="tags">
     
     
-    <a href="/tags/javascript.html">javascript</a>
+    <a href="/tags/solr.html">solr</a>
     
-    <a href="/tags/html.html">html</a>
+    <a href="/tags/sunspot.html">sunspot</a>
     
-    <a href="/tags/dom.html">dom</a>
+    <a href="/tags/postgresql.html">postgresql</a>
     
-    <a href="/tags/css.html">css</a>
+    <a href="/tags/fulltext.html">fulltext</a>
     
-    <a href="/tags/class.html">class</a>
-    
-    <a href="/tags/element.html">element</a>
+    <a href="/tags/search.html">search</a>
     
 </h4>
 <div class="clear"></div>
@@ -147,19 +232,19 @@ But that makes sense to eliminate maintenance problem described above.
         <ul class="posts">
             
                <!-- Exclude self -->
-                <li><span>30 Jul 2012</span> &raquo; <a href="/2012/07/postgresql-full-text-search-solr">Full text search - Solr(Sunspot) vs PostgreSQL</a></li>
-              
-            
-               <!-- Exclude self -->
                 <li><span>08 Jun 2010</span> &raquo; <a href="/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails">Advanced non-flat controllers hierarchy with rails</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>06 Jun 2012</span> &raquo; <a href="/2012/06/assumption-driven-development">Assumption Driven Approach</a></li>
+                <li><span>23 Jan 2012</span> &raquo; <a href="/2012/01/rails-32-features-changelog">New Rails Release with a few features from me</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>27 Oct 2009</span> &raquo; <a href="/2009/10/objects-behaviour-inheritance-with-rspec">Objects behaviour inheritance with RSpec</a></li>
+                <li><span>18 Nov 2011</span> &raquo; <a href="/2011/11/development-smtp-server">Improve your Email delivery code with Mailtrap</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>01 Mar 2012</span> &raquo; <a href="/2012/03/javascript-ajax-submit-form-validation">Web Forms 2.0: Submit with Ajax and Client Side Validation</a></li>
               
             
         </ul>
@@ -169,8 +254,8 @@ But that makes sense to eliminate maintenance problem described above.
 <script type="text/javascript">
     var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
 
-    //var disqus_identifier = '/2010/04/dom-element-class-html-javascript-reference';
-    //var disqus_url = 'http://gusiev.com/2010/04/dom-element-class-html-javascript-reference';
+    //var disqus_identifier = '/2012/07/postgresql-full-text-search-solr';
+    //var disqus_url = 'http://gusiev.com/2012/07/postgresql-full-text-search-solr';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

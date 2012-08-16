@@ -75,6 +75,35 @@
                     
     <div class="post">
         <h2>
+            <a href='/2011/07/rspec-context-behavior-subject-slides'>Advanced RSpec Techniques presentation</a>
+            <div class="date">08 Jul 2011</div>
+        </h2>
+        <p>I&#8217;ve always pay attention to Rspec and posted some articles about <a href='/tags/rspec.html'>Advanced Rspec features</a>. Right now about 2k tests written by me personally in 3 years of development with Rails.</p>
+
+<p>Here is the slides from my talk about all invented patterns and best practices: <br /> <strong><a href='http://gusiev.com/dorspec#1'>Do rspec: fogotten features of RSpec</a></strong> <!--</p>-->
+        <h4 class="tags">
+    
+    <a href="/tags/subject.html">subject</a>
+    
+    <a href="/tags/rspec.html">rspec</a>
+    
+    <a href="/tags/context.html">context</a>
+    
+    <a href="/tags/behavior.html">behavior</a>
+    
+    <a href="/tags/dry.html">dry</a>
+    
+    <a href="/tags/slides.html">slides</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2011/06/ruby-datagrid-gem-report'>Reporting made easy by Datagrid gem for Rails</a>
             <div class="date">26 Jun 2011</div>
         </h2>
@@ -658,67 +687,6 @@ And you feel much better.
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2010/08/populate-db-pattern-fake-data'>Populate database pattern - why is it so cool?</a>
-            <div class="date">26 Aug 2010</div>
-        </h2>
-        Once my co-worker propose an idea to fill database with some fake data because we didn't have a  gui forms yet and we have to show something that works to customer. That was a start for great pattern - <strong>populator</strong>.
-<!--
-
-<h3>Advantages</h3>
-Later we didn't drop that functionality because it was helpful for everyone to always see what's new appear in application. And we find more and more useful aspects of having populator. It was so easy to attach new people to project because we deliver a short set of data within a source code that demonstrates everything we have in our app. Now whole team has a full data set and see if any page doesn't work because of a side effect. Frontend people feel more comfortable with populator because they don't care of how to create many assets in order to see pagination and things like that . Also UI issues became easier to detect because every element present on a screen for every person letting him detect browser specific bugs. 
-
-<h3> Implementation</h3>
-
-I won't recommend any specific library to populate the db except the one to generate fake(Lorem ipsum) content. We prefer <a href="http://github.com/stympy/faker">Faker</a> but that is up to personal choice.
-Important note is that inserting data directly into db is bad idea because all application logic is ignored in this case: validation will be ignored and counters cache might be broken. That is why Populate gem is not recommended.<br/><br/>
-One nice improvement we made is pass _SCALE_ parameter to populator in order to control how many objects should be generated. Use minimal amount if you need to test that populator works and regular amount to get working system.<br/>
-Another good idea is soft save(ignore if not valid) and output the number of created objects after at the end. This letting you if something went wrong during populate process.<br/>
-<br/>
-Here is an example of how it may look like:
-<pre><code>User.transaction do
-  # apply the SCALE parameter to the argument. 
-  # Default SCALE is 10 so 10 * 1 = 10. 
-  # Generate 10 users by default
-  scale(1).times do 
-    user = User.new
-    user.email = Faker::Internet.email
-    user.first_name = Faker::Name.first_name
-    user.last_name = Faker::Name.last_name
-    user.password = user.password_confirmation = 'monkey'
-    user.save # this may be false in case of uniqueness restriction or other problems
-  end
-end
-
-
-users = User.all
-puts "Users: #{users.count}" # make sure we actually made some users </code></pre>
-
-<h3>At the end</h3>
-I beleive that Populator should be a part of the build of every project. Yes, it needs some support but in fact it saves lots and lots of time.
--->
-        <h4 class="tags">
-    
-    <a href="/tags/database.html">database</a>
-    
-    <a href="/tags/ruby.html">ruby</a>
-    
-    <a href="/tags/pattern.html">pattern</a>
-    
-    <a href="/tags/populate.html">populate</a>
-    
-    <a href="/tags/fake.html">fake</a>
-    
-    <a href="/tags/data.html">data</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -753,6 +721,10 @@ I beleive that Populator should be a part of the build of every project. Yes, it
                         <ul>
                             
                             <li>
+                                <a href='/2012/07/postgresql-full-text-search-solr'>Full text search - Solr(Sunspot) vs PostgreSQL</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2012/06/javascript-ajax-debug-popup-response'>How many clicks do you need to debug ajax request?</a>
                             </li>
                             
@@ -766,10 +738,6 @@ I beleive that Populator should be a part of the build of every project. Yes, it
                             
                             <li>
                                 <a href='/2012/03/javascript-ajax-submit-form-validation'>Web Forms 2.0: Submit with Ajax and Client Side Validation</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/01/rails-32-features-changelog'>New Rails Release with a few features from me</a>
                             </li>
                             
                         </ul>

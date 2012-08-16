@@ -4,13 +4,132 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2012-07-29T17:42:41+03:00</updated>
+ <updated>2012-08-16T10:42:21+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
    <email>agresso@gmail.com</email>
  </author>
  
+ 
+ <entry>
+   <title>Full text search - Solr(Sunspot) vs PostgreSQL</title>
+   <link href="http://gusiev.com/2012/07/postgresql-full-text-search-solr"/>
+   <updated>2012-07-30T00:00:00+03:00</updated>
+   <id>http://gusiev.com/2012/07/postgresql-full-text-search-solr</id>
+   <content type="html">&lt;p&gt;This is short notes about my experience with full text search based on PostgreSQL and Solr. Solr was primary used with a help of &lt;a href='https://github.com/sunspot/sunspot'&gt;Sunspot gem&lt;/a&gt; that was definitely a good idea, but unfortunately caused some drawbacks. PostgreSQL provides full text search out of the box and to my opinion doesn&amp;#8217;t need any additional ruby specific tools other than ORM. &lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h2 id='tldr'&gt;TL;DR&lt;/h2&gt;
+
+&lt;p&gt;PostgreSQL approach is simple and fit well to agile project. Solr is pretty powerful, but you need to pay for that power. And this is significant cost. Think twice if you really need this power from the first day of full text search in your project.&lt;/p&gt;
+
+&lt;h2 id='search_index'&gt;Search index&lt;/h2&gt;
+
+&lt;p&gt;Solr search index is something you create almost manually by defining a new data schema. Sunspot sets &lt;code&gt;after_save&lt;/code&gt; hooks to your model to update it&amp;#8217;s solr index.&lt;/p&gt;
+
+&lt;p&gt;Here is an example of schema definition based on Sunspot gem:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='k'&gt;class&lt;/span&gt; &lt;span class='nc'&gt;Product&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;&lt;/span&gt; &lt;span class='no'&gt;ActiveRecord&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;Base&lt;/span&gt;
+  &lt;span class='n'&gt;searchable&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt;
+    &lt;span class='n'&gt;text&lt;/span&gt; &lt;span class='ss'&gt;:title&lt;/span&gt;
+    &lt;span class='n'&gt;text&lt;/span&gt; &lt;span class='ss'&gt;:material&lt;/span&gt;
+    &lt;span class='n'&gt;text&lt;/span&gt; &lt;span class='ss'&gt;:category&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt;
+      &lt;span class='n'&gt;category&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;title&lt;/span&gt;
+    &lt;span class='k'&gt;end&lt;/span&gt;
+    &lt;span class='n'&gt;text&lt;/span&gt; &lt;span class='ss'&gt;:brand&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt;
+      &lt;span class='n'&gt;brand&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;title&lt;/span&gt;
+    &lt;span class='k'&gt;end&lt;/span&gt;
+  &lt;span class='k'&gt;end&lt;/span&gt; &lt;span class='c1'&gt;# do&lt;/span&gt;
+&lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;PostgreSQL search index might be yet another column in the database, set by pre save hook:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='k'&gt;class&lt;/span&gt; &lt;span class='nc'&gt;Product&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;&lt;/span&gt; &lt;span class='no'&gt;ActiveRecord&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;Base&lt;/span&gt;
+
+  &lt;span class='n'&gt;before_validation&lt;/span&gt; &lt;span class='ss'&gt;:set_searchable_content&lt;/span&gt;
+  &lt;span class='kp'&gt;protected&lt;/span&gt;
+  &lt;span class='k'&gt;def&lt;/span&gt; &lt;span class='nf'&gt;set_searchable_content&lt;/span&gt;
+    &lt;span class='nb'&gt;self&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;searchable_content&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='n'&gt;title&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;material&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;category&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;title&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;brand&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;title&lt;/span&gt;&lt;span class='o'&gt;].&lt;/span&gt;&lt;span class='n'&gt;join&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot; &amp;quot;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+  &lt;span class='k'&gt;end&lt;/span&gt;
+&lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;And don&amp;#8217;t forget about database index:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='sql'&gt;&lt;span class='k'&gt;CREATE&lt;/span&gt; &lt;span class='k'&gt;INDEX&lt;/span&gt; &lt;span class='n'&gt;source_idx&lt;/span&gt; &lt;span class='k'&gt;ON&lt;/span&gt; &lt;span class='n'&gt;products&lt;/span&gt; &lt;span class='k'&gt;USING&lt;/span&gt; &lt;span class='n'&gt;gin&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;to_tsvector&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s1'&gt;&amp;#39;english&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;searchable_content&lt;/span&gt;&lt;span class='p'&gt;));&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;While this is very basic use case, it shows up the direction where your code will go in each variant.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Advanced high level DSL with a lot of &amp;#8220;unknown unknowns&amp;#8221; in Solr case&lt;/li&gt;
+
+&lt;li&gt;Just ruby code that everyone would understand from the first look in case of Postgres&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;As an example of how you would solve more advanced problem, I want to show facet search implementation:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='c1'&gt;# Suppose to receive a list of ids to count between different categories&lt;/span&gt;
+&lt;span class='k'&gt;def&lt;/span&gt; &lt;span class='nc'&gt;self&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='nf'&gt;search_facets&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;ids&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+  &lt;span class='k'&gt;return&lt;/span&gt; &lt;span class='o'&gt;[]&lt;/span&gt; &lt;span class='k'&gt;if&lt;/span&gt; &lt;span class='n'&gt;ids&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;blank?&lt;/span&gt;
+  &lt;span class='no'&gt;ProductCategory&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;select&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot;product_categories.id, count(product_categories.id) as product_count&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;
+     &lt;span class='n'&gt;joins&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:products&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;
+     &lt;span class='n'&gt;where&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot;products.id&amp;quot;&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='n'&gt;ids&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;
+     &lt;span class='n'&gt;group&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot;product_categories.id&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;
+&lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;While Solr based facet would be easier:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='no'&gt;Product&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;search&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt; &lt;span class='o'&gt;|&lt;/span&gt;&lt;span class='n'&gt;s&lt;/span&gt;&lt;span class='o'&gt;|&lt;/span&gt;
+  &lt;span class='n'&gt;s&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;keywords&lt;/span&gt; &lt;span class='n'&gt;params&lt;/span&gt;&lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='ss'&gt;:query&lt;/span&gt;&lt;span class='o'&gt;]&lt;/span&gt;
+  &lt;span class='n'&gt;s&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;facet&lt;/span&gt; &lt;span class='ss'&gt;:category_id&lt;/span&gt;
+  &lt;span class='n'&gt;s&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;paginate&lt;/span&gt; &lt;span class='ss'&gt;:page&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='n'&gt;params&lt;/span&gt;&lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='ss'&gt;:page&lt;/span&gt;&lt;span class='o'&gt;]&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:per_page&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='mi'&gt;10&lt;/span&gt;
+&lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;At first look you might say that Solr way is more clear, but you still don&amp;#8217;t know what it does in deep details. Sunspot gives DSL is yet another language to query data. It includes all types of operations (e.g. &lt;a href='https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields'&gt;comparison operators&lt;/a&gt;, while postgres lets use SQL - language you should know already.&lt;/p&gt;
+
+&lt;p&gt;There is also easy to spot that Solr and Sunspot tool chain brings more features to you out of the box. But this is where Solr advantages ends. Note stat Solr config file is not as readable as Sunspot DSL. Here is a short example that tells Solr to do some string transformation before create a search index:&lt;/p&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='xml'&gt;&lt;span class='nt'&gt;&amp;lt;fieldType&lt;/span&gt; &lt;span class='na'&gt;name=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;text&amp;quot;&lt;/span&gt; &lt;span class='na'&gt;class=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;solr.TextField&amp;quot;&lt;/span&gt; &lt;span class='na'&gt;omitNorms=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;false&amp;quot;&lt;/span&gt;&lt;span class='nt'&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class='nt'&gt;&amp;lt;analyzer&amp;gt;&lt;/span&gt;
+    &lt;span class='nt'&gt;&amp;lt;tokenizer&lt;/span&gt; &lt;span class='na'&gt;class=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;solr.StandardTokenizerFactory&amp;quot;&lt;/span&gt;&lt;span class='nt'&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class='c'&gt;&amp;lt;!-- remove punctualtion --&amp;gt;&lt;/span&gt;
+    &lt;span class='nt'&gt;&amp;lt;filter&lt;/span&gt; &lt;span class='na'&gt;class=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;solr.StandardFilterFactory&amp;quot;&lt;/span&gt;&lt;span class='nt'&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class='c'&gt;&amp;lt;!-- lower case letters --&amp;gt;&lt;/span&gt;
+    &lt;span class='nt'&gt;&amp;lt;filter&lt;/span&gt; &lt;span class='na'&gt;class=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;solr.LowerCaseFilterFactory&amp;quot;&lt;/span&gt;&lt;span class='nt'&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class='c'&gt;&amp;lt;!-- language semantic support --&amp;gt;&lt;/span&gt;
+    &lt;span class='nt'&gt;&amp;lt;filter&lt;/span&gt; &lt;span class='na'&gt;class=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;solr.SnowballPorterFilterFactory&amp;quot;&lt;/span&gt; &lt;span class='na'&gt;language=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;English&amp;quot;&lt;/span&gt;&lt;span class='nt'&gt;/&amp;gt;&lt;/span&gt;
+  &lt;span class='nt'&gt;&amp;lt;/analyzer&amp;gt;&lt;/span&gt;
+&lt;span class='nt'&gt;&amp;lt;/fieldType&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;When you go deeper into solr you might need to deal with configs like example above. While in case of PostgreSQL you can do any string transformation using ruby.&lt;/p&gt;
+
+&lt;h2 id='deployment_and_testing'&gt;Deployment and Testing&lt;/h2&gt;
+
+&lt;p&gt;Solr is a standalone application and you need to take care about Solr configuration. It is a part of a code since some search business logic depends on it. This might require:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;different solr config files across different branches&lt;/li&gt;
+
+&lt;li&gt;test suite that covers some config options&lt;/li&gt;
+
+&lt;li&gt;different solr instances launched for development and test environments&lt;/li&gt;
+
+&lt;li&gt;a need to rebuild search index when you switch branches&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Postgres built in search doesn&amp;#8217;t have these problems at all. This will give a significant performance boost in agile process. Deployment, testing and switching branches doesn&amp;#8217;t require any full text search specific action.&lt;/p&gt;
+
+&lt;h2 id='reindex_process'&gt;Reindex process&lt;/h2&gt;
+
+&lt;p&gt;Reindex complexity comes from several factors.&lt;/p&gt;
+
+&lt;p&gt;First of them is complicated search index that cover more than one model (Ex: &lt;code&gt;Product.belongs_to :brand&lt;/code&gt; and &lt;code&gt;Brand#title&lt;/code&gt; should be a part of &lt;code&gt;Product&lt;/code&gt; index). It makes both approaches more complex as business logic becomes more complex.&lt;/p&gt;
+
+&lt;p&gt;But in case of Solr this is not the only one thing to care. With database size growth you gain more problems. Solr index do not have that nice migration mechanism and dump transfer tools as Relational databases. No matter which gem you will use to connect Solr and Relational database: you need to take care when search index schema changes.&lt;/p&gt;
+
+&lt;h2 id='conclusion'&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Conceptually I would like my database to respond for every data search operation e.g. full text search. This is where PostgreSQL is going. But this feature is not that strong now e.g. it still lacks spell checking and result highlight features. Solr is old school tool having all full text search features you ever imagine, but it&amp;#8217;s heavy configuration file and technology stack should be easier.&lt;/p&gt;</content>
+ </entry>
  
  <entry>
    <title>How many clicks do you need to debug ajax request?</title>
