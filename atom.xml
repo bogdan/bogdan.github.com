@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2012-08-16T10:42:21+03:00</updated>
+ <updated>2012-08-16T11:04:30+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>Full text search - Solr(Sunspot) vs PostgreSQL</title>
-   <link href="http://gusiev.com/2012/07/postgresql-full-text-search-solr"/>
-   <updated>2012-07-30T00:00:00+03:00</updated>
-   <id>http://gusiev.com/2012/07/postgresql-full-text-search-solr</id>
+   <link href="http://gusiev.com/2012/08/postgresql-full-text-search-solr"/>
+   <updated>2012-08-16T00:00:00+03:00</updated>
+   <id>http://gusiev.com/2012/08/postgresql-full-text-search-solr</id>
    <content type="html">&lt;p&gt;This is short notes about my experience with full text search based on PostgreSQL and Solr. Solr was primary used with a help of &lt;a href='https://github.com/sunspot/sunspot'&gt;Sunspot gem&lt;/a&gt; that was definitely a good idea, but unfortunately caused some drawbacks. PostgreSQL provides full text search out of the box and to my opinion doesn&amp;#8217;t need any additional ruby specific tools other than ORM. &lt;!--more--&gt;&lt;/p&gt;
 
 &lt;h2 id='tldr'&gt;TL;DR&lt;/h2&gt;
