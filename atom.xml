@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2012-10-04T23:15:28+03:00</updated>
+ <updated>2012-10-30T08:54:20+02:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
@@ -37,35 +37,17 @@
 &lt;p&gt;Solr search index is something you create almost manually by defining a new data schema. Sunspot sets &lt;code&gt;after_save&lt;/code&gt; hooks to your model to update it&amp;#8217;s solr index.&lt;/p&gt;
 
 &lt;p&gt;Here is an example of schema definition based on Sunspot gem:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='k'&gt;class&lt;/span&gt; &lt;span class='nc'&gt;Product&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;&lt;/span&gt; &lt;span class='no'&gt;ActiveRecord&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;Base&lt;/span&gt;
-  &lt;span class='n'&gt;searchable&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt;
-    &lt;span class='n'&gt;text&lt;/span&gt; &lt;span class='ss'&gt;:title&lt;/span&gt;
-    &lt;span class='n'&gt;text&lt;/span&gt; &lt;span class='ss'&gt;:material&lt;/span&gt;
-    &lt;span class='n'&gt;text&lt;/span&gt; &lt;span class='ss'&gt;:category&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt;
-      &lt;span class='n'&gt;category&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;title&lt;/span&gt;
-    &lt;span class='k'&gt;end&lt;/span&gt;
-    &lt;span class='n'&gt;text&lt;/span&gt; &lt;span class='ss'&gt;:brand&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt;
-      &lt;span class='n'&gt;brand&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;title&lt;/span&gt;
-    &lt;span class='k'&gt;end&lt;/span&gt;
-  &lt;span class='k'&gt;end&lt;/span&gt; &lt;span class='c1'&gt;# do&lt;/span&gt;
-&lt;span class='k'&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;PostgreSQL search index might be yet another column in the database, set by pre save hook:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='k'&gt;class&lt;/span&gt; &lt;span class='nc'&gt;Product&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;&lt;/span&gt; &lt;span class='no'&gt;ActiveRecord&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;Base&lt;/span&gt;
 
-  &lt;span class='n'&gt;before_validation&lt;/span&gt; &lt;span class='ss'&gt;:set_searchable_content&lt;/span&gt;
-  &lt;span class='kp'&gt;protected&lt;/span&gt;
-  &lt;span class='k'&gt;def&lt;/span&gt; &lt;span class='nf'&gt;set_searchable_content&lt;/span&gt;
-    &lt;span class='nb'&gt;self&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;searchable_content&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='n'&gt;title&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;material&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;category&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;title&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;brand&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;title&lt;/span&gt;&lt;span class='o'&gt;].&lt;/span&gt;&lt;span class='n'&gt;join&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot; &amp;quot;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
-  &lt;span class='k'&gt;end&lt;/span&gt;
-&lt;span class='k'&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
+&lt;p&gt;PostgreSQL search index might be yet another column in the database, set by pre save hook:&lt;/p&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;And don&amp;#8217;t forget about database index:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='sql'&gt;&lt;span class='k'&gt;CREATE&lt;/span&gt; &lt;span class='k'&gt;INDEX&lt;/span&gt; &lt;span class='n'&gt;source_idx&lt;/span&gt; &lt;span class='k'&gt;ON&lt;/span&gt; &lt;span class='n'&gt;products&lt;/span&gt; &lt;span class='k'&gt;USING&lt;/span&gt; &lt;span class='n'&gt;gin&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;to_tsvector&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s1'&gt;&amp;#39;english&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;searchable_content&lt;/span&gt;&lt;span class='p'&gt;));&lt;/span&gt; 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;While this is very basic use case, it shows up the direction where your code will go in each variant.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -75,40 +57,19 @@
 &lt;/ul&gt;
 
 &lt;p&gt;As an example of how you would solve more advanced problem, I want to show facet search implementation:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='c1'&gt;# Suppose to receive a list of ids to count between different categories&lt;/span&gt;
-&lt;span class='k'&gt;def&lt;/span&gt; &lt;span class='nc'&gt;self&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='nf'&gt;search_facets&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;ids&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
-  &lt;span class='k'&gt;return&lt;/span&gt; &lt;span class='o'&gt;[]&lt;/span&gt; &lt;span class='k'&gt;if&lt;/span&gt; &lt;span class='n'&gt;ids&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;blank?&lt;/span&gt;
-  &lt;span class='no'&gt;ProductCategory&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;select&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot;product_categories.id, count(product_categories.id) as product_count&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;
-     &lt;span class='n'&gt;joins&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:products&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;
-     &lt;span class='n'&gt;where&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot;products.id&amp;quot;&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='n'&gt;ids&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;
-     &lt;span class='n'&gt;group&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot;product_categories.id&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;
-&lt;span class='k'&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;While Solr based facet would be easier:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='no'&gt;Product&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;search&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt; &lt;span class='o'&gt;|&lt;/span&gt;&lt;span class='n'&gt;s&lt;/span&gt;&lt;span class='o'&gt;|&lt;/span&gt;
-  &lt;span class='n'&gt;s&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;keywords&lt;/span&gt; &lt;span class='n'&gt;params&lt;/span&gt;&lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='ss'&gt;:query&lt;/span&gt;&lt;span class='o'&gt;]&lt;/span&gt;
-  &lt;span class='n'&gt;s&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;facet&lt;/span&gt; &lt;span class='ss'&gt;:category_id&lt;/span&gt;
-  &lt;span class='n'&gt;s&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;paginate&lt;/span&gt; &lt;span class='ss'&gt;:page&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='n'&gt;params&lt;/span&gt;&lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='ss'&gt;:page&lt;/span&gt;&lt;span class='o'&gt;]&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:per_page&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='mi'&gt;10&lt;/span&gt;
-&lt;span class='k'&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;At first look you might say that Solr way is more clear, but you still don&amp;#8217;t know what it does in deep details. Sunspot gives DSL is yet another language to query data. It includes all types of operations (e.g. &lt;a href='https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields'&gt;comparison operators&lt;/a&gt;, while postgres lets use SQL - language you should know already.&lt;/p&gt;
 
 &lt;p&gt;There is also easy to spot that Solr and Sunspot tool chain brings more features to you out of the box. But this is where Solr advantages ends. Note stat Solr config file is not as readable as Sunspot DSL. Here is a short example that tells Solr to do some string transformation before create a search index:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='xml'&gt;&lt;span class='nt'&gt;&amp;lt;fieldType&lt;/span&gt; &lt;span class='na'&gt;name=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;text&amp;quot;&lt;/span&gt; &lt;span class='na'&gt;class=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;solr.TextField&amp;quot;&lt;/span&gt; &lt;span class='na'&gt;omitNorms=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;false&amp;quot;&lt;/span&gt;&lt;span class='nt'&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class='nt'&gt;&amp;lt;analyzer&amp;gt;&lt;/span&gt;
-    &lt;span class='nt'&gt;&amp;lt;tokenizer&lt;/span&gt; &lt;span class='na'&gt;class=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;solr.StandardTokenizerFactory&amp;quot;&lt;/span&gt;&lt;span class='nt'&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class='c'&gt;&amp;lt;!-- remove punctualtion --&amp;gt;&lt;/span&gt;
-    &lt;span class='nt'&gt;&amp;lt;filter&lt;/span&gt; &lt;span class='na'&gt;class=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;solr.StandardFilterFactory&amp;quot;&lt;/span&gt;&lt;span class='nt'&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class='c'&gt;&amp;lt;!-- lower case letters --&amp;gt;&lt;/span&gt;
-    &lt;span class='nt'&gt;&amp;lt;filter&lt;/span&gt; &lt;span class='na'&gt;class=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;solr.LowerCaseFilterFactory&amp;quot;&lt;/span&gt;&lt;span class='nt'&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class='c'&gt;&amp;lt;!-- language semantic support --&amp;gt;&lt;/span&gt;
-    &lt;span class='nt'&gt;&amp;lt;filter&lt;/span&gt; &lt;span class='na'&gt;class=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;solr.SnowballPorterFilterFactory&amp;quot;&lt;/span&gt; &lt;span class='na'&gt;language=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;English&amp;quot;&lt;/span&gt;&lt;span class='nt'&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span class='nt'&gt;&amp;lt;/analyzer&amp;gt;&lt;/span&gt;
-&lt;span class='nt'&gt;&amp;lt;/fieldType&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;When you go deeper into solr you might need to deal with configs like example above. While in case of PostgreSQL you can do any string transformation using ruby.&lt;/p&gt;
 
 &lt;h2 id='deployment_and_testing'&gt;Deployment and Testing&lt;/h2&gt;
@@ -364,16 +325,9 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)&lt;/code&gt;&lt;/pre
 &lt;h2 id='sumbit_with_ajax'&gt;Sumbit with Ajax&lt;/h2&gt;
 
 &lt;p&gt;Submit a form with AJAX have never been a problem:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='js'&gt;&lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;.&lt;/span&gt;&lt;span class='nx'&gt;ajax&lt;/span&gt;&lt;span class='p'&gt;({&lt;/span&gt;
-  &lt;span class='nx'&gt;url&lt;/span&gt;&lt;span class='o'&gt;:&lt;/span&gt; &lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='nx'&gt;form&lt;/span&gt;&lt;span class='p'&gt;).&lt;/span&gt;&lt;span class='nx'&gt;attr&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s1'&gt;&amp;#39;action&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt;
-  &lt;span class='nx'&gt;data&lt;/span&gt;&lt;span class='o'&gt;:&lt;/span&gt; &lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='nx'&gt;form&lt;/span&gt;&lt;span class='p'&gt;).&lt;/span&gt;&lt;span class='nx'&gt;serialize&lt;/span&gt;&lt;span class='p'&gt;(),&lt;/span&gt;
-  &lt;span class='nx'&gt;type&lt;/span&gt;&lt;span class='o'&gt;:&lt;/span&gt; &lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='nx'&gt;form&lt;/span&gt;&lt;span class='p'&gt;).&lt;/span&gt;&lt;span class='nx'&gt;attr&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s1'&gt;&amp;#39;method&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt;
-  &lt;span class='nx'&gt;success&lt;/span&gt;&lt;span class='o'&gt;:&lt;/span&gt; &lt;span class='kd'&gt;function&lt;/span&gt; &lt;span class='p'&gt;()&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;
-    &lt;span class='c1'&gt;//do&lt;/span&gt;
-  &lt;span class='p'&gt;}&lt;/span&gt;
-&lt;span class='p'&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;More over submit with AJAX doesn&amp;#8217;t require to rerender a page if it was not successfull: less server load and no need to support &amp;#8216;new&amp;#8217; and &amp;#8216;edit&amp;#8217; mode in HTML template. Problem that comes up with ajax submit is Validation. If you ever find yourself stuck with syncing client and server side validation or bug that form doesn&amp;#8217;t have some data that was there before submit then you know what I am talking about too.&lt;/p&gt;
 
 &lt;h2 id='solving_validation_problem'&gt;Solving validation problem&lt;/h2&gt;
@@ -381,9 +335,9 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)&lt;/code&gt;&lt;/pre
 &lt;p&gt;There are number of visions in the Ruby community on how to solve the problem: some people prefer stay with Forms 1.0. Some people generate JavaScript validators based on ActiveModel validators. Other guys write their own validation in JavaScript and perform it on both client and server side. The complexity of all these solution goes beyond believe. And here I am going to describe much simpler way of doing it.&lt;/p&gt;
 
 &lt;p&gt;What if we pass the validation result as JSON from backend in a simple key:value format like:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='js'&gt;&lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='nx'&gt;email&lt;/span&gt;&lt;span class='o'&gt;:&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;is not valid&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='nx'&gt;password&lt;/span&gt;&lt;span class='o'&gt;:&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;is too short&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;It&amp;#8217;s fast as wind and easy to implement:&lt;/p&gt;
 
 &lt;ul&gt;
@@ -397,42 +351,17 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)&lt;/code&gt;&lt;/pre
 &lt;h2 id='from_assumptions_to_coding'&gt;From Assumptions to Coding&lt;/h2&gt;
 
 &lt;p&gt;As we agreed - controller should return JSON instead of HTML:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='diff'&gt; class UsersController &amp;lt; ApplicationController
-   def create
-     @user = User.new(params[:user])
-     if @user.save
-&lt;span class='gd'&gt;-      redirect_to root_path&lt;/span&gt;
-&lt;span class='gi'&gt;+      render :json =&amp;gt; {:redirect =&amp;gt; root_path}&lt;/span&gt;
-     else
-&lt;span class='gd'&gt;-      render :action =&amp;gt; :new&lt;/span&gt;
-&lt;span class='gi'&gt;+      render :json =&amp;gt; {:errors =&amp;gt; user.errors}&lt;/span&gt;
-     end
-   end
- end
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;All we need to do after that is just assign errors to the form to the prepared spots identified with HTML5 custom attribute:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='diff'&gt; &amp;lt;form id=&amp;quot;new_user&amp;quot; action=&amp;quot;/users&amp;quot; method=&amp;quot;post&amp;quot;&amp;gt;
-&lt;span class='gd'&gt;-  &amp;lt;div class=&amp;quot;field&amp;quot;&amp;gt;&lt;/span&gt;
-&lt;span class='gi'&gt;+  &amp;lt;div class=&amp;quot;field&amp;quot; validate=&amp;quot;email&amp;quot;&amp;gt;&lt;/span&gt;
-     &amp;lt;label for=&amp;quot;user_email&amp;quot;&amp;gt;Email&amp;lt;/label&amp;gt;&amp;lt;br /&amp;gt;
-     &amp;lt;input id=&amp;quot;user_email&amp;quot; name=&amp;quot;user[email]&amp;quot; type=&amp;quot;text&amp;quot; /&amp;gt;
-   &amp;lt;/div&amp;gt;
-&lt;span class='gd'&gt;-  &amp;lt;div class=&amp;quot;field&amp;quot;&amp;gt;&lt;/span&gt;
-&lt;span class='gi'&gt;+  &amp;lt;div class=&amp;quot;field&amp;quot; validate=&amp;quot;password&amp;quot;&amp;gt;&lt;/span&gt;
-     &amp;lt;label for=&amp;quot;user_password&amp;quot;&amp;gt;Password&amp;lt;/label&amp;gt;&amp;lt;br /&amp;gt;
-     &amp;lt;input id=&amp;quot;user_password&amp;quot; name=&amp;quot;user[password]&amp;quot; type=&amp;quot;password&amp;quot; /&amp;gt;
-   &amp;lt;/div&amp;gt;
-   &amp;lt;div class=&amp;quot;actions&amp;quot;&amp;gt;
-     &amp;lt;input name=&amp;quot;commit&amp;quot; type=&amp;quot;submit&amp;quot; value=&amp;quot;Create User&amp;quot; /&amp;gt;
-   &amp;lt;/div&amp;gt;
- &amp;lt;/form&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;All the dirty work can be done by &lt;a href='https://github.com/bogdan/ajaxsubmit'&gt;AjaxSubmit&lt;/a&gt; library that implements all the ideas described above:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='js'&gt;&lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s1'&gt;&amp;#39;#new_user&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;).&lt;/span&gt;&lt;span class='nx'&gt;ajaxForm&lt;/span&gt;&lt;span class='p'&gt;();&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;The main goal reached: Make super modern AJAX form is as easy as regular form. If you still can&amp;#8217;t believe that it is so easy - check out &lt;a href='http://ajaxsubmit.heroku.com'&gt;LIVE demo&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id='ajaxsubmit_is_it_flexible'&gt;AjaxSubmit: Is it flexible?&lt;/h2&gt;
@@ -468,13 +397,9 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)&lt;/code&gt;&lt;/pre
 &lt;p&gt;People around made a &lt;a href='https://github.com/rails/rails/commit/a382d60f6abc94b6a965525872f858e48abc00de'&gt;lot of PR on it&lt;/a&gt;. So, You probably already heard about it.&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;pluck&lt;/code&gt; can be used to query a single column from the underlying table of a model. It accepts a column name as argument and returns an array of values of the specified column with the corresponding data type.&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='no'&gt;Client&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;where&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:active&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='kp'&gt;true&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;pluck&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:id&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
-&lt;span class='c1'&gt;# SELECT id FROM clients WHERE active = 1&lt;/span&gt;
 
-&lt;span class='no'&gt;Client&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;uniq&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;pluck&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:role&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
-&lt;span class='c1'&gt;# SELECT DISTINCT role FROM clients&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;&lt;a href='http://edgeguides.rubyonrails.org/active_record_querying.html#pluck'&gt;Pluck in Rails guides&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id='strict_validation_concept'&gt;Strict validation concept&lt;/h2&gt;
@@ -482,31 +407,21 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)&lt;/code&gt;&lt;/pre
 &lt;p&gt;Some validation are not connected with end user and breaking it is more likely a bug than problem with user input. A few constraints can be embed to DB(like foreign keys), but most of them can not. And it&amp;#8217;s a good idea to use AM validators to do such checks as well.&lt;/p&gt;
 
 &lt;p&gt;Use case:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='k'&gt;class&lt;/span&gt; &lt;span class='nc'&gt;Article&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;&lt;/span&gt; &lt;span class='no'&gt;AR&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;Base&lt;/span&gt;
-  &lt;span class='n'&gt;validates&lt;/span&gt; &lt;span class='ss'&gt;:author&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:presence&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='kp'&gt;true&lt;/span&gt;
-&lt;span class='k'&gt;end&lt;/span&gt;
 
-&lt;span class='n'&gt;u&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='no'&gt;Article&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;new&lt;/span&gt;
-&lt;span class='n'&gt;u&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;save&lt;/span&gt; &lt;span class='c1'&gt;# =&amp;gt; false&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;&lt;code&gt;#author&lt;/code&gt; is usually set in controller from &lt;code&gt;current_user&lt;/code&gt;. If somebody forgets to do it - user see error: &lt;code&gt;Author cann&amp;#39;t be blank&lt;/code&gt;. And it is not right to show error message to user that he is not able to fix. More over DEV team is not notified about the problem.&lt;/p&gt;
 
 &lt;p&gt;In order to fix that You can use &lt;a href='https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2'&gt;validate! method&lt;/a&gt; that generates validator that always raises exception when fails:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='k'&gt;class&lt;/span&gt; &lt;span class='nc'&gt;Article&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;&lt;/span&gt; &lt;span class='no'&gt;AR&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;Base&lt;/span&gt;
-  &lt;span class='n'&gt;validates!&lt;/span&gt; &lt;span class='ss'&gt;:author&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:presence&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='kp'&gt;true&lt;/span&gt;
-&lt;span class='k'&gt;end&lt;/span&gt;
 
-&lt;span class='n'&gt;u&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='no'&gt;User&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;new&lt;/span&gt;
-&lt;span class='n'&gt;u&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;save&lt;/span&gt; &lt;span class='c1'&gt;# raises ActiveModel::StrictValidationFailed&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;h2 id='customizing_mass_assignment_sanitizer'&gt;Customizing Mass Assignment Sanitizer&lt;/h2&gt;
 
 &lt;p&gt;Added an ability to specify &lt;a href='https://github.com/rails/rails/commit/aa2639e746d8af5d7673bbbbbccbe868edeb0161'&gt;your own behavior on mass assignment protection&lt;/a&gt;, controlled by option:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='no'&gt;ActiveModel&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;MassAssignmentSecurity&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;mass_assignment_sanitizer&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;The main idea behind this change is to make Mass Assignment Sanitizer to raise exceptions in development and test environments while leaving logging behavior in production. This will be the &lt;a href='https://github.com/rails/rails/commit/0fab8c388ea9cfcace0907102697c78a68762be3'&gt;default Rails application template&lt;/a&gt; in version 3.2. It will allow to detect mass assignment protection issues caused by bug in code more effectively before they will be deployed to production.&lt;/p&gt;
 
 &lt;h2 id='power_hacking_selectmultiple'&gt;Power hacking select[multiple]&lt;/h2&gt;
@@ -517,19 +432,14 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)&lt;/code&gt;&lt;/pre
 
 &lt;p&gt;When &lt;code&gt;multiple&lt;/code&gt; parameter passed to select and all options got deselected web browsers do not send any value to server. Unfortunately this introduces a gotcha: if an &lt;code&gt;User&lt;/code&gt; model has many &lt;code&gt;roles&lt;/code&gt; and have &lt;code&gt;role_ids&lt;/code&gt; accessor, and in the form that edits roles of the user the user deselects all roles from &lt;code&gt;role_ids&lt;/code&gt; multiple select box, no &lt;code&gt;role_ids&lt;/code&gt; parameter is sent. So, any mass-assignment idiom like&lt;/p&gt;
 
-&lt;p&gt;&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;  &lt;span class='vi'&gt;@user&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;update_attributes&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;params&lt;/span&gt;&lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='ss'&gt;:user&lt;/span&gt;&lt;span class='o'&gt;]&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
 
 &lt;p&gt;wouldn&amp;#8217;t update roles.&lt;/p&gt;
 
 &lt;p&gt;To prevent this the helper generates an auxiliary hidden field before every multiple select. The hidden field has the same name as multiple select and blank value.&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='html'&gt;&lt;span class='nt'&gt;&amp;lt;input&lt;/span&gt; &lt;span class='na'&gt;type=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;hidden&amp;quot;&lt;/span&gt; &lt;span class='na'&gt;name=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;user[role_ids]&amp;quot;&lt;/span&gt; &lt;span class='na'&gt;value=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class='nt'&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class='nt'&gt;&amp;lt;select&lt;/span&gt; &lt;span class='na'&gt;id=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;user_role_ids&amp;quot;&lt;/span&gt; &lt;span class='na'&gt;name=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;user[role_ids]&amp;quot;&lt;/span&gt; &lt;span class='na'&gt;multiple=&lt;/span&gt;&lt;span class='s'&gt;&amp;quot;multiple&amp;quot;&lt;/span&gt;&lt;span class='nt'&gt;&amp;gt;&lt;/span&gt;
-  ....
-&lt;span class='nt'&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;p&gt;This way, the client either sends only the hidden field (representing the deselected multiple select box), or both fields. Since the HTML specification says key/value pairs have to be sent in the same order they appear in the form, and parameters extraction gets the last occurrence of any repeated key in the query string, that works for ordinary forms.&lt;/p&gt;
 
 &lt;p&gt;Unfortunately this trick can introduce a side effects described well in this &lt;a href='http://stackoverflow.com/questions/8929230/why-is-the-first-element-always-blank-in-my-rails-multi-select-using-an-embedde'&gt;stackoverflow question&lt;/a&gt;. If you know an effective way to fix that - let me know.&lt;/p&gt;
@@ -569,18 +479,14 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)&lt;/code&gt;&lt;/pre
 &lt;h3 id='html_columns'&gt;HTML columns&lt;/h3&gt;
 
 &lt;p&gt;In order to use view helpers to render columns You can use &lt;code&gt;:html&lt;/code&gt; option. This will call column block in the view context:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='n'&gt;column&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:completed&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:html&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='kp'&gt;true&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt; &lt;span class='o'&gt;|&lt;/span&gt;&lt;span class='n'&gt;asset&lt;/span&gt;&lt;span class='o'&gt;|&lt;/span&gt; &lt;span class='n'&gt;asset&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;completed?&lt;/span&gt; &lt;span class='p'&gt;?&lt;/span&gt; &lt;span class='n'&gt;image_tag&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot;green.gif&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='n'&gt;image_tag&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot;red.gif&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt;
-&lt;span class='c1'&gt;# or do it in partial&lt;/span&gt;
-&lt;span class='n'&gt;column&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:actions&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:html&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='kp'&gt;true&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt; &lt;span class='o'&gt;|&lt;/span&gt;&lt;span class='n'&gt;asset&lt;/span&gt;&lt;span class='o'&gt;|&lt;/span&gt; &lt;span class='n'&gt;render&lt;/span&gt; &lt;span class='ss'&gt;:partial&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;admin/assets/actions&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:object&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='n'&gt;asset&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
+
 &lt;h3 id='table_customization_with_rails_engines'&gt;Table customization with Rails Engines&lt;/h3&gt;
 
 &lt;p&gt;Rails Engines allows you to embed views into Rails plugins and make them customizable. If You need serious customization of datagrid &lt;code&gt;&amp;lt;table&amp;gt;&lt;/code&gt; and HTML Columns doesn&amp;#8217;t help, you can customize datagrid internal views by running:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='sh'&gt;rake datagrid:copy_partials
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;This will create the following files in your Rails root directory:&lt;/p&gt;
+
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp This will create the following files in your Rails root directory:&lt;/p&gt;
 &lt;pre&gt;
 &lt;code&gt;
 |~app/
@@ -726,57 +632,15 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)&lt;/code&gt;&lt;/pre
 &lt;/ul&gt;
 
 &lt;p&gt;And we can easily split their definition with the following ruby DSL&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='k'&gt;class&lt;/span&gt; &lt;span class='nc'&gt;SimpleReport&lt;/span&gt;
 
-  &lt;span class='kp'&gt;include&lt;/span&gt; &lt;span class='no'&gt;Datagrid&lt;/span&gt;
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
 
-  &lt;span class='n'&gt;scope&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt;
-    &lt;span class='no'&gt;User&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;includes&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:group&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
-  &lt;span class='k'&gt;end&lt;/span&gt;
-
-  &lt;span class='n'&gt;filter&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:category&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:enum&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:select&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot;first&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;second&amp;quot;&lt;/span&gt;&lt;span class='o'&gt;]&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
-  &lt;span class='n'&gt;filter&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:group_id&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:multiple&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='kp'&gt;true&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
-  &lt;span class='n'&gt;filter&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:group_name&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:header&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;Group&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt; &lt;span class='o'&gt;|&lt;/span&gt;&lt;span class='n'&gt;value&lt;/span&gt;&lt;span class='o'&gt;|&lt;/span&gt;
-    &lt;span class='nb'&gt;self&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;joins&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:group&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;where&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:groups&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='ss'&gt;:name&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='n'&gt;value&lt;/span&gt;&lt;span class='p'&gt;})&lt;/span&gt;
-  &lt;span class='k'&gt;end&lt;/span&gt;
-
-
-  &lt;span class='n'&gt;column&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:name&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
-  &lt;span class='n'&gt;column&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:group&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:order&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;groups.name&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt;
-    &lt;span class='nb'&gt;self&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;group&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;name&lt;/span&gt;
-  &lt;span class='k'&gt;end&lt;/span&gt;
-  &lt;span class='n'&gt;column&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:active&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:header&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;Activated&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:order&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='kp'&gt;false&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
-    &lt;span class='o'&gt;!&lt;/span&gt;&lt;span class='nb'&gt;self&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;disabled&lt;/span&gt;
-  &lt;span class='k'&gt;end&lt;/span&gt;
-&lt;span class='k'&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
 &lt;h3 id='grid_instance_api'&gt;Grid instance API&lt;/h3&gt;
 
 &lt;p&gt;And now we can create and manipulate reports:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='n'&gt;report&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='no'&gt;SimpleReport&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;new&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;
-        &lt;span class='ss'&gt;:group_id&lt;/span&gt;          &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='mi'&gt;1&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt;&lt;span class='mi'&gt;2&lt;/span&gt;&lt;span class='o'&gt;]&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt;
-        &lt;span class='ss'&gt;:category&lt;/span&gt;          &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;first&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt;
-        &lt;span class='ss'&gt;:order&lt;/span&gt;             &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='ss'&gt;:group&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt;
-        &lt;span class='ss'&gt;:descending&lt;/span&gt;        &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='kp'&gt;true&lt;/span&gt;
-&lt;span class='p'&gt;)&lt;/span&gt;
 
-&lt;span class='n'&gt;report&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;assets&lt;/span&gt; &lt;span class='c1'&gt;# =&amp;gt; Array of User instances: &lt;/span&gt;
-              &lt;span class='c1'&gt;# SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count &amp;gt;= 1 AND users.category = &amp;#39;first&amp;#39; ORDER BY groups.name DESC&lt;/span&gt;
+&lt;p&gt;Liquid error: No such file or directory - posix_spawnp&lt;/p&gt;
 
-&lt;span class='n'&gt;report&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;assets&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;paginate&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='ss'&gt;:page&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='n'&gt;params&lt;/span&gt;&lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='ss'&gt;:page&lt;/span&gt;&lt;span class='o'&gt;]&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='c1'&gt;# =&amp;gt; Yes, it is&lt;/span&gt;
-
-&lt;span class='n'&gt;report&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;header&lt;/span&gt; &lt;span class='c1'&gt;# =&amp;gt; [&amp;quot;Group&amp;quot;, &amp;quot;Name&amp;quot;, &amp;quot;Activated&amp;quot;]&lt;/span&gt;
-&lt;span class='n'&gt;report&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;rows&lt;/span&gt;   &lt;span class='c1'&gt;# =&amp;gt; [&lt;/span&gt;
-              &lt;span class='c1'&gt;#      [&amp;quot;Steve&amp;quot;, &amp;quot;Spammers&amp;quot;, true],&lt;/span&gt;
-              &lt;span class='c1'&gt;#      [ &amp;quot;John&amp;quot;, &amp;quot;Spoilers&amp;quot;, true],&lt;/span&gt;
-              &lt;span class='c1'&gt;#      [&amp;quot;Berry&amp;quot;, &amp;quot;Good people&amp;quot;, false]&lt;/span&gt;
-              &lt;span class='c1'&gt;#    ]&lt;/span&gt;
-&lt;span class='n'&gt;report&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;data&lt;/span&gt;   &lt;span class='c1'&gt;# =&amp;gt; [ header, *rows]&lt;/span&gt;
-
-&lt;span class='n'&gt;report&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;to_csv&lt;/span&gt; &lt;span class='c1'&gt;# =&amp;gt; Yes, it is&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
 &lt;h3 id='feel_the_power_and_flexibility_by_examples'&gt;Feel the Power and Flexibility by examples&lt;/h3&gt;
 
 &lt;p&gt;I love flexibility. That is why datagrid has a lot of things for non trivial use cases. In order to proof that I&amp;#8217;ll show you some examples of what you can do:&lt;/p&gt;
@@ -1558,26 +1422,7 @@ Unfortunately most of the companies are ignoring that simple rule and unfortunat
    <link href="http://gusiev.com/2010/01/sql-queries-activerecord-rails-named-scopes-stack"/>
    <updated>2010-01-24T00:00:00+02:00</updated>
    <id>http://gusiev.com/2010/01/sql-queries-activerecord-rails-named-scopes-stack</id>
-   <content type="html">&lt;p&gt;If you ever work with rails application that is a little bit more complex than a simple CRUD you would know that some of the ActiveRecord magic doesn&amp;#8217;t work for complex SQL queries. I am primary talking about scopes stack feature.&lt;br /&gt; &lt;!--more--&gt; &lt;hr /&gt; Let&amp;#8217;s review the following scope that suppose to be usable in different combinations with others:&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='n'&gt;scope&lt;/span&gt; &lt;span class='ss'&gt;:network_of&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='nb'&gt;lambda&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='o'&gt;|&lt;/span&gt;&lt;span class='n'&gt;user&lt;/span&gt;&lt;span class='o'&gt;|&lt;/span&gt;
-&lt;span class='p'&gt;{&lt;/span&gt;
-&lt;span class='ss'&gt;:select&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;u.*&amp;quot;&lt;/span&gt;
-&lt;span class='ss'&gt;:from&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;users u, followings f1, followings f2&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt;
-&lt;span class='ss'&gt;:conditions&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;f1.follower_id = &lt;/span&gt;&lt;span class='si'&gt;#{&lt;/span&gt;&lt;span class='n'&gt;user&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;id&lt;/span&gt;&lt;span class='si'&gt;}&lt;/span&gt;&lt;span class='s2'&gt; AND &amp;quot;&lt;/span&gt; &lt;span class='o'&gt;+&lt;/span&gt; 
-&lt;span class='s2'&gt;&amp;quot;f1.followed_id = f2.follower_id AND &amp;quot;&lt;/span&gt; &lt;span class='o'&gt;+&lt;/span&gt;
-&lt;span class='s2'&gt;&amp;quot;f2.followed_id = u.id&amp;quot;&lt;/span&gt;
-&lt;span class='p'&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;It suppose to returns all people that are followed by people that are followed by the given person(second circle). From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL. But this solution will have some issues with Active Record scopes stack magic. See that &lt;code&gt;User.network_for(current_user).all(:limit =&amp;gt;5)&lt;/code&gt; will result in SQL exception primary because &lt;code&gt;:limit =&amp;gt; 5&lt;/code&gt; doesn&amp;#8217;t know about the table alias &lt;code&gt;users u&lt;/code&gt;. We can not use it in fact.&lt;br /&gt; The second problem comes to the foreground when we will try to use ActiveRecord features like &lt;code&gt;User.network_for(current_user).all(:include =&amp;gt; :orders)&lt;/code&gt;. ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.&lt;br /&gt; The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make &amp;#8220;users&amp;#8221; table to be the last one declared in :from parameter.&lt;/p&gt;
-&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='ss'&gt;:select&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;users.*&amp;quot;&lt;/span&gt;
-&lt;span class='ss'&gt;:from&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;followings f1, followings f2, users&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt;
-&lt;span class='ss'&gt;:conditions&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;f1.follower_id = &lt;/span&gt;&lt;span class='si'&gt;#{&lt;/span&gt;&lt;span class='n'&gt;user&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;id&lt;/span&gt;&lt;span class='si'&gt;}&lt;/span&gt;&lt;span class='s2'&gt; AND &amp;quot;&lt;/span&gt; &lt;span class='o'&gt;+&lt;/span&gt; 
-&lt;span class='s2'&gt;&amp;quot;f1.followed_id = f2.follower_id AND &amp;quot;&lt;/span&gt; &lt;span class='o'&gt;+&lt;/span&gt;
-&lt;span class='s2'&gt;&amp;quot;f2.followed_id = users.id&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;Summary I would say that using &lt;code&gt;:joins&lt;/code&gt; instead of &lt;code&gt;:from/:conditions&lt;/code&gt; would give more flexibility and stackability to your scopes but sometimes &lt;code&gt;:from&lt;/code&gt; is more clear and here you got the tip how to use it.&lt;/p&gt;</content>
+   <content type="html">&lt;p&gt;If you ever work with rails application that is a little bit more complex than a simple CRUD you would know that some of the ActiveRecord magic doesn&amp;#8217;t work for complex SQL queries. I am primary talking about scopes stack feature.&lt;br /&gt; &lt;!--more--&gt; &lt;hr /&gt; Let&amp;#8217;s review the following scope that suppose to be usable in different combinations with others: Liquid error: No such file or directory - posix_spawnp It suppose to returns all people that are followed by people that are followed by the given person(second circle). From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL. But this solution will have some issues with Active Record scopes stack magic. See that &lt;code&gt;User.network_for(current_user).all(:limit =&amp;gt;5)&lt;/code&gt; will result in SQL exception primary because &lt;code&gt;:limit =&amp;gt; 5&lt;/code&gt; doesn&amp;#8217;t know about the table alias &lt;code&gt;users u&lt;/code&gt;. We can not use it in fact.&lt;br /&gt; The second problem comes to the foreground when we will try to use ActiveRecord features like &lt;code&gt;User.network_for(current_user).all(:include =&amp;gt; :orders)&lt;/code&gt;. ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.&lt;br /&gt; The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make &amp;#8220;users&amp;#8221; table to be the last one declared in :from parameter. Liquid error: No such file or directory - posix_spawnp Summary I would say that using &lt;code&gt;:joins&lt;/code&gt; instead of &lt;code&gt;:from/:conditions&lt;/code&gt; would give more flexibility and stackability to your scopes but sometimes &lt;code&gt;:from&lt;/code&gt; is more clear and here you got the tip how to use it.&lt;/p&gt;</content>
  </entry>
  
  <entry>
