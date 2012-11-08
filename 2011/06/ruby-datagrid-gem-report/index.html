@@ -12,7 +12,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
+    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -94,15 +94,57 @@
 </ul>
 
 <p>And we can easily split their definition with the following ruby DSL</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>SimpleReport</span>
 
-<p>Liquid error: No such file or directory - posix_spawnp</p>
+  <span class='kp'>include</span> <span class='no'>Datagrid</span>
 
+  <span class='n'>scope</span> <span class='k'>do</span>
+    <span class='no'>User</span><span class='o'>.</span><span class='n'>includes</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>)</span>
+  <span class='k'>end</span>
+
+  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:category</span><span class='p'>,</span> <span class='ss'>:enum</span><span class='p'>,</span> <span class='ss'>:select</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='s2'>&quot;first&quot;</span><span class='p'>,</span> <span class='s2'>&quot;second&quot;</span><span class='o'>]</span><span class='p'>)</span>
+  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:group_id</span><span class='p'>,</span> <span class='ss'>:multiple</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span>
+  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:group_name</span><span class='p'>,</span> <span class='ss'>:header</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;Group&quot;</span><span class='p'>)</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>value</span><span class='o'>|</span>
+    <span class='nb'>self</span><span class='o'>.</span><span class='n'>joins</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>)</span><span class='o'>.</span><span class='n'>where</span><span class='p'>(</span><span class='ss'>:groups</span> <span class='o'>=&gt;</span> <span class='p'>{</span><span class='ss'>:name</span> <span class='o'>=&gt;</span> <span class='n'>value</span><span class='p'>})</span>
+  <span class='k'>end</span>
+
+
+  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:name</span><span class='p'>)</span>
+  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>,</span> <span class='ss'>:order</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;groups.name&quot;</span><span class='p'>)</span> <span class='k'>do</span>
+    <span class='nb'>self</span><span class='o'>.</span><span class='n'>group</span><span class='o'>.</span><span class='n'>name</span>
+  <span class='k'>end</span>
+  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:active</span><span class='p'>,</span> <span class='ss'>:header</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;Activated&quot;</span><span class='p'>,</span> <span class='ss'>:order</span> <span class='o'>=&gt;</span> <span class='kp'>false</span><span class='p'>)</span>
+    <span class='o'>!</span><span class='nb'>self</span><span class='o'>.</span><span class='n'>disabled</span>
+  <span class='k'>end</span>
+<span class='k'>end</span>
+</code></pre>
+</div>
 <h3 id='grid_instance_api'>Grid instance API</h3>
 
 <p>And now we can create and manipulate reports:</p>
+<div class='highlight'><pre><code class='ruby'><span class='n'>report</span> <span class='o'>=</span> <span class='no'>SimpleReport</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span>
+        <span class='ss'>:group_id</span>          <span class='o'>=&gt;</span> <span class='o'>[</span><span class='mi'>1</span><span class='p'>,</span><span class='mi'>2</span><span class='o'>]</span><span class='p'>,</span>
+        <span class='ss'>:category</span>          <span class='o'>=&gt;</span> <span class='s2'>&quot;first&quot;</span><span class='p'>,</span>
+        <span class='ss'>:order</span>             <span class='o'>=&gt;</span> <span class='ss'>:group</span><span class='p'>,</span>
+        <span class='ss'>:descending</span>        <span class='o'>=&gt;</span> <span class='kp'>true</span>
+<span class='p'>)</span>
 
-<p>Liquid error: No such file or directory - posix_spawnp</p>
+<span class='n'>report</span><span class='o'>.</span><span class='n'>assets</span> <span class='c1'># =&gt; Array of User instances: </span>
+              <span class='c1'># SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count &gt;= 1 AND users.category = &#39;first&#39; ORDER BY groups.name DESC</span>
 
+<span class='n'>report</span><span class='o'>.</span><span class='n'>assets</span><span class='o'>.</span><span class='n'>paginate</span><span class='p'>(</span><span class='ss'>:page</span> <span class='o'>=&gt;</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:page</span><span class='o'>]</span><span class='p'>)</span> <span class='c1'># =&gt; Yes, it is</span>
+
+<span class='n'>report</span><span class='o'>.</span><span class='n'>header</span> <span class='c1'># =&gt; [&quot;Group&quot;, &quot;Name&quot;, &quot;Activated&quot;]</span>
+<span class='n'>report</span><span class='o'>.</span><span class='n'>rows</span>   <span class='c1'># =&gt; [</span>
+              <span class='c1'>#      [&quot;Steve&quot;, &quot;Spammers&quot;, true],</span>
+              <span class='c1'>#      [ &quot;John&quot;, &quot;Spoilers&quot;, true],</span>
+              <span class='c1'>#      [&quot;Berry&quot;, &quot;Good people&quot;, false]</span>
+              <span class='c1'>#    ]</span>
+<span class='n'>report</span><span class='o'>.</span><span class='n'>data</span>   <span class='c1'># =&gt; [ header, *rows]</span>
+
+<span class='n'>report</span><span class='o'>.</span><span class='n'>to_csv</span> <span class='c1'># =&gt; Yes, it is</span>
+</code></pre>
+</div>
 <h3 id='feel_the_power_and_flexibility_by_examples'>Feel the Power and Flexibility by examples</h3>
 
 <p>I love flexibility. That is why datagrid has a lot of things for non trivial use cases. In order to proof that I&#8217;ll show you some examples of what you can do:</p>
@@ -212,6 +254,10 @@
                         <ul>
                             
                             <li>
+                                <a href='/2012/10/crazy-javascript-initialization-strategy'>Smart Javascript Initialization Strategy</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2012/09/rails-strict-validation-popularity'>Strict validation is a main stream</a>
                             </li>
                             
@@ -225,10 +271,6 @@
                             
                             <li>
                                 <a href='/2012/06/assumption-driven-development'>Assumption Driven Approach</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/05/benchmark-performance-patch-ruby-diff'>Benchmark your performance patches</a>
                             </li>
                             
                         </ul>
@@ -256,6 +298,7 @@
 <a href="/tags/bdd.html" title="Pages tagged bdd" style="font-size: 17.6px; line-height:17.6px" rel="tag">bdd</a> 
 <a href="/tags/behavior.html" title="Pages tagged behavior" style="font-size: 19.4px; line-height:19.4px" rel="tag">behavior</a> 
 <a href="/tags/changelog.html" title="Pages tagged changelog" style="font-size: 17.6px; line-height:17.6px" rel="tag">changelog</a> 
+<a href="/tags/class.html" title="Pages tagged class" style="font-size: 17.6px; line-height:17.6px" rel="tag">class</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 21.2px; line-height:21.2px" rel="tag">contribution</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
@@ -268,7 +311,7 @@
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 24.8px; line-height:24.8px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 26.6px; line-height:26.6px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 

@@ -12,7 +12,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
+    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -106,14 +106,18 @@
 <h3 id='html_columns'>HTML columns</h3>
 
 <p>In order to use view helpers to render columns You can use <code>:html</code> option. This will call column block in the view context:</p>
-
-<p>Liquid error: No such file or directory - posix_spawnp</p>
-
+<div class='highlight'><pre><code class='ruby'><span class='n'>column</span><span class='p'>(</span><span class='ss'>:completed</span><span class='p'>,</span> <span class='ss'>:html</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span> <span class='p'>{</span> <span class='o'>|</span><span class='n'>asset</span><span class='o'>|</span> <span class='n'>asset</span><span class='o'>.</span><span class='n'>completed?</span> <span class='p'>?</span> <span class='n'>image_tag</span><span class='p'>(</span><span class='s2'>&quot;green.gif&quot;</span><span class='p'>)</span> <span class='p'>:</span> <span class='n'>image_tag</span><span class='p'>(</span><span class='s2'>&quot;red.gif&quot;</span><span class='p'>)</span> <span class='p'>}</span>
+<span class='c1'># or do it in partial</span>
+<span class='n'>column</span><span class='p'>(</span><span class='ss'>:actions</span><span class='p'>,</span> <span class='ss'>:html</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span> <span class='p'>{</span> <span class='o'>|</span><span class='n'>asset</span><span class='o'>|</span> <span class='n'>render</span> <span class='ss'>:partial</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;admin/assets/actions&quot;</span><span class='p'>,</span> <span class='ss'>:object</span> <span class='o'>=&gt;</span> <span class='n'>asset</span> <span class='p'>}</span>
+</code></pre>
+</div>
 <h3 id='table_customization_with_rails_engines'>Table customization with Rails Engines</h3>
 
 <p>Rails Engines allows you to embed views into Rails plugins and make them customizable. If You need serious customization of datagrid <code>&lt;table&gt;</code> and HTML Columns doesn&#8217;t help, you can customize datagrid internal views by running:</p>
-
-<p>Liquid error: No such file or directory - posix_spawnp This will create the following files in your Rails root directory:</p>
+<div class='highlight'><pre><code class='sh'>rake datagrid:copy_partials
+</code></pre>
+</div>
+<p>This will create the following files in your Rails root directory:</p>
 <pre>
 <code>
 |~app/
@@ -168,15 +172,15 @@
               
             
                <!-- Exclude self -->
+                <li><span>08 Oct 2012</span> &raquo; <a href="/2012/10/crazy-javascript-initialization-strategy">Smart Javascript Initialization Strategy</a></li>
+              
+            
+               <!-- Exclude self -->
                 <li><span>16 Aug 2012</span> &raquo; <a href="/2012/08/postgresql-full-text-search-solr">Full text search - Solr(Sunspot) vs PostgreSQL</a></li>
               
             
                <!-- Exclude self -->
                 <li><span>26 Jun 2011</span> &raquo; <a href="/2011/06/ruby-datagrid-gem-report">Reporting made easy by Datagrid gem for Rails</a></li>
-              
-            
-               <!-- Exclude self -->
-                <li><span>01 Mar 2012</span> &raquo; <a href="/2012/03/javascript-ajax-submit-form-validation">Web Forms 2.0: Submit with Ajax and Client Side Validation</a></li>
               
             
         </ul>
@@ -211,6 +215,10 @@
                         <ul>
                             
                             <li>
+                                <a href='/2012/10/crazy-javascript-initialization-strategy'>Smart Javascript Initialization Strategy</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2012/09/rails-strict-validation-popularity'>Strict validation is a main stream</a>
                             </li>
                             
@@ -224,10 +232,6 @@
                             
                             <li>
                                 <a href='/2012/06/assumption-driven-development'>Assumption Driven Approach</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/05/benchmark-performance-patch-ruby-diff'>Benchmark your performance patches</a>
                             </li>
                             
                         </ul>
@@ -255,6 +259,7 @@
 <a href="/tags/bdd.html" title="Pages tagged bdd" style="font-size: 17.6px; line-height:17.6px" rel="tag">bdd</a> 
 <a href="/tags/behavior.html" title="Pages tagged behavior" style="font-size: 19.4px; line-height:19.4px" rel="tag">behavior</a> 
 <a href="/tags/changelog.html" title="Pages tagged changelog" style="font-size: 17.6px; line-height:17.6px" rel="tag">changelog</a> 
+<a href="/tags/class.html" title="Pages tagged class" style="font-size: 17.6px; line-height:17.6px" rel="tag">class</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 21.2px; line-height:21.2px" rel="tag">contribution</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
@@ -267,7 +272,7 @@
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 24.8px; line-height:24.8px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 26.6px; line-height:26.6px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 

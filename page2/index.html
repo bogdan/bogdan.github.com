@@ -10,7 +10,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
+    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -73,6 +73,35 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2011/11/slides-rails-fat-model-service-code'>Slides: Fighting with fat models</a>
+            <div class="date">11 Nov 2011</div>
+        </h2>
+        <p>Here are my slides from <a href='http://rubyc.eu'>RubyC</a> conference.</p>
+
+<p>This presentation covers a hot topic for projects that are more than a year old - it&#8217;s fat models. The problem appear naturally as models are the best place to allocate business logic code. There are number of existing techniques to manage large amount of code in Rails application. But they are suitable only in a half of use cases. For the rest of them we can use <strong>Traits</strong> pattern that is described well in this presentation.</p>
+
+<p><strong><a href='http://gusiev.com/slides/fighting_fat_models/static'>Fighting with fat models</a></strong> <!--</p>-->
+        <h4 class="tags">
+    
+    <a href="/tags/model.html">model</a>
+    
+    <a href="/tags/service.html">service</a>
+    
+    <a href="/tags/dry.html">dry</a>
+    
+    <a href="/tags/slides.html">slides</a>
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2011/10/resque-plugins-framework-scaling'>Resque-way</a>
@@ -143,15 +172,57 @@
 </ul>
 
 <p>And we can easily split their definition with the following ruby DSL</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>SimpleReport</span>
 
-<p>Liquid error: No such file or directory - posix_spawnp</p>
+  <span class='kp'>include</span> <span class='no'>Datagrid</span>
 
+  <span class='n'>scope</span> <span class='k'>do</span>
+    <span class='no'>User</span><span class='o'>.</span><span class='n'>includes</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>)</span>
+  <span class='k'>end</span>
+
+  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:category</span><span class='p'>,</span> <span class='ss'>:enum</span><span class='p'>,</span> <span class='ss'>:select</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='s2'>&quot;first&quot;</span><span class='p'>,</span> <span class='s2'>&quot;second&quot;</span><span class='o'>]</span><span class='p'>)</span>
+  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:group_id</span><span class='p'>,</span> <span class='ss'>:multiple</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span>
+  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:group_name</span><span class='p'>,</span> <span class='ss'>:header</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;Group&quot;</span><span class='p'>)</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>value</span><span class='o'>|</span>
+    <span class='nb'>self</span><span class='o'>.</span><span class='n'>joins</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>)</span><span class='o'>.</span><span class='n'>where</span><span class='p'>(</span><span class='ss'>:groups</span> <span class='o'>=&gt;</span> <span class='p'>{</span><span class='ss'>:name</span> <span class='o'>=&gt;</span> <span class='n'>value</span><span class='p'>})</span>
+  <span class='k'>end</span>
+
+
+  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:name</span><span class='p'>)</span>
+  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>,</span> <span class='ss'>:order</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;groups.name&quot;</span><span class='p'>)</span> <span class='k'>do</span>
+    <span class='nb'>self</span><span class='o'>.</span><span class='n'>group</span><span class='o'>.</span><span class='n'>name</span>
+  <span class='k'>end</span>
+  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:active</span><span class='p'>,</span> <span class='ss'>:header</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;Activated&quot;</span><span class='p'>,</span> <span class='ss'>:order</span> <span class='o'>=&gt;</span> <span class='kp'>false</span><span class='p'>)</span>
+    <span class='o'>!</span><span class='nb'>self</span><span class='o'>.</span><span class='n'>disabled</span>
+  <span class='k'>end</span>
+<span class='k'>end</span>
+</code></pre>
+</div>
 <h3 id='grid_instance_api'>Grid instance API</h3>
 
 <p>And now we can create and manipulate reports:</p>
+<div class='highlight'><pre><code class='ruby'><span class='n'>report</span> <span class='o'>=</span> <span class='no'>SimpleReport</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span>
+        <span class='ss'>:group_id</span>          <span class='o'>=&gt;</span> <span class='o'>[</span><span class='mi'>1</span><span class='p'>,</span><span class='mi'>2</span><span class='o'>]</span><span class='p'>,</span>
+        <span class='ss'>:category</span>          <span class='o'>=&gt;</span> <span class='s2'>&quot;first&quot;</span><span class='p'>,</span>
+        <span class='ss'>:order</span>             <span class='o'>=&gt;</span> <span class='ss'>:group</span><span class='p'>,</span>
+        <span class='ss'>:descending</span>        <span class='o'>=&gt;</span> <span class='kp'>true</span>
+<span class='p'>)</span>
 
-<p>Liquid error: No such file or directory - posix_spawnp</p>
+<span class='n'>report</span><span class='o'>.</span><span class='n'>assets</span> <span class='c1'># =&gt; Array of User instances: </span>
+              <span class='c1'># SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count &gt;= 1 AND users.category = &#39;first&#39; ORDER BY groups.name DESC</span>
 
+<span class='n'>report</span><span class='o'>.</span><span class='n'>assets</span><span class='o'>.</span><span class='n'>paginate</span><span class='p'>(</span><span class='ss'>:page</span> <span class='o'>=&gt;</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:page</span><span class='o'>]</span><span class='p'>)</span> <span class='c1'># =&gt; Yes, it is</span>
+
+<span class='n'>report</span><span class='o'>.</span><span class='n'>header</span> <span class='c1'># =&gt; [&quot;Group&quot;, &quot;Name&quot;, &quot;Activated&quot;]</span>
+<span class='n'>report</span><span class='o'>.</span><span class='n'>rows</span>   <span class='c1'># =&gt; [</span>
+              <span class='c1'>#      [&quot;Steve&quot;, &quot;Spammers&quot;, true],</span>
+              <span class='c1'>#      [ &quot;John&quot;, &quot;Spoilers&quot;, true],</span>
+              <span class='c1'>#      [&quot;Berry&quot;, &quot;Good people&quot;, false]</span>
+              <span class='c1'>#    ]</span>
+<span class='n'>report</span><span class='o'>.</span><span class='n'>data</span>   <span class='c1'># =&gt; [ header, *rows]</span>
+
+<span class='n'>report</span><span class='o'>.</span><span class='n'>to_csv</span> <span class='c1'># =&gt; Yes, it is</span>
+</code></pre>
+</div>
 <h3 id='feel_the_power_and_flexibility_by_examples'>Feel the Power and Flexibility by examples</h3>
 
 <p>I love flexibility. That is why datagrid has a lot of things for non trivial use cases. In order to proof that I&#8217;ll show you some examples of what you can do:</p>
@@ -539,93 +610,6 @@ In some cases it might be useful not only in the development but in production a
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2010/11/dynamic-context-in-rspec-dont-repeat-yourself'>Dynamic context in Rspec - don't repeat yourself</a>
-            <div class="date">03 Nov 2010</div>
-        </h2>
-        We use to have less problems with subject and behavior when writing our unit tests. And <strong>context</strong> is what testing is all about.
- Just because web apps manage data and same method can return different values based on current database state.
-Advanced rspec features allow to use very effective technique to organize tests. 
-In order to reflect your non-linear business process in unit tests you can not oly nest contexts in each other but also make your context more dynamic.
-<!--
-
-<h3>Context callback</h3>
-Rspec <code>#let</code> method is used lazy for loading things into context.
-In spite of lazy initialization let blocks they are defined before <code>before each</code> hook. 
-This allow us to create context callback.
-<br/><br/>
-Understand by example. 
-In this example orders should be delivered to confirmed customer account just after creation and should not be delivered if the account is not confirmed yet.
-<pre><code>describe Order do
-  context "after create" do #defining a partial context
-    before(:each) do
-      subject.customer.confirmed = _confirmed
-      subject.save!
-    end
-
-    context "when customer is confirmed" do 
-      let(:_confirmed) { true }
-      it { should be_delivered }
-    end
-    
-    context "when customer is not confirmed" do 
-      let(:_confirmed) { false }
-      it { should_not be_delivered }
-    end
-  end
-end</code></pre>
-
-Here you can see partial context definition and custom behavior in two nested contexts.
-I used underscore prefix in order to identify the callback method, that is defined differently in different contexts.<br/> <br/>
-This happened because <code>let</code> as method is defined at once but <code>before</code> block is called only when <code>it</code> is reached.
-
-<h3>Testing utility function</h3>
-Another example that is a kind of pattern matching(Erlang term), designed to test utility functions.<br/>
-Suppose we have a boolean expression evaluation function:
-<pre><code>describe Expression
-  describe ".run" do
-
-    subject { Expression.run(arg) }
-
-    context "with '&amp;' where both true" do
-      let(:arg) { "true &amp; true" }
-      it {should be_true}
-    end
-
-    context "with '&amp;' where one false" do
-      let(:arg) { "false &amp; true" }
-      it {should be_false}
-    end
-    ........
-  end
-end</code></pre>
-
-Very good strategy to run same function with different arguments.
-
-<h3>Summary</h3>
-
-Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (e.g. for other programming languages), Rspec authors got in deep to the testing problems and invent flexible and elegant syntax.
--->
-        <h4 class="tags">
-    
-    <a href="/tags/behavior.html">behavior</a>
-    
-    <a href="/tags/rspec.html">rspec</a>
-    
-    <a href="/tags/context.html">context</a>
-    
-    <a href="/tags/test.html">test</a>
-    
-    <a href="/tags/dry.html">dry</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -660,6 +644,10 @@ Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (
                         <ul>
                             
                             <li>
+                                <a href='/2012/10/crazy-javascript-initialization-strategy'>Smart Javascript Initialization Strategy</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2012/09/rails-strict-validation-popularity'>Strict validation is a main stream</a>
                             </li>
                             
@@ -673,10 +661,6 @@ Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (
                             
                             <li>
                                 <a href='/2012/06/assumption-driven-development'>Assumption Driven Approach</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/05/benchmark-performance-patch-ruby-diff'>Benchmark your performance patches</a>
                             </li>
                             
                         </ul>
@@ -704,6 +688,7 @@ Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (
 <a href="/tags/bdd.html" title="Pages tagged bdd" style="font-size: 17.6px; line-height:17.6px" rel="tag">bdd</a> 
 <a href="/tags/behavior.html" title="Pages tagged behavior" style="font-size: 19.4px; line-height:19.4px" rel="tag">behavior</a> 
 <a href="/tags/changelog.html" title="Pages tagged changelog" style="font-size: 17.6px; line-height:17.6px" rel="tag">changelog</a> 
+<a href="/tags/class.html" title="Pages tagged class" style="font-size: 17.6px; line-height:17.6px" rel="tag">class</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 21.2px; line-height:21.2px" rel="tag">contribution</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
@@ -716,7 +701,7 @@ Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 24.8px; line-height:24.8px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 26.6px; line-height:26.6px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
