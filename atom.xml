@@ -4,13 +4,22 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2012-12-06T18:31:39+02:00</updated>
+ <updated>2012-12-12T15:45:22+02:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
    <email>agresso@gmail.com</email>
  </author>
  
+ 
+ <entry>
+   <title>Rails Contribution slides from ruby meetup in Kiev</title>
+   <link href="http://gusiev.com/2012/12/rails-contribution-slides-from-ruby-meetup"/>
+   <updated>2012-12-11T00:00:00+02:00</updated>
+   <id>http://gusiev.com/2012/12/rails-contribution-slides-from-ruby-meetup</id>
+   <content type="html">&lt;p&gt;Here are slides I&amp;#8217;ve shown on ruby meetup in Kiev. It&amp;#8217;s all about my expirience with &lt;a href='http://gusiev.com/slides/rails_contribution/static/#1'&gt;power hacking rails internals&lt;/a&gt;. Give some inside on how ActiveSupport Callbacks and Rails Router are working.&lt;/p&gt;
+&lt;!--more--&gt;</content>
+ </entry>
  
  <entry>
    <title>Smart Javascript Initialization Strategy</title>

@@ -75,6 +75,103 @@
                     
     <div class="post">
         <h2>
+            <a href='/2011/11/development-smtp-server'>Improve your Email delivery code with Mailtrap</a>
+            <div class="date">18 Nov 2011</div>
+        </h2>
+        <p>Today, I want introduce the <a href='http://mailtrap.io'>Mailtrap web service</a> aimed to help developers build and improve their email delivery functionality.</p>
+
+<p>Usually people use same SMTP settings for all environments, but this actually creates many problems in Staging and Development environments. Mailtrap is a special SMTP service for these environments aimed to solve specific problems. <!--</p>
+
+<h3 id='problems'>Problems</h3>
+
+<h4 id='testing_user_registration_is_hell'>Testing user registration is hell</h4>
+
+<p>In order to register yet another user You need to have new unique email address that should be hosted somewhere.</p>
+
+<h4 id='perform_mass_email_sending_is_a_problem_too'>Perform mass email sending is a problem too</h4>
+
+<p>Suppose you have a daily email to all customers and need check if your delivery logic works fine. In this case you need to know what emails were send, which customers received them. And again you need a batch of email addresses to test with.</p>
+
+<h4 id='discuss_email_layout_and_functional_problems_with_product_team'>Discuss email layout and functional problems with product team</h4>
+
+<p>In order to share email You need to forward it to some inbox or attach to bug ticket as file. This is still not as easy as it could be.</p>
+
+<h4 id='send_emails_to_real_customers_by_mistake'>Send emails to real customers by mistake</h4>
+
+<p>In some cases copy production database to staging is a good idea. But You have a risk that real emails appear on development servers. You need to take care about that.</p>
+
+<p>My personal score is about 2500 emails sent by mistake at a time. Some people I know told me that their personal record is <strong>more than 2 millions emails sent by mistake</strong>. (Share your personal fuckup story in comments.)</p>
+
+<h3 id='existing_solutions'>Existing solutions</h3>
+
+<p>You can go in many ways to fix the problem e.g.:</p>
+
+<ul>
+<li>setup the script on your smtp server that changes recipient email</li>
+
+<li>use services like mailinator.com (only in some cases)</li>
+
+<li>use custom Ruby specific gems like mail_view or mailcatcher.</li>
+</ul>
+
+<p>All of them solves only some of the problems described above.</p>
+
+<h3 id='our_idea'>Our Idea</h3>
+
+<p>Development SMTP service should work in a different way then production one: It should not deliver emails but just gather them in one place and provide a shared access for team to debug it. Mailtrap is the first SMTP service built specifically for this purpose.</p>
+<img src='http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png' style='width: 693px' />
+<p>Unlike many alternative solutions, Mailtrap is platform independent, doesn&#8217;t require any daemon to run and is just an SMTP server from application stand point. All you need to do is <strong>setup host, username and password</strong>.</p>
+
+<h3 id='features'>Features</h3>
+
+<p>This is not about high load, not about delivery statistics but about:</p>
+
+<ul>
+<li>
+<p>Ability to access ANY sent email without registration</p>
+</li>
+
+<li>
+<p>Share Email is as easy as copypasting the URL</p>
+</li>
+
+<li>
+<p>Developer tools for debugging &amp; improving email template:</p>
+
+<ul>
+<li>Syntax highlight</li>
+
+<li>Easy view source</li>
+
+<li>Apply CSS reset</li>
+</ul>
+</li>
+
+<li>
+<p>Access to the history</p>
+</li>
+</ul>
+
+<h2 id='try_mailtrap_right_now'>Try <a href='http://mailtrap.io'>Mailtrap</a> right now</h2>-->
+        <h4 class="tags">
+    
+    <a href="/tags/smtp.html">smtp</a>
+    
+    <a href="/tags/development.html">development</a>
+    
+    <a href="/tags/service.html">service</a>
+    
+    <a href="/tags/environment.html">environment</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2011/11/slides-rails-fat-model-service-code'>Slides: Fighting with fat models</a>
             <div class="date">11 Nov 2011</div>
         </h2>
@@ -565,51 +662,6 @@ This help us maintain the links between git and hoptoad automatically.
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2011/03/ajax-jquery-debug-javascript'>Debug ajax requests in more easy way</a>
-            <div class="date">18 Mar 2011</div>
-        </h2>
-        When I have to debug ajax requests, I always feel pain in the ass accessing the exception message and backtrace. It require at least 3 clicks to get them and only in the plain html format, that web framework use to generate. Is it better to see it at once in the browser popup?  
-<!--
-<br/><br/>
-This can be done with Ajax callbacks offered by javascript framework(if yours doesn't - get rid of it). We can catch errors there and display popup. JQuery example with #ajaxError callback that fires on every unsuccessful ajax call:
-<pre><code>(function() {
-      var popup = null;
-      $(document).ajaxError(function(event, xhr, settings, exception) {
-        if (popup) {
-          popup.close();
-          popup = null;
-        }
-        popup = window.open(null, "error", "width=800,height=600");
-        $(popup.document.documentElement).html(xhr.responseText);
-        return true;
-      });
-    }());</code></pre>
-
-Checked in FF and Chrome(IE is not a browser).
-<a href="http://img6.imagebanana.com/img/drl8wpd9/screenshot_014.png">Screenshot</a> with the result. Be aware of browser popup blocker. <br/>
-You always have a control when popup the error. I like it to be "in any case". But You can customize it with <em>xhr.status</em> and <em>if</em> statement on the server side.
-<br/><br/>
-In some cases it might be useful not only in the development but in production as well. But it should be an iframe inside of pretty html layout, so that designers won't blame programmers too much.
--->
-        <h4 class="tags">
-    
-    <a href="/tags/javascript.html">javascript</a>
-    
-    <a href="/tags/jquery.html">jquery</a>
-    
-    <a href="/tags/debug.html">debug</a>
-    
-    <a href="/tags/ajax.html">ajax</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -644,6 +696,10 @@ In some cases it might be useful not only in the development but in production a
                         <ul>
                             
                             <li>
+                                <a href='/2012/12/rails-contribution-slides-from-ruby-meetup'>Rails Contribution slides from ruby meetup in Kiev</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2012/10/crazy-javascript-initialization-strategy'>Smart Javascript Initialization Strategy</a>
                             </li>
                             
@@ -657,10 +713,6 @@ In some cases it might be useful not only in the development but in production a
                             
                             <li>
                                 <a href='/2012/06/javascript-ajax-debug-popup-response'>How many clicks do you need to debug ajax request?</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/06/assumption-driven-development'>Assumption Driven Approach</a>
                             </li>
                             
                         </ul>
@@ -690,7 +742,7 @@ In some cases it might be useful not only in the development but in production a
 <a href="/tags/changelog.html" title="Pages tagged changelog" style="font-size: 17.6px; line-height:17.6px" rel="tag">changelog</a> 
 <a href="/tags/class.html" title="Pages tagged class" style="font-size: 17.6px; line-height:17.6px" rel="tag">class</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
-<a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 21.2px; line-height:21.2px" rel="tag">contribution</a> 
+<a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 23.0px; line-height:23.0px" rel="tag">contribution</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 17.6px; line-height:17.6px" rel="tag">datagrid</a> 
@@ -708,11 +760,11 @@ In some cases it might be useful not only in the development but in production a
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 32.0px; line-height:32.0px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 33.8px; line-height:33.8px" rel="tag">rails</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
-<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 17.6px; line-height:17.6px" rel="tag">slides</a> 
+<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 19.4px; line-height:19.4px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
