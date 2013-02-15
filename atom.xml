@@ -4,13 +4,33 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2012-12-12T15:45:22+02:00</updated>
+ <updated>2013-02-15T09:58:32+02:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
    <email>agresso@gmail.com</email>
  </author>
  
+ 
+ <entry>
+   <title>Where to work as a rubyist in Ukraine</title>
+   <link href="http://gusiev.com/2013/02/working-in-curebit-ycombinator-ukraine-job"/>
+   <updated>2013-02-15T00:00:00+02:00</updated>
+   <id>http://gusiev.com/2013/02/working-in-curebit-ycombinator-ukraine-job</id>
+   <content type="html">&lt;p&gt;Last year I had a lot of changes in my career: I had to switch job twice while planning to do it only once. Most of the projects I was working on before was about building time wasting features to raise more money for more time wasting features. I wanted to find the right project for myself: A project that brings something good to people. Ruby is extremely good for startups, but easy investments is a decease for most of them in Ukraine. In September I met Allan Grant a CEO of Curebit. Curebit has a great team of sales and marketing people but was lacking of good engineers. Allan was the first business guy in my life that was more focused on building product than raise money &amp;#8212; build features endless cycle. So we started to work together.&lt;/p&gt;
+&lt;!--more--&gt;&lt;img src='https://d2vzmlm7xciaqk.cloudfront.net/asset-vb3f26d3/images/curebit-logo-transparent.png' style='margin: 5px auto; display: block;height: 50px' /&gt;
+&lt;p&gt;Curebit is a San Francisco-based startup that recently opened an office in Kiev, and I&amp;#8217;d like to invite you to interview with us.&lt;/p&gt;
+
+&lt;p&gt;Allan is also a Rails developer (&lt;a href='http://github.com/allangrant'&gt;http://github.com/allangrant&lt;/a&gt;) of Ukrainian origin. Our company, Curebit, raised &lt;a href='http://www.crunchbase.com/company/curebit'&gt;$1.2 million&lt;/a&gt; from great investors like YCombinator (the creators of Hacker News) and 500Startups. The company is small (10 people) but profitable, and growing. We are a product company working on interesting architectural challenges, and we make the best product in our market (referral systems for e-commerce companies). We are now moving fast from being a good product to being a good platform. This fact give us really advanced challenges to fight with.&lt;/p&gt;
+
+&lt;p&gt;The team in Ukraine is only 6 people right now, but everyone is AMAZING and we want to get the best developers on-board. I am leading the engineering team, and Sergii Iurevych (OOCSS expert) leads design &amp;amp; front-end development. We pay everyone generously a San Francisco level salary because we know that our country has engineers that worth it.&lt;/p&gt;
+
+&lt;p&gt;Most importantly (this is hard to explain in blog post), we have unique values that make Curebit a great place to work. We prefer to cut features/move deadlines instead of giving up code quality/polish. We don&amp;#8217;t keep track of vacation days, because everyone we work with loves their work. We&amp;#8217;re building a company to create value in the world, not just for profit. We have a culture, and we don&amp;#8217;t write it down or talk about &amp;#8212; we just live it.&lt;/p&gt;
+
+&lt;p&gt;We would love to meet you, even if you are not looking for a job right now. Please shoot us email to &lt;a href='mailto:bogdan@curebit.com'&gt;bogdan@curebit.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If you want to see our product, check out the site at &lt;a href='http://curebit.com'&gt;http://curebit.com&lt;/a&gt; (feel free to create fake account), or play with this demo account: &lt;a href='http://curebit.com/demo'&gt;http://curebit.com/demo&lt;/a&gt; (it&amp;#8217;s an old demo that doesn&amp;#8217;t show much).&lt;/p&gt;</content>
+ </entry>
  
  <entry>
    <title>Rails Contribution slides from ruby meetup in Kiev</title>

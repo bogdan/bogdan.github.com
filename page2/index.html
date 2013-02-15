@@ -75,6 +75,78 @@
                     
     <div class="post">
         <h2>
+            <a href='/2012/01/datagrid-reports-release-gem'>New release of Datagrid: Mongoid, Rails Engines and HTML columns support</a>
+            <div class="date">10 Jan 2012</div>
+        </h2>
+        <p><a href='https://github.com/bogdan/datagrid'>Datagrid</a> version 0.5.0 has been released.</p>
+
+<p>Datagrid is a Ruby on Rails plugin that helps you to build and <a href='http://datagrid.heroku.com'>represent table-like data</a> with:</p>
+
+<ul>
+<li>Customizable filtering</li>
+
+<li>Columns</li>
+
+<li>Sort order</li>
+
+<li>Localization</li>
+
+<li>Export to CSV</li>
+</ul>
+
+<p>Here are some major features from new release. <!--</p>
+
+<h3 id='mongoid_support'>Mongoid support</h3>
+
+<p>Previously Datagrid supported only ActiveRecord ORM. Now Mongoid is also available: <a href='http://datagrid.heroku.com/document_reports'>see the demo</a>.</p>
+
+<p>New datagrid driver architecture allows to add yet another ORM in less then <a href='https://github.com/bogdan/datagrid/blob/master/lib/datagrid/drivers/mongoid.rb'>40 lines of code</a>.</p>
+
+<h3 id='html_columns'>HTML columns</h3>
+
+<p>In order to use view helpers to render columns You can use <code>:html</code> option. This will call column block in the view context:</p>
+<div class='highlight'><pre><code class='ruby'><span class='n'>column</span><span class='p'>(</span><span class='ss'>:completed</span><span class='p'>,</span> <span class='ss'>:html</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span> <span class='p'>{</span> <span class='o'>|</span><span class='n'>asset</span><span class='o'>|</span> <span class='n'>asset</span><span class='o'>.</span><span class='n'>completed?</span> <span class='p'>?</span> <span class='n'>image_tag</span><span class='p'>(</span><span class='s2'>&quot;green.gif&quot;</span><span class='p'>)</span> <span class='p'>:</span> <span class='n'>image_tag</span><span class='p'>(</span><span class='s2'>&quot;red.gif&quot;</span><span class='p'>)</span> <span class='p'>}</span>
+<span class='c1'># or do it in partial</span>
+<span class='n'>column</span><span class='p'>(</span><span class='ss'>:actions</span><span class='p'>,</span> <span class='ss'>:html</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span> <span class='p'>{</span> <span class='o'>|</span><span class='n'>asset</span><span class='o'>|</span> <span class='n'>render</span> <span class='ss'>:partial</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;admin/assets/actions&quot;</span><span class='p'>,</span> <span class='ss'>:object</span> <span class='o'>=&gt;</span> <span class='n'>asset</span> <span class='p'>}</span>
+</code></pre>
+</div>
+<h3 id='table_customization_with_rails_engines'>Table customization with Rails Engines</h3>
+
+<p>Rails Engines allows you to embed views into Rails plugins and make them customizable. If You need serious customization of datagrid <code>&lt;table&gt;</code> and HTML Columns doesn&#8217;t help, you can customize datagrid internal views by running:</p>
+<div class='highlight'><pre><code class='sh'>rake datagrid:copy_partials
+</code></pre>
+</div>
+<p>This will create the following files in your Rails root directory:</p>
+<pre>
+<code>
+|~app/
+| ~views/
+|   ~datagrid/
+|     |-_head.html.erb
+|     |-_row.html.erb
+|     |_table.html.erb
+</code>
+</pre>
+<p>Now You are able to customize whatever You want.</p>-->
+        <h4 class="tags">
+    
+    <a href="/tags/datagrid.html">datagrid</a>
+    
+    <a href="/tags/gem.html">gem</a>
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    <a href="/tags/changelog.html">changelog</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2011/11/development-smtp-server'>Improve your Email delivery code with Mailtrap</a>
             <div class="date">18 Nov 2011</div>
         </h2>
@@ -591,77 +663,6 @@ Implementation can be found in <a href="https://github.com/rails/rails/blob/mast
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2011/03/do-git-commits-associated-to-hoptoad-errors'>Do git commits associated to hoptoad errors</a>
-            <div class="date">28 Mar 2011</div>
-        </h2>
-        We are trying to build a better development workflow by connecting all our tools together.
-So, this time we tried to connect HopToad Application with git commits because sometimes it's better to just paste the link to hoptoad error rather than describe all steps to reproduce. This idea was resulted in the command line interface for hoptoad api with a little git integration - <a target="_blank" href="http://github.com/railsware/shelltoad">Shelltoad</a>.
-<!--
-<br/><br/>
-Currently, in order to resolve hoptoad error we do the following.<br/>
-Check the list of errors:
-<pre><code>$ shelltoad
-[#3374331] production ActionController::MethodNotAllowed: Only put requests are allowed
-[#4023713] production ActiveRecord::StatementInvalid: PGError: ERROR:
-       duplicate key value violates unique constraint "index_companies_on_slug" :
-       INSERT INTO "companies" .....
-</code></pre>
-View the information on the required error.
- '713' is automatically guess for 4023713
-<pre><code>
-$ shelltoad 713
-ActiveRecord::StatementInvalid: PGError: ERROR: duplicate key value violates unique constraint
- "index_companies_on_slug" : INSERT INTO "companies"
-("slug", "created_at", "title", "updated_at", "external_url", "logo_id", "custom") VALUES('abbott-associates
-/var/data/www/apps/startwire/shared/bundle/ruby/1.8/gems/activerecord-
-2.3.8/lib/active_record/connection_adapters/abstract_adapter.rb:221
-/var/data/www/apps/startwire/releases/20110218113457/app/models/company.rb:50
-/var/data/www/apps/startwire/releases/20110218113457/app/utils/network_map/populate.rb:9
-/var/data/www/apps/startwire/releases/20110218113457/app/utils/network_map/populate.rb:74
-/var/data/www/apps/startwire/releases/20110218113457/app/utils/network_map/populate.rb:70
-....
-</code></pre>
-Fix the error in the code ...
-Prepare git commit:
-<pre><code>
-$ git add .
-</code></pre>
-Commit the fix to git with connection to hoptoad issue id
-<pre><code>
-$ shelltoad commit 713
-[dev 47f09ec]     http://xxx.hoptoadapp.com//errors/4023713
- 1 files changed, 1 insertions(+), 1 deletions(-)
-</code></pre>
-
-Commit message will look like this:
-<code><pre>http://startdatelabs.hoptoadapp.com//errors/4023713
-
-ActiveRecord::StatementInvalid: PGError: ERROR: duplicate key value violates unique constraint
- "index_companies_on_slug" : INSERT INTO "companies"
-("slug", "created_at", "title", "updated_at", "external_url", "logo_id", "custom") VALUES('abbott-associates</pre></code>
-
-
-This help us maintain the links between git and hoptoad automatically.
--->
-        <h4 class="tags">
-    
-    <a href="/tags/ruby.html">ruby</a>
-    
-    <a href="/tags/git.html">git</a>
-    
-    <a href="/tags/hoptoad.html">hoptoad</a>
-    
-    <a href="/tags/commit.html">commit</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -696,6 +697,10 @@ This help us maintain the links between git and hoptoad automatically.
                         <ul>
                             
                             <li>
+                                <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2012/12/rails-contribution-slides-from-ruby-meetup'>Rails Contribution slides from ruby meetup in Kiev</a>
                             </li>
                             
@@ -709,10 +714,6 @@ This help us maintain the links between git and hoptoad automatically.
                             
                             <li>
                                 <a href='/2012/08/postgresql-full-text-search-solr'>Full text search - Solr(Sunspot) vs PostgreSQL</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/06/javascript-ajax-debug-popup-response'>How many clicks do you need to debug ajax request?</a>
                             </li>
                             
                         </ul>
