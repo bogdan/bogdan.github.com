@@ -10,7 +10,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
+    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -73,6 +73,114 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2012/01/rails-32-features-changelog'>New Rails Release with a few features from me</a>
+            <div class="date">23 Jan 2012</div>
+        </h2>
+        <p>Upcoming Rails 3.2 release has many useful features.</p>
+
+<p>Some of them are coming from me:</p>
+
+<ul>
+<li>ActiveRecord #pluck method</li>
+
+<li>Strict validation concept</li>
+
+<li>Customizable mass assignment sanitizer behavior</li>
+
+<li>Gotcha for <code>select[multiple]</code> tag</li>
+</ul>
+
+<p>Here is a more detailed description than in the <a href='https://gist.github.com/1472145'>Changelog</a>.</p>
+<!--
+<h2 id='pluck_method'>Pluck method</h2>
+
+<p>People around made a <a href='https://github.com/rails/rails/commit/a382d60f6abc94b6a965525872f858e48abc00de'>lot of PR on it</a>. So, You probably already heard about it.</p>
+
+<p><code>pluck</code> can be used to query a single column from the underlying table of a model. It accepts a column name as argument and returns an array of values of the specified column with the corresponding data type.</p>
+<div class='highlight'><pre><code class='ruby'><span class='no'>Client</span><span class='o'>.</span><span class='n'>where</span><span class='p'>(</span><span class='ss'>:active</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span><span class='o'>.</span><span class='n'>pluck</span><span class='p'>(</span><span class='ss'>:id</span><span class='p'>)</span>
+<span class='c1'># SELECT id FROM clients WHERE active = 1</span>
+
+<span class='no'>Client</span><span class='o'>.</span><span class='n'>uniq</span><span class='o'>.</span><span class='n'>pluck</span><span class='p'>(</span><span class='ss'>:role</span><span class='p'>)</span>
+<span class='c1'># SELECT DISTINCT role FROM clients</span>
+</code></pre>
+</div>
+<p><a href='http://edgeguides.rubyonrails.org/active_record_querying.html#pluck'>Pluck in Rails guides</a></p>
+
+<h2 id='strict_validation_concept'>Strict validation concept</h2>
+
+<p>Some validation are not connected with end user and breaking it is more likely a bug than problem with user input. A few constraints can be embed to DB(like foreign keys), but most of them can not. And it&#8217;s a good idea to use AM validators to do such checks as well.</p>
+
+<p>Use case:</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Article</span> <span class='o'>&lt;</span> <span class='no'>AR</span><span class='o'>::</span><span class='no'>Base</span>
+  <span class='n'>validates</span> <span class='ss'>:author</span><span class='p'>,</span> <span class='ss'>:presence</span> <span class='o'>=&gt;</span> <span class='kp'>true</span>
+<span class='k'>end</span>
+
+<span class='n'>u</span> <span class='o'>=</span> <span class='no'>Article</span><span class='o'>.</span><span class='n'>new</span>
+<span class='n'>u</span><span class='o'>.</span><span class='n'>save</span> <span class='c1'># =&gt; false</span>
+</code></pre>
+</div>
+<p><code>#author</code> is usually set in controller from <code>current_user</code>. If somebody forgets to do it - user see error: <code>Author cann&#39;t be blank</code>. And it is not right to show error message to user that he is not able to fix. More over DEV team is not notified about the problem.</p>
+
+<p>In order to fix that You can use <a href='https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2'>validate! method</a> that generates validator that always raises exception when fails:</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Article</span> <span class='o'>&lt;</span> <span class='no'>AR</span><span class='o'>::</span><span class='no'>Base</span>
+  <span class='n'>validates!</span> <span class='ss'>:author</span><span class='p'>,</span> <span class='ss'>:presence</span> <span class='o'>=&gt;</span> <span class='kp'>true</span>
+<span class='k'>end</span>
+
+<span class='n'>u</span> <span class='o'>=</span> <span class='no'>User</span><span class='o'>.</span><span class='n'>new</span>
+<span class='n'>u</span><span class='o'>.</span><span class='n'>save</span> <span class='c1'># raises ActiveModel::StrictValidationFailed</span>
+</code></pre>
+</div>
+<h2 id='customizing_mass_assignment_sanitizer'>Customizing Mass Assignment Sanitizer</h2>
+
+<p>Added an ability to specify <a href='https://github.com/rails/rails/commit/aa2639e746d8af5d7673bbbbbccbe868edeb0161'>your own behavior on mass assignment protection</a>, controlled by option:</p>
+<div class='highlight'><pre><code class='ruby'><span class='no'>ActiveModel</span><span class='o'>::</span><span class='no'>MassAssignmentSecurity</span><span class='o'>.</span><span class='n'>mass_assignment_sanitizer</span>
+</code></pre>
+</div>
+<p>The main idea behind this change is to make Mass Assignment Sanitizer to raise exceptions in development and test environments while leaving logging behavior in production. This will be the <a href='https://github.com/rails/rails/commit/0fab8c388ea9cfcace0907102697c78a68762be3'>default Rails application template</a> in version 3.2. It will allow to detect mass assignment protection issues caused by bug in code more effectively before they will be deployed to production.</p>
+
+<h2 id='power_hacking_selectmultiple'>Power hacking select[multiple]</h2>
+
+<p>Quote from Rails documentation that comes along with <a href='https://github.com/rails/rails/commit/faba406fa15251cdc9588364d23c687a14ed6885'>the patch</a>:</p>
+
+<p>The HTML specification says:</p>
+
+<p>When <code>multiple</code> parameter passed to select and all options got deselected web browsers do not send any value to server. Unfortunately this introduces a gotcha: if an <code>User</code> model has many <code>roles</code> and have <code>role_ids</code> accessor, and in the form that edits roles of the user the user deselects all roles from <code>role_ids</code> multiple select box, no <code>role_ids</code> parameter is sent. So, any mass-assignment idiom like</p>
+
+<p><div class='highlight'><pre><code class='ruby'>  <span class='vi'>@user</span><span class='o'>.</span><span class='n'>update_attributes</span><span class='p'>(</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:user</span><span class='o'>]</span><span class='p'>)</span>
+</code></pre>
+</div></p>
+
+<p>wouldn&#8217;t update roles.</p>
+
+<p>To prevent this the helper generates an auxiliary hidden field before every multiple select. The hidden field has the same name as multiple select and blank value.</p>
+<div class='highlight'><pre><code class='html'><span class='nt'>&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;hidden&quot;</span> <span class='na'>name=</span><span class='s'>&quot;user[role_ids]&quot;</span> <span class='na'>value=</span><span class='s'>&quot;&quot;</span><span class='nt'>/&gt;</span>
+<span class='nt'>&lt;select</span> <span class='na'>id=</span><span class='s'>&quot;user_role_ids&quot;</span> <span class='na'>name=</span><span class='s'>&quot;user[role_ids]&quot;</span> <span class='na'>multiple=</span><span class='s'>&quot;multiple&quot;</span><span class='nt'>&gt;</span>
+  ....
+<span class='nt'>&lt;/select&gt;</span>
+</code></pre>
+</div>
+<p>This way, the client either sends only the hidden field (representing the deselected multiple select box), or both fields. Since the HTML specification says key/value pairs have to be sent in the same order they appear in the form, and parameters extraction gets the last occurrence of any repeated key in the query string, that works for ordinary forms.</p>
+
+<p>Unfortunately this trick can introduce a side effects described well in this <a href='http://stackoverflow.com/questions/8929230/why-is-the-first-element-always-blank-in-my-rails-multi-select-using-an-embedde'>stackoverflow question</a>. If you know an effective way to fix that - let me know.</p>
+
+<h4 id='have_fun_with_upgrading'>Have fun with upgrading</h4>-->
+        <h4 class="tags">
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    <a href="/tags/changelog.html">changelog</a>
+    
+    <a href="/tags/contribution.html">contribution</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2012/01/datagrid-reports-release-gem'>New release of Datagrid: Mongoid, Rails Engines and HTML columns support</a>
@@ -606,63 +714,6 @@ Net::HTTP.colorize = true
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2011/04/javascript-injection-in-json-inserted-directly-into-script-tag'>JavaScript injection in JSON inserted directly into script tag</a>
-            <div class="date">06 Apr 2011</div>
-        </h2>
-        Pass data from backend to javascript is done in many different ways. One of the most simple is to inject(&lt;%= %&gt;) value as function argument inside of script tag. Unfortunately this pattern has well known XSS vulnerability but in a little different form than same injection in html template.
-<!--
-<pre><code>&lt;script type="text/javascript"&gt;
-    App.initizalizeSomething(<%= data.to_json %>)
-&lt;/script&gt;</code></pre>
-
-The reason is that browser treat <strong>&lt;/script&gt;</strong> as close script tag no matter where is it inserted into script. So, the script tag can be closed unexpectedly and opened again with any code if the <em>data</em> argument will contain correctly formed sequence, like:
-<pre><code>&lt;/script&gt;&lt;script&gt;alert('hello')&lt;/script&gt;</code></pre>
-
-Use <em>#html_escape</em> helper is wrong here because it has different type of escaping.
-For example you don't need to escape double quote in this case.
-
-Rails core team is aware of that problem and implemented special helper:
-<pre><code># A utility method for escaping HTML entities in JSON strings
-# using \uXXXX JavaScript escape sequences for string literals:
-#
-#   json_escape('is a &gt; 0 &amp; a < 10?')
-#   # => is a \u003E 0 \u0026 a \u003C 10?
-#
-# Note that after this operation is performed the output is not
-# valid JSON. In particular double quotes are removed:
-#
-#   json_escape('{&quot;name&quot;:&quot;john&quot;,&quot;created_at&quot;:&quot;2010-04-28T01:39:31Z&quot;,&quot;id&quot;:1}')
-#   # => {name:john,created_at:2010-04-28T01:39:31Z,id:1}
-#
-# This method is also aliased as +j+, and available as a helper
-# in Rails templates:
-#
-#   <%=j @person.to_json %>
-#
-def json_escape(s)</code></pre>
-Implementation can be found in <a href="https://github.com/rails/rails/blob/master/activesupport/lib/active_support/core_ext/string/output_safety.rb#L53" target="_blank">Rails source code</a>. 
--->
-        <h4 class="tags">
-    
-    <a href="/tags/javascript.html">javascript</a>
-    
-    <a href="/tags/html.html">html</a>
-    
-    <a href="/tags/xss.html">xss</a>
-    
-    <a href="/tags/escape.html">escape</a>
-    
-    <a href="/tags/json.html">json</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -697,6 +748,10 @@ Implementation can be found in <a href="https://github.com/rails/rails/blob/mast
                         <ul>
                             
                             <li>
+                                <a href='/2013/03/git-story-id-pivotal-tracker-integration'>Attach git commits to pivotal stories</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
                             </li>
                             
@@ -710,10 +765,6 @@ Implementation can be found in <a href="https://github.com/rails/rails/blob/mast
                             
                             <li>
                                 <a href='/2012/09/rails-strict-validation-popularity'>Strict validation is a main stream</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/08/postgresql-full-text-search-solr'>Full text search - Solr(Sunspot) vs PostgreSQL</a>
                             </li>
                             
                         </ul>
@@ -742,6 +793,7 @@ Implementation can be found in <a href="https://github.com/rails/rails/blob/mast
 <a href="/tags/behavior.html" title="Pages tagged behavior" style="font-size: 19.4px; line-height:19.4px" rel="tag">behavior</a> 
 <a href="/tags/changelog.html" title="Pages tagged changelog" style="font-size: 17.6px; line-height:17.6px" rel="tag">changelog</a> 
 <a href="/tags/class.html" title="Pages tagged class" style="font-size: 17.6px; line-height:17.6px" rel="tag">class</a> 
+<a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 23.0px; line-height:23.0px" rel="tag">contribution</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
@@ -749,7 +801,8 @@ Implementation can be found in <a href="https://github.com/rails/rails/blob/mast
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 17.6px; line-height:17.6px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
 <a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 19.4px; line-height:19.4px" rel="tag">dry</a> 
-<a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 21.2px; line-height:21.2px" rel="tag">gem</a> 
+<a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 23.0px; line-height:23.0px" rel="tag">gem</a> 
+<a href="/tags/git.html" title="Pages tagged git" style="font-size: 17.6px; line-height:17.6px" rel="tag">git</a> 
 <a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 

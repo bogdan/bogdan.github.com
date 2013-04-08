@@ -10,7 +10,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, context, contribution, criticism, database, datagrid, debug, dry, gem, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
+    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -73,6 +73,93 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2010/04/ruby18-private-protected-incapsulatio'>Encapsulation in Ruby: 'private' doesn't give expected level of privacy</a>
+            <div class="date">05 Apr 2010</div>
+        </h2>
+        The classic OOP pattern usually called encapsulation implemented in ruby with <code>private</code> and <code>protected</code> <del>keywords</del> methods. The distinction between API and implementation works great with both. The problem is that <code>private</code> doesn't hide method for inherited classes. 
+<!--
+<hr/>
+See the simple example below:
+
+<pre><code>
+class A
+  private
+  def implementation
+    puts 'private A'
+  end
+end
+
+class B < A
+  def api
+    implementation
+  end
+end
+
+B.new.api
+</code></pre>
+
+And we won't get exception at the last line.<br/>
+So, in fact <code>private</code> do not do what you expect it to do. Use cases that distinguish <code>private</code> and <code>protected</code> are more specific.
+At first: <code>implementation</code> method can not be called like <code>self.implementation</code> even from class A.
+<pre><code>class A
+  def api
+    self.implementation #exception here
+  end
+  private
+  def implementation
+    puts 'private A'
+  end
+end
+
+A.new.api
+</code></pre>
+Seamless pure gap. You can do such call if the method would be protected. Can't imagine the case when this limitation is useful. <br/>
+<br/>
+The second difference is a bit esoteric. Two instances of the same class can access protected methods of each other but not private methods.
+
+<pre><code>class A
+  def api(another) #suppose to receive an instance of a
+    implementation == another.implementation
+  end
+  protected
+  def implementation
+    puts 'private A'
+  end
+end
+A.new.api(A.new)
+</code></pre>
+
+Fine for <code>protected</code> but fail for <code>private</code>. Well, this kind of protection do not make a real because of it's rareness.
+<h3>My conclusion: don't use private at all</h3>
+
+You might do any decision on the points above.<br/>
+My conclusion is to not use <code>private</code> at all, because it doesn't give the level of privacy that I expect. Difference form <code>protected</code> is so pure that it do not have any real benefits. 
+
+
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/criticism.html">criticism</a>
+    
+    <a href="/tags/ruby.html">ruby</a>
+    
+    <a href="/tags/encapsulation.html">encapsulation</a>
+    
+    <a href="/tags/privacy.html">privacy</a>
+    
+    <a href="/tags/method.html">method</a>
+    
+    <a href="/tags/api.html">api</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2010/03/quality-develop-application-improve-usability-design'>A dream to develop application that I will use</a>
@@ -517,50 +604,6 @@ I hope this information was helpful. Thanks for reading.
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2009/05/what-do-you-expect-from-interface'>What do you expect from the interface?</a>
-            <div class="date">05 May 2009</div>
-        </h2>
-        Read a great article today - <a href="http://www.google.com.ua/url?sa=t&source=web&ct=res&cd=3&url=http%3A%2F%2Fwww.objectmentor.com%2Fresources%2Farticles%2Flsp.pdf&ei=xjb_Sbi-EJbItge-ocmSDA&usg=AFQjCNFnNI0DmzofjWDQEGILAT-W1L8Mtw&sig2=okCh8NuqsQslKMTSWOlaTw"> Liskov Substitution Principle (LSP)</a>. It let me understand that Interface is not just a list of methods.<br/>
-<!--
-<hr/>
-Let's review the following utility function:
-<div class="bordered">
-<code>public static void processList(List list) {
-          list.clear();
-          list.add(new Object());
-}</code>
-</div>
-It accepts the object that implements <em>java.utils.List</em> interface as the parameter.
-What do you expect to receive in result? The list with one element, right?<br/>
-But does the result really meet your expectation? Who knows, the object that implements list interface do not guarantee you 'Act as container' behavior. It just implements all the methods of the interface and nothing else.<br/>
-Actually all methods of the interface <strike>should have</strike> have a notation of their usage. If you do not follow these notations - you should not inherit your object from the interface even if the object has all the methods of the interface.<br/>
-<br/>
-<strong>Idea:</strong> Maybe one day programming languages will have unit tests as part of interface and validate each instance that implements this interface with them.
-
-
-
--->
-        <h4 class="tags">
-    
-    <a href="/tags/java.html">java</a>
-    
-    <a href="/tags/programming.html">programming</a>
-    
-    <a href="/tags/interface.html">interface</a>
-    
-    <a href="/tags/idea.html">idea</a>
-    
-    <a href="/tags/lsp.html">lsp</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -595,6 +638,10 @@ Actually all methods of the interface <strike>should have</strike> have a notati
                         <ul>
                             
                             <li>
+                                <a href='/2013/03/git-story-id-pivotal-tracker-integration'>Attach git commits to pivotal stories</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
                             </li>
                             
@@ -608,10 +655,6 @@ Actually all methods of the interface <strike>should have</strike> have a notati
                             
                             <li>
                                 <a href='/2012/09/rails-strict-validation-popularity'>Strict validation is a main stream</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/08/postgresql-full-text-search-solr'>Full text search - Solr(Sunspot) vs PostgreSQL</a>
                             </li>
                             
                         </ul>
@@ -640,6 +683,7 @@ Actually all methods of the interface <strike>should have</strike> have a notati
 <a href="/tags/behavior.html" title="Pages tagged behavior" style="font-size: 19.4px; line-height:19.4px" rel="tag">behavior</a> 
 <a href="/tags/changelog.html" title="Pages tagged changelog" style="font-size: 17.6px; line-height:17.6px" rel="tag">changelog</a> 
 <a href="/tags/class.html" title="Pages tagged class" style="font-size: 17.6px; line-height:17.6px" rel="tag">class</a> 
+<a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 23.0px; line-height:23.0px" rel="tag">contribution</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
@@ -647,7 +691,8 @@ Actually all methods of the interface <strike>should have</strike> have a notati
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 17.6px; line-height:17.6px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
 <a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 19.4px; line-height:19.4px" rel="tag">dry</a> 
-<a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 21.2px; line-height:21.2px" rel="tag">gem</a> 
+<a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 23.0px; line-height:23.0px" rel="tag">gem</a> 
+<a href="/tags/git.html" title="Pages tagged git" style="font-size: 17.6px; line-height:17.6px" rel="tag">git</a> 
 <a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 

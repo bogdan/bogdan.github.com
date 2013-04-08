@@ -4,13 +4,61 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2013-04-06T12:54:22+03:00</updated>
+ <updated>2013-04-08T11:19:33+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
    <email>agresso@gmail.com</email>
  </author>
  
+ 
+ <entry>
+   <title>Attach git commits to pivotal stories</title>
+   <link href="http://gusiev.com/2013/03/git-story-id-pivotal-tracker-integration"/>
+   <updated>2013-03-25T00:00:00+02:00</updated>
+   <id>http://gusiev.com/2013/03/git-story-id-pivotal-tracker-integration</id>
+   <content type="html">&lt;p&gt;I heard about 10 different ways to organize work flow around pivotaltracker and git and about 5 gems to support that process. All of them seems abusing for me: the outcome of pivotal/git integration is a git commit attached to pivotal story and the rest of conventions like naming branches or merge policy doesn&amp;#8217;t make any sense in long time perspective and is just a waste of time in fact.&lt;/p&gt;
+
+&lt;p&gt;That&amp;#8217;s why I&amp;#8217;ve decided to make the most trivial integration that covers this idea and don&amp;#8217;t provide additional complexity: Meet &lt;a href='https://github.com/bogdan/git-storyid'&gt;git-storyid&lt;/a&gt; gem - the only one git/pivotaltracker integration that saves your time.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h2 id='installation'&gt;Installation&lt;/h2&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='sh'&gt;gem install git-storyid
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id='usage'&gt;Usage&lt;/h2&gt;
+&lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='sh'&gt;git storyid -m &lt;span class='s2'&gt;&amp;quot;Initial implementation of campaign tags&amp;quot;&lt;/span&gt;
+&lt;span class='c'&gt;# Api token (https://www.pivotaltracker.com/profile): a56f0e9a4fbXXXXXXXXXXXXXX&lt;/span&gt;
+&lt;span class='c'&gt;# Use SSL (y/n): y&lt;/span&gt;
+&lt;span class='c'&gt;# Your pivotal initials (e.g. BG): BG&lt;/span&gt;
+&lt;span class='c'&gt;# Project ID: 494XXX&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Now interactive menu is displayed to select one of &lt;strong&gt;Started stories&lt;/strong&gt; owned by you:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[1] Removing Billing Page
+[2] Welcome Email
+[3] Email Shares -  Capture
+[4] Speed up activities by dates aggregation
+[5] Mass Email to Customer List - thurs AM
+[6] Investigate production error
+[7] Tag campaign insertion points
+
+Indexes(csv): 7
+[campaign-tags 3020407]  [#44116647] Initial implementation of campaign tags
+ 1 file changed, 1 insertion(+), 2 deletions(-)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Result commit:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;commit 3020407e92cb125083cf50ad494ff15169a7f2e6
+Author: Bogdan Gusiev &amp;lt;youremail@gmail.com&amp;gt;
+Date:   Fri Mar 15 12:42:32 2013 +0200
+
+[#44116647] Initial implementation of campaign tags
+
+Feature: Tag campaign insertion points and 
+campaigns with an identifier, 
+so only campaigns with matching identifier will get shown&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id='how_should_i_name_branches'&gt;How should I name branches?&lt;/h2&gt;
+
+&lt;p&gt;Branch names is not something that you should focus on. Unlike commit messages, branches are removed from history after merge. That is why you should name them in a way that takes less of your time. I personally prefer to have only one branch for myself called &lt;code&gt;bogdandev&lt;/code&gt; when I work on a project. When the feature is not done - there is no sense to work on another feature.&lt;/p&gt;</content>
+ </entry>
  
  <entry>
    <title>Where to work as a rubyist in Ukraine</title>
