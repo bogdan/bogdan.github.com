@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2013-04-08T11:19:33+03:00</updated>
+ <updated>2013-04-08T11:22:03+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>Attach git commits to pivotal stories</title>
-   <link href="http://gusiev.com/2013/03/git-story-id-pivotal-tracker-integration"/>
-   <updated>2013-03-25T00:00:00+02:00</updated>
-   <id>http://gusiev.com/2013/03/git-story-id-pivotal-tracker-integration</id>
+   <link href="http://gusiev.com/2013/04/git-story-id-pivotal-tracker-integration"/>
+   <updated>2013-04-08T00:00:00+03:00</updated>
+   <id>http://gusiev.com/2013/04/git-story-id-pivotal-tracker-integration</id>
    <content type="html">&lt;p&gt;I heard about 10 different ways to organize work flow around pivotaltracker and git and about 5 gems to support that process. All of them seems abusing for me: the outcome of pivotal/git integration is a git commit attached to pivotal story and the rest of conventions like naming branches or merge policy doesn&amp;#8217;t make any sense in long time perspective and is just a waste of time in fact.&lt;/p&gt;
 
 &lt;p&gt;That&amp;#8217;s why I&amp;#8217;ve decided to make the most trivial integration that covers this idea and don&amp;#8217;t provide additional complexity: Meet &lt;a href='https://github.com/bogdan/git-storyid'&gt;git-storyid&lt;/a&gt; gem - the only one git/pivotaltracker integration that saves your time.&lt;/p&gt;
