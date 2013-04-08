@@ -10,7 +10,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
+    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -73,6 +73,57 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2010/04/dom-element-class-html-javascript-reference'>DOM element class - css reference or javascript reference?</a>
+            <div class="date">20 Apr 2010</div>
+        </h2>
+        Designer have used element class attribute for CSS styling for ages. Nowadays classes are also used in javascript selectors. This overlapping cause additional problems: Changes in js may cause broken design and changes in design may cause broken js. The last one may be hard to detect especially when design and css are handled by different person.
+<!--
+<hr/>
+Element class seems the best way to query the element from DOM in js code. Other variants like it's relative possition to other elements are very fragile. Let's say that we have the following DOM:
+<pre><code>&lt;a&gt; Delete&lt;/a&gt;
+&lt;a&gt; Edit&lt;/a&gt;</code></pre>
+And both links are handled with javascript. How would you separate them? 
+<ul>
+	<li><strong>By order</strong>(first, second) will cause problems if designer would like to change the order.</li>
+	<li><strong>By id</strong> will fail if you would have a list of elements where each has these links</li>
+	<li><strong>By label</strong> is just a fuck up and won't work for multi language application</li>
+</ul>
+The only one variant that provide the best stability is reference <strong>By class</strong>.
+But as stated above class also serves for another purpose - styling. 
+
+The thing that might help is a special prefix(for example "js") for all 'JavaScript classes'.
+Like:
+<pre><code>&lt;a class="js-new-comment big-blue-button"&gt; New Comment &lt;/a&gt;</code></pre>
+
+And the convention that classes with prefix should only be used in javascript selectors and classes without prefix in CSS.
+<br/><br/>
+Yes, sometimes it may look like:
+<pre><code>&lt;input type='button' class="js-follow-button follow-button"&gt; Follow this person &lt;/input&gt;</code></pre>
+But that makes sense to eliminate maintenance problem described above.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/javascript.html">javascript</a>
+    
+    <a href="/tags/html.html">html</a>
+    
+    <a href="/tags/dom.html">dom</a>
+    
+    <a href="/tags/css.html">css</a>
+    
+    <a href="/tags/class.html">class</a>
+    
+    <a href="/tags/element.html">element</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2010/04/ruby18-private-protected-incapsulatio'>Encapsulation in Ruby: 'private' doesn't give expected level of privacy</a>
@@ -536,74 +587,6 @@ Do not scare of double select from single table. That is the same technique as i
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2009/05/how-to-choose-a-good-sexy-title-for-your-article'>How to choose a sexy title for your article</a>
-            <div class="date">13 May 2009</div>
-        </h2>
-        Most of the people will not spend a minute reading your article if they wouldn't get interested from the very beginning. What resides at the beginning of any article? <strong>It is the title of course.</strong>
-That is why choose a good title is very important for every content posted in the net.
-<!--
-<hr/>
-
-Title should not reflect the overall idea of your article, let it <b>just be cool</b>. Attracting users attention is more important. It should be the key point of what are you righting about<br/> 
-<br/>
-
-Here is my idea: <strong>Title looks cool for the reader if it is close to his thoughts. </strong><br/>
-Reader should feel himself close to the topic you are going to speak about.
-Let's find out and see what do our mind filled in and describe some title choosing principles:
-
-<h4>Emotions</h4>
-Emotions acts like a catalyst. Expressing strong emotion in the title will give you the most effective result. People are getting interested not only when your emotion correspond to their but also vice versa.<br/>
-Example: <a href="/2009/05/jboss-seam-usage-makes-the-application-code-crazy/">JBoss Seam usage makes the application code crazy!</a>
-
-<h4>Questions</h4>
-In most cases the reader is somebody who want to know more about the world. Put a question in the title and it will engage everybody who wants to know the answer. <br/>
-Like this one: <a href="/2009/05/what-do-you-expect-from-interface/">What do you expect from the interface?</a> 
-
-
-<h4>Famous topics</h4>
-<ul>
-	<li>Humor is top theme on every forum, every blog, every site all the time. Joking title is a good way to awake the interest.</li>
-	<li>Sex. You noticed the title of this article, right?</li>
-	<li>Weather</li>
-	<li>Politics</li>
-	<li>Sports</li>	
-        <li>etc.</li>
-</ul>
-<br/>
-Making a slight reference in the title to one of above mentioned topics will attract much more attention to your article<br/>
-I hope this information was helpful. Thanks for reading.
-
-
-
-
-
-
-
-
--->
-        <h4 class="tags">
-    
-    <a href="/tags/howto.html">howto</a>
-    
-    <a href="/tags/idea.html">idea</a>
-    
-    <a href="/tags/title.html">title</a>
-    
-    <a href="/tags/article.html">article</a>
-    
-    <a href="/tags/reader.html">reader</a>
-    
-    <a href="/tags/author.html">author</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -642,6 +625,10 @@ I hope this information was helpful. Thanks for reading.
                             </li>
                             
                             <li>
+                                <a href='/2013/04/background-jobs-frameworkds-delayed-job-resque-slides'>Background Jobs Frameworks: Resque vs DelayedJob</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
                             </li>
                             
@@ -651,10 +638,6 @@ I hope this information was helpful. Thanks for reading.
                             
                             <li>
                                 <a href='/2012/10/crazy-javascript-initialization-strategy'>Smart Javascript Initialization Strategy</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/09/rails-strict-validation-popularity'>Strict validation is a main stream</a>
                             </li>
                             
                         </ul>
@@ -705,10 +688,11 @@ I hope this information was helpful. Thanks for reading.
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
 <a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 33.8px; line-height:33.8px" rel="tag">rails</a> 
+<a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
-<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 19.4px; line-height:19.4px" rel="tag">slides</a> 
+<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 21.2px; line-height:21.2px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 

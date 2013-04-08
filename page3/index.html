@@ -10,7 +10,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
+    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -73,6 +73,67 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2011/05/migrate-wordpress-jekyll-post-preview'>Finally get rid of WordPress and PHP</a>
+            <div class="date">20 May 2011</div>
+        </h2>
+        <p>After a few tries migrate to blog engine with programming language I know well, I finally found <a href='http://github.com/mojombo/jekyll'>jekyll</a> - lightweight static site generator. My main concerns in this choice was:</p>
+
+<ul>
+<li>Edit posts in my favorite text editor with favorite markup</li>
+
+<li>NO PHP</li>
+
+<li>Syntax highlight out of the box</li>
+</ul>
+<!--
+<h3 id='migration_from_wordpress'>Migration from WordPress</h3>
+
+<p>Three main migration points was:</p>
+
+<ul>
+<li>Posts that was migrated with <a href='http://google.com/search?q=wordpress%20jekyll%20migrate'>several lines of ruby code</a></li>
+
+<li>Comments that imported to <a href='http://wordpress.org/extend/plugins/disqus-comment-system/'>disqus</a> as jekyll is static site engine so the comments should be hosted somewhere else</li>
+
+<li>Generate <a href='http://www.google.com.ua/search?sourceid=chrome&amp;client=ubuntu&amp;channel=cs&amp;ie=UTF-8&amp;q=jekyll+tag+cloud'>tag cloud and posts by tag pages</a> that also have a lot of workarounds in the web</li>
+</ul>
+
+<p>One problem I am currently have is &#8220;post preview&#8221; feature that is currently unsupported in jekyll. My current approach for this looks like this:</p>
+
+<pre><code>post.content | replace_first:&#39;&lt;!--more--&gt;&#39;,&#39;&lt;!--&#39; | append:&#39;--&gt;&#39; </code></pre>
+
+<h3 id='problems'>Problems</h3>
+
+<p>Jekyll looks not very extensible. Some methods are not available in the API. Example: integrate SASS require more pain the ass than it should be. I am planning to fix that in a few days. Another problem I ran into is that github native support don&#8217;t allow you any extension. My suggestion is to generate static content locally with your own code on top of jekyll and upload static content to git repository.</p>
+
+<p>Currently I build site locally from <a href='http://github.com/bogdan/blog'>source code</a> and push static content into <a href='http://github.com/bogdan/bogdan.github.com'>separated repository</a>.</p>
+
+<h3 id='result'>Result</h3>
+
+<p>About 12 hours of work to transfer 30 posts and their comments. Reworked site design to be more clean.</p>-->
+        <h4 class="tags">
+    
+    <a href="/tags/jekyll.html">jekyll</a>
+    
+    <a href="/tags/wordpress.html">wordpress</a>
+    
+    <a href="/tags/php.html">php</a>
+    
+    <a href="/tags/migration.html">migration</a>
+    
+    <a href="/tags/liquid.html">liquid</a>
+    
+    <a href="/tags/criticism.html">criticism</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2011/04/javascript-injection-in-json-inserted-directly-into-script-tag'>JavaScript injection in JSON inserted directly into script tag</a>
@@ -747,57 +808,6 @@ Default policy for placing two actions that has some kind of connection is <stro
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2010/04/dom-element-class-html-javascript-reference'>DOM element class - css reference or javascript reference?</a>
-            <div class="date">20 Apr 2010</div>
-        </h2>
-        Designer have used element class attribute for CSS styling for ages. Nowadays classes are also used in javascript selectors. This overlapping cause additional problems: Changes in js may cause broken design and changes in design may cause broken js. The last one may be hard to detect especially when design and css are handled by different person.
-<!--
-<hr/>
-Element class seems the best way to query the element from DOM in js code. Other variants like it's relative possition to other elements are very fragile. Let's say that we have the following DOM:
-<pre><code>&lt;a&gt; Delete&lt;/a&gt;
-&lt;a&gt; Edit&lt;/a&gt;</code></pre>
-And both links are handled with javascript. How would you separate them? 
-<ul>
-	<li><strong>By order</strong>(first, second) will cause problems if designer would like to change the order.</li>
-	<li><strong>By id</strong> will fail if you would have a list of elements where each has these links</li>
-	<li><strong>By label</strong> is just a fuck up and won't work for multi language application</li>
-</ul>
-The only one variant that provide the best stability is reference <strong>By class</strong>.
-But as stated above class also serves for another purpose - styling. 
-
-The thing that might help is a special prefix(for example "js") for all 'JavaScript classes'.
-Like:
-<pre><code>&lt;a class="js-new-comment big-blue-button"&gt; New Comment &lt;/a&gt;</code></pre>
-
-And the convention that classes with prefix should only be used in javascript selectors and classes without prefix in CSS.
-<br/><br/>
-Yes, sometimes it may look like:
-<pre><code>&lt;input type='button' class="js-follow-button follow-button"&gt; Follow this person &lt;/input&gt;</code></pre>
-But that makes sense to eliminate maintenance problem described above.
--->
-        <h4 class="tags">
-    
-    <a href="/tags/javascript.html">javascript</a>
-    
-    <a href="/tags/html.html">html</a>
-    
-    <a href="/tags/dom.html">dom</a>
-    
-    <a href="/tags/css.html">css</a>
-    
-    <a href="/tags/class.html">class</a>
-    
-    <a href="/tags/element.html">element</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -836,6 +846,10 @@ But that makes sense to eliminate maintenance problem described above.
                             </li>
                             
                             <li>
+                                <a href='/2013/04/background-jobs-frameworkds-delayed-job-resque-slides'>Background Jobs Frameworks: Resque vs DelayedJob</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
                             </li>
                             
@@ -845,10 +859,6 @@ But that makes sense to eliminate maintenance problem described above.
                             
                             <li>
                                 <a href='/2012/10/crazy-javascript-initialization-strategy'>Smart Javascript Initialization Strategy</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/09/rails-strict-validation-popularity'>Strict validation is a main stream</a>
                             </li>
                             
                         </ul>
@@ -899,10 +909,11 @@ But that makes sense to eliminate maintenance problem described above.
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
 <a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 33.8px; line-height:33.8px" rel="tag">rails</a> 
+<a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
-<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 19.4px; line-height:19.4px" rel="tag">slides</a> 
+<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 21.2px; line-height:21.2px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
