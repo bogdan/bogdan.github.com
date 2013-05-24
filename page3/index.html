@@ -75,6 +75,59 @@
                     
     <div class="post">
         <h2>
+            <a href='/2011/05/http-api-logging-rails'>Logging HTTP api calls just like database queries</a>
+            <div class="date">24 May 2011</div>
+        </h2>
+        Http api calls are pretty similar to SQL queries - they query data from external source to process them in ruby space. So I think it's a good idea to log them just like ActiveRecord does with SQL queries. 
+<pre><code>  Location Load (25.1ms)   SELECT * FROM "locations" WHERE ("locations"."id" = 2548) ORDER BY title</code></pre>
+
+<!--
+This simple peace of code could be very helpful in case of 
+<a href="http://github.com/railsware/http_logger">
+    debugging HTTP api in ruby</a>.
+<a href="https://github.com/railsware/http_logger/blob/master/screenshots/solr.png">Screenshot</a> with the result
+
+
+Installation is simple:
+
+<pre><code>gem install http_logger</code></pre>
+
+And:
+
+<pre><code>require 'http_logger'
+
+Net::HTTP.logger = Logger.new(...) 
+    # Default: Rails.logger if defined?(Rails)
+
+Net::HTTP.colorize = true 
+    # Default: true</code></pre>
+
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/api.html">api</a>
+    
+    <a href="/tags/http.html">http</a>
+    
+    <a href="/tags/logging.html">logging</a>
+    
+    <a href="/tags/ruby.html">ruby</a>
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    <a href="/tags/debug.html">debug</a>
+    
+    <a href="/tags/gem.html">gem</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2011/05/migrate-wordpress-jekyll-post-preview'>Finally get rid of WordPress and PHP</a>
             <div class="date">20 May 2011</div>
         </h2>
@@ -312,15 +365,15 @@ In some cases it might be useful not only in the development but in production a
             <a href='/2010/11/dynamic-context-in-rspec-dont-repeat-yourself'>Dynamic context in Rspec - don't repeat yourself</a>
             <div class="date">03 Nov 2010</div>
         </h2>
-        We use to have less problems with subject and behavior when writing our unit tests. And <strong>context</strong> is what testing is all about.
- Just because web apps manage data and same method can return different values based on current database state.
-Advanced rspec features allow to use very effective technique to organize tests. 
-In order to reflect your non-linear business process in unit tests you can not oly nest contexts in each other but also make your context more dynamic.
+        We used to have less problems with subject and behavior when writing our unit tests. And <strong>context</strong> is what testing is all about.
+ Web apps manage data and the same method can return different values based on current database state.
+Advanced rspec features make it possible to use very effective technique to organize tests. 
+In order to reflect your non-linear business process in unit tests you can not only nest contexts in each other but also make your context more dynamic.
 <!--
 
 <h3>Context callback</h3>
-Rspec <code>#let</code> method is used lazy for loading things into context.
-In spite of lazy initialization let blocks they are defined before <code>before each</code> hook. 
+Rspec <code>#let</code> method is used to lazy load things into context.
+In spite of lazy initialization, let blocks are defined before the <code>before each</code> hook. 
 This allow us to create context callback.
 <br/><br/>
 Understand by example. 
@@ -646,168 +699,6 @@ Custom matcher is just 50 lines of code that make your life much easier. Do not 
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails'>Advanced non-flat controllers hierarchy with rails</a>
-            <div class="date">08 Jun 2010</div>
-        </h2>
-        REST became the best practice for organizing CRUD server side interface. 
-But what to do when we have something more than hello-world application that 
-goes forward from data CRUD and provides many presentations 
-of the same data with different filters and different layouts?
-<!--
-<br/>
-
-<h3>How the flat controller architecture goes to hell</h3>
-
-Starting from REST-full controller people use to stick to them and add more and more actions to the same class. And that is how the controller code goes to hell:
-
-<pre><code>class UsersController &lt; ApplicationController
-#
-# Filters
-#
-skip_before_filter :check_user_is_valid, :only =&gt; [:edit, :update]
-before_filter :require_user, :only =&gt; [
-:update, :edit, :settings, :disconnect_twitter, :connect_facebook_account, :google_contacts
-]
-
-before_filter :load_user, :except =&gt; [
-:index, :new, :create, :remote_validate_email, :autocomplete_for_user_full_name,
-:remote_validate_facebook_uid, :google_contacts
-]
-
-before_filter :check_permissions, :only =&gt; [ :edit, :update, :settings, :update_photo, :connect_facebook_account ]
-
-before_filter :load_invitation, :only =&gt; [:new, :create]
-before_filter :ensure_authenticated_to_facebook, :only =&gt; :connect_facebook_account
-before_filter :initialize_form, :only =&gt; [:edit]
-
-#
-# And 20 almost independent actions goes here
-# And the twice longer tests file for this controller
-#
-
-end
-</code></pre>
-
-<h3> Namespaces and nesting </h3>
-The root of the problem is in ignoring the following simple rule:
-<strong>The default choice for implementing new feature is do it in other controller</strong>
-It's always better to have 20 controllers with one action then one controller with 20 actions.
-Usually there is no compromise variant. And 20 controllers with one action ain't as bad as you imagine.<br/>
-<br/>
-
-In order to handle the large number of controller we are actively using the namespaces and nested resources features. Let me give an example: User has many projects, Project belongs to category. We need to list projects per user and per category. In the flat hierarchy you would be confused but namespaces and nesting solves the problem.<br/>
-
-<pre><code>map.resources :categories do |c|
-  c.namespace :categories do |categories|
-    categories.resouces :projects
-  end
-end
-map.resources :users do |u|
-  c.namespace :users do |users|
-    users.resouces :projects
-  end
-end
-
-class Categories::ProjectsController
-
-  def index
-    @projects = ....
-  end
-end
-
-class Users::ProjectsController
-
-  def index
-    @projects = ....
-  end
-end</code></pre>
-
-
-Everyone heard about restful authentication but not so many people applied this idea to other not so restful from the first sight things. Like TwitterConnectionController:
-
-<pre><code>class Users::TwitterConnectionController < ApplicationController
-
-  def create
-  end
-
-  def destroy
-  end
-end</code></pre>
-
-Many people will be pushing all such staff to UsersController until their editors would run out of memory.
-
-<h3>Out of scope</h3>
-
-State control actions are not in REST but should be one day. Placing them in the same controller with CRUD is generally a good idea:
-
-<pre><code>class ArticlesController 
-
-  def {new, create, update, edit, destroy}
-  end
-
-  def publish
-    @article.publish!
-    redirect_to articles_path
-  end
-
-end</code></pre>
-
-<h3>Some sugar from generators</h3>
-
-Rails <em>generate</em> script supports namespaces very well:
-<pre><code>$ ./script/generate <del>rspec_</del>controller users/categories
-      create  app/controllers/users
-      create  app/helpers/users
-      create  app/views/users/categories
-      create  spec/controllers/users
-      create  spec/helpers/users
-      create  spec/views/users/categories
-      create  spec/controllers/users/categories_controller_spec.rb
-      create  spec/helpers/users/categories_helper_spec.rb
-      create  app/controllers/users/categories_controller.rb
-      create  app/helpers/users/categories_helper.rb</code></pre>
-
-And classes created in appropriate namespace and folder as well as specs for them.
-The only one thing you should do manually is add routes. 
-
-<h3>Drawbacks</h3>
-
-Every engeneering solution has it's drawbacks. While you have different controllers that operates on the same classes you might need to reuse functionality among them.
-I preffer to solve it by mixing in a module:
-<pre><code>class Users::ProjectController
-
- include UserNestedResource
-
-end</code></pre>
-
-Some people use inheritance instead. Both ways are almost the same. Nothing hard here as well.
-
-<h3>Summary</h3>
-
-At the end I 'll just repeat it again:<br/> 
-Default policy for placing two actions that has some kind of connection is <strong>SPLIT</strong>.
--->
-        <h4 class="tags">
-    
-    <a href="/tags/ruby.html">ruby</a>
-    
-    <a href="/tags/rails.html">rails</a>
-    
-    <a href="/tags/controller.html">controller</a>
-    
-    <a href="/tags/route.html">route</a>
-    
-    <a href="/tags/architecture.html">architecture</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -842,6 +733,10 @@ Default policy for placing two actions that has some kind of connection is <stro
                         <ul>
                             
                             <li>
+                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/04/git-story-id-pivotal-tracker-integration'>Attach git commits to pivotal stories</a>
                             </li>
                             
@@ -855,10 +750,6 @@ Default policy for placing two actions that has some kind of connection is <stro
                             
                             <li>
                                 <a href='/2012/12/rails-contribution-slides-from-ruby-meetup'>Rails Contribution slides from ruby meetup in Kiev</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/10/crazy-javascript-initialization-strategy'>Smart Javascript Initialization Strategy</a>
                             </li>
                             
                         </ul>
@@ -880,7 +771,7 @@ Default policy for placing two actions that has some kind of connection is <stro
                     <div class="sidebarbox tag-cloud">
                         <h2>Browse by tags</h2>
                         <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 21.2px; line-height:21.2px" rel="tag">activerecord</a> 
-<a href="/tags/ajax.html" title="Pages tagged ajax" style="font-size: 19.4px; line-height:19.4px" rel="tag">ajax</a> 
+<a href="/tags/ajax.html" title="Pages tagged ajax" style="font-size: 21.2px; line-height:21.2px" rel="tag">ajax</a> 
 <a href="/tags/api.html" title="Pages tagged api" style="font-size: 17.6px; line-height:17.6px" rel="tag">api</a> 
 <a href="/tags/application.html" title="Pages tagged application" style="font-size: 17.6px; line-height:17.6px" rel="tag">application</a> 
 <a href="/tags/bdd.html" title="Pages tagged bdd" style="font-size: 17.6px; line-height:17.6px" rel="tag">bdd</a> 
@@ -889,7 +780,7 @@ Default policy for placing two actions that has some kind of connection is <stro
 <a href="/tags/class.html" title="Pages tagged class" style="font-size: 17.6px; line-height:17.6px" rel="tag">class</a> 
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
-<a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 23.0px; line-height:23.0px" rel="tag">contribution</a> 
+<a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 24.8px; line-height:24.8px" rel="tag">contribution</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 17.6px; line-height:17.6px" rel="tag">datagrid</a> 
@@ -901,14 +792,14 @@ Default policy for placing two actions that has some kind of connection is <stro
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 26.6px; line-height:26.6px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 33.8px; line-height:33.8px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 35.6px; line-height:35.6px" rel="tag">rails</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
@@ -917,7 +808,7 @@ Default policy for placing two actions that has some kind of connection is <stro
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
-<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 19.4px; line-height:19.4px" rel="tag">validation</a> 
+<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 21.2px; line-height:21.2px" rel="tag">validation</a> 
 <a href="/tags/vim.html" title="Pages tagged vim" style="font-size: 17.6px; line-height:17.6px" rel="tag">vim</a> 
 
                     </div>

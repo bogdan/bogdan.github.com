@@ -4,13 +4,28 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2013-04-08T12:05:08+03:00</updated>
+ <updated>2013-05-24T18:10:21+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
    <email>agresso@gmail.com</email>
  </author>
  
+ 
+ <entry>
+   <title>Support validation through ajax in Rails 4.x</title>
+   <link href="http://gusiev.com/2013/05/rails-ajax-validation-form-submit-javascript"/>
+   <updated>2013-05-24T00:00:00+03:00</updated>
+   <id>http://gusiev.com/2013/05/rails-ajax-validation-form-submit-javascript</id>
+   <content type="html">&lt;p&gt;I have a constant feeling that in a modern web every web form should be submitted with AJAX not the old retro way with POST request. This is better for numerous reasons.&lt;/p&gt;
+
+&lt;p&gt;At first, it gives better user experience At second, AJAX is faster than regular request. At the end, it doesn&amp;#8217;t require a work to redraw the page with it&amp;#8217;s previous state if validation fails.&lt;/p&gt;
+
+&lt;p&gt;Currently I am trying to make rails app support this out of the box. And here is first small step to this goal:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href='https://github.com/rails/rails/pull/8638'&gt;This patch&lt;/a&gt; allows a complete validation though ajax using active model validators. This is a &lt;a href='http://rails-ajax-validation.herokuapp.com/developers/new'&gt;live demo&lt;/a&gt; of what it allows to do. If you feel especially interested in this feature, say your +1 here or on github.&lt;/p&gt;
+&lt;!--more--&gt;</content>
+ </entry>
  
  <entry>
    <title>Attach git commits to pivotal stories</title>
@@ -1206,15 +1221,15 @@ In some cases it might be useful not only in the development but in production a
    <link href="http://gusiev.com/2010/11/dynamic-context-in-rspec-dont-repeat-yourself"/>
    <updated>2010-11-03T00:00:00+02:00</updated>
    <id>http://gusiev.com/2010/11/dynamic-context-in-rspec-dont-repeat-yourself</id>
-   <content type="html">We use to have less problems with subject and behavior when writing our unit tests. And &lt;strong&gt;context&lt;/strong&gt; is what testing is all about.
- Just because web apps manage data and same method can return different values based on current database state.
-Advanced rspec features allow to use very effective technique to organize tests. 
-In order to reflect your non-linear business process in unit tests you can not oly nest contexts in each other but also make your context more dynamic.
+   <content type="html">We used to have less problems with subject and behavior when writing our unit tests. And &lt;strong&gt;context&lt;/strong&gt; is what testing is all about.
+ Web apps manage data and the same method can return different values based on current database state.
+Advanced rspec features make it possible to use very effective technique to organize tests. 
+In order to reflect your non-linear business process in unit tests you can not only nest contexts in each other but also make your context more dynamic.
 &lt;!--more--&gt;
 
 &lt;h3&gt;Context callback&lt;/h3&gt;
-Rspec &lt;code&gt;#let&lt;/code&gt; method is used lazy for loading things into context.
-In spite of lazy initialization let blocks they are defined before &lt;code&gt;before each&lt;/code&gt; hook. 
+Rspec &lt;code&gt;#let&lt;/code&gt; method is used to lazy load things into context.
+In spite of lazy initialization, let blocks are defined before the &lt;code&gt;before each&lt;/code&gt; hook. 
 This allow us to create context callback.
 &lt;br/&gt;&lt;br/&gt;
 Understand by example. 

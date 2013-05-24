@@ -75,6 +75,107 @@
                     
     <div class="post">
         <h2>
+            <a href='/2012/05/benchmark-performance-patch-ruby-diff'>Benchmark your performance patches</a>
+            <div class="date">01 May 2012</div>
+        </h2>
+        <p>After a dozen performance patches to many gems want to share some practical experience I gain. Tools I&#8217;ve picked up was <strong>perftools.rb</strong> and ruby <strong>built-in benchmark</strong> library. They are fit well for cases when optimization stays at Ruby level and doesn&#8217;t require to fix something in native extensions or dig into IO operations.</p>
+<!--
+<p>General flow on how to tackle performance is clear:</p>
+
+<ul>
+<li><a href='https://github.com/tmm1/perftools.rb'>perftools.rb</a> shows slow method calls in a nice call graph format.</li>
+
+<li><a href='http://ruby-doc.org/stdlib-1.9.2/libdoc/benchmark/rdoc/Benchmark.html'>Benchmark</a> proves that we made an improvement.</li>
+</ul>
+
+<p>Perftools does all the hard work for you.</p>
+
+<pre><code>require &#39;perftools&#39;
+PerfTools::CpuProfiler.start(&quot;/tmp/profile_result&quot;) do
+  # code to profile
+end</code></pre>
+
+<p>Run test and open result:</p>
+
+<pre><code>gem install perftools.rb
+ruby test.rb
+pprof.rb --gif /tmp/profile_result &gt; /tmp/profile_result.gif
+$IMAGE_VIEWER /tmp/profile_result.gif </code></pre>
+
+<p>Example output: <strong>Rails route generator call graph</strong></p>
+<a href='http://postimage.org/image/fy4fxhzvr/full/'>
+  <img src='/images/perf_sample.gif' width='600px' />
+</a>
+<p>Here is short instruction how to read call graph:</p>
+
+<p>Each block represents a method that was called. Percentage in a block shows how much time was spend in current method with and without all it&#8217;s nested calls comparing to overall time. Arrow with number shows how many times parent method called it&#8217;s children method.</p>
+
+<p>That&#8217;s it. All you need to do now is find blocks with most percentage and try reduce them.</p>
+
+<p>This flow works fine till the moment when benchmark results before and after patch should be compared. Ruby Benchmark can not merge them together and represent in a human readable form like this:</p>
+
+<pre><code>Running benchmark with current working tree
+Checkout HEAD^
+Running benchmark with HEAD^
+Checkout to previous HEAD again
+
+                    user     system      total        real
+----------------------------------headers parsing when long
+After patch:    0.100000   0.000000   0.100000 (  0.089926)
+Before patch:   0.700000   0.000000   0.700000 (  0.697444)
+
+----------------------------------headers parsing when tiny
+After patch:    0.000000   0.000000   0.000000 (  0.009930)
+Before patch:   0.020000   0.000000   0.020000 (  0.024283)
+
+---------------------------------headers parsing when empty
+After patch:    0.010000   0.000000   0.010000 (  0.002160)
+Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
+
+<p>So, decided to create a library that fixes this problem. Try out <strong><a href='https://github.com/bogdan/diffbench'>DiffBench</a></strong> if you ever come up with performance patch.</p>
+
+<p>DiffBench in action examples:</p>
+
+<ul>
+<li>
+<p>Rails</p>
+
+<ul>
+<li>ActiveRecord - <a href='https://github.com/rails/rails/pull/5467'>#5467</a></li>
+
+<li>ActiveModel - <a href='https://github.com/rails/rails/pull/5431'>#5431</a></li>
+
+<li>ActiveSupport - <a href='https://github.com/rails/rails/pull/4493'>#4493</a></li>
+
+<li>ActionPack - <a href='https://github.com/rails/rails/pull/5957'>#5957</a></li>
+</ul>
+</li>
+
+<li>
+<p>Mail - <a href='https://github.com/mikel/mail/pull/369'>#396</a>, <a href='https://github.com/mikel/mail/pull/366'>#366</a></p>
+</li>
+</ul>-->
+        <h4 class="tags">
+    
+    <a href="/tags/gem.html">gem</a>
+    
+    <a href="/tags/contribution.html">contribution</a>
+    
+    <a href="/tags/performance.html">performance</a>
+    
+    <a href="/tags/callgraph.html">callgraph</a>
+    
+    <a href="/tags/patch.html">patch</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2012/03/javascript-ajax-submit-form-validation'>Web Forms 2.0: Submit with Ajax and Client Side Validation</a>
             <div class="date">01 Mar 2012</div>
         </h2>
@@ -707,59 +808,6 @@ let g:dbext_table_names_case = 2
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2011/05/http-api-logging-rails'>Logging HTTP api calls just like database queries</a>
-            <div class="date">24 May 2011</div>
-        </h2>
-        Http api calls are pretty similar to SQL queries - they query data from external source to process them in ruby space. So I think it's a good idea to log them just like ActiveRecord does with SQL queries. 
-<pre><code>  Location Load (25.1ms)   SELECT * FROM "locations" WHERE ("locations"."id" = 2548) ORDER BY title</code></pre>
-
-<!--
-This simple peace of code could be very helpful in case of 
-<a href="http://github.com/railsware/http_logger">
-    debugging HTTP api in ruby</a>.
-<a href="https://github.com/railsware/http_logger/blob/master/screenshots/solr.png">Screenshot</a> with the result
-
-
-Installation is simple:
-
-<pre><code>gem install http_logger</code></pre>
-
-And:
-
-<pre><code>require 'http_logger'
-
-Net::HTTP.logger = Logger.new(...) 
-    # Default: Rails.logger if defined?(Rails)
-
-Net::HTTP.colorize = true 
-    # Default: true</code></pre>
-
--->
-        <h4 class="tags">
-    
-    <a href="/tags/api.html">api</a>
-    
-    <a href="/tags/http.html">http</a>
-    
-    <a href="/tags/logging.html">logging</a>
-    
-    <a href="/tags/ruby.html">ruby</a>
-    
-    <a href="/tags/rails.html">rails</a>
-    
-    <a href="/tags/debug.html">debug</a>
-    
-    <a href="/tags/gem.html">gem</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -794,6 +842,10 @@ Net::HTTP.colorize = true
                         <ul>
                             
                             <li>
+                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/04/git-story-id-pivotal-tracker-integration'>Attach git commits to pivotal stories</a>
                             </li>
                             
@@ -807,10 +859,6 @@ Net::HTTP.colorize = true
                             
                             <li>
                                 <a href='/2012/12/rails-contribution-slides-from-ruby-meetup'>Rails Contribution slides from ruby meetup in Kiev</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/10/crazy-javascript-initialization-strategy'>Smart Javascript Initialization Strategy</a>
                             </li>
                             
                         </ul>
@@ -832,7 +880,7 @@ Net::HTTP.colorize = true
                     <div class="sidebarbox tag-cloud">
                         <h2>Browse by tags</h2>
                         <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 21.2px; line-height:21.2px" rel="tag">activerecord</a> 
-<a href="/tags/ajax.html" title="Pages tagged ajax" style="font-size: 19.4px; line-height:19.4px" rel="tag">ajax</a> 
+<a href="/tags/ajax.html" title="Pages tagged ajax" style="font-size: 21.2px; line-height:21.2px" rel="tag">ajax</a> 
 <a href="/tags/api.html" title="Pages tagged api" style="font-size: 17.6px; line-height:17.6px" rel="tag">api</a> 
 <a href="/tags/application.html" title="Pages tagged application" style="font-size: 17.6px; line-height:17.6px" rel="tag">application</a> 
 <a href="/tags/bdd.html" title="Pages tagged bdd" style="font-size: 17.6px; line-height:17.6px" rel="tag">bdd</a> 
@@ -841,7 +889,7 @@ Net::HTTP.colorize = true
 <a href="/tags/class.html" title="Pages tagged class" style="font-size: 17.6px; line-height:17.6px" rel="tag">class</a> 
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
-<a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 23.0px; line-height:23.0px" rel="tag">contribution</a> 
+<a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 24.8px; line-height:24.8px" rel="tag">contribution</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 17.6px; line-height:17.6px" rel="tag">datagrid</a> 
@@ -853,14 +901,14 @@ Net::HTTP.colorize = true
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 26.6px; line-height:26.6px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 33.8px; line-height:33.8px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 35.6px; line-height:35.6px" rel="tag">rails</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
@@ -869,7 +917,7 @@ Net::HTTP.colorize = true
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
-<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 19.4px; line-height:19.4px" rel="tag">validation</a> 
+<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 21.2px; line-height:21.2px" rel="tag">validation</a> 
 <a href="/tags/vim.html" title="Pages tagged vim" style="font-size: 17.6px; line-height:17.6px" rel="tag">vim</a> 
 
                     </div>
