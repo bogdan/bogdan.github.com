@@ -8,6 +8,13 @@ Home
 	Oven basket
 		30x40
 	Large ceramic knife
+<<<<<<< HEAD
+	Kran
+	Verevka
+	Buhgalter day
+=======
+	Tolkalka
+>>>>>>> 4023bd58602c06bfd303ac09b0797a403e712805
 OSS
 	Ruby
 		Irb bug: >> (&:)<tab>
@@ -28,10 +35,8 @@ OSS
 		rubyflow
 		http://afreshcup.com/
 	Accept values for
-		Remove discover
 		Rewrite discover article in blog
 	datagrid
-		Build generators
 		Ability to specify whole grid as html
 	AjaxSubmit
 		ajaxsubmit-rails
@@ -60,6 +65,8 @@ OSS
 			Check SQL select * from pv where price <= Infinity
 			Make rails raise exception if asset is used directly but not precompiled
 			#valid! method
+			Move mass assignment attributes to activemodel
+			Make increment thread safe
 		has_many :tags, :accepts_nested_attributes => true
 		Resolve changelog merge problem
 		rake db:migrate:down STEP=
@@ -77,7 +84,8 @@ OSS
 		Model.schema
 		redirect_to :back with default
 		rails console helper doesn't have *_path *_url
-		Move mass assignment attributes to activemodel
+		insert_fixture to accept an array
+		DateTime blow up a log
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
@@ -101,7 +109,6 @@ Get a new idea
 		Invent UI
 		Ask Dmitra about what people at Miraline are doing
 	Bug tracker with tree support
-		Discuss with Allan
 	Reporting service
 		Ask Allan about his friend that doing data analysis software
 	Bees or Ants strategy game
@@ -111,9 +118,8 @@ Get a new idea
 
 Configuration
 	Vim
-		Investigate why Rlog doesn't have highlight
+		Delimitmate with repeat(.)
 	Skype
-		Investigate with strace
 Blog
 	Article about ActiveSupport::Callbacks
 	PAEI model in programming
@@ -122,8 +128,12 @@ Blog
 		plugins.jquery.com
 	Compare dinosaurs growth to startup growth
 
-Write new Interview cases
-	https://docs.google.com/document/d/1WLupR56Ma2lO5OhLD0g8-nrjunbV7TEmlM6sQx3xESQ/edit#
+Invent new interview tasks
+	Minesweeper
+	Lines
+	Tetris
+	Haml
+
 
 The art of programming
 	Organize a conference with rubygarage
