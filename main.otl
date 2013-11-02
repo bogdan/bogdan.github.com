@@ -1,7 +1,6 @@
 Home
 	Elizabeth Adler Prevage
 	Fish knife
-	Trempels
 	Earthen pot
 	Fitness club
 	Katishki
@@ -101,7 +100,6 @@ OSS
 		String#to_date with wrong date
 		Sqlite millisecond hunting
 			where(:created_at => Date.today.beginning_of_day)
-		Rollback changes on transaction rollback
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
