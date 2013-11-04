@@ -4,13 +4,24 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2013-11-02T14:55:44+02:00</updated>
+ <updated>2013-11-04T15:36:14+02:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
    <email>agresso@gmail.com</email>
  </author>
  
+ 
+ <entry>
+   <title>Datagrid slides from Ruby Meditation 3</title>
+   <link href="http://gusiev.com/2013/11/datagrid-slides-report-framework"/>
+   <updated>2013-11-04T00:00:00+02:00</updated>
+   <id>http://gusiev.com/2013/11/datagrid-slides-report-framework</id>
+   <content type="html">&lt;p&gt;Here are my &lt;a href='http://gusiev.com/slides/datagrid/index.html#/'&gt;slides about Datagrid gem&lt;/a&gt; from Ruby Meditation Conference last weekend. Datagrid is a gem I&amp;#8217;ve released almost 3 years ago. It is focused on table data representation and now allowes a full power flexibility to be called a Framework.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href='http://github.com/bogdan/datagrid'&gt;http://github.com/bogdan/datagrid&lt;/a&gt;&lt;/p&gt;
+&lt;!--more--&gt;</content>
+ </entry>
  
  <entry>
    <title>Support validation through ajax in Rails 4.x</title>

@@ -10,7 +10,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
+    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, report, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -73,6 +73,118 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2012/06/assumption-driven-development'>Assumption Driven Approach</a>
+            <div class="date">06 Jun 2012</div>
+        </h2>
+        <p>This post shows some examples of how things can go wrong way because of people actions based on assumptions but not on facts. It is more conceptual than practical, so be patient and don&#8217;t blame my grammar mistakes too much. <!--</p>
+
+<h3 id='evil_of_assumptions'>Evil of assumptions</h3>
+
+<p>This is my favorite example of how wrong assumption can be:</p>
+
+<p>Very popular ruby questions for newbies:</p>
+
+<pre><code>What is the difference between `private` and `protected` methods?</code></pre>
+
+<p>Question seems good and reasonable. But most people don&#8217;t know the right answer even after years with ruby. Most people assume that <code>private</code> methods can not be called from inherited classes, but <code>protected</code> can be.</p>
+
+<p>But that&#8217;s only an assumption. Have you ever tried to ensure that it&#8217;s right? The answer is: <strong>This is not true</strong>. Private method can be called from inherited class in the same way as protected.</p>
+
+<pre><code>class A
+  private
+  def a
+    puts &#39;hello&#39;
+  end
+end
+
+class B &lt; A
+  def b
+    a
+  end
+end
+
+B.new.b # No Exception here</code></pre>
+
+<p><a href='http://gusiev.com/2010/04/ruby18-private-protected-incapsulatio/'>More about private and public methods here</a>.</p>
+
+<p>This is good example on how myths can spread the world: Almost every person is surprised by the output of program above.</p>
+
+<p>This makes me feel that many interviewers ask questions while don&#8217;t know what they are asking about. From this point I can state that a lot of ruby interviews goes in a wrong direction by providing an assumption as a fact.</p>
+
+<h3 id='class_variables_assumption'>Class variables assumption</h3>
+
+<p>Yet another assumption that can be made based on ruby documentation is connected with ruby class variables:</p>
+
+<pre><code>class A
+  @@x = 2
+  def self.pr
+    @@x
+  end
+end
+
+class B &lt; A
+  @@x = 5
+end
+
+puts B.pr
+puts A.pr</code></pre>
+
+<p>You can assume that last two lines produce 5 and 2, but they both produce 5. Because class variables are shared across all classes.</p>
+
+<h3 id='assumption_example_in_the_performance_field'>Assumption example in the performance field</h3>
+
+<p>Most popular assumptions field is performance. And here we come up with the most recent bad assumption example:</p>
+
+<p>Ruby 2.0 offers lazy enumeration feature.</p>
+
+<pre><code>(1...100000).to_a.lazy.select{|a| a.odd? }.map{|a| a**2}.to_a</code></pre>
+
+<p>In short: there will be only one iteration over an array with no intermediate array between <code>select</code> and <code>map</code>. If you are an assumption-driven person, you already assumed that <code>#lazy</code> not only saves your memory, but also improve performance.</p>
+
+<p>And problem is that it is not true. <a href='https://bugs.ruby-lang.org/issues/6183'><code>#lazy</code> is very slow</a>.</p>
+
+<h3 id='how_to_use_assumption_in_a_right_way'>How to use assumption in a right way?</h3>
+
+<p>Why we are still using assumptions a lot? Because they are cheap: they allow us to move faster without proofing that we are moving the right direction.</p>
+
+<p>Here are some MUSTs that we need to follow:</p>
+
+<ul>
+<li>Always make sure that you are 100% right when you are interviewing other person.</li>
+
+<li>Never make assumptions in performance field.</li>
+</ul>
+
+<p>And here are some more conceptual advices:</p>
+
+<ul>
+<li>Make assumptions depend on facts, but not other assumptions.</li>
+
+<li>Prove any assumption with fact before going with another assumption</li>
+
+<li>Do not tell people about assumptions as if they are facts.</li>
+
+<li>When we can&#8217;t make a good assumption from the beginning, maybe it&#8217;s time to gather more facts</li>
+</ul>-->
+        <h4 class="tags">
+    
+    <a href="/tags/assumption.html">assumption</a>
+    
+    <a href="/tags/ruby.html">ruby</a>
+    
+    <a href="/tags/performance.html">performance</a>
+    
+    <a href="/tags/fact.html">fact</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2012/05/benchmark-performance-patch-ruby-diff'>Benchmark your performance patches</a>
@@ -748,66 +860,6 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2011/05/dbext-vim-table-names-convention-patch'>Patching dbext vim plugin to support Rails naming conventions</a>
-            <div class="date">30 May 2011</div>
-        </h2>
-        <p><a href='http://www.vim.org/scripts/script.php?script_id=356'>dbext</a> is an excellent vim plugin that allows you to execute SQL queries directly from vim. For example: <code>select * from &lt;word under cursor&gt;</code>. When dbext is used with Rails there is a problem that you can work with some variation of table name like:</p>
-
-<ul>
-<li>UserRole</li>
-
-<li>user_role_id</li>
-
-<li>user_role_ids</li>
-
-<li>user_role</li>
-</ul>
-
-<p>But still wants to use it as table name in your database queries so that you won&#8217;t type it manually.</p>
-<!--
-<p>So, I made it to automatically convert word under cursor into a table name with the following configuration options:</p>
-
-<pre><code>let g:dbext_table_names_number = 2 
-    # 0 - disabled, 1 - singular, 2 - plural
-let g:dbext_table_names_case = 2 
-    # 0 - disabled, 1 - camelcase, 2 - underscore</code></pre>
-
-<p>Also there is an option to automatically strip <code>_id</code> suffix from word to convert it to table name:</p>
-
-<pre><code>let g:dbext_table_names_strip_id = 1</code></pre>
-
-<p>All these options match Rails table name convention by default. Staff in <a href='http://github.com/bogdan/dbext'>my dbext fork</a>.</p>
-
-<p>Once you install it in your vim runtime put your cursor on any table name variation like example above and run <code>:DBSelectFromTable</code> to get:</p>
-
-<p><code>select * from user_roles</code></p>
-
-<p>Other commands are also patched. Please let me know if any bugs found.</p>
-
-<p>Don&#8217;t know if non-rails developers would love this patch but pretty sure that it won&#8217;t annoy them. Please support <a href='https://github.com/zklinger/dbext/pull/1'>my pull request</a> if you like it.</p>-->
-        <h4 class="tags">
-    
-    <a href="/tags/rails.html">rails</a>
-    
-    <a href="/tags/vim.html">vim</a>
-    
-    <a href="/tags/dbext.html">dbext</a>
-    
-    <a href="/tags/patch.html">patch</a>
-    
-    <a href="/tags/convention.html">convention</a>
-    
-    <a href="/tags/sql.html">sql</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -842,6 +894,10 @@ let g:dbext_table_names_case = 2
                         <ul>
                             
                             <li>
+                                <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
@@ -855,10 +911,6 @@ let g:dbext_table_names_case = 2
                             
                             <li>
                                 <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/12/rails-contribution-slides-from-ruby-meetup'>Rails Contribution slides from ruby meetup in Kiev</a>
                             </li>
                             
                         </ul>
@@ -896,7 +948,7 @@ let g:dbext_table_names_case = 2
                     </div>
                     <div class="sidebarbox tag-cloud">
                         <h2>Browse by tags</h2>
-                        <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 21.2px; line-height:21.2px" rel="tag">activerecord</a> 
+                        <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 23.0px; line-height:23.0px" rel="tag">activerecord</a> 
 <a href="/tags/ajax.html" title="Pages tagged ajax" style="font-size: 21.2px; line-height:21.2px" rel="tag">ajax</a> 
 <a href="/tags/api.html" title="Pages tagged api" style="font-size: 17.6px; line-height:17.6px" rel="tag">api</a> 
 <a href="/tags/application.html" title="Pages tagged application" style="font-size: 17.6px; line-height:17.6px" rel="tag">application</a> 
@@ -909,10 +961,10 @@ let g:dbext_table_names_case = 2
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 24.8px; line-height:24.8px" rel="tag">contribution</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
-<a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 17.6px; line-height:17.6px" rel="tag">datagrid</a> 
+<a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 19.4px; line-height:19.4px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
 <a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 19.4px; line-height:19.4px" rel="tag">dry</a> 
-<a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 23.0px; line-height:23.0px" rel="tag">gem</a> 
+<a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 24.8px; line-height:24.8px" rel="tag">gem</a> 
 <a href="/tags/git.html" title="Pages tagged git" style="font-size: 17.6px; line-height:17.6px" rel="tag">git</a> 
 <a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
@@ -925,12 +977,13 @@ let g:dbext_table_names_case = 2
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 35.6px; line-height:35.6px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 37.400000000000006px; line-height:37.400000000000006px" rel="tag">rails</a> 
+<a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
-<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 21.2px; line-height:21.2px" rel="tag">slides</a> 
+<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 23.0px; line-height:23.0px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 

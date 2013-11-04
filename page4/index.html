@@ -10,7 +10,7 @@
     </title>
     <meta name="robots" content="follow, all" />
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
+    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, report, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -73,6 +73,62 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2010/06/ultimate-rspec-matcher-to-test-validation'>Ultimate rspec matcher to test validation</a>
+            <div class="date">30 Jun 2010</div>
+        </h2>
+        After a first thousand of tests using Rspec I fount it very annoying to repeat my self testing the standard code as spec code is usually twice longer than code it test. I've started to look for a way to simplify the patterns and make it reusable. Among other nice rspec tricks there is possibility to write custom Rspec matchers. Spec the validation is just two lines of code for each attribute now.
+<!--
+
+
+<h3> Existing solutions </h3>
+After doing some search around I found Shoulda and remarkable gems that provide a way of doing this. Here is one of remarkable variant (others are just ugly): 
+<pre><code>it { should validate_numericality_of(:age, :greater_than => 18, :only_integer => true) }</code></pre>
+But that is huge contradiction with BDD methodology because it doesn't make you think about behavior. People use to copy-paste code from model to spec and all possible bugs within. As the result <strong>nothing is tested</strong>... I don't even say about "test first".
+
+<h3> Easy DSL and Implementation </h3>
+When I implement validation everything I care about is: what values should be accepted and what values should not. An easy DSL that realize this pattern would be:
+<pre><code>describe User do
+  it { should accept_values_for(:email, "john@example.com", "lambda@gusiev.com") }
+  it { should_not accept_values_for(:email, "invalid", nil, "a@b", "john@.com") }
+end</code></pre> 
+That's it! Two lines of code per attribute. And that is perfectly fine for "test first" principle.<br/>
+Rspec authors take care about custom Rspec matcher. So the implementation is very easy.
+Fork me on github: <a href="http://github.com/bogdan/accept_values_for">accept_values_for rpec matcher</a>. The <strong>accept_values_for</strong> pattern is a true BDD way and unlike Remarkable it really do testing.
+
+<h3> validates_uniqueness_of </h3> 
+This is very special validation because you always need more then one record to test it. So, the pattern for uniqueness validation is:
+<pre><code>describe User do
+  context "if user with email 'aa@bb.com' exists" do
+    before do
+      User.create!(@valid_attributes.merge(:email =&gt; 'aa@bb.com')
+    end
+    it { should_not accept_values_for(:email, "aa@bb.com") }
+  end
+end</code></pre>
+<h3> Summary </h3>
+Custom matcher is just 50 lines of code that make your life much easier. Do not scare to write your own. Custom matcher to test ActiveRecord#named_scope coming soon.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/rspec.html">rspec</a>
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    <a href="/tags/activerecord.html">activerecord</a>
+    
+    <a href="/tags/validation.html">validation</a>
+    
+    <a href="/tags/pattern.html">pattern</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails'>Advanced non-flat controllers hierarchy with rails</a>
@@ -657,40 +713,6 @@ Therefore user stories are the most productive when the implementation is done u
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2009/06/pragmatic-review-view-google-wave-criticism-technolog'>Pragmatic review of Google Wave technology</a>
-            <div class="date">08 Jun 2009</div>
-        </h2>
-        Have a good time watching the <a href="http://www.youtube.com/watch?v=v_UyVmITiYQ">Google Wave presentation video</a>. Looks like an excellent open technology that will make our life easier. I like the overall idea. It is really awesome. But I personally admit some things that seems useless to me...<br/>
-<!--
-<hr/>
-Starting from the very beginning I need to say: Wow! Now we can organize all communication threads to the widespread object called <strong>Wave</strong> that will be readable and editable by any other application. No more browsing dozen of sites and tracking all changes around - all interested waves can be reorganized in the way you want.<br/>
-Let's review the features now:<br/>
-<ul>
-	<li> Act as Wiki. Wiki can be handled via Waves too, but not sure about parallel editing. That looks sexy on presentation but has no sense in action.</li>
-	<li>Translation to another languages. I would like to have that on my desktop. Don't think it would be useful then doing the real time communication. Machine translation never was good enough.</li>	
-  <li> Spell checker based on language model. Many people around worked on language model and no one has built it strong enough to handle automatic spell check. Let's wait for release and see if Google guys reach the success here.</li>
-
-</ul>
--->
-        <h4 class="tags">
-    
-    <a href="/tags/criticism.html">criticism</a>
-    
-    <a href="/tags/technology.html">technology</a>
-    
-    <a href="/tags/review.html">review</a>
-    
-    <a href="/tags/wave.html">wave</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -725,6 +747,10 @@ Let's review the features now:<br/>
                         <ul>
                             
                             <li>
+                                <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
@@ -738,10 +764,6 @@ Let's review the features now:<br/>
                             
                             <li>
                                 <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2012/12/rails-contribution-slides-from-ruby-meetup'>Rails Contribution slides from ruby meetup in Kiev</a>
                             </li>
                             
                         </ul>
@@ -779,7 +801,7 @@ Let's review the features now:<br/>
                     </div>
                     <div class="sidebarbox tag-cloud">
                         <h2>Browse by tags</h2>
-                        <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 21.2px; line-height:21.2px" rel="tag">activerecord</a> 
+                        <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 23.0px; line-height:23.0px" rel="tag">activerecord</a> 
 <a href="/tags/ajax.html" title="Pages tagged ajax" style="font-size: 21.2px; line-height:21.2px" rel="tag">ajax</a> 
 <a href="/tags/api.html" title="Pages tagged api" style="font-size: 17.6px; line-height:17.6px" rel="tag">api</a> 
 <a href="/tags/application.html" title="Pages tagged application" style="font-size: 17.6px; line-height:17.6px" rel="tag">application</a> 
@@ -792,10 +814,10 @@ Let's review the features now:<br/>
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 24.8px; line-height:24.8px" rel="tag">contribution</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
-<a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 17.6px; line-height:17.6px" rel="tag">datagrid</a> 
+<a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 19.4px; line-height:19.4px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
 <a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 19.4px; line-height:19.4px" rel="tag">dry</a> 
-<a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 23.0px; line-height:23.0px" rel="tag">gem</a> 
+<a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 24.8px; line-height:24.8px" rel="tag">gem</a> 
 <a href="/tags/git.html" title="Pages tagged git" style="font-size: 17.6px; line-height:17.6px" rel="tag">git</a> 
 <a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
@@ -808,12 +830,13 @@ Let's review the features now:<br/>
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 35.6px; line-height:35.6px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 37.400000000000006px; line-height:37.400000000000006px" rel="tag">rails</a> 
+<a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
-<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 21.2px; line-height:21.2px" rel="tag">slides</a> 
+<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 23.0px; line-height:23.0px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
