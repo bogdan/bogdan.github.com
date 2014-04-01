@@ -11,6 +11,8 @@
       Bogdan's blog
     </title>
     <meta name="robots" content="follow, all" />
+    <meta charset="utf-8"> 
+    
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
     <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, report, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
@@ -79,9 +81,10 @@
         <a href="/2011/06/ruby-datagrid-gem-report">Reporting made easy by Datagrid gem for Rails</a>
         <div class="date">26 Jun 2011</div>
     </h2>
-    <p>4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about <a href='https://github.com/bogdan/datagrid'>perfect report gem</a> that would provide easy DSL for making filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head and now finally I have enough knowledge and opportunities to build such tool.</p>
+    
+<p>4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about <a href="https://github.com/bogdan/datagrid">perfect report gem</a> that would provide easy DSL for making filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head and now finally I have enough knowledge and opportunities to build such tool.</p>
 <!--more-->
-<h3 id='defining_a_grid'>Defining a grid</h3>
+<h3 id="defining_a_grid">Defining a grid</h3>
 
 <p>The idea of Datagrid DSL is to define a scope of ActiveRecord models and define different independent criterias to filter this scope. Than convert filtered data to table view with defined columns. So, typical datagrid report consists of:</p>
 
@@ -119,7 +122,7 @@
 <span class='k'>end</span>
 </code></pre>
 </div>
-<h3 id='grid_instance_api'>Grid instance API</h3>
+<h3 id="grid_instance_api">Grid instance API</h3>
 
 <p>And now we can create and manipulate reports:</p>
 <div class='highlight'><pre><code class='ruby'><span class='n'>report</span> <span class='o'>=</span> <span class='no'>SimpleReport</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span>
@@ -145,27 +148,28 @@
 <span class='n'>report</span><span class='o'>.</span><span class='n'>to_csv</span> <span class='c1'># =&gt; Yes, it is</span>
 </code></pre>
 </div>
-<h3 id='feel_the_power_and_flexibility_by_examples'>Feel the Power and Flexibility by examples</h3>
+<h3 id="feel_the_power_and_flexibility_by_examples">Feel the Power and Flexibility by examples</h3>
 
-<p>I love flexibility. That is why datagrid has a lot of things for non trivial use cases. In order to proof that I&#8217;ll show you some examples of what you can do:</p>
+<p>I love flexibility. That is why datagrid has a lot of things for non trivial use cases. In order to proof that I’ll show you some examples of what you can do:</p>
 
 <ul>
-<li><a href='https://gist.github.com/7ba4267aa25b6e37eb44'>Range filters</a></li>
+<li><a href="https://gist.github.com/7ba4267aa25b6e37eb44">Range filters</a></li>
 
-<li><a href='https://gist.github.com/4e84d2dad2f2362a9ab4'>Time sheets aggregation report</a></li>
+<li><a href="https://gist.github.com/4e84d2dad2f2362a9ab4">Time sheets aggregation report</a></li>
 
-<li><a href='https://gist.github.com/8b91694edec900de84be'>Daily statistics</a></li>
+<li><a href="https://gist.github.com/8b91694edec900de84be">Daily statistics</a></li>
 
-<li><a href='https://gist.github.com/106acfc3fe689564896c'>Extending built in methods</a></li>
+<li><a href="https://gist.github.com/106acfc3fe689564896c">Extending built in methods</a></li>
 </ul>
 
-<h3 id='documentation'>Documentation</h3>
+<h3 id="documentation">Documentation</h3>
 
-<p><a href='https://github.com/bogdan/datagrid/wiki'>Datagrid WIKI</a> is main documentation source of the gem. Also feel free to ask questions right after this post.</p>
+<p><a href="https://github.com/bogdan/datagrid/wiki">Datagrid WIKI</a> is main documentation source of the gem. Also feel free to ask questions right after this post.</p>
 
-<h3 id='in_my_todo_list'>In my TODO list</h3>
+<h3 id="in_my_todo_list">In my TODO list</h3>
 
-<p>Current version of datagrid gem have fully document back-end staff. It&#8217;s production ready - we are running three projects that use datagrid. Now I am working on front-end that is already part of the distribution, but not yet documented.</p>
+<p>Current version of datagrid gem have fully document back-end staff. It’s production ready - we are running three projects that use datagrid. Now I am working on front-end that is already part of the distribution, but not yet documented.</p>
+
     <div class="clear"></div>
     <div class="left">
       <table class="post-social-share">
@@ -254,6 +258,10 @@
                         <ul>
                             
                             <li>
+                                <a href='/2014/04/state-machine-minemalistic-validation-perfection-changes'>Minimalistic State Machine: Less is More</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
                             </li>
                             
@@ -267,10 +275,6 @@
                             
                             <li>
                                 <a href='/2013/04/background-jobs-frameworkds-delayed-job-resque-slides'>Background Jobs Frameworks: Resque vs DelayedJob</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
                             </li>
                             
                         </ul>
@@ -322,7 +326,7 @@
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 24.8px; line-height:24.8px" rel="tag">contribution</a> 
-<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 26.6px; line-height:26.6px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 19.4px; line-height:19.4px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
@@ -340,7 +344,7 @@
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 37.400000000000006px; line-height:37.400000000000006px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 39.2px; line-height:39.2px" rel="tag">rails</a> 
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
@@ -350,7 +354,7 @@
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
-<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 21.2px; line-height:21.2px" rel="tag">validation</a> 
+<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 23.0px; line-height:23.0px" rel="tag">validation</a> 
 <a href="/tags/vim.html" title="Pages tagged vim" style="font-size: 17.6px; line-height:17.6px" rel="tag">vim</a> 
 
                     </div>

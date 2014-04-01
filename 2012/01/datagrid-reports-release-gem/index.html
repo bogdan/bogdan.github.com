@@ -11,6 +11,8 @@
       Bogdan's blog
     </title>
     <meta name="robots" content="follow, all" />
+    <meta charset="utf-8"> 
+    
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
     <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, report, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
@@ -79,9 +81,10 @@
         <a href="/2012/01/datagrid-reports-release-gem">New release of Datagrid: Mongoid, Rails Engines and HTML columns support</a>
         <div class="date">10 Jan 2012</div>
     </h2>
-    <p><a href='https://github.com/bogdan/datagrid'>Datagrid</a> version 0.5.0 has been released.</p>
+    
+<p><a href="https://github.com/bogdan/datagrid">Datagrid</a> version 0.5.0 has been released.</p>
 
-<p>Datagrid is a Ruby on Rails plugin that helps you to build and <a href='http://datagrid.heroku.com'>represent table-like data</a> with:</p>
+<p>Datagrid is a Ruby on Rails plugin that helps you to build and <a href="http://datagrid.heroku.com">represent table-like data</a> with:</p>
 
 <ul>
 <li>Customizable filtering</li>
@@ -97,13 +100,13 @@
 
 <p>Here are some major features from new release. <!--more--></p>
 
-<h3 id='mongoid_support'>Mongoid support</h3>
+<h3 id="mongoid_support">Mongoid support</h3>
 
-<p>Previously Datagrid supported only ActiveRecord ORM. Now Mongoid is also available: <a href='http://datagrid.heroku.com/document_reports'>see the demo</a>.</p>
+<p>Previously Datagrid supported only ActiveRecord ORM. Now Mongoid is also available: <a href="http://datagrid.heroku.com/document_reports">see the demo</a>.</p>
 
-<p>New datagrid driver architecture allows to add yet another ORM in less then <a href='https://github.com/bogdan/datagrid/blob/master/lib/datagrid/drivers/mongoid.rb'>40 lines of code</a>.</p>
+<p>New datagrid driver architecture allows to add yet another ORM in less then <a href="https://github.com/bogdan/datagrid/blob/master/lib/datagrid/drivers/mongoid.rb">40 lines of code</a>.</p>
 
-<h3 id='html_columns'>HTML columns</h3>
+<h3 id="html_columns">HTML columns</h3>
 
 <p>In order to use view helpers to render columns You can use <code>:html</code> option. This will call column block in the view context:</p>
 <div class='highlight'><pre><code class='ruby'><span class='n'>column</span><span class='p'>(</span><span class='ss'>:completed</span><span class='p'>,</span> <span class='ss'>:html</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span> <span class='p'>{</span> <span class='o'>|</span><span class='n'>asset</span><span class='o'>|</span> <span class='n'>asset</span><span class='o'>.</span><span class='n'>completed?</span> <span class='p'>?</span> <span class='n'>image_tag</span><span class='p'>(</span><span class='s2'>&quot;green.gif&quot;</span><span class='p'>)</span> <span class='p'>:</span> <span class='n'>image_tag</span><span class='p'>(</span><span class='s2'>&quot;red.gif&quot;</span><span class='p'>)</span> <span class='p'>}</span>
@@ -111,9 +114,9 @@
 <span class='n'>column</span><span class='p'>(</span><span class='ss'>:actions</span><span class='p'>,</span> <span class='ss'>:html</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span> <span class='p'>{</span> <span class='o'>|</span><span class='n'>asset</span><span class='o'>|</span> <span class='n'>render</span> <span class='ss'>:partial</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;admin/assets/actions&quot;</span><span class='p'>,</span> <span class='ss'>:object</span> <span class='o'>=&gt;</span> <span class='n'>asset</span> <span class='p'>}</span>
 </code></pre>
 </div>
-<h3 id='table_customization_with_rails_engines'>Table customization with Rails Engines</h3>
+<h3 id="table_customization_with_rails_engines">Table customization with Rails Engines</h3>
 
-<p>Rails Engines allows you to embed views into Rails plugins and make them customizable. If You need serious customization of datagrid <code>&lt;table&gt;</code> and HTML Columns doesn&#8217;t help, you can customize datagrid internal views by running:</p>
+<p>Rails Engines allows you to embed views into Rails plugins and make them customizable. If You need serious customization of datagrid <code>&lt;table&gt;</code> and HTML Columns doesn’t help, you can customize datagrid internal views by running:</p>
 <div class='highlight'><pre><code class='sh'>rake datagrid:copy_partials
 </code></pre>
 </div>
@@ -129,6 +132,7 @@
 </code>
 </pre>
 <p>Now You are able to customize whatever You want.</p>
+
     <div class="clear"></div>
     <div class="left">
       <table class="post-social-share">
@@ -215,6 +219,10 @@
                         <ul>
                             
                             <li>
+                                <a href='/2014/04/state-machine-minemalistic-validation-perfection-changes'>Minimalistic State Machine: Less is More</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
                             </li>
                             
@@ -228,10 +236,6 @@
                             
                             <li>
                                 <a href='/2013/04/background-jobs-frameworkds-delayed-job-resque-slides'>Background Jobs Frameworks: Resque vs DelayedJob</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
                             </li>
                             
                         </ul>
@@ -283,7 +287,7 @@
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 24.8px; line-height:24.8px" rel="tag">contribution</a> 
-<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 26.6px; line-height:26.6px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 19.4px; line-height:19.4px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
@@ -301,7 +305,7 @@
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 37.400000000000006px; line-height:37.400000000000006px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 39.2px; line-height:39.2px" rel="tag">rails</a> 
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
@@ -311,7 +315,7 @@
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
-<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 21.2px; line-height:21.2px" rel="tag">validation</a> 
+<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 23.0px; line-height:23.0px" rel="tag">validation</a> 
 <a href="/tags/vim.html" title="Pages tagged vim" style="font-size: 17.6px; line-height:17.6px" rel="tag">vim</a> 
 
                     </div>

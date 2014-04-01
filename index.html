@@ -9,6 +9,8 @@
       Bogdan's blog
     </title>
     <meta name="robots" content="follow, all" />
+    <meta charset="utf-8"> 
+    
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
     <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, report, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
@@ -75,12 +77,101 @@
                     
     <div class="post">
         <h2>
+            <a href='/2014/04/state-machine-minemalistic-validation-perfection-changes'>Minimalistic State Machine: Less is More</a>
+            <div class="date">01 Apr 2014</div>
+        </h2>
+        
+<p>I have tried a bunch of ActiveRecord’s state machine gems. Their functionality is very close to each other. It allows to validate a state transition and reinvent ruby programming language to define transition methods. The fact that all of them produces custom API to define a ruby method doesn’t look right… <!--</p>
+
+<h3 id="samples_using_common_state_machine_gems">Samples using common state machine gems</h3>
+<div class='highlight'><pre><code class='ruby'><span class='c1'># State Machine gem example</span>
+<span class='n'>state_machine</span> <span class='ss'>:state</span><span class='p'>,</span> <span class='ss'>:initial</span> <span class='o'>=&gt;</span> <span class='ss'>:parked</span> <span class='k'>do</span>
+  <span class='n'>event</span> <span class='ss'>:approve!</span> <span class='k'>do</span>
+    <span class='n'>transition</span> <span class='ss'>:pending</span> <span class='o'>=&gt;</span> <span class='ss'>:approved</span>
+  <span class='k'>end</span>
+  <span class='n'>after_transition</span> <span class='ss'>:pending</span> <span class='o'>=&gt;</span> <span class='ss'>:approved</span><span class='p'>,</span> <span class='ss'>:do</span> <span class='o'>=&gt;</span> <span class='ss'>:send_approval_email</span>
+<span class='k'>end</span>
+
+<span class='c1'># Workflow gem example</span>
+<span class='n'>workflow</span> <span class='k'>do</span>
+  <span class='n'>state</span> <span class='ss'>:pending</span> <span class='k'>do</span>
+    <span class='n'>event</span> <span class='ss'>:approve!</span><span class='p'>,</span> <span class='ss'>:transitions_to</span> <span class='o'>=&gt;</span> <span class='ss'>:approved</span><span class='p'>,</span> <span class='ss'>:after_transition</span> <span class='o'>=&gt;</span> <span class='ss'>:send_approval_email</span>
+  <span class='k'>end</span>
+<span class='k'>end</span>
+
+<span class='c1'># And finally plain ruby/rails example</span>
+<span class='k'>def</span> <span class='nf'>approve!</span>
+  <span class='n'>update_attributes!</span><span class='p'>(</span><span class='ss'>:state</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;approved&quot;</span><span class='p'>)</span>
+  <span class='n'>send_approval_email</span>
+<span class='k'>end</span>
+</code></pre>
+</div>
+<p>Maybe I don’t know all modern trends but ruby version looks more human readable to me.</p>
+
+<h3 id="so_why_do_we_still_tend_to_use_state_machine_gems">So why do we still tend to use state machine gems</h3>
+
+<p>The main reason is state change validation. It won’t be easy to always check if it is possible to transition object from state A to state B in plain Ruby. This part of state machine is something that really matter.</p>
+
+<p>In my head it appears as some kind of allowed changes map:</p>
+<div class='highlight'><pre><code class='ruby'><span class='n'>order_state_changes_map</span> <span class='o'>=</span> <span class='p'>{</span> 
+  <span class='kp'>nil</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='ss'>:pending</span><span class='o'>]</span><span class='p'>,</span> <span class='c1'># Initial state is always pending</span>
+  <span class='ss'>:pending</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='ss'>:approved</span><span class='p'>,</span> <span class='ss'>:rejected</span><span class='o'>]</span><span class='p'>,</span> <span class='c1'># Pending can be changed to to paid and delivered</span>
+  <span class='ss'>:approved</span> <span class='o'>=&gt;</span> <span class='ss'>:paid</span> <span class='c1'># Delivered can only be changed to paid</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>If the state machine’s main goal is to validate changes than let’s implement it as a validation:</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Order</span> <span class='o'>&lt;</span> <span class='no'>AR</span><span class='o'>::</span><span class='no'>Base</span>
+  <span class='n'>validates</span> <span class='ss'>:state</span><span class='p'>,</span> <span class='ss'>:changes</span> <span class='o'>=&gt;</span> <span class='n'>order_state_changes_map</span>
+<span class='k'>end</span>
+</code></pre>
+</div>
+<p>With this pattern you can define state change methods in ruby:</p>
+<div class='highlight'><pre><code class='ruby'><span class='n'>validates</span> <span class='ss'>:state</span><span class='p'>,</span> <span class='ss'>:changes</span> <span class='o'>=&gt;</span> <span class='p'>{</span> 
+  <span class='kp'>nil</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='ss'>:pending</span><span class='o'>]</span><span class='p'>,</span> <span class='c1'># Initial state is always pending</span>
+  <span class='ss'>:pending</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='ss'>:approved</span><span class='p'>,</span> <span class='ss'>:rejected</span><span class='o'>]</span><span class='p'>,</span> <span class='c1'># Pending can be changed to to paid and delivered</span>
+  <span class='ss'>:approved</span> <span class='o'>=&gt;</span> <span class='ss'>:paid</span> <span class='c1'># Delivered can only be changed to paid</span>
+<span class='p'>}</span>
+
+<span class='k'>def</span> <span class='nf'>upproved!</span>
+  <span class='c1'># ....</span>
+<span class='k'>end</span>
+
+<span class='k'>def</span> <span class='nf'>upproved?</span>
+  <span class='c1'># ....</span>
+<span class='k'>end</span>
+</code></pre>
+</div>
+<p>Now it looks really readable and a person who never saw this kind of API before can figure out what is happening.</p>
+
+<p>Give a try to: <a href="https://github.com/bogdan/changes_validator">ChangesValidator</a> in your app</p>
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    <a href="/tags/validation.html">validation</a>
+    
+    <a href="/tags/statemachine.html">statemachine</a>
+    
+    <a href="/tags/criticism.html">criticism</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
             <div class="date">04 Nov 2013</div>
         </h2>
-        <p>Here are my <a href='http://gusiev.com/slides/datagrid/index.html#/'>slides about Datagrid gem</a> from Ruby Meditation Conference last weekend. Datagrid is a gem I&#8217;ve released almost 3 years ago. It is focused on table data representation and now allowes a full power flexibility to be called a Framework.</p>
+        
+<p>Here are my <a href="http://gusiev.com/slides/datagrid/index.html#/">slides about Datagrid gem</a> from Ruby Meditation Conference last weekend. Datagrid is a gem I’ve released almost 3 years ago. It is focused on table data representation and now allowes a full power flexibility to be called a Framework.</p>
 
-<p><a href='http://github.com/bogdan/datagrid'>http://github.com/bogdan/datagrid</a></p>
+<p><a href="http://github.com/bogdan/datagrid">http://github.com/bogdan/datagrid</a></p>
 <!---->
         <h4 class="tags">
     
@@ -108,13 +199,14 @@
             <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
             <div class="date">24 May 2013</div>
         </h2>
-        <p>I have a constant feeling that in a modern web every web form should be submitted with AJAX not the old retro way with POST request. This is better for numerous reasons.</p>
+        
+<p>I have a constant feeling that in a modern web every web form should be submitted with AJAX not the old retro way with POST request. This is better for numerous reasons.</p>
 
-<p>At first, it gives better user experience At second, AJAX is faster than regular request. At the end, it doesn&#8217;t require a work to redraw the page with it&#8217;s previous state if validation fails.</p>
+<p>At first, it gives better user experience At second, AJAX is faster than regular request. At the end, it doesn’t require a work to redraw the page with it’s previous state if validation fails.</p>
 
 <p>Currently I am trying to make rails app support this out of the box. And here is first small step to this goal:</p>
 
-<p><a href='https://github.com/rails/rails/pull/8638'>This patch</a> allows a complete validation though ajax using active model validators. This is a <a href='http://rails-ajax-validation.herokuapp.com/developers/new'>live demo</a> of what it allows to do. If you feel especially interested in this feature, say your +1 here or on github.</p>
+<p><a href="https://github.com/rails/rails/pull/8638">This patch</a> allows a complete validation though ajax using active model validators. This is a <a href="http://rails-ajax-validation.herokuapp.com/developers/new">live demo</a> of what it allows to do. If you feel especially interested in this feature, say your +1 here or on github.</p>
 <!---->
         <h4 class="tags">
     
@@ -140,15 +232,16 @@
             <a href='/2013/04/git-story-id-pivotal-tracker-integration'>Attach git commits to pivotal stories</a>
             <div class="date">08 Apr 2013</div>
         </h2>
-        <p>I heard about 10 different ways to organize work flow around pivotaltracker and git and about 5 gems to support that process. All of them seems abusing for me: the outcome of pivotal/git integration is a git commit attached to pivotal story and the rest of conventions like naming branches or merge policy doesn&#8217;t make any sense in long time perspective and is just a waste of time in fact.</p>
+        
+<p>I heard about 10 different ways to organize work flow around pivotaltracker and git and about 5 gems to support that process. All of them seems abusing for me: the outcome of pivotal/git integration is a git commit attached to pivotal story and the rest of conventions like naming branches or merge policy doesn’t make any sense in long time perspective and is just a waste of time in fact.</p>
 
-<p>That&#8217;s why I&#8217;ve decided to make the most trivial integration that covers this idea and don&#8217;t provide additional complexity: Meet <a href='https://github.com/bogdan/git-storyid'>git-storyid</a> gem - the only one git/pivotaltracker integration that saves your time. <!--</p>
+<p>That’s why I’ve decided to make the most trivial integration that covers this idea and don’t provide additional complexity: Meet <a href="https://github.com/bogdan/git-storyid">git-storyid</a> gem - the only one git/pivotaltracker integration that saves your time. <!--</p>
 
-<h2 id='installation'>Installation</h2>
+<h2 id="installation">Installation</h2>
 <div class='highlight'><pre><code class='sh'>gem install git-storyid
 </code></pre>
 </div>
-<h2 id='usage'>Usage</h2>
+<h2 id="usage">Usage</h2>
 <div class='highlight'><pre><code class='sh'>git storyid -m <span class='s2'>&quot;Initial implementation of campaign tags&quot;</span>
 <span class='c'># Api token (https://www.pivotaltracker.com/profile): a56f0e9a4fbXXXXXXXXXXXXXX</span>
 <span class='c'># Use SSL (y/n): y</span>
@@ -178,9 +271,10 @@ Date:   Fri Mar 15 12:42:32 2013 +0200
 Feature: Tag campaign insertion points and 
 campaigns with an identifier, 
 so only campaigns with matching identifier will get shown</code></pre>
-<h2 id='how_should_i_name_branches'>How should I name branches?</h2>
+<h2 id="how_should_i_name_branches">How should I name branches?</h2>
 
-<p>Branch names is not something that you should focus on. Unlike commit messages, branches are removed from history after merge. That is why you should name them in a way that takes less of your time. I personally prefer to have only one branch for myself called <code>bogdandev</code> when I work on a project. When the feature is not done - there is no sense to work on another feature.</p>-->
+<p>Branch names is not something that you should focus on. Unlike commit messages, branches are removed from history after merge. That is why you should name them in a way that takes less of your time. I personally prefer to have only one branch for myself called <code>bogdandev</code> when I work on a project. When the feature is not done - there is no sense to work on another feature.</p>
+-->
         <h4 class="tags">
     
     <a href="/tags/git.html">git</a>
@@ -203,7 +297,9 @@ so only campaigns with matching identifier will get shown</code></pre>
             <a href='/2013/04/background-jobs-frameworkds-delayed-job-resque-slides'>Background Jobs Frameworks: Resque vs DelayedJob</a>
             <div class="date">08 Apr 2013</div>
         </h2>
-        <p>Here are my slides from Ruby Meditation meet-up in Kiev last weekend. Covers some internals and some features of DelayedJob and Resque. <a href='http://x.gusiev.com/background-jobs-frameworks'>http://x.gusiev.com/background-jobs-frameworks</a> <!--</p>-->
+        
+<p>Here are my slides from Ruby Meditation meet-up in Kiev last weekend. Covers some internals and some features of DelayedJob and Resque. <a href="http://x.gusiev.com/background-jobs-frameworks">http://x.gusiev.com/background-jobs-frameworks</a> <!--</p>
+-->
         <h4 class="tags">
     
     <a href="/tags/resque.html">resque</a>
@@ -224,19 +320,23 @@ so only campaigns with matching identifier will get shown</code></pre>
             <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
             <div class="date">15 Feb 2013</div>
         </h2>
-        <p>Last year I had a lot of changes in my career: I had to switch jobs twice while planning to do it only once. Most of the projects I was working on before was about building time wasting features to raise more money for more time wasting features. I wanted to find the right project for myself: A project that brings something good to people. Ruby is extremely good for startups, but easy investments is a decease for most of them in Ukraine. In September I met Allan Grant, CEO of Curebit. Curebit has a great team of sales and marketing people but was lacking great engineers. Allan was the first business guy in my life that was more focused on building product than raising money &#8212; build features endless cycle. So we started to work together.</p>
-<!--<img src='https://d2vzmlm7xciaqk.cloudfront.net/asset-vb3f26d3/images/curebit-logo-transparent.png' style='margin: 5px auto; display: block;height: 50px' />
-<p>Curebit is a San Francisco-based startup that recently opened an office in Kiev, and I&#8217;d like to invite you to interview with us.</p>
+        
+<p>Allan was the first business guy in my life that was more focused on building product than raising money — build features endless cycle. So we started to work together.</p>
+<!--
+<p><img src='https://d2vzmlm7xciaqk.cloudfront.net/asset-vb3f26d3/images/curebit-logo-transparent.png' style='margin: 5px auto; display: block;height: 50px' /></p>
 
-<p>Allan is also a Rails developer (<a href='http://github.com/allangrant'>http://github.com/allangrant</a>) of Ukrainian origin. Our company, Curebit, raised <a href='http://www.crunchbase.com/company/curebit'>$1.2 million</a> from great investors like YCombinator (the creators of Hacker News) and 500Startups. The company is small (10 people) but profitable, and growing. We are a product company working on interesting architectural challenges and we are making the best product in our market (referral systems for e-commerce companies). We are now moving fast from being a good product to being a good platform. This fact give us really advanced challenges to fight with.</p>
+<p>Curebit is a San Francisco-based startup that recently opened an office in Kiev, and I’d like to invite you to interview with us.</p>
+
+<p>Allan is also a Rails developer (<a href="http://github.com/allangrant">http://github.com/allangrant</a>) of Ukrainian origin. Our company, Curebit, raised <a href="http://www.crunchbase.com/company/curebit">$1.2 million</a> from great investors like YCombinator (the creators of Hacker News) and 500Startups. The company is small (10 people) but profitable, and growing. We are a product company working on interesting architectural challenges and we are making the best product in our market (referral systems for e-commerce companies). We are now moving fast from being a good product to being a good platform. This fact give us really advanced challenges to fight with.</p>
 
 <p>The team in Ukraine is only 6 people right now, but everyone is AMAZING and we want to get the best developers on-board. I am leading the engineering team, and Sergii Iurevych (OOCSS expert) leads design &amp; front-end development. We pay everyone generously a San Francisco level salary because we know that our country has engineers that are worth it.</p>
 
-<p>Most importantly (this is hard to explain in blog post), we have unique values that make Curebit a great place to work. We prefer to cut features/move deadlines instead of giving up code quality/polish. We don&#8217;t keep track of vacation days, because everyone we work with loves their work. We&#8217;re building a company to create value in the world, not just for profit. We have a culture, and we don&#8217;t write it down or talk about &#8212; we just live it.</p>
+<p>Most importantly (this is hard to explain in blog post), we have unique values that make Curebit a great place to work. We prefer to cut features/move deadlines instead of giving up code quality/polish. We don’t keep track of vacation days, because everyone we work with loves their work. We’re building a company to create value in the world, not just for profit. We have a culture, and we don’t write it down or talk about — we just live it.</p>
 
-<p>We would love to meet you, even if you are not looking for a job right now. Please shoot us email to <a href='mailto:bogdan@curebit.com'>bogdan@curebit.com</a></p>
+<p>We would love to meet you, even if you are not looking for a job right now. Please shoot us email to <a href="mailto:bogdan@curebit.com">bogdan@curebit.com</a></p>
 
-<p>If you want to see our product, check out the site at <a href='http://curebit.com'>http://curebit.com</a> (feel free to create fake account), or play with this demo account: <a href='http://curebit.com/demo'>http://curebit.com/demo</a> (it&#8217;s an old demo that doesn&#8217;t show much).</p>-->
+<p>If you want to see our product, check out the site at <a href="http://curebit.com">http://curebit.com</a> (feel free to create fake account), or play with this demo account: <a href="http://curebit.com/demo">http://curebit.com/demo</a> (it’s an old demo that doesn’t show much).</p>
+-->
         <h4 class="tags">
     
     <a href="/tags/job.html">job</a>
@@ -259,7 +359,8 @@ so only campaigns with matching identifier will get shown</code></pre>
             <a href='/2012/12/rails-contribution-slides-from-ruby-meetup'>Rails Contribution slides from ruby meetup in Kiev</a>
             <div class="date">11 Dec 2012</div>
         </h2>
-        <p>Here are slides I&#8217;ve shown on ruby meetup in Kiev. It&#8217;s all about my expirience with <a href='http://gusiev.com/slides/rails_contribution/static/#1'>power hacking rails internals</a>. Give some inside on how ActiveSupport Callbacks and Rails Router are working.</p>
+        
+<p>Here are slides I’ve shown on ruby meetup in Kiev. It’s all about my expirience with <a href="http://gusiev.com/slides/rails_contribution/static/#1">power hacking rails internals</a>. Give some inside on how ActiveSupport Callbacks and Rails Router are working.</p>
 <!---->
         <h4 class="tags">
     
@@ -281,7 +382,8 @@ so only campaigns with matching identifier will get shown</code></pre>
             <a href='/2012/10/crazy-javascript-initialization-strategy'>Smart Javascript Initialization Strategy</a>
             <div class="date">08 Oct 2012</div>
         </h2>
-        <p>JavaScript initialization process is a pain in the ass since dynamic HTML and AJAX became popular. We need to take care all the time about what we need to initialize after every change in DOM. Thanks to <code>jQuery#live</code> and <code>jQuery#on</code> that is not so right but still very effective solution. It allows to fix the problem with initialization of typical events. But initialization is not always about binding DOM events. In more advanced cases it could be wrapping widget class over an element or custom jQuery method call like date-picker.</p>
+        
+<p>JavaScript initialization process is a pain in the ass since dynamic HTML and AJAX became popular. We need to take care all the time about what we need to initialize after every change in DOM. Thanks to <code>jQuery#live</code> and <code>jQuery#on</code> that is not so right but still very effective solution. It allows to fix the problem with initialization of typical events. But initialization is not always about binding DOM events. In more advanced cases it could be wrapping widget class over an element or custom jQuery method call like date-picker.</p>
 <!--
 <p>Here is an example:</p>
 <div class='highlight'><pre><code class='js'><span class='c1'>// This line will be required not only on `$(docuemnt).ready` </span>
@@ -309,9 +411,9 @@ so only campaigns with matching identifier will get shown</code></pre>
 <span class='p'>});</span>
 </code></pre>
 </div>
-<h3 id='tired_to_handle_things_like_this'>Tired to handle things like this?</h3>
+<h3 id="tired_to_handle_things_like_this">Tired to handle things like this?</h3>
 
-<h2 id='change_the_way_of_thinking_about_initialization'>Change the way of thinking about initialization</h2>
+<h2 id="change_the_way_of_thinking_about_initialization">Change the way of thinking about initialization</h2>
 
 <p>Initialization code is a bridge where between actual JS class and DOM element. In 99% of cases it has one to one or one to many relation. Than, why do we always need that intermediate initialization code?</p>
 
@@ -346,9 +448,10 @@ so only campaigns with matching identifier will get shown</code></pre>
 <div class='highlight'><pre><code class='html'><span class='nt'>&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;text&quot;</span> <span class='na'>name=</span><span class='s'>&quot;profile[birth_date]&quot;</span> <span class='na'>data-class=</span><span class='s'>&quot;DatePicker&quot;</span><span class='nt'>&gt;</span>
 </code></pre>
 </div>
-<h2 id='conclusion'>Conclusion</h2>
+<h2 id="conclusion">Conclusion</h2>
 
-<p>JavaScript coding is annoying for most people that came from other languages because it keeps fragmented things that should be bound together. In order to avoid this problem we need to invent conventions to follow, so that every person in a team understand that. But the cost of convention described here is not that much and makes code move clean and easy to follow.</p>-->
+<p>JavaScript coding is annoying for most people that came from other languages because it keeps fragmented things that should be bound together. In order to avoid this problem we need to invent conventions to follow, so that every person in a team understand that. But the cost of convention described here is not that much and makes code move clean and easy to follow.</p>
+-->
         <h4 class="tags">
     
     <a href="/tags/javascript.html">javascript</a>
@@ -369,7 +472,8 @@ so only campaigns with matching identifier will get shown</code></pre>
             <a href='/2012/09/rails-strict-validation-popularity'>Strict validation is a main stream</a>
             <div class="date">17 Sep 2012</div>
         </h2>
-        <p>It&#8217;s nice to see that <a href='/2012/01/rails-32-features-changelog/#strict_validation_concept'>strict validation feature</a> that I&#8217;ve <a href='https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2'>done almost a year ago</a> is <a href='http://robots.thoughtbot.com/post/31728620503/refactoring-replace-conditional-with-polymorphism'>finally getting popular</a>. Spend a moment and understand what it does by <a href='http://api.rubyonrails.org/classes/ActiveModel/Validations/ClassMethods.html#method-i-validates-21'>Rails documentation</a>.</p>
+        
+<p>It’s nice to see that <a href="/2012/01/rails-32-features-changelog/#strict_validation_concept">strict validation feature</a> that I’ve <a href="https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2">done almost a year ago</a> is <a href="http://robots.thoughtbot.com/post/31728620503/refactoring-replace-conditional-with-polymorphism">finally getting popular</a>. Spend a moment and understand what it does by <a href="http://api.rubyonrails.org/classes/ActiveModel/Validations/ClassMethods.html#method-i-validates-21">Rails documentation</a>.</p>
 <!---->
         <h4 class="tags">
     
@@ -391,15 +495,16 @@ so only campaigns with matching identifier will get shown</code></pre>
             <a href='/2012/08/postgresql-full-text-search-solr'>Full text search - Solr(Sunspot) vs PostgreSQL</a>
             <div class="date">16 Aug 2012</div>
         </h2>
-        <p>This is short notes about my experience with full text search based on PostgreSQL and Solr. Solr was primary used with a help of <a href='https://github.com/sunspot/sunspot'>Sunspot gem</a> that was definitely a good idea, but unfortunately caused some drawbacks. PostgreSQL provides full text search out of the box and to my opinion doesn&#8217;t need any additional ruby specific tools other than ORM. <!--</p>
+        
+<p>This is short notes about my experience with full text search based on PostgreSQL and Solr. Solr was primary used with a help of <a href="https://github.com/sunspot/sunspot">Sunspot gem</a> that was definitely a good idea, but unfortunately caused some drawbacks. PostgreSQL provides full text search out of the box and to my opinion doesn’t need any additional ruby specific tools other than ORM. <!--</p>
 
-<h2 id='tldr'>TL;DR</h2>
+<h2 id="tldr">TL;DR</h2>
 
 <p>PostgreSQL approach is simple and fit well to agile project. Solr is pretty powerful, but you need to pay for that power. And this is significant cost. Think twice if you really need this power from the first day of full text search in your project.</p>
 
-<h2 id='search_index'>Search index</h2>
+<h2 id="search_index">Search index</h2>
 
-<p>Solr search index is something you create almost manually by defining a new data schema. Sunspot sets <code>after_save</code> hooks to your model to update it&#8217;s solr index.</p>
+<p>Solr search index is something you create almost manually by defining a new data schema. Sunspot sets <code>after_save</code> hooks to your model to update it’s solr index.</p>
 
 <p>Here is an example of schema definition based on Sunspot gem:</p>
 <div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Product</span> <span class='o'>&lt;</span> <span class='no'>ActiveRecord</span><span class='o'>::</span><span class='no'>Base</span>
@@ -427,14 +532,14 @@ so only campaigns with matching identifier will get shown</code></pre>
 <span class='k'>end</span>
 </code></pre>
 </div>
-<p>And don&#8217;t forget about database index:</p>
+<p>And don’t forget about database index:</p>
 <div class='highlight'><pre><code class='sql'><span class='k'>CREATE</span> <span class='k'>INDEX</span> <span class='n'>source_idx</span> <span class='k'>ON</span> <span class='n'>products</span> <span class='k'>USING</span> <span class='n'>gin</span><span class='p'>(</span><span class='n'>to_tsvector</span><span class='p'>(</span><span class='s1'>&#39;english&#39;</span><span class='p'>,</span> <span class='n'>searchable_content</span><span class='p'>));</span> 
 </code></pre>
 </div>
 <p>While this is very basic use case, it shows up the direction where your code will go in each variant.</p>
 
 <ul>
-<li>Advanced high level DSL with a lot of &#8220;unknown unknowns&#8221; in Solr case</li>
+<li>Advanced high level DSL with a lot of “unknown unknowns” in Solr case</li>
 
 <li>Just ruby code that everyone would understand from the first look in case of Postgres</li>
 </ul>
@@ -458,7 +563,7 @@ so only campaigns with matching identifier will get shown</code></pre>
 <span class='k'>end</span>
 </code></pre>
 </div>
-<p>At first look you might say that Solr way is more clear, but you still don&#8217;t know what it does in deep details. Sunspot gives DSL is yet another language to query data. It includes all types of operations (e.g. <a href='https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields'>comparison operators</a>, while postgres lets use SQL - language you should know already.</p>
+<p>At first look you might say that Solr way is more clear, but you still don’t know what it does in deep details. Sunspot gives DSL is yet another language to query data. It includes all types of operations (e.g. <a href="https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields">comparison operators</a>, while postgres lets use SQL - language you should know already.</p>
 
 <p>There is also easy to spot that Solr and Sunspot tool chain brings more features to you out of the box. But this is where Solr advantages ends. Note stat Solr config file is not as readable as Sunspot DSL. Here is a short example that tells Solr to do some string transformation before create a search index:</p>
 <div class='highlight'><pre><code class='xml'><span class='nt'>&lt;fieldType</span> <span class='na'>name=</span><span class='s'>&quot;text&quot;</span> <span class='na'>class=</span><span class='s'>&quot;solr.TextField&quot;</span> <span class='na'>omitNorms=</span><span class='s'>&quot;false&quot;</span><span class='nt'>&gt;</span>
@@ -476,7 +581,7 @@ so only campaigns with matching identifier will get shown</code></pre>
 </div>
 <p>When you go deeper into solr you might need to deal with configs like example above. While in case of PostgreSQL you can do any string transformation using ruby.</p>
 
-<h2 id='deployment_and_testing'>Deployment and Testing</h2>
+<h2 id="deployment_and_testing">Deployment and Testing</h2>
 
 <p>Solr is a standalone application and you need to take care about Solr configuration. It is a part of a code since some search business logic depends on it. This might require:</p>
 
@@ -490,9 +595,9 @@ so only campaigns with matching identifier will get shown</code></pre>
 <li>a need to rebuild search index when you switch branches</li>
 </ul>
 
-<p>Postgres built in search doesn&#8217;t have these problems at all. This will give a significant performance boost in agile process. Deployment, testing and switching branches doesn&#8217;t require any full text search specific action.</p>
+<p>Postgres built in search doesn’t have these problems at all. This will give a significant performance boost in agile process. Deployment, testing and switching branches doesn’t require any full text search specific action.</p>
 
-<h2 id='reindex_process'>Reindex process</h2>
+<h2 id="reindex_process">Reindex process</h2>
 
 <p>Reindex complexity comes from several factors.</p>
 
@@ -500,9 +605,10 @@ so only campaigns with matching identifier will get shown</code></pre>
 
 <p>But in case of Solr this is not the only one thing to care. With database size growth you gain more problems. Solr index do not have that nice migration mechanism and dump transfer tools as Relational databases. No matter which gem you will use to connect Solr and Relational database: you need to take care when search index schema changes.</p>
 
-<h2 id='conclusion'>Conclusion</h2>
+<h2 id="conclusion">Conclusion</h2>
 
-<p>Conceptually I would like my database to respond for every data search operation e.g. full text search. This is where PostgreSQL is going. But this feature is not that strong now e.g. it still lacks spell checking and result highlight features. Solr is old school tool having all full text search features you ever imagine, but it&#8217;s heavy configuration file and technology stack should be easier.</p>-->
+<p>Conceptually I would like my database to respond for every data search operation e.g. full text search. This is where PostgreSQL is going. But this feature is not that strong now e.g. it still lacks spell checking and result highlight features. Solr is old school tool having all full text search features you ever imagine, but it’s heavy configuration file and technology stack should be easier.</p>
+-->
         <h4 class="tags">
     
     <a href="/tags/solr.html">solr</a>
@@ -514,54 +620,6 @@ so only campaigns with matching identifier will get shown</code></pre>
     <a href="/tags/fulltext.html">fulltext</a>
     
     <a href="/tags/search.html">search</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
-    <div class="post">
-        <h2>
-            <a href='/2012/06/javascript-ajax-debug-popup-response'>How many clicks do you need to debug ajax request?</a>
-            <div class="date">16 Jun 2012</div>
-        </h2>
-        <p>Here I am gonna use Chrome browser as an example:</p>
-
-<ol>
-<li>Open context menu</li>
-
-<li>Click inspect element.</li>
-
-<li>Click &#8220;Network&#8221; tab</li>
-
-<li>Spawn again an ajax request (at least one click. Sometimes more)</li>
-
-<li>Click on failed request at Network tab</li>
-
-<li>Click &#8220;Preview&#8221; or &#8220;Response&#8221; subtab</li>
-</ol>
-<!--<a href='http://i.imm.io/skBN.png'>
-  <img src='http://i.imm.io/skBN.png' width='400px' />
-</a>
-<h3 id='this_should_change'>THIS SHOULD CHANGE</h3>
-
-<p>Why we can not automate this daily routine work?</p>
-
-<p>With <a href='https://github.com/bogdan/jquery-ajax-debug'>this tiny script</a> you don&#8217;t need any: Error response will be displayed in Popup at once after it occur.</p>
-<a href='http://i.imm.io/skDh.png'>
-  <img src='http://i.imm.io/skDh.png' width='400px' />
-</a>-->
-        <h4 class="tags">
-    
-    <a href="/tags/javascript.html">javascript</a>
-    
-    <a href="/tags/debug.html">debug</a>
-    
-    <a href="/tags/ajax.html">ajax</a>
-    
-    <a href="/tags/efficiency.html">efficiency</a>
     
     
 </h4>
@@ -596,6 +654,10 @@ so only campaigns with matching identifier will get shown</code></pre>
                         <ul>
                             
                             <li>
+                                <a href='/2014/04/state-machine-minemalistic-validation-perfection-changes'>Minimalistic State Machine: Less is More</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
                             </li>
                             
@@ -609,10 +671,6 @@ so only campaigns with matching identifier will get shown</code></pre>
                             
                             <li>
                                 <a href='/2013/04/background-jobs-frameworkds-delayed-job-resque-slides'>Background Jobs Frameworks: Resque vs DelayedJob</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
                             </li>
                             
                         </ul>
@@ -664,7 +722,7 @@ so only campaigns with matching identifier will get shown</code></pre>
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 24.8px; line-height:24.8px" rel="tag">contribution</a> 
-<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 26.6px; line-height:26.6px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 19.4px; line-height:19.4px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
@@ -682,7 +740,7 @@ so only campaigns with matching identifier will get shown</code></pre>
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 37.400000000000006px; line-height:37.400000000000006px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 39.2px; line-height:39.2px" rel="tag">rails</a> 
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
@@ -692,7 +750,7 @@ so only campaigns with matching identifier will get shown</code></pre>
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
-<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 21.2px; line-height:21.2px" rel="tag">validation</a> 
+<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 23.0px; line-height:23.0px" rel="tag">validation</a> 
 <a href="/tags/vim.html" title="Pages tagged vim" style="font-size: 17.6px; line-height:17.6px" rel="tag">vim</a> 
 
                     </div>

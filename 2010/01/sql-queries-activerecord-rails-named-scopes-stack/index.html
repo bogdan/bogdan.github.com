@@ -11,6 +11,8 @@
       Bogdan's blog
     </title>
     <meta name="robots" content="follow, all" />
+    <meta charset="utf-8"> 
+    
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
     <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, report, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
@@ -79,7 +81,10 @@
         <a href="/2010/01/sql-queries-activerecord-rails-named-scopes-stack">Advanced SQL and scopes stack with ActiveRecord</a>
         <div class="date">24 Jan 2010</div>
     </h2>
-    <p>If you ever work with rails application that is a little bit more complex than a simple CRUD you would know that some of the ActiveRecord magic doesn&#8217;t work for complex SQL queries. I am primary talking about scopes stack feature.<br /> <!--more--> <hr /> Let&#8217;s review the following scope that suppose to be usable in different combinations with others:</p>
+    
+<p>If you ever work with rails application that is a little bit more complex than a simple CRUD you would know that some of the ActiveRecord magic doesn’t work for complex SQL queries. I am primary talking about scopes stack feature.<br /> <!--more--></p>
+<hr />
+<p> Let’s review the following scope that suppose to be usable in different combinations with others:</p>
 <div class='highlight'><pre><code class='ruby'><span class='n'>scope</span> <span class='ss'>:network_of</span><span class='p'>,</span> <span class='nb'>lambda</span> <span class='p'>{</span><span class='o'>|</span><span class='n'>user</span><span class='o'>|</span>
 <span class='p'>{</span>
 <span class='ss'>:select</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;u.*&quot;</span>
@@ -90,7 +95,7 @@
 <span class='p'>}</span>
 </code></pre>
 </div>
-<p>It suppose to returns all people that are followed by people that are followed by the given person(second circle). From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL. But this solution will have some issues with Active Record scopes stack magic. See that <code>User.network_for(current_user).all(:limit =&gt;5)</code> will result in SQL exception primary because <code>:limit =&gt; 5</code> doesn&#8217;t know about the table alias <code>users u</code>. We can not use it in fact.<br /> The second problem comes to the foreground when we will try to use ActiveRecord features like <code>User.network_for(current_user).all(:include =&gt; :orders)</code>. ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.<br /> The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make &#8220;users&#8221; table to be the last one declared in :from parameter.</p>
+<p>It suppose to returns all people that are followed by people that are followed by the given person(second circle). From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL. But this solution will have some issues with Active Record scopes stack magic. See that <code>User.network_for(current_user).all(:limit =&gt;5)</code> will result in SQL exception primary because <code>:limit =&gt; 5</code> doesn’t know about the table alias <code>users u</code>. We can not use it in fact.<br /> The second problem comes to the foreground when we will try to use ActiveRecord features like <code>User.network_for(current_user).all(:include =&gt; :orders)</code>. ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.<br /> The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make “users” table to be the last one declared in :from parameter.</p>
 <div class='highlight'><pre><code class='ruby'><span class='ss'>:select</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;users.*&quot;</span>
 <span class='ss'>:from</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;followings f1, followings f2, users&quot;</span><span class='p'>,</span>
 <span class='ss'>:conditions</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;f1.follower_id = </span><span class='si'>#{</span><span class='n'>user</span><span class='o'>.</span><span class='n'>id</span><span class='si'>}</span><span class='s2'> AND &quot;</span> <span class='o'>+</span> 
@@ -99,6 +104,7 @@
 </code></pre>
 </div>
 <p>Summary I would say that using <code>:joins</code> instead of <code>:from/:conditions</code> would give more flexibility and stackability to your scopes but sometimes <code>:from</code> is more clear and here you got the tip how to use it.</p>
+
     <div class="clear"></div>
     <div class="left">
       <table class="post-social-share">
@@ -189,6 +195,10 @@
                         <ul>
                             
                             <li>
+                                <a href='/2014/04/state-machine-minemalistic-validation-perfection-changes'>Minimalistic State Machine: Less is More</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
                             </li>
                             
@@ -202,10 +212,6 @@
                             
                             <li>
                                 <a href='/2013/04/background-jobs-frameworkds-delayed-job-resque-slides'>Background Jobs Frameworks: Resque vs DelayedJob</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
                             </li>
                             
                         </ul>
@@ -257,7 +263,7 @@
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 24.8px; line-height:24.8px" rel="tag">contribution</a> 
-<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 26.6px; line-height:26.6px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 19.4px; line-height:19.4px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
@@ -275,7 +281,7 @@
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 37.400000000000006px; line-height:37.400000000000006px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 39.2px; line-height:39.2px" rel="tag">rails</a> 
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
@@ -285,7 +291,7 @@
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
-<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 21.2px; line-height:21.2px" rel="tag">validation</a> 
+<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 23.0px; line-height:23.0px" rel="tag">validation</a> 
 <a href="/tags/vim.html" title="Pages tagged vim" style="font-size: 17.6px; line-height:17.6px" rel="tag">vim</a> 
 
                     </div>

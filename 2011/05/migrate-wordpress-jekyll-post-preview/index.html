@@ -11,6 +11,8 @@
       Bogdan's blog
     </title>
     <meta name="robots" content="follow, all" />
+    <meta charset="utf-8"> 
+    
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
     <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, report, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
@@ -79,7 +81,8 @@
         <a href="/2011/05/migrate-wordpress-jekyll-post-preview">Finally get rid of WordPress and PHP</a>
         <div class="date">20 May 2011</div>
     </h2>
-    <p>After a few tries migrate to blog engine with programming language I know well, I finally found <a href='http://github.com/mojombo/jekyll'>jekyll</a> - lightweight static site generator. My main concerns in this choice was:</p>
+    
+<p>After a few tries migrate to blog engine with programming language I know well, I finally found <a href="http://github.com/mojombo/jekyll">jekyll</a> - lightweight static site generator. My main concerns in this choice was:</p>
 
 <ul>
 <li>Edit posts in my favorite text editor with favorite markup</li>
@@ -89,31 +92,32 @@
 <li>Syntax highlight out of the box</li>
 </ul>
 <!--more-->
-<h3 id='migration_from_wordpress'>Migration from WordPress</h3>
+<h3 id="migration_from_wordpress">Migration from WordPress</h3>
 
 <p>Three main migration points was:</p>
 
 <ul>
-<li>Posts that was migrated with <a href='http://google.com/search?q=wordpress%20jekyll%20migrate'>several lines of ruby code</a></li>
+<li>Posts that was migrated with <a href="http://google.com/search?q=wordpress%20jekyll%20migrate">several lines of ruby code</a></li>
 
-<li>Comments that imported to <a href='http://wordpress.org/extend/plugins/disqus-comment-system/'>disqus</a> as jekyll is static site engine so the comments should be hosted somewhere else</li>
+<li>Comments that imported to <a href="http://wordpress.org/extend/plugins/disqus-comment-system/">disqus</a> as jekyll is static site engine so the comments should be hosted somewhere else</li>
 
-<li>Generate <a href='http://www.google.com.ua/search?sourceid=chrome&amp;client=ubuntu&amp;channel=cs&amp;ie=UTF-8&amp;q=jekyll+tag+cloud'>tag cloud and posts by tag pages</a> that also have a lot of workarounds in the web</li>
+<li>Generate <a href="http://www.google.com.ua/search?sourceid=chrome&client=ubuntu&channel=cs&ie=UTF-8&q=jekyll+tag+cloud">tag cloud and posts by tag pages</a> that also have a lot of workarounds in the web</li>
 </ul>
 
-<p>One problem I am currently have is &#8220;post preview&#8221; feature that is currently unsupported in jekyll. My current approach for this looks like this:</p>
+<p>One problem I am currently have is “post preview” feature that is currently unsupported in jekyll. My current approach for this looks like this:</p>
 
 <pre><code>post.content | replace_first:&#39;&lt;!--more--&gt;&#39;,&#39;&lt;!--&#39; | append:&#39;--&gt;&#39; </code></pre>
 
-<h3 id='problems'>Problems</h3>
+<h3 id="problems">Problems</h3>
 
-<p>Jekyll looks not very extensible. Some methods are not available in the API. Example: integrate SASS require more pain the ass than it should be. I am planning to fix that in a few days. Another problem I ran into is that github native support don&#8217;t allow you any extension. My suggestion is to generate static content locally with your own code on top of jekyll and upload static content to git repository.</p>
+<p>Jekyll looks not very extensible. Some methods are not available in the API. Example: integrate SASS require more pain the ass than it should be. I am planning to fix that in a few days. Another problem I ran into is that github native support don’t allow you any extension. My suggestion is to generate static content locally with your own code on top of jekyll and upload static content to git repository.</p>
 
-<p>Currently I build site locally from <a href='http://github.com/bogdan/blog'>source code</a> and push static content into <a href='http://github.com/bogdan/bogdan.github.com'>separated repository</a>.</p>
+<p>Currently I build site locally from <a href="http://github.com/bogdan/blog">source code</a> and push static content into <a href="http://github.com/bogdan/bogdan.github.com">separated repository</a>.</p>
 
-<h3 id='result'>Result</h3>
+<h3 id="result">Result</h3>
 
 <p>About 12 hours of work to transfer 30 posts and their comments. Reworked site design to be more clean.</p>
+
     <div class="clear"></div>
     <div class="left">
       <table class="post-social-share">
@@ -204,6 +208,10 @@
                         <ul>
                             
                             <li>
+                                <a href='/2014/04/state-machine-minemalistic-validation-perfection-changes'>Minimalistic State Machine: Less is More</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
                             </li>
                             
@@ -217,10 +225,6 @@
                             
                             <li>
                                 <a href='/2013/04/background-jobs-frameworkds-delayed-job-resque-slides'>Background Jobs Frameworks: Resque vs DelayedJob</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
                             </li>
                             
                         </ul>
@@ -272,7 +276,7 @@
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 24.8px; line-height:24.8px" rel="tag">contribution</a> 
-<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 26.6px; line-height:26.6px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 19.4px; line-height:19.4px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
@@ -290,7 +294,7 @@
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 37.400000000000006px; line-height:37.400000000000006px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 39.2px; line-height:39.2px" rel="tag">rails</a> 
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
@@ -300,7 +304,7 @@
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
-<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 21.2px; line-height:21.2px" rel="tag">validation</a> 
+<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 23.0px; line-height:23.0px" rel="tag">validation</a> 
 <a href="/tags/vim.html" title="Pages tagged vim" style="font-size: 17.6px; line-height:17.6px" rel="tag">vim</a> 
 
                     </div>

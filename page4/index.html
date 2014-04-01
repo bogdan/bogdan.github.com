@@ -9,6 +9,8 @@
       Bogdan's blog
     </title>
     <meta name="robots" content="follow, all" />
+    <meta charset="utf-8"> 
+    
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
     <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, report, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
@@ -73,6 +75,101 @@
 
                 <div id="content">
                     
+    <div class="post">
+        <h2>
+            <a href='/2010/07/bdd-rspec-matcher-to-test-named_scope-scoped-rails-3'>Ultimate rspec matcher to test named_scope or scoped</a>
+            <div class="date">11 Jul 2010</div>
+        </h2>
+        After having a good practice on using <a href="http://gusiev.com/2010/06/ultimate-rspec-matcher-to-test-validation/">Ultimate rspec matcher to test validation</a> I think it's time to implement one for testing named scopes - custom finders. Testing these finders is daily task. Here is how it can be done with minimum amount of code and maximum readability.
+<!--
+<h3>Discovery <del>(Animal Planet)</del></h3>
+
+What do we expect from the custom finder?
+We expect that it should find assets A, B, C and should not find assets D, E, F.
+And sometimes the order is important: it should find A, B C with exact order.
+
+With respect to <em>let</em> rspec feature let's take an example: Product has and belongs to many categories. We need to have a scope to filter products within the specified category:
+
+<pre><code>describe "#by_category_id" do
+      let(:given_category) do 
+        Factory.create(:given_category)
+      end
+ 
+
+      let(:product_in_given_category) do
+        Factory.create(
+          :product,
+          :categories => [category]
+        )
+      end
+
+      let(:product_not_in_given_category) do
+        Factory.create(
+          :product,
+          :categories => [Factory.create(:category)]
+        )
+      end
+
+      # This might be tricky to redefine subject as the finder result
+      # but in this way we can delegate the matcher to subject and 
+      # avoid writing test descriptions.
+      subject { Product.by_category_id(given_category.id) }
+
+      it { should discover(product_in_given_category) }
+      it { should_not discover(product_not_in_given_category) }
+
+    end
+</code></pre> 
+
+Factory girl was used in this example because factories kickass when we test finders. As you can see the example has a perfect readability with no one line of plain English text. I didn't include the description in my examples but you can easily make them if they make sense for you.<br/>
+Note: Be aware of the lazy loading of your finder. <em>let</em> is initialized lazy too. You should make sure it is called before the actual query to the database.
+If you don't want to care about lazy loading their is <em>let!</em> method that could be easily copy-pasted from Rspec 2.0. Unlike <em>let</em> it doesn't have lazy initialization:
+<pre><code>def let!(name, &block)
+  let(name, &block)
+  before { __send__(name) } 
+end
+</code></pre>
+
+<h3>Testing sort order</h3>
+
+If the ordering is done in non-trivial way let's <em>discover.with_exact_order</em>. 
+<pre><code>describe "#most_commented named scope" do
+  let(:uncommented_post) { Factory.create(:post)}
+  let!(:less_commented_post) { Factory.create(:post, :comments => [Factory.build(:comment)])}
+  let!(:more_commented_post) { 
+    Factory.create(:post, :comments => [Factory.build(:comment), Factory.build(:comment)])}
+  }
+
+  subject { described_class.most_commented }
+ it {should discover(more_commented_post, less_commented_post).with_exact_order }
+ it {should_not discover(uncommented_post) }
+end</code></pre>
+
+Be careful with default order. MySQL and Postgres sort objects as they were created by default.
+That is why generate objects in reverse order e.g. <em>less_commented_post</em> before <em>more_commented_post</em> is important to make sure that ordering is your code behavior rather than default db behavior.
+ 
+<h3> Summary </h3>
+I 've add this matcher to the <a href="http://gusiev.com/2010/06/ultimate-rspec-matcher-to-test-validation/">previous one</a>. Both matchers are available here <a href="http://github.com/bogdan/accept_values_for">accept_values_for</a>. Let's start thinking of what else we can do.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/bdd.html">bdd</a>
+    
+    <a href="/tags/rspec.html">rspec</a>
+    
+    <a href="/tags/activerecord.html">activerecord</a>
+    
+    <a href="/tags/named_scope.html">named_scope</a>
+    
+    <a href="/tags/matcher.html">matcher</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
     <div class="post">
         <h2>
             <a href='/2010/06/ultimate-rspec-matcher-to-test-validation'>Ultimate rspec matcher to test validation</a>
@@ -462,7 +559,10 @@ Unfortunately most of the companies are ignoring that simple rule and unfortunat
             <a href='/2010/01/sql-queries-activerecord-rails-named-scopes-stack'>Advanced SQL and scopes stack with ActiveRecord</a>
             <div class="date">24 Jan 2010</div>
         </h2>
-        <p>If you ever work with rails application that is a little bit more complex than a simple CRUD you would know that some of the ActiveRecord magic doesn&#8217;t work for complex SQL queries. I am primary talking about scopes stack feature.<br /> <!-- <hr /> Let&#8217;s review the following scope that suppose to be usable in different combinations with others:</p>
+        
+<p>If you ever work with rails application that is a little bit more complex than a simple CRUD you would know that some of the ActiveRecord magic doesn’t work for complex SQL queries. I am primary talking about scopes stack feature.<br /> <!--</p>
+<hr />
+<p> Let’s review the following scope that suppose to be usable in different combinations with others:</p>
 <div class='highlight'><pre><code class='ruby'><span class='n'>scope</span> <span class='ss'>:network_of</span><span class='p'>,</span> <span class='nb'>lambda</span> <span class='p'>{</span><span class='o'>|</span><span class='n'>user</span><span class='o'>|</span>
 <span class='p'>{</span>
 <span class='ss'>:select</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;u.*&quot;</span>
@@ -473,7 +573,7 @@ Unfortunately most of the companies are ignoring that simple rule and unfortunat
 <span class='p'>}</span>
 </code></pre>
 </div>
-<p>It suppose to returns all people that are followed by people that are followed by the given person(second circle). From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL. But this solution will have some issues with Active Record scopes stack magic. See that <code>User.network_for(current_user).all(:limit =&gt;5)</code> will result in SQL exception primary because <code>:limit =&gt; 5</code> doesn&#8217;t know about the table alias <code>users u</code>. We can not use it in fact.<br /> The second problem comes to the foreground when we will try to use ActiveRecord features like <code>User.network_for(current_user).all(:include =&gt; :orders)</code>. ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.<br /> The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make &#8220;users&#8221; table to be the last one declared in :from parameter.</p>
+<p>It suppose to returns all people that are followed by people that are followed by the given person(second circle). From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL. But this solution will have some issues with Active Record scopes stack magic. See that <code>User.network_for(current_user).all(:limit =&gt;5)</code> will result in SQL exception primary because <code>:limit =&gt; 5</code> doesn’t know about the table alias <code>users u</code>. We can not use it in fact.<br /> The second problem comes to the foreground when we will try to use ActiveRecord features like <code>User.network_for(current_user).all(:include =&gt; :orders)</code>. ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.<br /> The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make “users” table to be the last one declared in :from parameter.</p>
 <div class='highlight'><pre><code class='ruby'><span class='ss'>:select</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;users.*&quot;</span>
 <span class='ss'>:from</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;followings f1, followings f2, users&quot;</span><span class='p'>,</span>
 <span class='ss'>:conditions</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;f1.follower_id = </span><span class='si'>#{</span><span class='n'>user</span><span class='o'>.</span><span class='n'>id</span><span class='si'>}</span><span class='s2'> AND &quot;</span> <span class='o'>+</span> 
@@ -481,7 +581,8 @@ Unfortunately most of the companies are ignoring that simple rule and unfortunat
 <span class='s2'>&quot;f2.followed_id = users.id&quot;</span>
 </code></pre>
 </div>
-<p>Summary I would say that using <code>:joins</code> instead of <code>:from/:conditions</code> would give more flexibility and stackability to your scopes but sometimes <code>:from</code> is more clear and here you got the tip how to use it.</p>-->
+<p>Summary I would say that using <code>:joins</code> instead of <code>:from/:conditions</code> would give more flexibility and stackability to your scopes but sometimes <code>:from</code> is more clear and here you got the tip how to use it.</p>
+-->
         <h4 class="tags">
     
     <a href="/tags/sql.html">sql</a>
@@ -656,63 +757,6 @@ When you start learning programming try to let your knowledge be "moved to produ
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2009/06/bdd-user-stories-productive-tdd-criticism'>When BDD user stories is productive</a>
-            <div class="date">29 Jun 2009</div>
-        </h2>
-        When you are skilled Unit tests writer it is not very easy to estimate the potential of BDD. Moreover in most cases BDD is used as a human-readable wrapper for unit tests. Do you really think that programmers need such abstract layer? Of course not... Users needs them.<br/>
-<!--
-<hr/>
-
-Saying Users I mean every non technical person who will treat to application quality some how.
-Featured innovation of BDD is <strong>User Stories</strong> - a human-readable bit of specification with technical test implementation behind it. <br/>
-Let's review the following example from the blog specification:
-<pre><code>
-  Given I signed up as Author
-    When I write article "TDD and BDD"
-    And text of article is "BDD is ...."
-    And I post article
-    Then I should see "Article is created"
-    And I should see article title "TDD and BDD"
-</code></pre>
-As you can see unlike TDD human readability is the term that was brought to the high priority in BDD. But that is not yet a BDD story.<br/>
-We need the programming implementation for each phrase in the story, like this:
-<pre><code>
-"I signed up as Author":
-     signInAsAuthor();
-</code></pre>
-
-Programmer's task is to chose the implementation that will validate described behavior. User doesn't know about any programming back end of the story. When the test failed he just knows that some behavior of the application is not working properly any more. <br/>
-From this point of view the key principle of user story implementation is that it should <strong>guarantee</strong> with the most high probability that the user can complete described actions.<br/> 
-
-Therefore user stories are the most productive when the implementation is done using <strong>GUI Robots</strong> like SWT bot, Selenium.
-
-
--->
-        <h4 class="tags">
-    
-    <a href="/tags/criticism.html">criticism</a>
-    
-    <a href="/tags/bdd.html">bdd</a>
-    
-    <a href="/tags/tdd.html">tdd</a>
-    
-    <a href="/tags/test.html">test</a>
-    
-    <a href="/tags/behavior.html">behavior</a>
-    
-    <a href="/tags/application.html">application</a>
-    
-    <a href="/tags/user story.html">user story</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -747,6 +791,10 @@ Therefore user stories are the most productive when the implementation is done u
                         <ul>
                             
                             <li>
+                                <a href='/2014/04/state-machine-minemalistic-validation-perfection-changes'>Minimalistic State Machine: Less is More</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
                             </li>
                             
@@ -760,10 +808,6 @@ Therefore user stories are the most productive when the implementation is done u
                             
                             <li>
                                 <a href='/2013/04/background-jobs-frameworkds-delayed-job-resque-slides'>Background Jobs Frameworks: Resque vs DelayedJob</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
                             </li>
                             
                         </ul>
@@ -815,7 +859,7 @@ Therefore user stories are the most productive when the implementation is done u
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 24.8px; line-height:24.8px" rel="tag">contribution</a> 
-<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 26.6px; line-height:26.6px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 19.4px; line-height:19.4px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
@@ -833,7 +877,7 @@ Therefore user stories are the most productive when the implementation is done u
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 37.400000000000006px; line-height:37.400000000000006px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 39.2px; line-height:39.2px" rel="tag">rails</a> 
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
@@ -843,7 +887,7 @@ Therefore user stories are the most productive when the implementation is done u
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
-<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 21.2px; line-height:21.2px" rel="tag">validation</a> 
+<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 23.0px; line-height:23.0px" rel="tag">validation</a> 
 <a href="/tags/vim.html" title="Pages tagged vim" style="font-size: 17.6px; line-height:17.6px" rel="tag">vim</a> 
 
                     </div>

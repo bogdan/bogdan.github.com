@@ -11,6 +11,8 @@
       Bogdan's blog
     </title>
     <meta name="robots" content="follow, all" />
+    <meta charset="utf-8"> 
+    
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
     <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, report, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
@@ -79,15 +81,16 @@
         <a href="/2013/04/git-story-id-pivotal-tracker-integration">Attach git commits to pivotal stories</a>
         <div class="date">08 Apr 2013</div>
     </h2>
-    <p>I heard about 10 different ways to organize work flow around pivotaltracker and git and about 5 gems to support that process. All of them seems abusing for me: the outcome of pivotal/git integration is a git commit attached to pivotal story and the rest of conventions like naming branches or merge policy doesn&#8217;t make any sense in long time perspective and is just a waste of time in fact.</p>
+    
+<p>I heard about 10 different ways to organize work flow around pivotaltracker and git and about 5 gems to support that process. All of them seems abusing for me: the outcome of pivotal/git integration is a git commit attached to pivotal story and the rest of conventions like naming branches or merge policy doesn’t make any sense in long time perspective and is just a waste of time in fact.</p>
 
-<p>That&#8217;s why I&#8217;ve decided to make the most trivial integration that covers this idea and don&#8217;t provide additional complexity: Meet <a href='https://github.com/bogdan/git-storyid'>git-storyid</a> gem - the only one git/pivotaltracker integration that saves your time. <!--more--></p>
+<p>That’s why I’ve decided to make the most trivial integration that covers this idea and don’t provide additional complexity: Meet <a href="https://github.com/bogdan/git-storyid">git-storyid</a> gem - the only one git/pivotaltracker integration that saves your time. <!--more--></p>
 
-<h2 id='installation'>Installation</h2>
+<h2 id="installation">Installation</h2>
 <div class='highlight'><pre><code class='sh'>gem install git-storyid
 </code></pre>
 </div>
-<h2 id='usage'>Usage</h2>
+<h2 id="usage">Usage</h2>
 <div class='highlight'><pre><code class='sh'>git storyid -m <span class='s2'>&quot;Initial implementation of campaign tags&quot;</span>
 <span class='c'># Api token (https://www.pivotaltracker.com/profile): a56f0e9a4fbXXXXXXXXXXXXXX</span>
 <span class='c'># Use SSL (y/n): y</span>
@@ -117,9 +120,10 @@ Date:   Fri Mar 15 12:42:32 2013 +0200
 Feature: Tag campaign insertion points and 
 campaigns with an identifier, 
 so only campaigns with matching identifier will get shown</code></pre>
-<h2 id='how_should_i_name_branches'>How should I name branches?</h2>
+<h2 id="how_should_i_name_branches">How should I name branches?</h2>
 
 <p>Branch names is not something that you should focus on. Unlike commit messages, branches are removed from history after merge. That is why you should name them in a way that takes less of your time. I personally prefer to have only one branch for myself called <code>bogdandev</code> when I work on a project. When the feature is not done - there is no sense to work on another feature.</p>
+
     <div class="clear"></div>
     <div class="left">
       <table class="post-social-share">
@@ -206,6 +210,10 @@ so only campaigns with matching identifier will get shown</code></pre>
                         <ul>
                             
                             <li>
+                                <a href='/2014/04/state-machine-minemalistic-validation-perfection-changes'>Minimalistic State Machine: Less is More</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
                             </li>
                             
@@ -219,10 +227,6 @@ so only campaigns with matching identifier will get shown</code></pre>
                             
                             <li>
                                 <a href='/2013/04/background-jobs-frameworkds-delayed-job-resque-slides'>Background Jobs Frameworks: Resque vs DelayedJob</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
                             </li>
                             
                         </ul>
@@ -274,7 +278,7 @@ so only campaigns with matching identifier will get shown</code></pre>
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 24.8px; line-height:24.8px" rel="tag">contribution</a> 
-<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 26.6px; line-height:26.6px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 19.4px; line-height:19.4px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
@@ -292,7 +296,7 @@ so only campaigns with matching identifier will get shown</code></pre>
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 37.400000000000006px; line-height:37.400000000000006px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 39.2px; line-height:39.2px" rel="tag">rails</a> 
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
@@ -302,7 +306,7 @@ so only campaigns with matching identifier will get shown</code></pre>
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
-<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 21.2px; line-height:21.2px" rel="tag">validation</a> 
+<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 23.0px; line-height:23.0px" rel="tag">validation</a> 
 <a href="/tags/vim.html" title="Pages tagged vim" style="font-size: 17.6px; line-height:17.6px" rel="tag">vim</a> 
 
                     </div>

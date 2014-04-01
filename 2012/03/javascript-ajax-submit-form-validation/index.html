@@ -11,6 +11,8 @@
       Bogdan's blog
     </title>
     <meta name="robots" content="follow, all" />
+    <meta charset="utf-8"> 
+    
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
     <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, report, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
@@ -79,9 +81,10 @@
         <a href="/2012/03/javascript-ajax-submit-form-validation">Web Forms 2.0: Submit with Ajax and Client Side Validation</a>
         <div class="date">01 Mar 2012</div>
     </h2>
-    <p>Web 2.0 world force us to build Forms in a new level of quality. AJAX and dynamic HTML changes a way how forms should work internally. Let&#8217;s call it Forms 2.0. And of course this facts bring a lot of complexity every time we deal with forms. Sometimes such form makes a real problem comparing to regular Web 1.0 form. Here will be a talk how to make Forms 2.0 as simple as Forms 1.0.</p>
+    
+<p>Web 2.0 world force us to build Forms in a new level of quality. AJAX and dynamic HTML changes a way how forms should work internally. Let’s call it Forms 2.0. And of course this facts bring a lot of complexity every time we deal with forms. Sometimes such form makes a real problem comparing to regular Web 1.0 form. Here will be a talk how to make Forms 2.0 as simple as Forms 1.0.</p>
 <!--more-->
-<h2 id='sumbit_with_ajax'>Sumbit with Ajax</h2>
+<h2 id="sumbit_with_ajax">Sumbit with Ajax</h2>
 
 <p>Submit a form with AJAX have never been a problem:</p>
 <div class='highlight'><pre><code class='js'><span class='nx'>$</span><span class='p'>.</span><span class='nx'>ajax</span><span class='p'>({</span>
@@ -94,9 +97,9 @@
 <span class='p'>});</span>
 </code></pre>
 </div>
-<p>More over submit with AJAX doesn&#8217;t require to rerender a page if it was not successfull: less server load and no need to support &#8216;new&#8217; and &#8216;edit&#8217; mode in HTML template. Problem that comes up with ajax submit is Validation. If you ever find yourself stuck with syncing client and server side validation or bug that form doesn&#8217;t have some data that was there before submit then you know what I am talking about too.</p>
+<p>More over submit with AJAX doesn’t require to rerender a page if it was not successfull: less server load and no need to support ‘new’ and ‘edit’ mode in HTML template. Problem that comes up with ajax submit is Validation. If you ever find yourself stuck with syncing client and server side validation or bug that form doesn’t have some data that was there before submit then you know what I am talking about too.</p>
 
-<h2 id='solving_validation_problem'>Solving validation problem</h2>
+<h2 id="solving_validation_problem">Solving validation problem</h2>
 
 <p>There are number of visions in the Ruby community on how to solve the problem: some people prefer stay with Forms 1.0. Some people generate JavaScript validators based on ActiveModel validators. Other guys write their own validation in JavaScript and perform it on both client and server side. The complexity of all these solution goes beyond believe. And here I am going to describe much simpler way of doing it.</p>
 
@@ -104,17 +107,21 @@
 <div class='highlight'><pre><code class='js'><span class='p'>{</span><span class='nx'>email</span><span class='o'>:</span> <span class='s2'>&quot;is not valid&quot;</span><span class='p'>,</span> <span class='nx'>password</span><span class='o'>:</span> <span class='s2'>&quot;is too short&quot;</span><span class='p'>}</span>
 </code></pre>
 </div>
-<p>It&#8217;s fast as wind and easy to implement:</p>
+<p>It’s fast as wind and easy to implement:</p>
 
 <ul>
-<li>No SQL queries during validation request * Except uniqueness, that is more likely a feature than a problem</li>
+<li>No SQL queries during validation request
+<ul>
+<li>Except uniqueness, that is more likely a feature than a problem</li>
+</ul>
+</li>
 
 <li>No Rendering just small JSON object as response</li>
 
 <li>No additional controller action - just modify existing one</li>
 </ul>
 
-<h2 id='from_assumptions_to_coding'>From Assumptions to Coding</h2>
+<h2 id="from_assumptions_to_coding">From Assumptions to Coding</h2>
 
 <p>As we agreed - controller should return JSON instead of HTML:</p>
 <div class='highlight'><pre><code class='diff'> class UsersController &lt; ApplicationController
@@ -149,17 +156,18 @@
  &lt;/form&gt;
 </code></pre>
 </div>
-<p>All the dirty work can be done by <a href='https://github.com/bogdan/ajaxsubmit'>AjaxSubmit</a> library that implements all the ideas described above:</p>
+<p>All the dirty work can be done by <a href="https://github.com/bogdan/ajaxsubmit">AjaxSubmit</a> library that implements all the ideas described above:</p>
 <div class='highlight'><pre><code class='js'><span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;#new_user&#39;</span><span class='p'>).</span><span class='nx'>ajaxForm</span><span class='p'>();</span>
 </code></pre>
 </div>
-<p>The main goal reached: Make super modern AJAX form is as easy as regular form. If you still can&#8217;t believe that it is so easy - check out <a href='http://ajaxsubmit.heroku.com'>LIVE demo</a>.</p>
+<p>The main goal reached: Make super modern AJAX form is as easy as regular form. If you still can’t believe that it is so easy - check out <a href="http://ajaxsubmit.heroku.com">LIVE demo</a>.</p>
 
-<h2 id='ajaxsubmit_is_it_flexible'>AjaxSubmit: Is it flexible?</h2>
+<h2 id="ajaxsubmit_is_it_flexible">AjaxSubmit: Is it flexible?</h2>
 
-<p>AjaxSubmit is a library that has 2 years of experience behind. About 7 different engineers made their contribution during this time. Take a look at the <a href='https://github.com/bogdan/ajaxsubmit#readme'>Read Me</a> for more information about API, callbacks and configuration options.</p>
+<p>AjaxSubmit is a library that has 2 years of experience behind. About 7 different engineers made their contribution during this time. Take a look at the <a href="https://github.com/bogdan/ajaxsubmit#readme">Read Me</a> for more information about API, callbacks and configuration options.</p>
 
-<p>You can also checkout <a href='http://mailtrap.io'>Mailtrap</a> that is a perfect example of how your site could look like with this library in every web form.</p>
+<p>You can also checkout <a href="http://mailtrap.io">Mailtrap</a> that is a perfect example of how your site could look like with this library in every web form.</p>
+
     <div class="clear"></div>
     <div class="left">
       <table class="post-social-share">
@@ -250,6 +258,10 @@
                         <ul>
                             
                             <li>
+                                <a href='/2014/04/state-machine-minemalistic-validation-perfection-changes'>Minimalistic State Machine: Less is More</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
                             </li>
                             
@@ -263,10 +275,6 @@
                             
                             <li>
                                 <a href='/2013/04/background-jobs-frameworkds-delayed-job-resque-slides'>Background Jobs Frameworks: Resque vs DelayedJob</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/02/working-in-curebit-ycombinator-ukraine-job'>Where to work as a rubyist in Ukraine</a>
                             </li>
                             
                         </ul>
@@ -318,7 +326,7 @@
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 24.8px; line-height:24.8px" rel="tag">contribution</a> 
-<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 24.8px; line-height:24.8px" rel="tag">criticism</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 26.6px; line-height:26.6px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 19.4px; line-height:19.4px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
@@ -336,7 +344,7 @@
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
-<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 37.400000000000006px; line-height:37.400000000000006px" rel="tag">rails</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 39.2px; line-height:39.2px" rel="tag">rails</a> 
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
@@ -346,7 +354,7 @@
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
-<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 21.2px; line-height:21.2px" rel="tag">validation</a> 
+<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 23.0px; line-height:23.0px" rel="tag">validation</a> 
 <a href="/tags/vim.html" title="Pages tagged vim" style="font-size: 17.6px; line-height:17.6px" rel="tag">vim</a> 
 
                     </div>
