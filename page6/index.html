@@ -77,6 +77,54 @@
                     
     <div class="post">
         <h2>
+            <a href='/2009/04/clear-upload-file-input-field'>Clear upload file input field </a>
+            <div class="date">23 Apr 2009</div>
+        </h2>
+        Many web developers came to the problem that they are not able to change value of file input field from Java Script in the web application. There is no access to value field of file input tag because of security restriction. However there is a trick how to erase this field if you need it in your application. <br/>
+<!--
+<hr/>
+You can simply redraw the html block where your input tag is located. In this case all data will remain the same except the selected file value.
+
+<pre><code>
+&lt;div id="uploadFile_div"&gt;
+&lt;input type="file" class="fieldMoz" id="uploadFile" 
+            onkeydown="return false;" size="40" name="uploadFile"/&gt;
+&lt;/div&gt;
+&lt;a onclick="clearFileInputField('uploadFile_div')" 
+                         href="javascript:noAction();"&gt;Clear&lt;/a&gt;
+</code></pre>
+Java Script function below looks strange but acts exactly in the way we want:
+<pre><code> 
+&lt;script&gt;
+function clearFileInputField(tagId) {
+    document.getElementById(tagId).innerHTML = 
+                    document.getElementById(tagId).innerHTML;
+}
+&lt;/script&gt;
+            
+</code></pre>
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/javascript.html">javascript</a>
+    
+    <a href="/tags/howto.html">howto</a>
+    
+    <a href="/tags/input.html">input</a>
+    
+    <a href="/tags/file.html">file</a>
+    
+    <a href="/tags/html.html">html</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2009/04/success-components'>Components of success </a>
             <div class="date">10 Apr 2009</div>
         </h2>
@@ -259,6 +307,10 @@ Here is selenium call method:
                         <ul>
                             
                             <li>
+                                <a href='/2014/05/podcast-interview-le0pard-open-source-contribution'>Took part in a podcast with Alexey Vasiliev</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2014/04/state-machine-minemalistic-validation-perfection-changes'>Minimalistic State Machine: Less is More</a>
                             </li>
                             
@@ -272,10 +324,6 @@ Here is selenium call method:
                             
                             <li>
                                 <a href='/2013/04/git-story-id-pivotal-tracker-integration'>Attach git commits to pivotal stories</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/04/background-jobs-frameworkds-delayed-job-resque-slides'>Background Jobs Frameworks: Resque vs DelayedJob</a>
                             </li>
                             
                         </ul>
@@ -326,10 +374,10 @@ Here is selenium call method:
 <a href="/tags/class.html" title="Pages tagged class" style="font-size: 17.6px; line-height:17.6px" rel="tag">class</a> 
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
-<a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 24.8px; line-height:24.8px" rel="tag">contribution</a> 
+<a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 26.6px; line-height:26.6px" rel="tag">contribution</a> 
 <a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 26.6px; line-height:26.6px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
-<a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 19.4px; line-height:19.4px" rel="tag">datagrid</a> 
+<a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 21.2px; line-height:21.2px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
 <a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 19.4px; line-height:19.4px" rel="tag">dry</a> 
 <a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 24.8px; line-height:24.8px" rel="tag">gem</a> 

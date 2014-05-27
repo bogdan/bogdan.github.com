@@ -10,18 +10,25 @@ Home
 	Kran
 	Verevka
 	Tolkalka
-	Umbrella
-	daily
-	Grelka
-	Hot water
-	masg
-	dfi
+	drums
+	umbrella
+	Toschi
+	Places to go on weekend?
+		Umbrella
+		daily
+		Grelka
+		Hot water
+		masg
+		dfi
+	Shipachki + silicon
 	
 
 OSS
 	Ruby
 		Irb bug: >> (&:)<tab>
 
+	Furi
+		Friendly URI
 	diffbench
 		TODO:
 			Exit code support

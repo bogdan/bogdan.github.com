@@ -4,13 +4,38 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2014-05-13T15:14:37+03:00</updated>
+ <updated>2014-05-27T11:01:40+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
    <email>agresso@gmail.com</email>
  </author>
  
+ 
+ <entry>
+   <title>Took part in a podcast with Alexey Vasiliev</title>
+   <link href="http://gusiev.com/2014/05/podcast-interview-le0pard-open-source-contribution"/>
+   <updated>2014-05-27T00:00:00+03:00</updated>
+   <id>http://gusiev.com/2014/05/podcast-interview-le0pard-open-source-contribution</id>
+   <content type="html">&lt;p&gt;
+Last weekend I took part in the a podcast with Alexey Vasiliev. We talked about my path in Open Source, Rails and IT industry in ukraine.
+
+&lt;/p&gt;
+&lt;p&gt;
+It is all in Russian.
+You can listen it here:
+&lt;br/&gt;
+&lt;strong&gt;
+  &lt;a href=&quot;http://www.rwpod.com/posts/2014/05/24/cafe-002.html&quot;&gt;http://www.rwpod.com/posts/2014/05/24/cafe-002.html&lt;/a&gt;
+&lt;/strong&gt;
+&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+
+
+</content>
+ </entry>
  
  <entry>
    <title>Minimalistic State Machine: Less is More</title>
