@@ -4,13 +4,23 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2014-05-30T14:39:25+03:00</updated>
+ <updated>2014-07-25T13:26:24+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
    <email>agresso@gmail.com</email>
  </author>
  
+ 
+ <entry>
+   <title>My Talk from RubyC conference</title>
+   <link href="http://gusiev.com/2014/07/rubyc-conference-video-parsers-slides"/>
+   <updated>2014-07-25T00:00:00+03:00</updated>
+   <id>http://gusiev.com/2014/07/rubyc-conference-video-parsers-slides</id>
+   <content type="html">
+&lt;p&gt;Here is a video from the excellent &lt;a href=&quot;http://rubyc.eu/&quot;&gt;Rubyc&lt;/a&gt; conference. Hope you will find this video funny as well: &lt;a href=&quot;https://www.youtube.com/watch?v=OlXdngQUix8&quot;&gt;All about parsers in ruby&lt;/a&gt; &lt;!--more--&gt;&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Took part in a podcast with Alexey Vasiliev</title>
