@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2014-07-25T13:26:24+03:00</updated>
+ <updated>2014-08-15T12:24:22+03:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
@@ -755,7 +755,7 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)&lt;/code&gt;&lt;/pre
 &lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;js&#39;&gt;&lt;span class=&#39;nx&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s1&#39;&gt;&amp;#39;#new_user&amp;#39;&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;).&lt;/span&gt;&lt;span class=&#39;nx&#39;&gt;ajaxForm&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;();&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;The main goal reached: Make super modern AJAX form is as easy as regular form. If you still can’t believe that it is so easy - check out &lt;a href=&quot;http://ajaxsubmit.heroku.com&quot;&gt;LIVE demo&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The main goal reached: Make super modern AJAX form is as easy as regular form. If you still can’t believe that it is so easy - check out &lt;a href=&quot;http://ajaxsubmit.herokuapp.com&quot;&gt;LIVE demo&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&quot;ajaxsubmit_is_it_flexible&quot;&gt;AjaxSubmit: Is it flexible?&lt;/h2&gt;
 
@@ -868,7 +868,7 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)&lt;/code&gt;&lt;/pre
    <content type="html">
 &lt;p&gt;&lt;a href=&quot;https://github.com/bogdan/datagrid&quot;&gt;Datagrid&lt;/a&gt; version 0.5.0 has been released.&lt;/p&gt;
 
-&lt;p&gt;Datagrid is a Ruby on Rails plugin that helps you to build and &lt;a href=&quot;http://datagrid.heroku.com&quot;&gt;represent table-like data&lt;/a&gt; with:&lt;/p&gt;
+&lt;p&gt;Datagrid is a Ruby on Rails plugin that helps you to build and &lt;a href=&quot;http://datagrid.herokuapp.com&quot;&gt;represent table-like data&lt;/a&gt; with:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Customizable filtering&lt;/li&gt;
@@ -886,7 +886,7 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)&lt;/code&gt;&lt;/pre
 
 &lt;h3 id=&quot;mongoid_support&quot;&gt;Mongoid support&lt;/h3&gt;
 
-&lt;p&gt;Previously Datagrid supported only ActiveRecord ORM. Now Mongoid is also available: &lt;a href=&quot;http://datagrid.heroku.com/document_reports&quot;&gt;see the demo&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Previously Datagrid supported only ActiveRecord ORM. Now Mongoid is also available: &lt;a href=&quot;http://datagrid.herokuapp.com/document_reports&quot;&gt;see the demo&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;New datagrid driver architecture allows to add yet another ORM in less then &lt;a href=&quot;https://github.com/bogdan/datagrid/blob/master/lib/datagrid/drivers/mongoid.rb&quot;&gt;40 lines of code&lt;/a&gt;.&lt;/p&gt;
 
