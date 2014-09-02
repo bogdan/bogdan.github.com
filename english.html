@@ -1,0 +1,1410 @@
+<html>
+<head>
+<script src="http://coffeescript.org/extras/coffee-script.js"> </script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="http://underscorejs.org/underscore-min.js"></script>
+
+<style>
+  .hidden {
+    display: none;
+  }
+  .container-fluid {
+    max-width: 700px;
+  }
+  .config-form: {
+    min-height: 350px;
+  }
+</style>
+
+
+<script type='text/coffeescript'>
+MODALS = ['be', 'may', 'might', 'can', 'could', 'shall', 'should', 'must']
+
+TENSES = ['present', 'past', 'future']
+COMPLETENESSES = ['simple', 'continues', 'perfect', 'perfect_continues']
+SHORTENINGS = [
+  [/I am/, "I'm"],
+  [/(you|we|they) are/, "you're"],
+  [/(he|she|it) is/, "$1's"],
+  [/will not/, "won't"],
+  [/(\w+) not/, "$1n't"],
+  [/(I|he|she|it|you|we|they) have (\w+)/, "$1've $2"]
+  [/\swill/, "'ll"]
+]
+IRREGULAR_VERBS = 
+  "abide" : [
+    "abode\/abided",
+    "abode\/abided\/abidden"
+  ],
+  "alight" : [
+    "alit\/alighted",
+    "alit\/alighted"
+  ],
+  "arise" : [
+    "arose",
+    "arisen"
+  ],
+  "awake" : [
+    "awoke",
+    "awoken"
+  ],
+  "be" : [
+    "was",
+    "been"
+  ],
+  "bear" : [
+    "bore",
+    "born\/borne"
+  ],
+  "beat" : [
+    "beat",
+    "beaten"
+  ],
+  "become" : [
+    "became",
+    "become"
+  ],
+  "begin" : [
+    "began",
+    "begun"
+  ],
+  "behold" : [
+    "beheld",
+    "beheld"
+  ],
+  "bend" : [
+    "bent",
+    "bent"
+  ],
+  "bet" : [
+    "bet",
+    "bet"
+  ],
+  "bid" : [
+    "bid",
+    "bid"
+  ],
+  "bind" : [
+    "bound",
+    "bound"
+  ],
+  "bite" : [
+    "bit",
+    "bitten"
+  ],
+  "bleed" : [
+    "bled",
+    "bled"
+  ],
+  "blow" : [
+    "blew",
+    "blown"
+  ],
+  "break" : [
+    "broke",
+    "broken"
+  ],
+  "breed" : [
+    "bred",
+    "bred"
+  ],
+  "bring" : [
+    "brought",
+    "brought"
+  ],
+  "broadcast" : [
+    "broadcast\/broadcasted",
+    "broadcast\/broadcasted"
+  ],
+  "build" : [
+    "built",
+    "built"
+  ],
+  "burn" : [
+    "burnt\/burned",
+    "burnt\/burned"
+  ],
+  "burst" : [
+    "burst",
+    "burst"
+  ],
+  "bust" : [
+    "bust",
+    "bust"
+  ],
+  "buy" : [
+    "bought",
+    "bought"
+  ],
+  "can" : [
+    "could",
+    "could"
+  ],
+  "cast" : [
+    "cast",
+    "cast"
+  ],
+  "catch" : [
+    "caught",
+    "caught"
+  ],
+  "choose" : [
+    "chose",
+    "chosen"
+  ],
+  "clap" : [
+    "clapped\/clapt",
+    "clapped\/clapt"
+  ],
+  "cling" : [
+    "clung",
+    "clung"
+  ],
+  "clothe" : [
+    "clad\/clothed",
+    "clad\/clothed"
+  ],
+  "come" : [
+    "came",
+    "come"
+  ],
+  "cost" : [
+    "cost",
+    "cost"
+  ],
+  "creep" : [
+    "crept",
+    "crept"
+  ],
+  "cut" : [
+    "cut",
+    "cut"
+  ],
+  "dare" : [
+    "dared\/durst",
+    "dared"
+  ],
+  "deal" : [
+    "dealt",
+    "dealt"
+  ],
+  "dig" : [
+    "dug",
+    "dug"
+  ],
+  "dive" : [
+    "dived\/dove",
+    "dived"
+  ],
+  "do" : [
+    "did",
+    "done"
+  ],
+  "draw" : [
+    "drew",
+    "drawn"
+  ],
+  "dream" : [
+    "dreamt\/dreamed",
+    "dreamt\/dreamed"
+  ],
+  "drink" : [
+    "drank",
+    "drunk"
+  ],
+  "drive" : [
+    "drove",
+    "driven"
+  ],
+  "dwell" : [
+    "dwelt",
+    "dwelt"
+  ],
+  "eat" : [
+    "ate",
+    "eaten"
+  ],
+  "fall" : [
+    "fell",
+    "fallen"
+  ],
+  "feed" : [
+    "fed",
+    "fed"
+  ],
+  "feel" : [
+    "felt",
+    "felt"
+  ],
+  "fight" : [
+    "fought",
+    "fought"
+  ],
+  "find" : [
+    "found",
+    "found"
+  ],
+  "fit" : [
+    "fit\/fitted",
+    "fit\/fitted"
+  ],
+  "flee" : [
+    "fled",
+    "fled"
+  ],
+  "fling" : [
+    "flung",
+    "flung"
+  ],
+  "fly" : [
+    "flew",
+    "flown"
+  ],
+  "forbid" : [
+    "forbade\/forbad",
+    "forbidden"
+  ],
+  "forecast" : [
+    "forecast\/forecasted",
+    "forecast\/forecasted"
+  ],
+  "foresee" : [
+    "foresaw",
+    "foreseen"
+  ],
+  "foretell" : [
+    "foretold",
+    "foretold"
+  ],
+  "forget" : [
+    "forgot",
+    "forgotten"
+  ],
+  "forgive" : [
+    "forgave",
+    "forgiven"
+  ],
+  "forsake" : [
+    "forsook",
+    "forsaken"
+  ],
+  "freeze" : [
+    "froze",
+    "frozen"
+  ],
+  "frostbite" : [
+    "frostbit",
+    "frostbitten"
+  ],
+  "get" : [
+    "got",
+    "got\/gotten"
+  ],
+  "give" : [
+    "gave",
+    "given"
+  ],
+  "go" : [
+    "went",
+    "gone"
+  ],
+  "grind" : [
+    "ground",
+    "ground"
+  ],
+  "grow" : [
+    "grew",
+    "grown"
+  ],
+  "handwrite" : [
+    "handwrote",
+    "handwritten"
+  ],
+  "hang" : [
+    "hung\/hanged",
+    "hung\/hanged"
+  ],
+  "have" : [
+    "had",
+    "had"
+  ],
+  "hear" : [
+    "heard",
+    "heard"
+  ],
+  "hide" : [
+    "hid",
+    "hidden"
+  ],
+  "hit" : [
+    "hit",
+    "hit"
+  ],
+  "hold" : [
+    "held",
+    "held"
+  ],
+  "hurt" : [
+    "hurt",
+    "hurt"
+  ],
+  "inlay" : [
+    "inlaid",
+    "inlaid"
+  ],
+  "input" : [
+    "input\/inputted",
+    "input\/inputted"
+  ],
+  "interlay" : [
+    "interlaid",
+    "interlaid"
+  ],
+  "keep" : [
+    "kept",
+    "kept"
+  ],
+  "kneel" : [
+    "knelt\/kneeled",
+    "knelt\/kneeled"
+  ],
+  "knit" : [
+    "knit\/knitted",
+    "knit\/knitted"
+  ],
+  "know" : [
+    "knew",
+    "known"
+  ],
+  "lay" : [
+    "laid",
+    "laid"
+  ],
+  "lead" : [
+    "led",
+    "led"
+  ],
+  "lean" : [
+    "leant\/leaned",
+    "leant\/leaned"
+  ],
+  "leap" : [
+    "leapt\/leaped",
+    "leapt\/leaped"
+  ],
+  "learn" : [
+    "learnt\/learned",
+    "learnt\/learned"
+  ],
+  "leave" : [
+    "left",
+    "left"
+  ],
+  "lend" : [
+    "lent",
+    "lent"
+  ],
+  "let" : [
+    "let",
+    "let"
+  ],
+  "lie" : [
+    "lay",
+    "lain"
+  ],
+  "light" : [
+    "lit",
+    "lit"
+  ],
+  "lose" : [
+    "lost",
+    "lost"
+  ],
+  "make" : [
+    "made",
+    "made"
+  ],
+  "may" : [
+    "might",
+    "might"
+  ],
+  "mean" : [
+    "meant",
+    "meant"
+  ],
+  "meet" : [
+    "met",
+    "met"
+  ],
+  "melt" : [
+    "melted",
+    "molten\/melted"
+  ],
+  "mislead" : [
+    "misled",
+    "misled"
+  ],
+  "mistake" : [
+    "mistook",
+    "mistaken"
+  ],
+  "misunderstand" : [
+    "misunderstood",
+    "misunderstood"
+  ],
+  "miswed" : [
+    "miswed\/miswedded",
+    "miswed\/miswedded"
+  ],
+  "mow" : [
+    "mowed",
+    "mown"
+  ],
+  "must" : [
+    "must",
+    "must"
+  ],
+  "overdraw" : [
+    "overdrew",
+    "overdrawn"
+  ],
+  "overhear" : [
+    "overheard",
+    "overheard"
+  ],
+  "overtake" : [
+    "overtook",
+    "overtaken"
+  ],
+  "pay" : [
+    "paid",
+    "paid"
+  ],
+  "preset" : [
+    "preset",
+    "preset"
+  ],
+  "prove" : [
+    "proved",
+    "proven\/proved"
+  ],
+  "put" : [
+    "put",
+    "put"
+  ],
+  "quit" : [
+    "quit",
+    "quit"
+  ],
+  "re-prove" : [
+    "re-proved",
+    "re-proven\/re-proved"
+  ],
+  "read" : [
+    "read",
+    "read"
+  ],
+  "rid" : [
+    "rid\/ridded",
+    "rid\/ridded"
+  ],
+  "ride" : [
+    "rode",
+    "ridden"
+  ],
+  "ring" : [
+    "rang",
+    "rung"
+  ],
+  "rise" : [
+    "rose",
+    "risen"
+  ],
+  "rive" : [
+    "rived",
+    "riven\/rived"
+  ],
+  "run" : [
+    "ran",
+    "run"
+  ],
+  "saw" : [
+    "sawed",
+    "sawn\/sawed"
+  ],
+  "say" : [
+    "said",
+    "said"
+  ],
+  "see" : [
+    "saw",
+    "seen"
+  ],
+  "seek" : [
+    "sought",
+    "sought"
+  ],
+  "sell" : [
+    "sold",
+    "sold"
+  ],
+  "send" : [
+    "sent",
+    "sent"
+  ],
+  "set" : [
+    "set",
+    "set"
+  ],
+  "sew" : [
+    "sewed",
+    "sewn\/sewed"
+  ],
+  "shake" : [
+    "shook",
+    "shaken"
+  ],
+  "shave" : [
+    "shaved",
+    "shaven\/shaved"
+  ],
+  "shear" : [
+    "shore\/sheared",
+    "shorn\/sheared"
+  ],
+  "shed" : [
+    "shed",
+    "shed"
+  ],
+  "shine" : [
+    "shone",
+    "shone"
+  ],
+  "shoe" : [
+    "shod",
+    "shod"
+  ],
+  "shoot" : [
+    "shot",
+    "shot"
+  ],
+  "show" : [
+    "showed",
+    "shown"
+  ],
+  "shrink" : [
+    "shrank",
+    "shrunk"
+  ],
+  "shut" : [
+    "shut",
+    "shut"
+  ],
+  "sing" : [
+    "sang",
+    "sung"
+  ],
+  "sink" : [
+    "sank",
+    "sunk"
+  ],
+  "sit" : [
+    "sat",
+    "sat"
+  ],
+  "slay" : [
+    "slew",
+    "slain"
+  ],
+  "sleep" : [
+    "slept",
+    "slept"
+  ],
+  "slide" : [
+    "slid",
+    "slid\/slidden"
+  ],
+  "sling" : [
+    "slung",
+    "slung"
+  ],
+  "slink" : [
+    "slunk",
+    "slunk"
+  ],
+  "slit" : [
+    "slit",
+    "slit"
+  ],
+  "smell" : [
+    "smelt\/smelled",
+    "smelt\/smelled"
+  ],
+  "sneak" : [
+    "sneaked\/snuck",
+    "sneaked\/snuck"
+  ],
+  "soothsay" : [
+    "soothsaid",
+    "soothsaid"
+  ],
+  "sow" : [
+    "sowed",
+    "sown"
+  ],
+  "speak" : [
+    "spoke",
+    "spoken"
+  ],
+  "speed" : [
+    "sped\/speeded",
+    "sped\/speeded"
+  ],
+  "spell" : [
+    "spelt\/spelled",
+    "spelt\/spelled"
+  ],
+  "spend" : [
+    "spent",
+    "spent"
+  ],
+  "spill" : [
+    "spilt\/spilled",
+    "spilt\/spilled"
+  ],
+  "spin" : [
+    "span\/spun",
+    "spun"
+  ],
+  "spit" : [
+    "spat\/spit",
+    "spat\/spit"
+  ],
+  "split" : [
+    "split",
+    "split"
+  ],
+  "spoil" : [
+    "spoilt\/spoiled",
+    "spoilt\/spoiled"
+  ],
+  "spread" : [
+    "spread",
+    "spread"
+  ],
+  "spring" : [
+    "sprang",
+    "sprung"
+  ],
+  "stand" : [
+    "stood",
+    "stood"
+  ],
+  "steal" : [
+    "stole",
+    "stolen"
+  ],
+  "stick" : [
+    "stuck",
+    "stuck"
+  ],
+  "sting" : [
+    "stung",
+    "stung"
+  ],
+  "stink" : [
+    "stank",
+    "stunk"
+  ],
+  "stride" : [
+    "strode\/strided",
+    "stridden"
+  ],
+  "strike" : [
+    "struck",
+    "struck\/stricken"
+  ],
+  "string" : [
+    "strung",
+    "strung"
+  ],
+  "strip" : [
+    "stript\/stripped",
+    "stript\/stripped"
+  ],
+  "strive" : [
+    "strove",
+    "striven"
+  ],
+  "sublet" : [
+    "sublet",
+    "sublet"
+  ],
+  "sunburn" : [
+    "sunburned\/sunburnt",
+    "sunburned\/sunburnt"
+  ],
+  "swear" : [
+    "swore",
+    "sworn"
+  ],
+  "sweat" : [
+    "sweat\/sweated",
+    "sweat\/sweated"
+  ],
+  "sweep" : [
+    "swept\/sweeped",
+    "swept\/sweeped"
+  ],
+  "swell" : [
+    "swelled",
+    "swollen"
+  ],
+  "swim" : [
+    "swam",
+    "swum"
+  ],
+  "swing" : [
+    "swung",
+    "swung"
+  ],
+  "take" : [
+    "took",
+    "taken"
+  ],
+  "teach" : [
+    "taught",
+    "taught"
+  ],
+  "tear" : [
+    "tore",
+    "torn"
+  ],
+  "tell" : [
+    "told",
+    "told"
+  ],
+  "think" : [
+    "thought",
+    "thought"
+  ],
+  "thrive" : [
+    "throve\/thrived",
+    "thriven\/thrived"
+  ],
+  "throw" : [
+    "threw",
+    "thrown"
+  ],
+  "thrust" : [
+    "thrust",
+    "thrust"
+  ],
+  "tread" : [
+    "trod",
+    "trodden"
+  ],
+  "undergo" : [
+    "underwent",
+    "undergone"
+  ],
+  "understand" : [
+    "understood",
+    "understood"
+  ],
+  "undertake" : [
+    "undertook",
+    "undertaken"
+  ],
+  "upset" : [
+    "upset",
+    "upset"
+  ],
+  "vex" : [
+    "vext\/vexed",
+    "vext\/vexed"
+  ],
+  "wake" : [
+    "woke",
+    "woken"
+  ],
+  "wear" : [
+    "wore",
+    "worn"
+  ],
+  "weave" : [
+    "wove",
+    "woven"
+  ],
+  "wed" : [
+    "wed\/wedded",
+    "wed\/wedded"
+  ],
+  "weep" : [
+    "wept",
+    "wept"
+  ],
+  "wend" : [
+    "wended\/went",
+    "wended\/went"
+  ],
+  "wet" : [
+    "wet\/wetted",
+    "wet\/wetted"
+  ],
+  "win" : [
+    "won",
+    "won"
+  ],
+  "wind" : [
+    "wound",
+    "wound"
+  ],
+  "withdraw" : [
+    "withdrew",
+    "withdrawn"
+  ],
+  "withhold" : [
+    "withheld",
+    "withheld"
+  ],
+  "withstand" : [
+    "withstood",
+    "withstood"
+  ],
+  "wring" : [
+    "wrung",
+    "wrung"
+  ],
+  "write" : [
+    "wrote",
+    "written"
+  ],
+  "zinc" : [
+    "zinced\/zincked",
+    "zinced\/zincked"
+  ]
+
+
+
+
+window.Grammar = 
+  present_simple_conjuction: (verb, pronoun)-> 
+    if verb == 'be'
+      @present_simple_be(pronoun)
+    else if verb in MODALS
+      verb
+    else if pronoun == 'he' || pronoun == 'she' || pronoun == 'it'
+      if verb == 'have'
+        return 'has'
+      else if verb.match(/[owsh]$/)
+        "#{verb}es"
+      else
+        "#{verb}s"
+    else
+      verb
+
+  present_simple_be: (pronoun)-> 
+    switch pronoun
+      when 'I' then 'am'
+      when 'he', 'she', 'it' then 'is'
+      else 'are'
+    
+
+
+
+  gerund: (verb)-> 
+    @change_ending(verb, 'ing')
+
+  change_ending: (verb, ending)-> 
+    @remove_ending(verb) + ending
+
+  remove_ending: (verb)-> 
+    if verb == 'be'
+      return verb
+    if verb.match(/e$/)
+      verb.substring(0, verb.length - 1)
+    else
+      verb
+
+    
+  perfect: (verb)-> 
+    if conjuctions = IRREGULAR_VERBS[verb]
+      return conjuctions[1]
+    @past(verb)
+
+  past: (verb, pronoun) ->
+    if verb == 'be'
+      switch(pronoun)
+        when 'I', 'he', 'she', 'it' then 'was'
+        else 'were'
+    else if conjuctions = IRREGULAR_VERBS[verb]
+      conjuctions[0]
+    else
+      @change_ending(verb, 'ed')
+
+  modality: (verb) ->
+    if verb in MODALS
+      'modal'
+    else
+      'regular'
+
+  perform: (options) -> 
+    pronoun = options.pronoun
+    verb = options.verb
+    tense = options.tense
+    mark = options.mark
+    object = options.object
+    completeness = options.completeness
+    level = options.level
+    modality = Grammar.modality(verb)
+    shortened = options.form == "shortened"
+
+
+    patterns =
+      present:
+        simple:
+          regular:
+            active:
+              negative: "#{pronoun} #{@present_simple_conjuction('do', pronoun)} not #{verb}"
+              positive: "#{pronoun} #{@present_simple_conjuction(verb, pronoun)}"
+              question: "#{@present_simple_conjuction('do', pronoun)} #{pronoun} #{verb}"
+            passive:
+              negative: "#{pronoun} #{@present_simple_conjuction('be', pronoun)} not #{@perfect(verb)}"
+              positive: "#{pronoun} #{@present_simple_conjuction('be', pronoun)} #{@perfect(verb)}"
+              question: "#{@present_simple_conjuction('be', pronoun)} #{pronoun} #{@perfect(verb)}"
+              
+          modal:
+            active:
+              negative: "#{pronoun} #{@present_simple_conjuction(verb, pronoun)} not"
+              positive: "#{pronoun} #{@present_simple_conjuction(verb, pronoun)}"
+              question: "#{@present_simple_conjuction(verb)} #{pronoun}"
+            passive: null
+
+        continues:
+          regular:
+            active:
+              negative: "#{pronoun} #{@present_simple_be(pronoun)} not #{@gerund(verb)}"
+              positive: "#{pronoun} #{@present_simple_be(pronoun)} #{@gerund(verb)}"
+              question: "#{@present_simple_be(pronoun)} #{pronoun} #{@gerund(verb)}"
+            passive:
+              negative: "#{pronoun} #{@present_simple_be(pronoun)} not being #{@perfect(verb)}"
+              positive: "#{pronoun} #{@present_simple_be(pronoun)} being #{@perfect(verb)}"
+              question: "#{@present_simple_be(pronoun)} #{pronoun} being #{@perfect(verb)}"
+          modal:
+            active: if verb == 'be' && level == 'advanced'
+              negative: "#{pronoun} #{@present_simple_be(pronoun)} not #{@gerund(verb)}"
+              positive: "#{pronoun} #{@present_simple_be(pronoun)} #{@gerund(verb)}"
+              question: "#{@present_simple_be(pronoun)} #{pronoun} #{@gerund(verb)}"
+
+            passive: null
+
+        perfect:
+          regular:
+            active:
+              negative: "#{pronoun} have not #{@perfect(verb)}"
+              positive: "#{pronoun} have #{@perfect(verb)}"
+              question: "have #{pronoun} #{@perfect(verb)}"
+            passive: null
+
+          modal:
+            active:
+              negative: "#{pronoun} have not #{@perfect(verb)}"
+              positive: "#{pronoun} have #{@perfect(verb)}"
+              question: "have #{pronoun} #{@perfect(verb)}"
+            passive: null
+        perfect_continues:
+          regular:
+            active:
+              negative: "#{pronoun} have not been #{@gerund(verb)}"
+              positive: "#{pronoun} have been #{@gerund(verb)}"
+              question: "have #{pronoun} been #{@gerund(verb)}"
+            passive: null
+          modal: null
+
+      past:
+        simple:
+          regular:
+            active:
+              negative: "#{pronoun} did not #{verb}"
+              positive: "#{pronoun} #{@past(verb, pronoun)}"
+              question: "did #{pronoun} #{verb}"
+            passive:
+              negative: "#{pronoun} #{@past('be', pronoun)} not #{@perfect(verb)}"
+              positive: "#{pronoun} #{@past('be', pronoun)} #{@perfect(verb)}"
+              question: "#{@past('be', pronoun)} #{pronoun} #{@perfect(verb)}"
+
+          modal:
+            active:
+              negative: "#{pronoun} #{@past(verb, pronoun)} not"
+              positive: "#{pronoun} #{@past(verb, pronoun)}"
+              question: "#{@past(verb, pronoun)} #{pronoun}"
+            passive: null
+
+        continues:
+          regular:
+            active:
+              negative: "#{pronoun} #{@past('be', pronoun)} not #{@gerund(verb)}"
+              positive: "#{pronoun} #{@past('be', pronoun)} #{@gerund(verb)}"
+              question: "#{@past('be', pronoun)} #{pronoun} #{@gerund(verb)}"
+            passive:
+              negative: "#{pronoun} #{@past('be', pronoun)} not being #{@perfect(verb)}"
+              positive: "#{pronoun} #{@past('be', pronoun)} being #{@perfect(verb)}"
+              question: "#{@past('be', pronoun)} #{pronoun} being #{@perfect(verb)}"
+          modal:
+            active: if verb == 'be' && level == 'advanced'
+              negative: "#{pronoun} #{@past('be', pronoun)} not #{@gerund(verb)}"
+              positive: "#{pronoun} #{@past('be', pronoun)} #{@gerund(verb)}"
+              question: "#{@past('be', pronoun)} #{pronoun} #{@gerund(verb)}"
+            passive: null
+
+        perfect:
+          regular:
+            active:
+              negative: "#{pronoun} had not #{@perfect(verb)}"
+              positive: "#{pronoun} had #{@perfect(verb)}"
+              question: "had #{pronoun} #{@perfect(verb)}"
+            passive: null
+          modal:
+            active:
+              negative: "#{pronoun} had not #{@perfect(verb)}"
+              positive: "#{pronoun} had #{@perfect(verb)}"
+              question: "had #{pronoun} #{@perfect(verb)}"
+            passive: null
+        perfect_continues:
+          regular:
+            active:
+              negative: "#{pronoun} had not been #{@gerund(verb)}"
+              positive: "#{pronoun} had been #{@gerund(verb)}"
+              question: "had #{pronoun} been #{@gerund(verb)}"
+            passive: null
+          modal: null
+
+      future:
+        simple:
+          regular:
+            active:
+              negative: "#{pronoun} will not #{verb}"
+              positive: "#{pronoun} will #{verb}"
+              question: "will #{pronoun} #{verb}"
+            passive:
+              negative: "#{pronoun} will not be #{@perfect(verb)}"
+              positive: "#{pronoun} will be #{@perfect(verb)}"
+              question: "will #{pronoun} be #{@perfect(verb)}"
+
+          modal: 
+            active: if verb == "be"
+              negative: "#{pronoun} will not #{verb}"
+              positive: "#{pronoun} will #{verb}"
+              question: "will #{pronoun} #{verb}"
+            passive: null
+            
+
+        continues:
+          regular:
+            active:
+              negative: "#{pronoun} will not be #{@gerund(verb)}"
+              positive: "#{pronoun} will be #{@gerund(verb)}"
+              question: "will #{pronoun} be #{@gerund(verb)}"
+            passive:
+              negative: "#{pronoun} will not be being #{@perfect(verb)}"
+              positive: "#{pronoun} will be being #{@perfect(verb)}"
+              question: "will #{pronoun} be being #{@perfect(verb)}"
+          modal:
+            active: if verb == 'be' && level == 'advanced'
+              negative: "#{pronoun} will not #{@gerund(verb)}"
+              positive: "#{pronoun} will #{@gerund(verb)}"
+              question: "will #{pronoun} #{@gerund(verb)}"
+            passive: null
+
+        perfect:
+          regular:
+            active:
+              negative: "#{pronoun} will not have #{@perfect(verb)}"
+              positive: "#{pronoun} will have #{@perfect(verb)}"
+              question: "will #{pronoun} have #{@perfect(verb)}"
+            passive: null
+          modal: null
+        perfect_continues:
+          regular:
+            active:
+              negative: "#{pronoun} will have not been #{@gerund(verb)}"
+              positive: "#{pronoun} will have been #{@gerund(verb)}"
+              question: "will #{pronoun} have been #{@gerund(verb)}"
+            passive: null
+          modal: null
+
+
+    if result = patterns[tense][completeness][modality]
+      if result = result[object]
+        result = result[mark]
+        if shortened
+          result = Grammar.shorten(result)
+        Utils.capitalize(result)
+      else 
+        null
+    else
+      null
+
+  shorten: (text) ->
+    if !text
+      return text
+
+    _.each SHORTENINGS, (element) ->
+      # Only one shortening
+      if text.indexOf("'") < 0
+        text = text.replace(element[0], element[1])
+    text
+
+  normalize_wordcase: (name) ->
+    if name == "I" or !name
+      name
+    else
+      name.toLowerCase(name)
+
+
+Utils =
+  serializeHash: (data) ->
+    result = {}
+    for item in data
+      result[item.name] = item.value
+    result
+
+  capitalize: (text) ->
+    if !text
+      return text
+    text[0].toUpperCase() + text.substring(1)
+    
+
+App =
+  run: ->
+    this.toggle_level()
+    this.toggle_verb_inputs()
+    data = Utils.serializeHash($('.js-form').serializeArray())
+    for tense in TENSES
+      for completeness in COMPLETENESSES
+        string = Grammar.perform($.extend(data, {tense: tense, completeness: completeness}))
+        $(".#{completeness} .#{tense}").html(string || '&mdash;')
+
+  toggle_button: (element) ->
+    group = $(element).parent()
+    group.find('button').removeClass('active');
+    $(element).addClass('active')
+    name = group.data('name')
+    input = $("input[name=#{name}")
+    value = Grammar.normalize_wordcase($(element).html())
+    if input.length == 0
+
+      $('.js-form').append("<input type='hidden' name='#{name}' value='#{value}'/>")
+    else
+      input.val(value)
+
+  toggle_verb_inputs: ->
+    modal = $('.js-verb-type-control button.active').html() == "Modal"
+    $('.js-modal-verbs-control').toggle(modal)
+    $('.js-regular-verbs-control').parent().toggle(!modal)
+    if modal 
+      $('.js-regular-verbs-control').val($('.js-modal-verbs-control button.active').html())
+    else
+      if $('.js-regular-verbs-control').val() in MODALS
+        $('.js-regular-verbs-control').val('live')
+
+  reset_input: (input) ->
+    App.toggle_button($(input).find('button:first'))
+
+  toggle_input: (input, indicator) ->
+    $(input).parent().parent().toggle(indicator)
+    if !indicator
+      @reset_input(input)
+
+
+  toggle_level: ->
+    level = $('.js-level-input button.active').html()
+
+    medium = level in ['Medium', 'Advanced'] 
+    advanced = level in ['Advanced'] 
+    @toggle_input('[data-name=form]', medium)
+    $('.perfect').toggle(medium)
+    $('.perfect_continues').toggle(advanced)
+    @toggle_input('[data-name=object]', advanced)
+
+
+
+
+$('.js-form').submit (event) ->
+  event.preventDefault()
+  App.run()
+
+$('.js-select-control').each ->
+  App.reset_input(this)
+
+$('.js-select-control button').click ->
+  App.toggle_button(this)
+  App.run()
+
+
+$('.js-verb-type-control button').click ->
+  App.run()
+
+
+$ ->
+  App.run()
+  
+
+
+
+</script>
+
+</head>
+<body>
+
+<div class="container-fluid">
+  <h1>English Grammar Table</h1>
+  <form role="form" action='#' class='js-form config-form '>
+    <div class='row'>
+
+      <div class="col-md-2"><h5>Level:</h5></div>
+      <div class="col-md-7 form-group">
+        <div class="btn-group js-select-control js-level-input" data-name="level">
+          <button type="button" class="btn btn-default active">Beginner</button>
+          <button type="button" class="btn btn-default">Medium</button>
+          <button type="button" class="btn btn-default">Advanced</button>
+        </div>
+      </div>
+
+    </div>
+    <div class='row'>
+
+      <div class="col-md-2"><h5>Pronoun:</h5></div>
+      <div class="col-md-7 form-group">
+        <div class="btn-group js-select-control" data-name="pronoun">
+          <button type="button" class="btn btn-default active">I</button>
+          <button type="button" class="btn btn-default">You</button>
+          <button type="button" class="btn btn-default">He</button>
+          <button type="button" class="btn btn-default">She</button>
+          <button type="button" class="btn btn-default">It</button>
+          <button type="button" class="btn btn-default">We</button>
+          <button type="button" class="btn btn-default">They</button>
+        </div>
+      </div>
+
+    </div>
+      
+    <div class='row'>
+      <div class="col-md-2"><h5>Type:</h5></div>
+      <div class='col-md-7 form-group'>
+
+        <div class="btn-group js-select-control" data-name="mark">
+          <button type="button" class="btn btn-default">Positive</button>
+          <button type="button" class="btn btn-default">Negative</button>
+          <button type="button" class="btn btn-default">Question</button>
+        </div>
+      </div>
+    </div>
+
+    <div class='row'>
+      <div class="col-md-2"><h5>Conjuction:</h5></div>
+      <div class='col-md-7 form-group'>
+        <div class="btn-group js-select-control js-verb-type-control" data-name="verb_type">
+          <button type="button" class="btn btn-default">Regular</button>
+          <button type="button" class="btn btn-default">Modal</button>
+        </div>
+      </div>
+    </div>
+
+    <div class='row'>
+      <div class="col-md-2"><h5>Verb:</h5></div>
+      <div class='col-md-6 form-group'>
+        <div class="btn-group js-select-control js-modal-verbs-control" data-name="verb">
+          <button type="button" class="btn btn-default">be</button>
+          <button type="button" class="btn btn-default">can</button>
+          <button type="button" class="btn btn-default">may</button>
+          <button type="button" class="btn btn-default">must</button>
+        </div>
+        <div class="input-group">
+          <input class="form-control js-regular-verbs-control" type='text' name='verb' placeholder='verb' value='like'>
+          <div class="input-group-btn">
+            <input type='submit' class="btn btn-primary" value='Pew!'/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='row medium'>
+      <div class="col-md-2"><h5>Form:</h5></div>
+      <div class='col-md-7 form-group'>
+        <div class="btn-group js-select-control" data-name="form">
+          <button type="button" class="btn btn-default">Full</button>
+          <button type="button" class="btn btn-default">Shortened</button>
+        </div>
+      </div>
+    </div>
+
+    <div class='row advanced'>
+      <div class="col-md-2"><h5>Object:</h5></div>
+      <div class='col-md-6 form-group'>
+        <div class="btn-group js-select-control" data-name="object">
+          <button type="button" class="btn btn-default">Active</button>
+          <button type="button" class="btn btn-default">Passive</button>
+        </div>
+      </div>
+    </div>
+    
+
+  </form>
+
+  <div class='row'>
+      <div class='col-md-12 form-group'>
+    <table class="table" cellspacing="0" cellpadding="0">
+      <tr>
+        <th>
+
+        </th>
+        <th>
+          Present
+        </th>
+        <th>
+          Past
+        </th>
+        <th>
+          Future
+        </th>
+      </tr>
+      <tr class='simple'>
+        <td>Simple</td>
+        <td class='present'>I live</td>
+        <td class='past'>I lived</td>
+        <td class='future'>I will live</td>
+      </tr>
+      <tr class='continues'>
+        <td>Continues</td>
+        <td class='present'>I live</td>
+        <td class='past'>I lived</td>
+        <td class='future'>I will live</td>
+      </tr>
+      <tr class='perfect medium'>
+        <td>Perfect</td>
+        <td class='present'>I live</td>
+        <td class='past'>I lived</td>
+        <td class='future'>I will live</td>
+      </tr>
+      <tr class='perfect_continues advanced'>
+        <td>Perfect Continues</td>
+        <td class='present'></td>
+        <td class='past'></td>
+        <td class='future'></td>
+      </tr>
+
+    </table>
+  </div>
+  </div>
+</div>
+</body>
+</html>                               
