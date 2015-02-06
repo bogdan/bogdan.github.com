@@ -81,25 +81,29 @@
         <a href="/2012/06/assumption-driven-development">Assumption Driven Approach</a>
         <div class="date">06 Jun 2012</div>
     </h2>
-    
-<p>This post shows some examples of how things can go wrong way because of people actions based on assumptions but not on facts. It is more conceptual than practical, so be patient and don’t blame my grammar mistakes too much. <!--more--></p>
+    <p>This post shows some examples of how things can go wrong way because of people actions based on assumptions but not on facts.
+It is more conceptual than practical, so be patient and don’t blame my grammar mistakes too much.
+<!--more--></p>
 
-<h3 id="evil_of_assumptions">Evil of assumptions</h3>
+<h3 id="evil-of-assumptions">Evil of assumptions</h3>
 
 <p>This is my favorite example of how wrong assumption can be:</p>
 
-<p>Very popular ruby questions for newbies:</p>
+<p>Very popular ruby questions for newbies: </p>
 
-<pre><code>What is the difference between `private` and `protected` methods?</code></pre>
+<pre><code>What is the difference between `private` and `protected` methods?
+</code></pre>
 
-<p>Question seems good and reasonable. But most people don’t know the right answer even after years with ruby. Most people assume that <code>private</code> methods can not be called from inherited classes, but <code>protected</code> can be.</p>
+<p>Question seems good and reasonable. But most people don’t know the right answer even after years with ruby.
+Most people assume that <code>private</code> methods can not be called from inherited classes, but <code>protected</code> can be.</p>
 
-<p>But that’s only an assumption. Have you ever tried to ensure that it’s right? The answer is: <strong>This is not true</strong>. Private method can be called from inherited class in the same way as protected.</p>
+<p>But that’s only an assumption. Have you ever tried to ensure that it’s right?
+The answer is: <strong>This is not true</strong>. Private method can be called from inherited class in the same way as protected.</p>
 
 <pre><code>class A
   private
   def a
-    puts &#39;hello&#39;
+    puts 'hello'
   end
 end
 
@@ -109,15 +113,18 @@ class B &lt; A
   end
 end
 
-B.new.b # No Exception here</code></pre>
+B.new.b # No Exception here
+</code></pre>
 
 <p><a href="http://gusiev.com/2010/04/ruby18-private-protected-incapsulatio/">More about private and public methods here</a>.</p>
 
-<p>This is good example on how myths can spread the world: Almost every person is surprised by the output of program above.</p>
+<p>This is good example on how myths can spread the world:
+Almost every person is surprised by the output of program above.</p>
 
-<p>This makes me feel that many interviewers ask questions while don’t know what they are asking about. From this point I can state that a lot of ruby interviews goes in a wrong direction by providing an assumption as a fact.</p>
+<p>This makes me feel that many interviewers ask questions while don’t know what they are asking about.
+From this point I can state that a lot of ruby interviews goes in a wrong direction by providing an assumption as a fact.</p>
 
-<h3 id="class_variables_assumption">Class variables assumption</h3>
+<h3 id="class-variables-assumption">Class variables assumption</h3>
 
 <p>Yet another assumption that can be made based on ruby documentation is connected with ruby class variables:</p>
 
@@ -133,45 +140,46 @@ class B &lt; A
 end
 
 puts B.pr
-puts A.pr</code></pre>
+puts A.pr
+</code></pre>
 
-<p>You can assume that last two lines produce 5 and 2, but they both produce 5. Because class variables are shared across all classes.</p>
+<p>You can assume that last two lines produce 5 and 2, but they both produce 5.
+Because class variables are shared across all classes.</p>
 
-<h3 id="assumption_example_in_the_performance_field">Assumption example in the performance field</h3>
+<h3 id="assumption-example-in-the-performance-field">Assumption example in the performance field</h3>
 
 <p>Most popular assumptions field is performance. And here we come up with the most recent bad assumption example:</p>
 
 <p>Ruby 2.0 offers lazy enumeration feature.</p>
 
-<pre><code>(1...100000).to_a.lazy.select{|a| a.odd? }.map{|a| a**2}.to_a</code></pre>
+<pre><code>(1...100000).to_a.lazy.select{|a| a.odd? }.map{|a| a**2}.to_a
+</code></pre>
 
-<p>In short: there will be only one iteration over an array with no intermediate array between <code>select</code> and <code>map</code>. If you are an assumption-driven person, you already assumed that <code>#lazy</code> not only saves your memory, but also improve performance.</p>
+<p>In short: there will be only one iteration over an array with no intermediate array between <code>select</code> and <code>map</code>.
+If you are an assumption-driven person, you already assumed that <code>#lazy</code> not only saves your memory, but also improve performance.</p>
 
-<p>And problem is that it is not true. <a href="https://bugs.ruby-lang.org/issues/6183"><code>#lazy</code> is very slow</a>.</p>
+<p>And problem is that it is not true. <a href="https://bugs.ruby-lang.org/issues/6183"><code>#lazy</code> is very slow</a>. </p>
 
-<h3 id="how_to_use_assumption_in_a_right_way">How to use assumption in a right way?</h3>
+<h3 id="how-to-use-assumption-in-a-right-way">How to use assumption in a right way?</h3>
 
 <p>Why we are still using assumptions a lot? Because they are cheap: they allow us to move faster without proofing that we are moving the right direction.</p>
 
 <p>Here are some MUSTs that we need to follow:</p>
 
 <ul>
-<li>Always make sure that you are 100% right when you are interviewing other person.</li>
-
-<li>Never make assumptions in performance field.</li>
+  <li>Always make sure that you are 100% right when you are interviewing other person.</li>
+  <li>Never make assumptions in performance field.</li>
 </ul>
 
 <p>And here are some more conceptual advices:</p>
 
 <ul>
-<li>Make assumptions depend on facts, but not other assumptions.</li>
-
-<li>Prove any assumption with fact before going with another assumption</li>
-
-<li>Do not tell people about assumptions as if they are facts.</li>
-
-<li>When we can’t make a good assumption from the beginning, maybe it’s time to gather more facts</li>
+  <li>Make assumptions depend on facts, but not other assumptions.</li>
+  <li>Prove any assumption with fact before going with another assumption</li>
+  <li>Do not tell people about assumptions as if they are facts.</li>
+  <li>When we can’t make a good assumption from the beginning, maybe it’s time to gather more facts</li>
 </ul>
+
 
     <div class="clear"></div>
     <div class="left">
@@ -212,19 +220,19 @@ puts A.pr</code></pre>
         <ul class="posts">
             
                <!-- Exclude self -->
-                <li><span>16 Aug 2012</span> &raquo; <a href="/2012/08/postgresql-full-text-search-solr">Full text search - Solr(Sunspot) vs PostgreSQL</a></li>
+                <li><span>03 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>05 Apr 2010</span> &raquo; <a href="/2010/04/ruby18-private-protected-incapsulatio">Encapsulation in Ruby: 'private' doesn't give expected level of privacy</a></li>
+                <li><span>25 Jul 2014</span> &raquo; <a href="/2014/07/rubyc-conference-video-parsers-slides">My Talk from RubyC conference</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>08 Oct 2012</span> &raquo; <a href="/2012/10/crazy-javascript-initialization-strategy">Smart Javascript Initialization Strategy</a></li>
+                <li><span>27 May 2014</span> &raquo; <a href="/2014/05/podcast-interview-le0pard-open-source-contribution">Took part in a podcast with Alexey Vasiliev</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>08 Jun 2010</span> &raquo; <a href="/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails">Advanced non-flat controllers hierarchy with rails</a></li>
+                <li><span>01 Apr 2014</span> &raquo; <a href="/2014/04/state-machine-minemalistic-validation-perfection-changes">Minimalistic State Machine: Less is More</a></li>
               
             
         </ul>
@@ -259,6 +267,10 @@ puts A.pr</code></pre>
                         <ul>
                             
                             <li>
+                                <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
                             </li>
                             
@@ -272,10 +284,6 @@ puts A.pr</code></pre>
                             
                             <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
                         </ul>
@@ -338,7 +346,7 @@ puts A.pr</code></pre>
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 30.2px; line-height:30.2px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
@@ -349,7 +357,7 @@ puts A.pr</code></pre>
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
-<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
 <a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 

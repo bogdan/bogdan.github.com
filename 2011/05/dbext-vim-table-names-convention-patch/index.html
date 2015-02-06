@@ -81,33 +81,34 @@
         <a href="/2011/05/dbext-vim-table-names-convention-patch">Patching dbext vim plugin to support Rails naming conventions</a>
         <div class="date">30 May 2011</div>
     </h2>
-    
-<p><a href="http://www.vim.org/scripts/script.php?script_id=356">dbext</a> is an excellent vim plugin that allows you to execute SQL queries directly from vim. For example: <code>select * from &lt;word under cursor&gt;</code>. When dbext is used with Rails there is a problem that you can work with some variation of table name like:</p>
+    <p><a href="http://www.vim.org/scripts/script.php?script_id=356">dbext</a> is an excellent vim plugin that allows you to execute SQL queries directly from vim. For example: <code>select * from &lt;word under cursor&gt;</code>. When dbext is used with Rails there is a problem that you can work with some variation of table name like: </p>
 
 <ul>
-<li>UserRole</li>
-
-<li>user_role_id</li>
-
-<li>user_role_ids</li>
-
-<li>user_role</li>
+  <li>UserRole</li>
+  <li>user_role_id</li>
+  <li>user_role_ids</li>
+  <li>user_role</li>
 </ul>
 
 <p>But still wants to use it as table name in your database queries so that you won’t type it manually.</p>
+
 <!--more-->
+
 <p>So, I made it to automatically convert word under cursor into a table name with the following configuration options:</p>
 
 <pre><code>let g:dbext_table_names_number = 2 
     # 0 - disabled, 1 - singular, 2 - plural
 let g:dbext_table_names_case = 2 
-    # 0 - disabled, 1 - camelcase, 2 - underscore</code></pre>
+    # 0 - disabled, 1 - camelcase, 2 - underscore
+</code></pre>
 
 <p>Also there is an option to automatically strip <code>_id</code> suffix from word to convert it to table name:</p>
 
-<pre><code>let g:dbext_table_names_strip_id = 1</code></pre>
+<pre><code>let g:dbext_table_names_strip_id = 1
+</code></pre>
 
-<p>All these options match Rails table name convention by default. Staff in <a href="http://github.com/bogdan/dbext">my dbext fork</a>.</p>
+<p>All these options match Rails table name convention by default.
+Staff in <a href="http://github.com/bogdan/dbext">my dbext fork</a>. </p>
 
 <p>Once you install it in your vim runtime put your cursor on any table name variation like example above and run <code>:DBSelectFromTable</code> to get:</p>
 
@@ -115,7 +116,9 @@ let g:dbext_table_names_case = 2
 
 <p>Other commands are also patched. Please let me know if any bugs found.</p>
 
-<p>Don’t know if non-rails developers would love this patch but pretty sure that it won’t annoy them. Please support <a href="https://github.com/zklinger/dbext/pull/1">my pull request</a> if you like it.</p>
+<p>Don’t know if non-rails developers would love this patch but pretty sure that it won’t annoy them. 
+Please support <a href="https://github.com/zklinger/dbext/pull/1">my pull request</a> if you like it.</p>
+
 
     <div class="clear"></div>
     <div class="left">
@@ -160,19 +163,19 @@ let g:dbext_table_names_case = 2
         <ul class="posts">
             
                <!-- Exclude self -->
-                <li><span>23 Jan 2012</span> &raquo; <a href="/2012/01/rails-32-features-changelog">New Rails Release with a few features from me</a></li>
+                <li><span>03 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>16 Aug 2012</span> &raquo; <a href="/2012/08/postgresql-full-text-search-solr">Full text search - Solr(Sunspot) vs PostgreSQL</a></li>
+                <li><span>25 Jul 2014</span> &raquo; <a href="/2014/07/rubyc-conference-video-parsers-slides">My Talk from RubyC conference</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>24 Jan 2010</span> &raquo; <a href="/2010/01/sql-queries-activerecord-rails-named-scopes-stack">Advanced SQL and scopes stack with ActiveRecord</a></li>
+                <li><span>27 May 2014</span> &raquo; <a href="/2014/05/podcast-interview-le0pard-open-source-contribution">Took part in a podcast with Alexey Vasiliev</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>02 Jun 2009</span> &raquo; <a href="/2009/06/avoid-nested-select-double-single-table-complex-query">Double select from a single table in complex SQL query.</a></li>
+                <li><span>01 Apr 2014</span> &raquo; <a href="/2014/04/state-machine-minemalistic-validation-perfection-changes">Minimalistic State Machine: Less is More</a></li>
               
             
         </ul>
@@ -207,6 +210,10 @@ let g:dbext_table_names_case = 2
                         <ul>
                             
                             <li>
+                                <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
                             </li>
                             
@@ -220,10 +227,6 @@ let g:dbext_table_names_case = 2
                             
                             <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
                         </ul>
@@ -286,7 +289,7 @@ let g:dbext_table_names_case = 2
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 30.2px; line-height:30.2px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
@@ -297,7 +300,7 @@ let g:dbext_table_names_case = 2
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
-<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
 <a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 

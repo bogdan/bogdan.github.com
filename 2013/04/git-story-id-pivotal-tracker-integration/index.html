@@ -81,24 +81,27 @@
         <a href="/2013/04/git-story-id-pivotal-tracker-integration">Attach git commits to pivotal stories</a>
         <div class="date">08 Apr 2013</div>
     </h2>
-    
-<p>I heard about 10 different ways to organize work flow around pivotaltracker and git and about 5 gems to support that process. All of them seems abusing for me: the outcome of pivotal/git integration is a git commit attached to pivotal story and the rest of conventions like naming branches or merge policy doesn’t make any sense in long time perspective and is just a waste of time in fact.</p>
+    <p>I heard about 10 different ways to organize work flow around pivotaltracker and git and about 5 gems to support that process.
+All of them seems abusing for me: the outcome of pivotal/git integration is a git commit attached to pivotal story and the rest of conventions like naming branches or merge policy doesn’t make any sense in long time perspective and is just a waste of time in fact. </p>
 
-<p>That’s why I’ve decided to make the most trivial integration that covers this idea and don’t provide additional complexity: Meet <a href="https://github.com/bogdan/git-storyid">git-storyid</a> gem - the only one git/pivotaltracker integration that saves your time. <!--more--></p>
+<p>That’s why I’ve decided to make the most trivial integration that covers this idea and don’t provide additional complexity:
+Meet <a href="https://github.com/bogdan/git-storyid">git-storyid</a> gem - the only one git/pivotaltracker integration that saves your time.
+<!--more--></p>
 
 <h2 id="installation">Installation</h2>
-<div class='highlight'><pre><code class='sh'>gem install git-storyid
-</code></pre>
-</div>
+
+<div class="highlight"><pre><code class="language-sh" data-lang="sh">gem install git-storyid</code></pre></div>
+
 <h2 id="usage">Usage</h2>
-<div class='highlight'><pre><code class='sh'>git storyid -m <span class='s2'>&quot;Initial implementation of campaign tags&quot;</span>
-<span class='c'># Api token (https://www.pivotaltracker.com/profile): a56f0e9a4fbXXXXXXXXXXXXXX</span>
-<span class='c'># Use SSL (y/n): y</span>
-<span class='c'># Your pivotal initials (e.g. BG): BG</span>
-<span class='c'># Project ID: 494XXX</span>
-</code></pre>
-</div>
+
+<div class="highlight"><pre><code class="language-sh" data-lang="sh">git storyid -m <span class="s2">&quot;Initial implementation of campaign tags&quot;</span>
+<span class="c"># Api token (https://www.pivotaltracker.com/profile): a56f0e9a4fbXXXXXXXXXXXXXX</span>
+<span class="c"># Use SSL (y/n): y</span>
+<span class="c"># Your pivotal initials (e.g. BG): BG</span>
+<span class="c"># Project ID: 494XXX</span></code></pre></div>
+
 <p>Now interactive menu is displayed to select one of <strong>Started stories</strong> owned by you:</p>
+
 <pre><code>[1] Removing Billing Page
 [2] Welcome Email
 [3] Email Shares -  Capture
@@ -110,7 +113,9 @@
 Indexes(csv): 7
 [campaign-tags 3020407]  [#44116647] Initial implementation of campaign tags
  1 file changed, 1 insertion(+), 2 deletions(-)</code></pre>
+
 <p>Result commit:</p>
+
 <pre><code>commit 3020407e92cb125083cf50ad494ff15169a7f2e6
 Author: Bogdan Gusiev &lt;youremail@gmail.com&gt;
 Date:   Fri Mar 15 12:42:32 2013 +0200
@@ -120,7 +125,8 @@ Date:   Fri Mar 15 12:42:32 2013 +0200
 Feature: Tag campaign insertion points and 
 campaigns with an identifier, 
 so only campaigns with matching identifier will get shown</code></pre>
-<h2 id="how_should_i_name_branches">How should I name branches?</h2>
+
+<h2 id="how-should-i-name-branches">How should I name branches?</h2>
 
 <p>Branch names is not something that you should focus on. Unlike commit messages, branches are removed from history after merge. That is why you should name them in a way that takes less of your time. I personally prefer to have only one branch for myself called <code>bogdandev</code> when I work on a project. When the feature is not done - there is no sense to work on another feature.</p>
 
@@ -163,19 +169,19 @@ so only campaigns with matching identifier will get shown</code></pre>
         <ul class="posts">
             
                <!-- Exclude self -->
-                <li><span>16 Aug 2012</span> &raquo; <a href="/2012/08/postgresql-full-text-search-solr">Full text search - Solr(Sunspot) vs PostgreSQL</a></li>
+                <li><span>03 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>08 Oct 2012</span> &raquo; <a href="/2012/10/crazy-javascript-initialization-strategy">Smart Javascript Initialization Strategy</a></li>
+                <li><span>25 Jul 2014</span> &raquo; <a href="/2014/07/rubyc-conference-video-parsers-slides">My Talk from RubyC conference</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>18 Nov 2011</span> &raquo; <a href="/2011/11/development-smtp-server">Improve your Email delivery code with Mailtrap</a></li>
+                <li><span>27 May 2014</span> &raquo; <a href="/2014/05/podcast-interview-le0pard-open-source-contribution">Took part in a podcast with Alexey Vasiliev</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>23 Jan 2012</span> &raquo; <a href="/2012/01/rails-32-features-changelog">New Rails Release with a few features from me</a></li>
+                <li><span>01 Apr 2014</span> &raquo; <a href="/2014/04/state-machine-minemalistic-validation-perfection-changes">Minimalistic State Machine: Less is More</a></li>
               
             
         </ul>
@@ -210,6 +216,10 @@ so only campaigns with matching identifier will get shown</code></pre>
                         <ul>
                             
                             <li>
+                                <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
                             </li>
                             
@@ -223,10 +233,6 @@ so only campaigns with matching identifier will get shown</code></pre>
                             
                             <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
                         </ul>
@@ -289,7 +295,7 @@ so only campaigns with matching identifier will get shown</code></pre>
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 30.2px; line-height:30.2px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
@@ -300,7 +306,7 @@ so only campaigns with matching identifier will get shown</code></pre>
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
-<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
 <a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 

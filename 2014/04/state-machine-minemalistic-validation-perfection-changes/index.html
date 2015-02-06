@@ -81,71 +81,76 @@
         <a href="/2014/04/state-machine-minemalistic-validation-perfection-changes">Minimalistic State Machine: Less is More</a>
         <div class="date">01 Apr 2014</div>
     </h2>
-    
-<p>I have tried a bunch of ActiveRecord’s state machine gems. Their functionality is very close to each other. It allows to validate a state transition and reinvent ruby programming language to define transition methods. The fact that all of them produces custom API to define a ruby method doesn’t look right… <!--more--></p>
+    <p>I have tried a bunch of ActiveRecord’s state machine gems.
+Their functionality is very close to each other. It allows to validate a state transition
+and reinvent ruby programming language to define transition methods.
+The fact that all of them produces custom API to define a ruby method doesn’t look right…
+<!--more--></p>
 
-<h3 id="samples_using_common_state_machine_gems">Samples using common state machine gems</h3>
-<div class='highlight'><pre><code class='ruby'><span class='c1'># State Machine gem example</span>
-<span class='n'>state_machine</span> <span class='ss'>:state</span><span class='p'>,</span> <span class='ss'>:initial</span> <span class='o'>=&gt;</span> <span class='ss'>:parked</span> <span class='k'>do</span>
-  <span class='n'>event</span> <span class='ss'>:approve!</span> <span class='k'>do</span>
-    <span class='n'>transition</span> <span class='ss'>:pending</span> <span class='o'>=&gt;</span> <span class='ss'>:approved</span>
-  <span class='k'>end</span>
-  <span class='n'>after_transition</span> <span class='ss'>:pending</span> <span class='o'>=&gt;</span> <span class='ss'>:approved</span><span class='p'>,</span> <span class='ss'>:do</span> <span class='o'>=&gt;</span> <span class='ss'>:send_approval_email</span>
-<span class='k'>end</span>
+<h3 id="samples-using-common-state-machine-gems">Samples using common state machine gems</h3>
 
-<span class='c1'># Workflow gem example</span>
-<span class='n'>workflow</span> <span class='k'>do</span>
-  <span class='n'>state</span> <span class='ss'>:pending</span> <span class='k'>do</span>
-    <span class='n'>event</span> <span class='ss'>:approve!</span><span class='p'>,</span> <span class='ss'>:transitions_to</span> <span class='o'>=&gt;</span> <span class='ss'>:approved</span><span class='p'>,</span> <span class='ss'>:after_transition</span> <span class='o'>=&gt;</span> <span class='ss'>:send_approval_email</span>
-  <span class='k'>end</span>
-<span class='k'>end</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># State Machine gem example</span>
+<span class="n">state_machine</span> <span class="ss">:state</span><span class="p">,</span> <span class="ss">:initial</span> <span class="o">=&gt;</span> <span class="ss">:parked</span> <span class="k">do</span>
+  <span class="n">event</span> <span class="ss">:approve!</span> <span class="k">do</span>
+    <span class="n">transition</span> <span class="ss">:pending</span> <span class="o">=&gt;</span> <span class="ss">:approved</span>
+  <span class="k">end</span>
+  <span class="n">after_transition</span> <span class="ss">:pending</span> <span class="o">=&gt;</span> <span class="ss">:approved</span><span class="p">,</span> <span class="ss">:do</span> <span class="o">=&gt;</span> <span class="ss">:send_approval_email</span>
+<span class="k">end</span>
 
-<span class='c1'># And finally plain ruby/rails example</span>
-<span class='k'>def</span> <span class='nf'>approve!</span>
-  <span class='n'>update_attributes!</span><span class='p'>(</span><span class='ss'>:state</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;approved&quot;</span><span class='p'>)</span>
-  <span class='n'>send_approval_email</span>
-<span class='k'>end</span>
-</code></pre>
-</div>
+<span class="c1"># Workflow gem example</span>
+<span class="n">workflow</span> <span class="k">do</span>
+  <span class="n">state</span> <span class="ss">:pending</span> <span class="k">do</span>
+    <span class="n">event</span> <span class="ss">:approve!</span><span class="p">,</span> <span class="ss">:transitions_to</span> <span class="o">=&gt;</span> <span class="ss">:approved</span><span class="p">,</span> <span class="ss">:after_transition</span> <span class="o">=&gt;</span> <span class="ss">:send_approval_email</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># And finally plain ruby/rails example</span>
+<span class="k">def</span> <span class="nf">approve!</span>
+  <span class="n">update_attributes!</span><span class="p">(</span><span class="ss">:state</span> <span class="o">=&gt;</span> <span class="s2">&quot;approved&quot;</span><span class="p">)</span>
+  <span class="n">send_approval_email</span>
+<span class="k">end</span></code></pre></div>
+
 <p>Maybe I don’t know all modern trends but ruby version looks more human readable to me.</p>
 
-<h3 id="so_why_do_we_still_tend_to_use_state_machine_gems">So why do we still tend to use state machine gems</h3>
+<h3 id="so-why-do-we-still-tend-to-use-state-machine-gems">So why do we still tend to use state machine gems</h3>
 
-<p>The main reason is state change validation. It won’t be easy to always check if it is possible to transition object from state A to state B in plain Ruby. This part of state machine is something that really matter.</p>
+<p>The main reason is state change validation. It won’t be easy to always check if it is possible to transition object from state A to state B in plain Ruby.
+This part of state machine is something that really matter.</p>
 
 <p>In my head it appears as some kind of allowed changes map:</p>
-<div class='highlight'><pre><code class='ruby'><span class='n'>order_state_changes_map</span> <span class='o'>=</span> <span class='p'>{</span> 
-  <span class='kp'>nil</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='ss'>:pending</span><span class='o'>]</span><span class='p'>,</span> <span class='c1'># Initial state is always pending</span>
-  <span class='ss'>:pending</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='ss'>:approved</span><span class='p'>,</span> <span class='ss'>:rejected</span><span class='o'>]</span><span class='p'>,</span> <span class='c1'># Pending can be changed to to paid and delivered</span>
-  <span class='ss'>:approved</span> <span class='o'>=&gt;</span> <span class='ss'>:paid</span> <span class='c1'># Delivered can only be changed to paid</span>
-<span class='p'>}</span>
-</code></pre>
-</div>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">order_state_changes_map</span> <span class="o">=</span> <span class="p">{</span> 
+  <span class="kp">nil</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:pending</span><span class="o">]</span><span class="p">,</span> <span class="c1"># Initial state is always pending</span>
+  <span class="ss">:pending</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:approved</span><span class="p">,</span> <span class="ss">:rejected</span><span class="o">]</span><span class="p">,</span> <span class="c1"># Pending can be changed to to paid and delivered</span>
+  <span class="ss">:approved</span> <span class="o">=&gt;</span> <span class="ss">:paid</span> <span class="c1"># Delivered can only be changed to paid</span>
+<span class="p">}</span></code></pre></div>
+
 <p>If the state machine’s main goal is to validate changes than let’s implement it as a validation:</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Order</span> <span class='o'>&lt;</span> <span class='no'>AR</span><span class='o'>::</span><span class='no'>Base</span>
-  <span class='n'>validates</span> <span class='ss'>:state</span><span class='p'>,</span> <span class='ss'>:changes</span> <span class='o'>=&gt;</span> <span class='n'>order_state_changes_map</span>
-<span class='k'>end</span>
-</code></pre>
-</div>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Order</span> <span class="o">&lt;</span> <span class="no">AR</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">validates</span> <span class="ss">:state</span><span class="p">,</span> <span class="ss">:changes</span> <span class="o">=&gt;</span> <span class="n">order_state_changes_map</span>
+<span class="k">end</span></code></pre></div>
+
 <p>With this pattern you can define state change methods in ruby:</p>
-<div class='highlight'><pre><code class='ruby'><span class='n'>validates</span> <span class='ss'>:state</span><span class='p'>,</span> <span class='ss'>:changes</span> <span class='o'>=&gt;</span> <span class='p'>{</span> 
-  <span class='kp'>nil</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='ss'>:pending</span><span class='o'>]</span><span class='p'>,</span> <span class='c1'># Initial state is always pending</span>
-  <span class='ss'>:pending</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='ss'>:approved</span><span class='p'>,</span> <span class='ss'>:rejected</span><span class='o'>]</span><span class='p'>,</span> <span class='c1'># Pending can be changed to to paid and delivered</span>
-  <span class='ss'>:approved</span> <span class='o'>=&gt;</span> <span class='ss'>:paid</span> <span class='c1'># Delivered can only be changed to paid</span>
-<span class='p'>}</span>
 
-<span class='k'>def</span> <span class='nf'>upproved!</span>
-  <span class='c1'># ....</span>
-<span class='k'>end</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">validates</span> <span class="ss">:state</span><span class="p">,</span> <span class="ss">:changes</span> <span class="o">=&gt;</span> <span class="p">{</span> 
+  <span class="kp">nil</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:pending</span><span class="o">]</span><span class="p">,</span> <span class="c1"># Initial state is always pending</span>
+  <span class="ss">:pending</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:approved</span><span class="p">,</span> <span class="ss">:rejected</span><span class="o">]</span><span class="p">,</span> <span class="c1"># Pending can be changed to to paid and delivered</span>
+  <span class="ss">:approved</span> <span class="o">=&gt;</span> <span class="ss">:paid</span> <span class="c1"># Delivered can only be changed to paid</span>
+<span class="p">}</span>
 
-<span class='k'>def</span> <span class='nf'>upproved?</span>
-  <span class='c1'># ....</span>
-<span class='k'>end</span>
-</code></pre>
-</div>
+<span class="k">def</span> <span class="nf">upproved!</span>
+  <span class="c1"># ....</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">upproved?</span>
+  <span class="c1"># ....</span>
+<span class="k">end</span></code></pre></div>
+
 <p>Now it looks really readable and a person who never saw this kind of API before can figure out what is happening.</p>
 
 <p>Give a try to: <a href="https://github.com/bogdan/changes_validator"><strong>ChangesValidator</strong></a> in your app</p>
+
 
     <div class="clear"></div>
     <div class="left">
@@ -186,19 +191,19 @@
         <ul class="posts">
             
                <!-- Exclude self -->
-                <li><span>16 Aug 2012</span> &raquo; <a href="/2012/08/postgresql-full-text-search-solr">Full text search - Solr(Sunspot) vs PostgreSQL</a></li>
+                <li><span>03 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>06 Jun 2012</span> &raquo; <a href="/2012/06/assumption-driven-development">Assumption Driven Approach</a></li>
+                <li><span>25 Jul 2014</span> &raquo; <a href="/2014/07/rubyc-conference-video-parsers-slides">My Talk from RubyC conference</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>08 Oct 2012</span> &raquo; <a href="/2012/10/crazy-javascript-initialization-strategy">Smart Javascript Initialization Strategy</a></li>
+                <li><span>27 May 2014</span> &raquo; <a href="/2014/05/podcast-interview-le0pard-open-source-contribution">Took part in a podcast with Alexey Vasiliev</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>23 Jan 2012</span> &raquo; <a href="/2012/01/rails-32-features-changelog">New Rails Release with a few features from me</a></li>
+                <li><span>04 Nov 2013</span> &raquo; <a href="/2013/11/datagrid-slides-report-framework">Datagrid slides from Ruby Meditation 3</a></li>
               
             
         </ul>
@@ -233,6 +238,10 @@
                         <ul>
                             
                             <li>
+                                <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
                             </li>
                             
@@ -246,10 +255,6 @@
                             
                             <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
                         </ul>
@@ -312,7 +317,7 @@
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 30.2px; line-height:30.2px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
@@ -323,7 +328,7 @@
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
-<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
 <a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 

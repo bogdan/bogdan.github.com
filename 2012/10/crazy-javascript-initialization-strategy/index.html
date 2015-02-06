@@ -81,75 +81,85 @@
         <a href="/2012/10/crazy-javascript-initialization-strategy">Smart Javascript Initialization Strategy</a>
         <div class="date">08 Oct 2012</div>
     </h2>
-    
-<p>JavaScript initialization process is a pain in the ass since dynamic HTML and AJAX became popular. We need to take care all the time about what we need to initialize after every change in DOM. Thanks to <code>jQuery#live</code> and <code>jQuery#on</code> that is not so right but still very effective solution. It allows to fix the problem with initialization of typical events. But initialization is not always about binding DOM events. In more advanced cases it could be wrapping widget class over an element or custom jQuery method call like date-picker.</p>
+    <p>JavaScript initialization process is a pain in the ass since dynamic HTML and AJAX became popular. We need to take care all the time about what we need to initialize after every change in DOM. Thanks to <code>jQuery#live</code> and <code>jQuery#on</code> that is not so right but still very effective solution. It allows to fix the problem with initialization of typical events.
+But initialization is not always about binding DOM events. In more advanced cases it could be wrapping widget class over an element or custom jQuery method call like date-picker.</p>
+
 <!--more-->
+
 <p>Here is an example:</p>
-<div class='highlight'><pre><code class='js'><span class='c1'>// This line will be required not only on `$(docuemnt).ready` </span>
-<span class='c1'>// but every time an update in DOM occur that adds some new date input on page.</span>
-<span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;.data-picker&quot;</span><span class='p'>).</span><span class='nx'>datePicker</span><span class='p'>();</span>
-</code></pre>
-</div>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// This line will be required not only on `$(docuemnt).ready` </span>
+<span class="c1">// but every time an update in DOM occur that adds some new date input on page.</span>
+<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.data-picker&quot;</span><span class="p">).</span><span class="nx">datePicker</span><span class="p">();</span></code></pre></div>
+
 <p>Or advanced example:</p>
-<div class='highlight'><pre><code class='js'><span class='kd'>var</span> <span class='nx'>ImageGallery</span> <span class='o'>=</span> <span class='kd'>function</span><span class='p'>(){</span>
-  <span class='cm'>/* Class with 100+ lines of code here */</span>
-<span class='p'>};</span> 
-<span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;.image-gallery&quot;</span><span class='p'>).</span><span class='nx'>each</span><span class='p'>(</span><span class='kd'>function</span><span class='p'>(</span><span class='nx'>element</span><span class='p'>){</span>
-  <span class='k'>new</span> <span class='nx'>ImageGallery</span><span class='p'>(</span><span class='nx'>element</span><span class='p'>);</span>
-<span class='p'>});</span>
-</code></pre>
-</div>
-<p>In example above is split into two sections: definition and initialization. This fact makes code hard to follow as moving from class to DOM element in HTML template require at least two transitions in your editor.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">ImageGallery</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="cm">/* Class with 100+ lines of code here */</span>
+<span class="p">};</span> 
+<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.image-gallery&quot;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">){</span>
+  <span class="k">new</span> <span class="nx">ImageGallery</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+<span class="p">});</span></code></pre></div>
+
+<p>In example above is split into two sections: definition and initialization.
+This fact makes code hard to follow as moving from class to DOM element in HTML template require at least two transitions in your editor.</p>
 
 <p>And when large page update comes after ajax query this is getting even worth. All initializer should called again:</p>
-<div class='highlight'><pre><code class='js'><span class='nx'>$</span><span class='p'>.</span><span class='nx'>get</span><span class='p'>(</span><span class='s2'>&quot;/profile/edit&quot;</span><span class='p'>,</span> <span class='nx'>data</span><span class='p'>,</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>response</span><span class='p'>)</span> <span class='p'>{</span>
-  <span class='nx'>showSomeProfileEditingPopup</span><span class='p'>(</span><span class='nx'>response</span><span class='p'>);</span>
-  <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;.profile-birth-date&quot;</span><span class='p'>).</span><span class='nx'>datePicker</span><span class='p'>();</span>
-  <span class='k'>new</span> <span class='nx'>ImageGallery</span><span class='p'>(</span><span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;.profile-image-gallery&#39;</span><span class='p'>));</span>
-  <span class='c1'>// More initialization here</span>
-<span class='p'>});</span>
-</code></pre>
-</div>
-<h3 id="tired_to_handle_things_like_this">Tired to handle things like this?</h3>
 
-<h2 id="change_the_way_of_thinking_about_initialization">Change the way of thinking about initialization</h2>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/profile/edit&quot;</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">showSomeProfileEditingPopup</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.profile-birth-date&quot;</span><span class="p">).</span><span class="nx">datePicker</span><span class="p">();</span>
+  <span class="k">new</span> <span class="nx">ImageGallery</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.profile-image-gallery&#39;</span><span class="p">));</span>
+  <span class="c1">// More initialization here</span>
+<span class="p">});</span></code></pre></div>
 
-<p>Initialization code is a bridge where between actual JS class and DOM element. In 99% of cases it has one to one or one to many relation. Than, why do we always need that intermediate initialization code?</p>
+<h3 id="tired-to-handle-things-like-this">Tired to handle things like this?</h3>
+
+<h2 id="change-the-way-of-thinking-about-initialization">Change the way of thinking about initialization</h2>
+
+<p>Initialization code is a bridge where between actual JS class and DOM element.
+In 99% of cases it has one to one or one to many relation.
+Than, why do we always need that intermediate initialization code?</p>
 
 <p>The DOM element could have the class itself:</p>
-<div class='highlight'><pre><code class='html'><span class='nt'>&lt;div</span> <span class='na'>class=</span><span class='s'>&quot;profile-image-gallery&quot;</span> <span class='na'>data-class=</span><span class='s'>&quot;ImageGallery&quot;</span><span class='nt'>&gt;</span>
-</code></pre>
-</div>
-<p>Now your way from DOM element to JS class require only one transition. Moreover all DOM elements could be initialized with one call. It needs to run over DOM and find all elements with <code>data-class</code> attributes that are not initialized and wrap them with a specified class:</p>
-<div class='highlight'><pre><code class='js'><span class='kd'>var</span> <span class='nx'>Initializer</span> <span class='o'>=</span> <span class='p'>{</span>
-  <span class='nx'>perform</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>()</span> <span class='p'>{</span>
-    <span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;[data-class]:not(.initialized)&#39;</span><span class='p'>).</span><span class='nx'>each</span><span class='p'>(</span><span class='kd'>function</span><span class='p'>(</span><span class='nx'>i</span><span class='p'>,</span> <span class='nx'>element</span><span class='p'>)</span> <span class='p'>{</span>
-      <span class='kd'>var</span> <span class='nx'>element</span> <span class='o'>=</span> <span class='nx'>$</span><span class='p'>(</span><span class='nx'>element</span><span class='p'>);</span>
-      <span class='nx'>element</span><span class='p'>.</span><span class='nx'>addClass</span><span class='p'>(</span><span class='s1'>&#39;initialized&#39;</span><span class='p'>);</span>
-      <span class='kd'>var</span> <span class='nx'>klass</span> <span class='o'>=</span> <span class='nb'>window</span><span class='p'>[</span><span class='nx'>element</span><span class='p'>.</span><span class='nx'>data</span><span class='p'>(</span><span class='nx'>element</span><span class='p'>)];</span>
-      <span class='k'>new</span> <span class='nx'>klass</span><span class='p'>(</span><span class='nx'>element</span><span class='p'>);</span>
-    <span class='p'>});</span>
-  <span class='p'>}</span>
-<span class='p'>};</span>
-</code></pre>
-</div>
-<p>This code bit will probably require some additional functionality to support an options but general idea is strong enough to handle all possible complexity in a future. Now, whenever DOM changes everything we need to do is call:</p>
-<div class='highlight'><pre><code class='js'><span class='nx'>Initializer</span><span class='p'>.</span><span class='nx'>perform</span><span class='p'>();</span>
-</code></pre>
-</div>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;profile-image-gallery&quot;</span> <span class="na">data-class=</span><span class="s">&quot;ImageGallery&quot;</span><span class="nt">&gt;</span></code></pre></div>
+
+<p>Now your way from DOM element to JS class require only one transition.
+Moreover all DOM elements could be initialized with one call. It needs to run over DOM and find all elements with <code>data-class</code> attributes that are not initialized and wrap them with a specified class:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">Initializer</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">perform</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;[data-class]:not(.initialized)&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+      <span class="nx">element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;initialized&#39;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">klass</span> <span class="o">=</span> <span class="nb">window</span><span class="p">[</span><span class="nx">element</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">element</span><span class="p">)];</span>
+      <span class="k">new</span> <span class="nx">klass</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">};</span></code></pre></div>
+
+<p>This code bit will probably require some additional functionality to support an options but general idea is strong enough to handle all possible complexity in a future.
+Now, whenever DOM changes everything we need to do is call:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">Initializer</span><span class="p">.</span><span class="nx">perform</span><span class="p">();</span></code></pre></div>
+
 <p>In order to attach third-party libraries to this initialization process we need to create a simple wrapping class around them:</p>
-<div class='highlight'><pre><code class='js'><span class='kd'>var</span> <span class='nx'>DatePicker</span> <span class='o'>=</span> <span class='kd'>function</span> <span class='p'>(</span><span class='nx'>element</span><span class='p'>)</span> <span class='p'>{</span>
-  <span class='nx'>$</span><span class='p'>(</span><span class='nx'>element</span><span class='p'>).</span><span class='nx'>datePicker</span><span class='p'>()</span>
-<span class='p'>}</span>
-</code></pre>
-</div>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">DatePicker</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">datePicker</span><span class="p">()</span>
+<span class="p">}</span></code></pre></div>
+
 <p>Now we are able to convert inputs to date pickers with unified initialization process:</p>
-<div class='highlight'><pre><code class='html'><span class='nt'>&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;text&quot;</span> <span class='na'>name=</span><span class='s'>&quot;profile[birth_date]&quot;</span> <span class='na'>data-class=</span><span class='s'>&quot;DatePicker&quot;</span><span class='nt'>&gt;</span>
-</code></pre>
-</div>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;profile[birth_date]&quot;</span> <span class="na">data-class=</span><span class="s">&quot;DatePicker&quot;</span><span class="nt">&gt;</span></code></pre></div>
+
 <h2 id="conclusion">Conclusion</h2>
 
-<p>JavaScript coding is annoying for most people that came from other languages because it keeps fragmented things that should be bound together. In order to avoid this problem we need to invent conventions to follow, so that every person in a team understand that. But the cost of convention described here is not that much and makes code move clean and easy to follow.</p>
+<p>JavaScript coding is annoying for most people that came from other languages because it keeps fragmented things that should be bound together.
+In order to avoid this problem we need to invent conventions to follow, so that every person in a team understand that.
+But the cost of convention described here is not that much and makes code move clean and easy to follow.</p>
+
 
     <div class="clear"></div>
     <div class="left">
@@ -188,19 +198,19 @@
         <ul class="posts">
             
                <!-- Exclude self -->
-                <li><span>16 Aug 2012</span> &raquo; <a href="/2012/08/postgresql-full-text-search-solr">Full text search - Solr(Sunspot) vs PostgreSQL</a></li>
+                <li><span>03 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>01 Mar 2012</span> &raquo; <a href="/2012/03/javascript-ajax-submit-form-validation">Web Forms 2.0: Submit with Ajax and Client Side Validation</a></li>
+                <li><span>25 Jul 2014</span> &raquo; <a href="/2014/07/rubyc-conference-video-parsers-slides">My Talk from RubyC conference</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>06 Jun 2012</span> &raquo; <a href="/2012/06/assumption-driven-development">Assumption Driven Approach</a></li>
+                <li><span>27 May 2014</span> &raquo; <a href="/2014/05/podcast-interview-le0pard-open-source-contribution">Took part in a podcast with Alexey Vasiliev</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>23 Jan 2012</span> &raquo; <a href="/2012/01/rails-32-features-changelog">New Rails Release with a few features from me</a></li>
+                <li><span>01 Apr 2014</span> &raquo; <a href="/2014/04/state-machine-minemalistic-validation-perfection-changes">Minimalistic State Machine: Less is More</a></li>
               
             
         </ul>
@@ -235,6 +245,10 @@
                         <ul>
                             
                             <li>
+                                <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
                             </li>
                             
@@ -248,10 +262,6 @@
                             
                             <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
                         </ul>
@@ -314,7 +324,7 @@
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 30.2px; line-height:30.2px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
@@ -325,7 +335,7 @@
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
-<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
 <a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 

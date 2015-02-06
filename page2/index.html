@@ -77,12 +77,114 @@
                     
     <div class="post">
         <h2>
+            <a href='/2012/10/crazy-javascript-initialization-strategy'>Smart Javascript Initialization Strategy</a>
+            <div class="date">08 Oct 2012</div>
+        </h2>
+        <p>JavaScript initialization process is a pain in the ass since dynamic HTML and AJAX became popular. We need to take care all the time about what we need to initialize after every change in DOM. Thanks to <code>jQuery#live</code> and <code>jQuery#on</code> that is not so right but still very effective solution. It allows to fix the problem with initialization of typical events.
+But initialization is not always about binding DOM events. In more advanced cases it could be wrapping widget class over an element or custom jQuery method call like date-picker.</p>
+
+<!--
+
+<p>Here is an example:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// This line will be required not only on `$(docuemnt).ready` </span>
+<span class="c1">// but every time an update in DOM occur that adds some new date input on page.</span>
+<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.data-picker&quot;</span><span class="p">).</span><span class="nx">datePicker</span><span class="p">();</span></code></pre></div>
+
+<p>Or advanced example:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">ImageGallery</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="cm">/* Class with 100+ lines of code here */</span>
+<span class="p">};</span> 
+<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.image-gallery&quot;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">){</span>
+  <span class="k">new</span> <span class="nx">ImageGallery</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+<span class="p">});</span></code></pre></div>
+
+<p>In example above is split into two sections: definition and initialization.
+This fact makes code hard to follow as moving from class to DOM element in HTML template require at least two transitions in your editor.</p>
+
+<p>And when large page update comes after ajax query this is getting even worth. All initializer should called again:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/profile/edit&quot;</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">showSomeProfileEditingPopup</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.profile-birth-date&quot;</span><span class="p">).</span><span class="nx">datePicker</span><span class="p">();</span>
+  <span class="k">new</span> <span class="nx">ImageGallery</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.profile-image-gallery&#39;</span><span class="p">));</span>
+  <span class="c1">// More initialization here</span>
+<span class="p">});</span></code></pre></div>
+
+<h3 id="tired-to-handle-things-like-this">Tired to handle things like this?</h3>
+
+<h2 id="change-the-way-of-thinking-about-initialization">Change the way of thinking about initialization</h2>
+
+<p>Initialization code is a bridge where between actual JS class and DOM element.
+In 99% of cases it has one to one or one to many relation.
+Than, why do we always need that intermediate initialization code?</p>
+
+<p>The DOM element could have the class itself:</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;profile-image-gallery&quot;</span> <span class="na">data-class=</span><span class="s">&quot;ImageGallery&quot;</span><span class="nt">&gt;</span></code></pre></div>
+
+<p>Now your way from DOM element to JS class require only one transition.
+Moreover all DOM elements could be initialized with one call. It needs to run over DOM and find all elements with <code>data-class</code> attributes that are not initialized and wrap them with a specified class:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">Initializer</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">perform</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;[data-class]:not(.initialized)&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+      <span class="nx">element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;initialized&#39;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">klass</span> <span class="o">=</span> <span class="nb">window</span><span class="p">[</span><span class="nx">element</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">element</span><span class="p">)];</span>
+      <span class="k">new</span> <span class="nx">klass</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">};</span></code></pre></div>
+
+<p>This code bit will probably require some additional functionality to support an options but general idea is strong enough to handle all possible complexity in a future.
+Now, whenever DOM changes everything we need to do is call:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">Initializer</span><span class="p">.</span><span class="nx">perform</span><span class="p">();</span></code></pre></div>
+
+<p>In order to attach third-party libraries to this initialization process we need to create a simple wrapping class around them:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">DatePicker</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">datePicker</span><span class="p">()</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Now we are able to convert inputs to date pickers with unified initialization process:</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;profile[birth_date]&quot;</span> <span class="na">data-class=</span><span class="s">&quot;DatePicker&quot;</span><span class="nt">&gt;</span></code></pre></div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>JavaScript coding is annoying for most people that came from other languages because it keeps fragmented things that should be bound together.
+In order to avoid this problem we need to invent conventions to follow, so that every person in a team understand that.
+But the cost of convention described here is not that much and makes code move clean and easy to follow.</p>
+
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/javascript.html">javascript</a>
+    
+    <a href="/tags/initialization.html">initialization</a>
+    
+    <a href="/tags/class.html">class</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2012/09/rails-strict-validation-popularity'>Strict validation is a main stream</a>
             <div class="date">17 Sep 2012</div>
         </h2>
-        
-<p>It’s nice to see that <a href="/2012/01/rails-32-features-changelog/#strict_validation_concept">strict validation feature</a> that I’ve <a href="https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2">done almost a year ago</a> is <a href="http://robots.thoughtbot.com/post/31728620503/refactoring-replace-conditional-with-polymorphism">finally getting popular</a>. Spend a moment and understand what it does by <a href="http://api.rubyonrails.org/classes/ActiveModel/Validations/ClassMethods.html#method-i-validates-21">Rails documentation</a>.</p>
-<!---->
+        <p>It’s nice to see that <a href="/2012/01/rails-32-features-changelog/#strict_validation_concept">strict validation feature</a> that I’ve <a href="https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2">done almost a year ago</a> is <a href="http://robots.thoughtbot.com/post/31728620503/refactoring-replace-conditional-with-polymorphism">finally getting popular</a>. Spend a moment and understand what it does by <a href="http://api.rubyonrails.org/classes/ActiveModel/Validations/ClassMethods.html#method-i-validates-21">Rails documentation</a>.</p>
+
+<!--
+
+-->
         <h4 class="tags">
     
     <a href="/tags/rails.html">rails</a>
@@ -103,119 +205,132 @@
             <a href='/2012/08/postgresql-full-text-search-solr'>Full text search - Solr(Sunspot) vs PostgreSQL</a>
             <div class="date">16 Aug 2012</div>
         </h2>
-        
-<p>This is short notes about my experience with full text search based on PostgreSQL and Solr. Solr was primary used with a help of <a href="https://github.com/sunspot/sunspot">Sunspot gem</a> that was definitely a good idea, but unfortunately caused some drawbacks. PostgreSQL provides full text search out of the box and to my opinion doesn’t need any additional ruby specific tools other than ORM. <!--</p>
+        <p>This is short notes about my experience with full text search based on PostgreSQL and Solr.
+Solr was primary used with a help of <a href="https://github.com/sunspot/sunspot">Sunspot gem</a> that was definitely a good idea, 
+but unfortunately caused some drawbacks. PostgreSQL provides full text search out of the box and to my opinion doesn’t need any 
+additional ruby specific tools other than ORM.
+<!--</p>
 
 <h2 id="tldr">TL;DR</h2>
 
-<p>PostgreSQL approach is simple and fit well to agile project. Solr is pretty powerful, but you need to pay for that power. And this is significant cost. Think twice if you really need this power from the first day of full text search in your project.</p>
+<p>PostgreSQL approach is simple and fit well to agile project.
+Solr is pretty powerful, but you need to pay for that power. And this is significant cost.
+Think twice if you really need this power from the first day of full text search in your project.</p>
 
-<h2 id="search_index">Search index</h2>
+<h2 id="search-index">Search index</h2>
 
-<p>Solr search index is something you create almost manually by defining a new data schema. Sunspot sets <code>after_save</code> hooks to your model to update it’s solr index.</p>
+<p>Solr search index is something you create almost manually by defining a new data schema.
+Sunspot sets <code>after_save</code> hooks to your model to update it’s solr index.</p>
 
 <p>Here is an example of schema definition based on Sunspot gem:</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Product</span> <span class='o'>&lt;</span> <span class='no'>ActiveRecord</span><span class='o'>::</span><span class='no'>Base</span>
-  <span class='n'>searchable</span> <span class='k'>do</span>
-    <span class='n'>text</span> <span class='ss'>:title</span>
-    <span class='n'>text</span> <span class='ss'>:material</span>
-    <span class='n'>text</span> <span class='ss'>:category</span> <span class='k'>do</span>
-      <span class='n'>category</span><span class='o'>.</span><span class='n'>title</span>
-    <span class='k'>end</span>
-    <span class='n'>text</span> <span class='ss'>:brand</span> <span class='k'>do</span>
-      <span class='n'>brand</span><span class='o'>.</span><span class='n'>title</span>
-    <span class='k'>end</span>
-  <span class='k'>end</span> <span class='c1'># do</span>
-<span class='k'>end</span>
-</code></pre>
-</div>
-<p>PostgreSQL search index might be yet another column in the database, set by pre save hook:</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Product</span> <span class='o'>&lt;</span> <span class='no'>ActiveRecord</span><span class='o'>::</span><span class='no'>Base</span>
 
-  <span class='n'>before_validation</span> <span class='ss'>:set_searchable_content</span>
-  <span class='kp'>protected</span>
-  <span class='k'>def</span> <span class='nf'>set_searchable_content</span>
-    <span class='nb'>self</span><span class='o'>.</span><span class='n'>searchable_content</span> <span class='o'>=</span> <span class='o'>[</span><span class='n'>title</span><span class='p'>,</span> <span class='n'>material</span><span class='p'>,</span> <span class='n'>category</span><span class='o'>.</span><span class='n'>title</span><span class='p'>,</span> <span class='n'>brand</span><span class='o'>.</span><span class='n'>title</span><span class='o'>].</span><span class='n'>join</span><span class='p'>(</span><span class='s2'>&quot; &quot;</span><span class='p'>)</span>
-  <span class='k'>end</span>
-<span class='k'>end</span>
-</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">searchable</span> <span class="k">do</span>
+    <span class="n">text</span> <span class="ss">:title</span>
+    <span class="n">text</span> <span class="ss">:material</span>
+    <span class="n">text</span> <span class="ss">:category</span> <span class="k">do</span>
+      <span class="n">category</span><span class="o">.</span><span class="n">title</span>
+    <span class="k">end</span>
+    <span class="n">text</span> <span class="ss">:brand</span> <span class="k">do</span>
+      <span class="n">brand</span><span class="o">.</span><span class="n">title</span>
+    <span class="k">end</span>
+  <span class="k">end</span> <span class="c1"># do</span>
+<span class="k">end</span></code></pre></div>
+
+<p>PostgreSQL search index might be yet another column in the database, set by pre save hook:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+
+  <span class="n">before_validation</span> <span class="ss">:set_searchable_content</span>
+  <span class="kp">protected</span>
+  <span class="k">def</span> <span class="nf">set_searchable_content</span>
+    <span class="nb">self</span><span class="o">.</span><span class="n">searchable_content</span> <span class="o">=</span> <span class="o">[</span><span class="n">title</span><span class="p">,</span> <span class="n">material</span><span class="p">,</span> <span class="n">category</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">brand</span><span class="o">.</span><span class="n">title</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
 <p>And don’t forget about database index:</p>
-<div class='highlight'><pre><code class='sql'><span class='k'>CREATE</span> <span class='k'>INDEX</span> <span class='n'>source_idx</span> <span class='k'>ON</span> <span class='n'>products</span> <span class='k'>USING</span> <span class='n'>gin</span><span class='p'>(</span><span class='n'>to_tsvector</span><span class='p'>(</span><span class='s1'>&#39;english&#39;</span><span class='p'>,</span> <span class='n'>searchable_content</span><span class='p'>));</span> 
-</code></pre>
-</div>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">source_idx</span> <span class="k">ON</span> <span class="n">products</span> <span class="k">USING</span> <span class="n">gin</span><span class="p">(</span><span class="n">to_tsvector</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="n">searchable_content</span><span class="p">));</span></code></pre></div>
+
 <p>While this is very basic use case, it shows up the direction where your code will go in each variant.</p>
 
 <ul>
-<li>Advanced high level DSL with a lot of “unknown unknowns” in Solr case</li>
-
-<li>Just ruby code that everyone would understand from the first look in case of Postgres</li>
+  <li>Advanced high level DSL with a lot of “unknown unknowns” in Solr case</li>
+  <li>Just ruby code that everyone would understand from the first look in case of Postgres</li>
 </ul>
 
 <p>As an example of how you would solve more advanced problem, I want to show facet search implementation:</p>
-<div class='highlight'><pre><code class='ruby'><span class='c1'># Suppose to receive a list of ids to count between different categories</span>
-<span class='k'>def</span> <span class='nc'>self</span><span class='o'>.</span><span class='nf'>search_facets</span><span class='p'>(</span><span class='n'>ids</span><span class='p'>)</span>
-  <span class='k'>return</span> <span class='o'>[]</span> <span class='k'>if</span> <span class='n'>ids</span><span class='o'>.</span><span class='n'>blank?</span>
-  <span class='no'>ProductCategory</span><span class='o'>.</span><span class='n'>select</span><span class='p'>(</span><span class='s2'>&quot;product_categories.id, count(product_categories.id) as product_count&quot;</span><span class='p'>)</span><span class='o'>.</span>
-     <span class='n'>joins</span><span class='p'>(</span><span class='ss'>:products</span><span class='p'>)</span><span class='o'>.</span>
-     <span class='n'>where</span><span class='p'>(</span><span class='s2'>&quot;products.id&quot;</span> <span class='o'>=&gt;</span> <span class='n'>ids</span><span class='p'>)</span><span class='o'>.</span>
-     <span class='n'>group</span><span class='p'>(</span><span class='s2'>&quot;product_categories.id&quot;</span><span class='p'>)</span><span class='o'>.</span>
-<span class='k'>end</span>
-</code></pre>
-</div>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># Suppose to receive a list of ids to count between different categories</span>
+<span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">search_facets</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
+  <span class="k">return</span> <span class="o">[]</span> <span class="k">if</span> <span class="n">ids</span><span class="o">.</span><span class="n">blank?</span>
+  <span class="no">ProductCategory</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;product_categories.id, count(product_categories.id) as product_count&quot;</span><span class="p">)</span><span class="o">.</span>
+     <span class="n">joins</span><span class="p">(</span><span class="ss">:products</span><span class="p">)</span><span class="o">.</span>
+     <span class="n">where</span><span class="p">(</span><span class="s2">&quot;products.id&quot;</span> <span class="o">=&gt;</span> <span class="n">ids</span><span class="p">)</span><span class="o">.</span>
+     <span class="n">group</span><span class="p">(</span><span class="s2">&quot;product_categories.id&quot;</span><span class="p">)</span><span class="o">.</span>
+<span class="k">end</span></code></pre></div>
+
 <p>While Solr based facet would be easier:</p>
-<div class='highlight'><pre><code class='ruby'><span class='no'>Product</span><span class='o'>.</span><span class='n'>search</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>s</span><span class='o'>|</span>
-  <span class='n'>s</span><span class='o'>.</span><span class='n'>keywords</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:query</span><span class='o'>]</span>
-  <span class='n'>s</span><span class='o'>.</span><span class='n'>facet</span> <span class='ss'>:category_id</span>
-  <span class='n'>s</span><span class='o'>.</span><span class='n'>paginate</span> <span class='ss'>:page</span> <span class='o'>=&gt;</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:page</span><span class='o'>]</span><span class='p'>,</span> <span class='ss'>:per_page</span> <span class='o'>=&gt;</span> <span class='mi'>10</span>
-<span class='k'>end</span>
-</code></pre>
-</div>
-<p>At first look you might say that Solr way is more clear, but you still don’t know what it does in deep details. Sunspot gives DSL is yet another language to query data. It includes all types of operations (e.g. <a href="https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields">comparison operators</a>, while postgres lets use SQL - language you should know already.</p>
 
-<p>There is also easy to spot that Solr and Sunspot tool chain brings more features to you out of the box. But this is where Solr advantages ends. Note stat Solr config file is not as readable as Sunspot DSL. Here is a short example that tells Solr to do some string transformation before create a search index:</p>
-<div class='highlight'><pre><code class='xml'><span class='nt'>&lt;fieldType</span> <span class='na'>name=</span><span class='s'>&quot;text&quot;</span> <span class='na'>class=</span><span class='s'>&quot;solr.TextField&quot;</span> <span class='na'>omitNorms=</span><span class='s'>&quot;false&quot;</span><span class='nt'>&gt;</span>
-  <span class='nt'>&lt;analyzer&gt;</span>
-    <span class='nt'>&lt;tokenizer</span> <span class='na'>class=</span><span class='s'>&quot;solr.StandardTokenizerFactory&quot;</span><span class='nt'>/&gt;</span>
-    <span class='c'>&lt;!-- remove punctualtion --&gt;</span>
-    <span class='nt'>&lt;filter</span> <span class='na'>class=</span><span class='s'>&quot;solr.StandardFilterFactory&quot;</span><span class='nt'>/&gt;</span>
-    <span class='c'>&lt;!-- lower case letters --&gt;</span>
-    <span class='nt'>&lt;filter</span> <span class='na'>class=</span><span class='s'>&quot;solr.LowerCaseFilterFactory&quot;</span><span class='nt'>/&gt;</span>
-    <span class='c'>&lt;!-- language semantic support --&gt;</span>
-    <span class='nt'>&lt;filter</span> <span class='na'>class=</span><span class='s'>&quot;solr.SnowballPorterFilterFactory&quot;</span> <span class='na'>language=</span><span class='s'>&quot;English&quot;</span><span class='nt'>/&gt;</span>
-  <span class='nt'>&lt;/analyzer&gt;</span>
-<span class='nt'>&lt;/fieldType&gt;</span>
-</code></pre>
-</div>
-<p>When you go deeper into solr you might need to deal with configs like example above. While in case of PostgreSQL you can do any string transformation using ruby.</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="k">do</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">keywords</span> <span class="n">params</span><span class="o">[</span><span class="ss">:query</span><span class="o">]</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">facet</span> <span class="ss">:category_id</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">paginate</span> <span class="ss">:page</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:page</span><span class="o">]</span><span class="p">,</span> <span class="ss">:per_page</span> <span class="o">=&gt;</span> <span class="mi">10</span>
+<span class="k">end</span></code></pre></div>
 
-<h2 id="deployment_and_testing">Deployment and Testing</h2>
+<p>At first look you might say that Solr way is more clear, but you still don’t know what it does in deep details.
+Sunspot gives DSL is yet another language to query data. It includes all types of operations (e.g. <a href="https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields">comparison operators</a>, while postgres lets use SQL - language you should know already.</p>
+
+<p>There is also easy to spot that Solr and Sunspot tool chain brings more features to you out of the box.
+But this is where Solr advantages ends.
+Note stat Solr config file is not as readable as Sunspot DSL. 
+Here is a short example that tells Solr to do some string transformation before create a search index:</p>
+
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;fieldType</span> <span class="na">name=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;solr.TextField&quot;</span> <span class="na">omitNorms=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;analyzer&gt;</span>
+    <span class="nt">&lt;tokenizer</span> <span class="na">class=</span><span class="s">&quot;solr.StandardTokenizerFactory&quot;</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- remove punctualtion --&gt;</span>
+    <span class="nt">&lt;filter</span> <span class="na">class=</span><span class="s">&quot;solr.StandardFilterFactory&quot;</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- lower case letters --&gt;</span>
+    <span class="nt">&lt;filter</span> <span class="na">class=</span><span class="s">&quot;solr.LowerCaseFilterFactory&quot;</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- language semantic support --&gt;</span>
+    <span class="nt">&lt;filter</span> <span class="na">class=</span><span class="s">&quot;solr.SnowballPorterFilterFactory&quot;</span> <span class="na">language=</span><span class="s">&quot;English&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/analyzer&gt;</span>
+<span class="nt">&lt;/fieldType&gt;</span></code></pre></div>
+
+<p>When you go deeper into solr you might need to deal with configs like example above.
+While in case of PostgreSQL you can do any string transformation using ruby.</p>
+
+<h2 id="deployment-and-testing">Deployment and Testing</h2>
 
 <p>Solr is a standalone application and you need to take care about Solr configuration. It is a part of a code since some search business logic depends on it. This might require:</p>
 
 <ul>
-<li>different solr config files across different branches</li>
-
-<li>test suite that covers some config options</li>
-
-<li>different solr instances launched for development and test environments</li>
-
-<li>a need to rebuild search index when you switch branches</li>
+  <li>different solr config files across different branches </li>
+  <li>test suite that covers some config options</li>
+  <li>different solr instances launched for development and test environments</li>
+  <li>a need to rebuild search index when you switch branches</li>
 </ul>
 
-<p>Postgres built in search doesn’t have these problems at all. This will give a significant performance boost in agile process. Deployment, testing and switching branches doesn’t require any full text search specific action.</p>
+<p>Postgres built in search doesn’t have these problems at all. This will give a significant performance boost in agile process.  Deployment, testing and switching branches doesn’t require any full text search specific action.</p>
 
-<h2 id="reindex_process">Reindex process</h2>
+<h2 id="reindex-process">Reindex process</h2>
 
 <p>Reindex complexity comes from several factors.</p>
 
-<p>First of them is complicated search index that cover more than one model (Ex: <code>Product.belongs_to :brand</code> and <code>Brand#title</code> should be a part of <code>Product</code> index). It makes both approaches more complex as business logic becomes more complex.</p>
+<p>First of them is complicated search index that cover more than one model (Ex: <code>Product.belongs_to :brand</code> and <code>Brand#title</code> should be a part of <code>Product</code> index).
+It makes both approaches more complex as business logic becomes more complex.</p>
 
-<p>But in case of Solr this is not the only one thing to care. With database size growth you gain more problems. Solr index do not have that nice migration mechanism and dump transfer tools as Relational databases. No matter which gem you will use to connect Solr and Relational database: you need to take care when search index schema changes.</p>
+<p>But in case of Solr this is not the only one thing to care.
+With database size growth you gain more problems. Solr index do not have that nice migration mechanism and dump transfer tools as Relational databases.
+No matter which gem you will use to connect Solr and Relational database: you need to take care when search index schema changes.</p>
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>Conceptually I would like my database to respond for every data search operation e.g. full text search. This is where PostgreSQL is going. But this feature is not that strong now e.g. it still lacks spell checking and result highlight features. Solr is old school tool having all full text search features you ever imagine, but it’s heavy configuration file and technology stack should be easier.</p>
+<p>Conceptually I would like my database to respond for every data search operation e.g. full text search.
+This is where PostgreSQL is going. But this feature is not that strong now e.g. it still lacks spell checking and result highlight features.
+Solr is old school tool having all full text search features you ever imagine, but it’s heavy configuration file and technology stack should be easier.</p>
+
 -->
         <h4 class="tags">
     
@@ -241,36 +356,34 @@
             <a href='/2012/06/javascript-ajax-debug-popup-response'>How many clicks do you need to debug ajax request?</a>
             <div class="date">16 Jun 2012</div>
         </h2>
-        
-<p>Here I am gonna use Chrome browser as an example:</p>
+        <p>Here I am gonna use Chrome browser as an example:</p>
 
 <ol>
-<li>Open context menu</li>
-
-<li>Click inspect element.</li>
-
-<li>Click “Network” tab</li>
-
-<li>Spawn again an ajax request (at least one click. Sometimes more)</li>
-
-<li>Click on failed request at Network tab</li>
-
-<li>Click “Preview” or “Response” subtab</li>
+  <li>Open context menu</li>
+  <li>Click inspect element.</li>
+  <li>Click “Network” tab</li>
+  <li>Spawn again an ajax request (at least one click. Sometimes more)</li>
+  <li>Click on failed request at Network tab</li>
+  <li>Click “Preview” or “Response” subtab</li>
 </ol>
+
 <!--
-<p><a href='http://i.imm.io/skBN.png'>
-  <img src='http://i.imm.io/skBN.png' width='400px' />
+
+<p><a href="http://i.imm.io/skBN.png">
+  <img width="400px" src="http://i.imm.io/skBN.png" />
 </a></p>
 
-<h3 id="this_should_change">THIS SHOULD CHANGE</h3>
+<h3 id="this-should-change">THIS SHOULD CHANGE</h3>
 
 <p>Why we can not automate this daily routine work?</p>
 
-<p>With <a href="https://github.com/bogdan/jquery-ajax-debug">this tiny script</a> you don’t need any: Error response will be displayed in Popup at once after it occur.</p>
+<p>With <a href="https://github.com/bogdan/jquery-ajax-debug">this tiny script</a> you don’t need any:
+Error response will be displayed in Popup at once after it occur.</p>
 
-<p><a href='http://i.imm.io/skDh.png'>
-  <img src='http://i.imm.io/skDh.png' width='400px' />
+<p><a href="http://i.imm.io/skDh.png">
+  <img width="400px" src="http://i.imm.io/skDh.png" />
 </a></p>
+
 -->
         <h4 class="tags">
     
@@ -294,25 +407,29 @@
             <a href='/2012/06/assumption-driven-development'>Assumption Driven Approach</a>
             <div class="date">06 Jun 2012</div>
         </h2>
-        
-<p>This post shows some examples of how things can go wrong way because of people actions based on assumptions but not on facts. It is more conceptual than practical, so be patient and don’t blame my grammar mistakes too much. <!--</p>
+        <p>This post shows some examples of how things can go wrong way because of people actions based on assumptions but not on facts.
+It is more conceptual than practical, so be patient and don’t blame my grammar mistakes too much.
+<!--</p>
 
-<h3 id="evil_of_assumptions">Evil of assumptions</h3>
+<h3 id="evil-of-assumptions">Evil of assumptions</h3>
 
 <p>This is my favorite example of how wrong assumption can be:</p>
 
-<p>Very popular ruby questions for newbies:</p>
+<p>Very popular ruby questions for newbies: </p>
 
-<pre><code>What is the difference between `private` and `protected` methods?</code></pre>
+<pre><code>What is the difference between `private` and `protected` methods?
+</code></pre>
 
-<p>Question seems good and reasonable. But most people don’t know the right answer even after years with ruby. Most people assume that <code>private</code> methods can not be called from inherited classes, but <code>protected</code> can be.</p>
+<p>Question seems good and reasonable. But most people don’t know the right answer even after years with ruby.
+Most people assume that <code>private</code> methods can not be called from inherited classes, but <code>protected</code> can be.</p>
 
-<p>But that’s only an assumption. Have you ever tried to ensure that it’s right? The answer is: <strong>This is not true</strong>. Private method can be called from inherited class in the same way as protected.</p>
+<p>But that’s only an assumption. Have you ever tried to ensure that it’s right?
+The answer is: <strong>This is not true</strong>. Private method can be called from inherited class in the same way as protected.</p>
 
 <pre><code>class A
   private
   def a
-    puts &#39;hello&#39;
+    puts 'hello'
   end
 end
 
@@ -322,15 +439,18 @@ class B &lt; A
   end
 end
 
-B.new.b # No Exception here</code></pre>
+B.new.b # No Exception here
+</code></pre>
 
 <p><a href="http://gusiev.com/2010/04/ruby18-private-protected-incapsulatio/">More about private and public methods here</a>.</p>
 
-<p>This is good example on how myths can spread the world: Almost every person is surprised by the output of program above.</p>
+<p>This is good example on how myths can spread the world:
+Almost every person is surprised by the output of program above.</p>
 
-<p>This makes me feel that many interviewers ask questions while don’t know what they are asking about. From this point I can state that a lot of ruby interviews goes in a wrong direction by providing an assumption as a fact.</p>
+<p>This makes me feel that many interviewers ask questions while don’t know what they are asking about.
+From this point I can state that a lot of ruby interviews goes in a wrong direction by providing an assumption as a fact.</p>
 
-<h3 id="class_variables_assumption">Class variables assumption</h3>
+<h3 id="class-variables-assumption">Class variables assumption</h3>
 
 <p>Yet another assumption that can be made based on ruby documentation is connected with ruby class variables:</p>
 
@@ -346,45 +466,46 @@ class B &lt; A
 end
 
 puts B.pr
-puts A.pr</code></pre>
+puts A.pr
+</code></pre>
 
-<p>You can assume that last two lines produce 5 and 2, but they both produce 5. Because class variables are shared across all classes.</p>
+<p>You can assume that last two lines produce 5 and 2, but they both produce 5.
+Because class variables are shared across all classes.</p>
 
-<h3 id="assumption_example_in_the_performance_field">Assumption example in the performance field</h3>
+<h3 id="assumption-example-in-the-performance-field">Assumption example in the performance field</h3>
 
 <p>Most popular assumptions field is performance. And here we come up with the most recent bad assumption example:</p>
 
 <p>Ruby 2.0 offers lazy enumeration feature.</p>
 
-<pre><code>(1...100000).to_a.lazy.select{|a| a.odd? }.map{|a| a**2}.to_a</code></pre>
+<pre><code>(1...100000).to_a.lazy.select{|a| a.odd? }.map{|a| a**2}.to_a
+</code></pre>
 
-<p>In short: there will be only one iteration over an array with no intermediate array between <code>select</code> and <code>map</code>. If you are an assumption-driven person, you already assumed that <code>#lazy</code> not only saves your memory, but also improve performance.</p>
+<p>In short: there will be only one iteration over an array with no intermediate array between <code>select</code> and <code>map</code>.
+If you are an assumption-driven person, you already assumed that <code>#lazy</code> not only saves your memory, but also improve performance.</p>
 
-<p>And problem is that it is not true. <a href="https://bugs.ruby-lang.org/issues/6183"><code>#lazy</code> is very slow</a>.</p>
+<p>And problem is that it is not true. <a href="https://bugs.ruby-lang.org/issues/6183"><code>#lazy</code> is very slow</a>. </p>
 
-<h3 id="how_to_use_assumption_in_a_right_way">How to use assumption in a right way?</h3>
+<h3 id="how-to-use-assumption-in-a-right-way">How to use assumption in a right way?</h3>
 
 <p>Why we are still using assumptions a lot? Because they are cheap: they allow us to move faster without proofing that we are moving the right direction.</p>
 
 <p>Here are some MUSTs that we need to follow:</p>
 
 <ul>
-<li>Always make sure that you are 100% right when you are interviewing other person.</li>
-
-<li>Never make assumptions in performance field.</li>
+  <li>Always make sure that you are 100% right when you are interviewing other person.</li>
+  <li>Never make assumptions in performance field.</li>
 </ul>
 
 <p>And here are some more conceptual advices:</p>
 
 <ul>
-<li>Make assumptions depend on facts, but not other assumptions.</li>
-
-<li>Prove any assumption with fact before going with another assumption</li>
-
-<li>Do not tell people about assumptions as if they are facts.</li>
-
-<li>When we can’t make a good assumption from the beginning, maybe it’s time to gather more facts</li>
+  <li>Make assumptions depend on facts, but not other assumptions.</li>
+  <li>Prove any assumption with fact before going with another assumption</li>
+  <li>Do not tell people about assumptions as if they are facts.</li>
+  <li>When we can’t make a good assumption from the beginning, maybe it’s time to gather more facts</li>
 </ul>
+
 -->
         <h4 class="tags">
     
@@ -408,44 +529,49 @@ puts A.pr</code></pre>
             <a href='/2012/05/benchmark-performance-patch-ruby-diff'>Benchmark your performance patches</a>
             <div class="date">01 May 2012</div>
         </h2>
-        
-<p>After a dozen performance patches to many gems want to share some practical experience I gain. Tools I’ve picked up was <strong>perftools.rb</strong> and ruby <strong>built-in benchmark</strong> library. They are fit well for cases when optimization stays at Ruby level and doesn’t require to fix something in native extensions or dig into IO operations.</p>
+        <p>After a dozen performance patches to many gems want to share some practical experience I gain. 
+Tools I’ve picked up was <strong>perftools.rb</strong> and ruby <strong>built-in benchmark</strong> library.
+They are fit well for cases when optimization stays at Ruby level and doesn’t require to fix something in native extensions or dig into IO operations.</p>
+
 <!--
+
 <p>General flow on how to tackle performance is clear:</p>
 
 <ul>
-<li><a href="https://github.com/tmm1/perftools.rb">perftools.rb</a> shows slow method calls in a nice call graph format.</li>
-
-<li><a href="http://ruby-doc.org/stdlib-1.9.2/libdoc/benchmark/rdoc/Benchmark.html">Benchmark</a> proves that we made an improvement.</li>
+  <li><a href="https://github.com/tmm1/perftools.rb">perftools.rb</a> shows slow method calls in a nice call graph format.</li>
+  <li><a href="http://ruby-doc.org/stdlib-1.9.2/libdoc/benchmark/rdoc/Benchmark.html">Benchmark</a> proves that we made an improvement.</li>
 </ul>
 
-<p>Perftools does all the hard work for you.</p>
+<p>Perftools does all the hard work for you. </p>
 
-<pre><code>require &#39;perftools&#39;
-PerfTools::CpuProfiler.start(&quot;/tmp/profile_result&quot;) do
+<pre><code>require 'perftools'
+PerfTools::CpuProfiler.start("/tmp/profile_result") do
   # code to profile
-end</code></pre>
+end
+</code></pre>
 
 <p>Run test and open result:</p>
 
 <pre><code>gem install perftools.rb
 ruby test.rb
 pprof.rb --gif /tmp/profile_result &gt; /tmp/profile_result.gif
-$IMAGE_VIEWER /tmp/profile_result.gif </code></pre>
+$IMAGE_VIEWER /tmp/profile_result.gif 
+</code></pre>
 
 <p>Example output: <strong>Rails route generator call graph</strong></p>
 
-<p><a href='http://postimage.org/image/fy4fxhzvr/full/'>
-  <img src='/images/perf_sample.gif' width='600px' />
+<p><a href="http://postimage.org/image/fy4fxhzvr/full/">
+  <img src="/images/perf_sample.gif" width="600px" />
 </a></p>
 
-<p>Here is short instruction how to read call graph:</p>
+<p>Here is short instruction how to read call graph: </p>
 
 <p>Each block represents a method that was called. Percentage in a block shows how much time was spend in current method with and without all it’s nested calls comparing to overall time. Arrow with number shows how many times parent method called it’s children method.</p>
 
 <p>That’s it. All you need to do now is find blocks with most percentage and try reduce them.</p>
 
-<p>This flow works fine till the moment when benchmark results before and after patch should be compared. Ruby Benchmark can not merge them together and represent in a human readable form like this:</p>
+<p>This flow works fine till the moment when benchmark results before and after patch should be compared. 
+Ruby Benchmark can not merge them together and represent in a human readable form like this:</p>
 
 <pre><code>Running benchmark with current working tree
 Checkout HEAD^
@@ -463,27 +589,26 @@ Before patch:   0.020000   0.000000   0.020000 (  0.024283)
 
 ---------------------------------headers parsing when empty
 After patch:    0.010000   0.000000   0.010000 (  0.002160)
-Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
+Before patch:   0.000000   0.000000   0.000000 (  0.002354)
+</code></pre>
 
-<p>So, decided to create a library that fixes this problem. Try out <strong><a href="https://github.com/bogdan/diffbench">DiffBench</a></strong> if you ever come up with performance patch.</p>
+<p>So, decided to create a library that fixes this problem.
+Try out <strong><a href="https://github.com/bogdan/diffbench">DiffBench</a></strong> if you ever come up with performance patch.</p>
 
 <p>DiffBench in action examples:</p>
 
 <ul>
-<li>Rails
-<ul>
-<li>ActiveRecord - <a href="https://github.com/rails/rails/pull/5467">#5467</a></li>
-
-<li>ActiveModel - <a href="https://github.com/rails/rails/pull/5431">#5431</a></li>
-
-<li>ActiveSupport - <a href="https://github.com/rails/rails/pull/4493">#4493</a></li>
-
-<li>ActionPack - <a href="https://github.com/rails/rails/pull/5957">#5957</a></li>
+  <li>Rails
+    <ul>
+      <li>ActiveRecord - <a href="https://github.com/rails/rails/pull/5467">#5467</a></li>
+      <li>ActiveModel - <a href="https://github.com/rails/rails/pull/5431">#5431</a></li>
+      <li>ActiveSupport - <a href="https://github.com/rails/rails/pull/4493">#4493</a></li>
+      <li>ActionPack - <a href="https://github.com/rails/rails/pull/5957">#5957</a></li>
+    </ul>
+  </li>
+  <li>Mail - <a href="https://github.com/mikel/mail/pull/369">#396</a>, <a href="https://github.com/mikel/mail/pull/366">#366</a></li>
 </ul>
-</li>
 
-<li>Mail - <a href="https://github.com/mikel/mail/pull/369">#396</a>, <a href="https://github.com/mikel/mail/pull/366">#366</a></li>
-</ul>
 -->
         <h4 class="tags">
     
@@ -509,92 +634,98 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
             <a href='/2012/03/javascript-ajax-submit-form-validation'>Web Forms 2.0: Submit with Ajax and Client Side Validation</a>
             <div class="date">01 Mar 2012</div>
         </h2>
-        
-<p>Web 2.0 world force us to build Forms in a new level of quality. AJAX and dynamic HTML changes a way how forms should work internally. Let’s call it Forms 2.0. And of course this facts bring a lot of complexity every time we deal with forms. Sometimes such form makes a real problem comparing to regular Web 1.0 form. Here will be a talk how to make Forms 2.0 as simple as Forms 1.0.</p>
+        <p>Web 2.0 world force us to build Forms in a new level of quality. AJAX and dynamic HTML changes a way how forms should work internally. Let’s call it Forms 2.0. And of course this facts bring a lot of complexity every time we deal with forms. Sometimes such form makes a real problem comparing to regular Web 1.0 form. Here will be a talk how to make Forms 2.0 as simple as Forms 1.0.</p>
+
 <!--
-<h2 id="sumbit_with_ajax">Sumbit with Ajax</h2>
+
+<h2 id="sumbit-with-ajax">Sumbit with Ajax</h2>
 
 <p>Submit a form with AJAX have never been a problem:</p>
-<div class='highlight'><pre><code class='js'><span class='nx'>$</span><span class='p'>.</span><span class='nx'>ajax</span><span class='p'>({</span>
-  <span class='nx'>url</span><span class='o'>:</span> <span class='nx'>$</span><span class='p'>(</span><span class='nx'>form</span><span class='p'>).</span><span class='nx'>attr</span><span class='p'>(</span><span class='s1'>&#39;action&#39;</span><span class='p'>),</span>
-  <span class='nx'>data</span><span class='o'>:</span> <span class='nx'>$</span><span class='p'>(</span><span class='nx'>form</span><span class='p'>).</span><span class='nx'>serialize</span><span class='p'>(),</span>
-  <span class='nx'>type</span><span class='o'>:</span> <span class='nx'>$</span><span class='p'>(</span><span class='nx'>form</span><span class='p'>).</span><span class='nx'>attr</span><span class='p'>(</span><span class='s1'>&#39;method&#39;</span><span class='p'>),</span>
-  <span class='nx'>success</span><span class='o'>:</span> <span class='kd'>function</span> <span class='p'>()</span> <span class='p'>{</span>
-    <span class='c1'>//do</span>
-  <span class='p'>}</span>
-<span class='p'>});</span>
-</code></pre>
-</div>
-<p>More over submit with AJAX doesn’t require to rerender a page if it was not successfull: less server load and no need to support ‘new’ and ‘edit’ mode in HTML template. Problem that comes up with ajax submit is Validation. If you ever find yourself stuck with syncing client and server side validation or bug that form doesn’t have some data that was there before submit then you know what I am talking about too.</p>
 
-<h2 id="solving_validation_problem">Solving validation problem</h2>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="nx">url</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="nx">form</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">),</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="nx">form</span><span class="p">).</span><span class="nx">serialize</span><span class="p">(),</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="nx">form</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;method&#39;</span><span class="p">),</span>
+  <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">//do</span>
+  <span class="p">}</span>
+<span class="p">});</span></code></pre></div>
 
-<p>There are number of visions in the Ruby community on how to solve the problem: some people prefer stay with Forms 1.0. Some people generate JavaScript validators based on ActiveModel validators. Other guys write their own validation in JavaScript and perform it on both client and server side. The complexity of all these solution goes beyond believe. And here I am going to describe much simpler way of doing it.</p>
+<p>More over submit with AJAX doesn’t require to rerender a page if it was not successfull: less server load and no need to support ‘new’ and ‘edit’ mode in HTML template. 
+Problem that comes up with ajax submit is  Validation.
+If you ever find yourself stuck with syncing client and server side validation or bug that form doesn’t have some data that was there before submit then you know what I am talking about too.</p>
+
+<h2 id="solving-validation-problem">Solving validation problem</h2>
+
+<p>There are number of visions in the Ruby community on how to solve the problem: some people prefer stay with Forms 1.0. Some people generate JavaScript validators based on ActiveModel validators. Other guys write their own validation in JavaScript and perform it on both client and server side.
+The complexity of all these solution goes beyond believe. And here I am going to describe much simpler way of doing it.</p>
 
 <p>What if we pass the validation result as JSON from backend in a simple key:value format like:</p>
-<div class='highlight'><pre><code class='js'><span class='p'>{</span><span class='nx'>email</span><span class='o'>:</span> <span class='s2'>&quot;is not valid&quot;</span><span class='p'>,</span> <span class='nx'>password</span><span class='o'>:</span> <span class='s2'>&quot;is too short&quot;</span><span class='p'>}</span>
-</code></pre>
-</div>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">{</span><span class="nx">email</span><span class="o">:</span> <span class="s2">&quot;is not valid&quot;</span><span class="p">,</span> <span class="nx">password</span><span class="o">:</span> <span class="s2">&quot;is too short&quot;</span><span class="p">}</span></code></pre></div>
+
 <p>It’s fast as wind and easy to implement:</p>
 
 <ul>
-<li>No SQL queries during validation request
-<ul>
-<li>Except uniqueness, that is more likely a feature than a problem</li>
-</ul>
-</li>
-
-<li>No Rendering just small JSON object as response</li>
-
-<li>No additional controller action - just modify existing one</li>
+  <li>No SQL queries during validation request
+    <ul>
+      <li>Except uniqueness, that is more likely a feature than a problem</li>
+    </ul>
+  </li>
+  <li>No Rendering just small JSON object as response</li>
+  <li>No additional controller action - just modify existing one</li>
 </ul>
 
-<h2 id="from_assumptions_to_coding">From Assumptions to Coding</h2>
+<h2 id="from-assumptions-to-coding">From Assumptions to Coding</h2>
 
 <p>As we agreed - controller should return JSON instead of HTML:</p>
-<div class='highlight'><pre><code class='diff'> class UsersController &lt; ApplicationController
+
+<div class="highlight"><pre><code class="language-diff" data-lang="diff">class UsersController &lt; ApplicationController
    def create
      @user = User.new(params[:user])
      if @user.save
-<span class='gd'>-      redirect_to root_path</span>
-<span class='gi'>+      render :json =&gt; {:redirect =&gt; root_path}</span>
+<span class="gd">-      redirect_to root_path</span>
+<span class="gi">+      render :json =&gt; {:redirect =&gt; root_path}</span>
      else
-<span class='gd'>-      render :action =&gt; :new</span>
-<span class='gi'>+      render :json =&gt; {:errors =&gt; user.errors}</span>
+<span class="gd">-      render :action =&gt; :new</span>
+<span class="gi">+      render :json =&gt; {:errors =&gt; user.errors}</span>
      end
    end
- end
-</code></pre>
-</div>
+ end</code></pre></div>
+
 <p>All we need to do after that is just assign errors to the form to the prepared spots identified with HTML5 custom attribute:</p>
-<div class='highlight'><pre><code class='diff'> &lt;form id=&quot;new_user&quot; action=&quot;/users&quot; method=&quot;post&quot;&gt;
-<span class='gd'>-  &lt;div class=&quot;field&quot;&gt;</span>
-<span class='gi'>+  &lt;div class=&quot;field&quot; validate=&quot;email&quot;&gt;</span>
+
+<div class="highlight"><pre><code class="language-diff" data-lang="diff">&lt;form id=&quot;new_user&quot; action=&quot;/users&quot; method=&quot;post&quot;&gt;
+<span class="gd">-  &lt;div class=&quot;field&quot;&gt;</span>
+<span class="gi">+  &lt;div class=&quot;field&quot; validate=&quot;email&quot;&gt;</span>
      &lt;label for=&quot;user_email&quot;&gt;Email&lt;/label&gt;&lt;br /&gt;
      &lt;input id=&quot;user_email&quot; name=&quot;user[email]&quot; type=&quot;text&quot; /&gt;
    &lt;/div&gt;
-<span class='gd'>-  &lt;div class=&quot;field&quot;&gt;</span>
-<span class='gi'>+  &lt;div class=&quot;field&quot; validate=&quot;password&quot;&gt;</span>
+<span class="gd">-  &lt;div class=&quot;field&quot;&gt;</span>
+<span class="gi">+  &lt;div class=&quot;field&quot; validate=&quot;password&quot;&gt;</span>
      &lt;label for=&quot;user_password&quot;&gt;Password&lt;/label&gt;&lt;br /&gt;
      &lt;input id=&quot;user_password&quot; name=&quot;user[password]&quot; type=&quot;password&quot; /&gt;
    &lt;/div&gt;
    &lt;div class=&quot;actions&quot;&gt;
      &lt;input name=&quot;commit&quot; type=&quot;submit&quot; value=&quot;Create User&quot; /&gt;
    &lt;/div&gt;
- &lt;/form&gt;
-</code></pre>
-</div>
-<p>All the dirty work can be done by <a href="https://github.com/bogdan/ajaxsubmit">AjaxSubmit</a> library that implements all the ideas described above:</p>
-<div class='highlight'><pre><code class='js'><span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;#new_user&#39;</span><span class='p'>).</span><span class='nx'>ajaxForm</span><span class='p'>();</span>
-</code></pre>
-</div>
-<p>The main goal reached: Make super modern AJAX form is as easy as regular form. If you still can’t believe that it is so easy - check out <a href="http://ajaxsubmit.herokuapp.com">LIVE demo</a>.</p>
+ &lt;/form&gt;</code></pre></div>
 
-<h2 id="ajaxsubmit_is_it_flexible">AjaxSubmit: Is it flexible?</h2>
+<p>All the dirty work can be done by <a href="https://github.com/bogdan/ajaxsubmit">AjaxSubmit</a> library 
+that implements all the ideas described above:</p>
 
-<p>AjaxSubmit is a library that has 2 years of experience behind. About 7 different engineers made their contribution during this time. Take a look at the <a href="https://github.com/bogdan/ajaxsubmit#readme">Read Me</a> for more information about API, callbacks and configuration options.</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#new_user&#39;</span><span class="p">).</span><span class="nx">ajaxForm</span><span class="p">();</span></code></pre></div>
 
-<p>You can also checkout <a href="http://mailtrap.io">Mailtrap</a> that is a perfect example of how your site could look like with this library in every web form.</p>
+<p>The main goal reached: Make super modern AJAX form is as easy as regular form.
+If you still can’t believe that it is so easy - check out <a href="http://ajaxsubmit.herokuapp.com">LIVE demo</a>.</p>
+
+<h2 id="ajaxsubmit-is-it-flexible">AjaxSubmit: Is it flexible?</h2>
+
+<p>AjaxSubmit is a library that has 2 years of experience behind. About 7 different engineers made their contribution during this time.
+Take a look at the <a href="https://github.com/bogdan/ajaxsubmit#readme">Read Me</a> for more information about API, callbacks and configuration options.</p>
+
+<p>You can also checkout <a href="http://mailtrap.io">Mailtrap</a> that is a perfect example of how your site could look like with this library 
+in every web form.</p>
 -->
         <h4 class="tags">
     
@@ -622,93 +753,104 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
             <a href='/2012/01/rails-32-features-changelog'>New Rails Release with a few features from me</a>
             <div class="date">23 Jan 2012</div>
         </h2>
-        
-<p>Upcoming Rails 3.2 release has many useful features.</p>
+        <p>Upcoming Rails 3.2 release has many useful features.</p>
 
 <p>Some of them are coming from me:</p>
 
 <ul>
-<li>ActiveRecord #pluck method</li>
-
-<li>Strict validation concept</li>
-
-<li>Customizable mass assignment sanitizer behavior</li>
-
-<li>Gotcha for <code>select[multiple]</code> tag</li>
+  <li>ActiveRecord #pluck method</li>
+  <li>Strict validation concept</li>
+  <li>Customizable mass assignment sanitizer behavior</li>
+  <li>Gotcha for <code>select[multiple]</code> tag</li>
 </ul>
 
 <p>Here is a more detailed description than in the <a href="https://gist.github.com/1472145">Changelog</a>.</p>
+
 <!--
-<h2 id="pluck_method">Pluck method</h2>
+
+<h2 id="pluck-method">Pluck method</h2>
 
 <p>People around made a <a href="https://github.com/rails/rails/commit/a382d60f6abc94b6a965525872f858e48abc00de">lot of PR on it</a>. So, You probably already heard about it.</p>
 
 <p><code>pluck</code> can be used to query a single column from the underlying table of a model. It accepts a column name as argument and returns an array of values of the specified column with the corresponding data type.</p>
-<div class='highlight'><pre><code class='ruby'><span class='no'>Client</span><span class='o'>.</span><span class='n'>where</span><span class='p'>(</span><span class='ss'>:active</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span><span class='o'>.</span><span class='n'>pluck</span><span class='p'>(</span><span class='ss'>:id</span><span class='p'>)</span>
-<span class='c1'># SELECT id FROM clients WHERE active = 1</span>
 
-<span class='no'>Client</span><span class='o'>.</span><span class='n'>uniq</span><span class='o'>.</span><span class='n'>pluck</span><span class='p'>(</span><span class='ss'>:role</span><span class='p'>)</span>
-<span class='c1'># SELECT DISTINCT role FROM clients</span>
-</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Client</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:active</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:id</span><span class="p">)</span>
+<span class="c1"># SELECT id FROM clients WHERE active = 1</span>
+
+<span class="no">Client</span><span class="o">.</span><span class="n">uniq</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:role</span><span class="p">)</span>
+<span class="c1"># SELECT DISTINCT role FROM clients</span></code></pre></div>
+
 <p><a href="http://edgeguides.rubyonrails.org/active_record_querying.html#pluck">Pluck in Rails guides</a></p>
 
-<h2 id="strict_validation_concept">Strict validation concept</h2>
+<h2 id="strict-validation-concept">Strict validation concept</h2>
 
 <p>Some validation are not connected with end user and breaking it is more likely a bug than problem with user input. A few constraints can be embed to DB(like foreign keys), but most of them can not. And it’s a good idea to use AM validators to do such checks as well.</p>
 
 <p>Use case:</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Article</span> <span class='o'>&lt;</span> <span class='no'>AR</span><span class='o'>::</span><span class='no'>Base</span>
-  <span class='n'>validates</span> <span class='ss'>:author</span><span class='p'>,</span> <span class='ss'>:presence</span> <span class='o'>=&gt;</span> <span class='kp'>true</span>
-<span class='k'>end</span>
 
-<span class='n'>u</span> <span class='o'>=</span> <span class='no'>Article</span><span class='o'>.</span><span class='n'>new</span>
-<span class='n'>u</span><span class='o'>.</span><span class='n'>save</span> <span class='c1'># =&gt; false</span>
-</code></pre>
-</div>
-<p><code>#author</code> is usually set in controller from <code>current_user</code>. If somebody forgets to do it - user see error: <code>Author cann&#39;t be blank</code>. And it is not right to show error message to user that he is not able to fix. More over DEV team is not notified about the problem.</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Article</span> <span class="o">&lt;</span> <span class="no">AR</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">validates</span> <span class="ss">:author</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="k">end</span>
+
+<span class="n">u</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">new</span>
+<span class="n">u</span><span class="o">.</span><span class="n">save</span> <span class="c1"># =&gt; false</span></code></pre></div>
+
+<p><code>#author</code> is usually set in controller from <code>current_user</code>. If somebody forgets to do it - user see error: 
+<code>Author cann't be blank</code>. 
+And it is not right to show error message to user that he is not able to fix.
+More over DEV team is not notified about the problem.</p>
 
 <p>In order to fix that You can use <a href="https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2">validate! method</a> that generates validator that always raises exception when fails:</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Article</span> <span class='o'>&lt;</span> <span class='no'>AR</span><span class='o'>::</span><span class='no'>Base</span>
-  <span class='n'>validates!</span> <span class='ss'>:author</span><span class='p'>,</span> <span class='ss'>:presence</span> <span class='o'>=&gt;</span> <span class='kp'>true</span>
-<span class='k'>end</span>
 
-<span class='n'>u</span> <span class='o'>=</span> <span class='no'>User</span><span class='o'>.</span><span class='n'>new</span>
-<span class='n'>u</span><span class='o'>.</span><span class='n'>save</span> <span class='c1'># raises ActiveModel::StrictValidationFailed</span>
-</code></pre>
-</div>
-<h2 id="customizing_mass_assignment_sanitizer">Customizing Mass Assignment Sanitizer</h2>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Article</span> <span class="o">&lt;</span> <span class="no">AR</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">validates!</span> <span class="ss">:author</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="k">end</span>
 
-<p>Added an ability to specify <a href="https://github.com/rails/rails/commit/aa2639e746d8af5d7673bbbbbccbe868edeb0161">your own behavior on mass assignment protection</a>, controlled by option:</p>
-<div class='highlight'><pre><code class='ruby'><span class='no'>ActiveModel</span><span class='o'>::</span><span class='no'>MassAssignmentSecurity</span><span class='o'>.</span><span class='n'>mass_assignment_sanitizer</span>
-</code></pre>
-</div>
+<span class="n">u</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span>
+<span class="n">u</span><span class="o">.</span><span class="n">save</span> <span class="c1"># raises ActiveModel::StrictValidationFailed</span></code></pre></div>
+
+<h2 id="customizing-mass-assignment-sanitizer">Customizing Mass Assignment Sanitizer</h2>
+
+<p>Added an ability to specify <a href="https://github.com/rails/rails/commit/aa2639e746d8af5d7673bbbbbccbe868edeb0161">your own behavior on mass assignment protection</a>, controlled by option: </p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">ActiveModel</span><span class="o">::</span><span class="no">MassAssignmentSecurity</span><span class="o">.</span><span class="n">mass_assignment_sanitizer</span></code></pre></div>
+
 <p>The main idea behind this change is to make Mass Assignment Sanitizer to raise exceptions in development and test environments while leaving logging behavior in production. This will be the <a href="https://github.com/rails/rails/commit/0fab8c388ea9cfcace0907102697c78a68762be3">default Rails application template</a> in version 3.2. It will allow to detect mass assignment protection issues caused by bug in code more effectively before they will be deployed to production.</p>
 
-<h2 id="power_hacking_selectmultiple">Power hacking select[multiple]</h2>
+<h2 id="power-hacking-selectmultiple">Power hacking select[multiple]</h2>
 
 <p>Quote from Rails documentation that comes along with <a href="https://github.com/rails/rails/commit/faba406fa15251cdc9588364d23c687a14ed6885">the patch</a>:</p>
 
-<p>The HTML specification says:</p>
+<p>The HTML specification says: </p>
 
-<p>When <code>multiple</code> parameter passed to select and all options got deselected web browsers do not send any value to server. Unfortunately this introduces a gotcha: if an <code>User</code> model has many <code>roles</code> and have <code>role_ids</code> accessor, and in the form that edits roles of the user the user deselects all roles from <code>role_ids</code> multiple select box, no <code>role_ids</code> parameter is sent. So, any mass-assignment idiom like</p>
-<div class='highlight'><pre><code class='ruby'>  <span class='vi'>@user</span><span class='o'>.</span><span class='n'>update_attributes</span><span class='p'>(</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:user</span><span class='o'>]</span><span class='p'>)</span>
-</code></pre>
-</div>
+<p>When <code>multiple</code> parameter passed to select and all options got deselected 
+web browsers do not send any value to server. Unfortunately this introduces a gotcha:
+if an <code>User</code> model has many <code>roles</code> and have <code>role_ids</code> accessor, and in the form that edits roles of the user
+the user deselects all roles from <code>role_ids</code> multiple select box, no <code>role_ids</code> parameter is sent. So,
+any mass-assignment idiom like</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vi">@user</span><span class="o">.</span><span class="n">update_attributes</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span></code></pre></div>
+
 <p>wouldn’t update roles.</p>
 
-<p>To prevent this the helper generates an auxiliary hidden field before every multiple select. The hidden field has the same name as multiple select and blank value.</p>
-<div class='highlight'><pre><code class='html'><span class='nt'>&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;hidden&quot;</span> <span class='na'>name=</span><span class='s'>&quot;user[role_ids]&quot;</span> <span class='na'>value=</span><span class='s'>&quot;&quot;</span><span class='nt'>/&gt;</span>
-<span class='nt'>&lt;select</span> <span class='na'>id=</span><span class='s'>&quot;user_role_ids&quot;</span> <span class='na'>name=</span><span class='s'>&quot;user[role_ids]&quot;</span> <span class='na'>multiple=</span><span class='s'>&quot;multiple&quot;</span><span class='nt'>&gt;</span>
+<p>To prevent this the helper generates an auxiliary hidden field before
+every multiple select. The hidden field has the same name as multiple select and blank value.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;user[role_ids]&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;user_role_ids&quot;</span> <span class="na">name=</span><span class="s">&quot;user[role_ids]&quot;</span> <span class="na">multiple=</span><span class="s">&quot;multiple&quot;</span><span class="nt">&gt;</span>
   ....
-<span class='nt'>&lt;/select&gt;</span>
-</code></pre>
-</div>
-<p>This way, the client either sends only the hidden field (representing the deselected multiple select box), or both fields. Since the HTML specification says key/value pairs have to be sent in the same order they appear in the form, and parameters extraction gets the last occurrence of any repeated key in the query string, that works for ordinary forms.</p>
+<span class="nt">&lt;/select&gt;</span></code></pre></div>
 
-<p>Unfortunately this trick can introduce a side effects described well in this <a href="http://stackoverflow.com/questions/8929230/why-is-the-first-element-always-blank-in-my-rails-multi-select-using-an-embedde">stackoverflow question</a>. If you know an effective way to fix that - let me know.</p>
+<p>This way, the client either sends only the hidden field (representing
+the deselected multiple select box), or both fields. Since the HTML specification
+says key/value pairs have to be sent in the same order they appear in the
+form, and parameters extraction gets the last occurrence of any repeated
+key in the query string, that works for ordinary forms.</p>
 
-<h4 id="have_fun_with_upgrading">Have fun with upgrading</h4>
+<p>Unfortunately this trick can introduce a side effects described well in this <a href="http://stackoverflow.com/questions/8929230/why-is-the-first-element-always-blank-in-my-rails-multi-select-using-an-embedde">stackoverflow question</a>.
+If you know an effective way to fix that - let me know.</p>
+
+<h4 id="have-fun-with-upgrading">Have fun with upgrading</h4>
 -->
         <h4 class="tags">
     
@@ -730,46 +872,45 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
             <a href='/2012/01/datagrid-reports-release-gem'>New release of Datagrid: Mongoid, Rails Engines and HTML columns support</a>
             <div class="date">10 Jan 2012</div>
         </h2>
-        
-<p><a href="https://github.com/bogdan/datagrid">Datagrid</a> version 0.5.0 has been released.</p>
+        <p><a href="https://github.com/bogdan/datagrid">Datagrid</a> version 0.5.0 has been released. </p>
 
 <p>Datagrid is a Ruby on Rails plugin that helps you to build and <a href="http://datagrid.herokuapp.com">represent table-like data</a> with:</p>
 
 <ul>
-<li>Customizable filtering</li>
-
-<li>Columns</li>
-
-<li>Sort order</li>
-
-<li>Localization</li>
-
-<li>Export to CSV</li>
+  <li>Customizable filtering</li>
+  <li>Columns</li>
+  <li>Sort order</li>
+  <li>Localization</li>
+  <li>Export to CSV</li>
 </ul>
 
-<p>Here are some major features from new release. <!--</p>
+<p>Here are some major features from new release.
+<!--</p>
 
-<h3 id="mongoid_support">Mongoid support</h3>
+<h3 id="mongoid-support">Mongoid support</h3>
 
 <p>Previously Datagrid supported only ActiveRecord ORM. Now Mongoid is also available: <a href="http://datagrid.herokuapp.com/document_reports">see the demo</a>.</p>
 
 <p>New datagrid driver architecture allows to add yet another ORM in less then <a href="https://github.com/bogdan/datagrid/blob/master/lib/datagrid/drivers/mongoid.rb">40 lines of code</a>.</p>
 
-<h3 id="html_columns">HTML columns</h3>
+<h3 id="html-columns">HTML columns</h3>
 
-<p>In order to use view helpers to render columns You can use <code>:html</code> option. This will call column block in the view context:</p>
-<div class='highlight'><pre><code class='ruby'><span class='n'>column</span><span class='p'>(</span><span class='ss'>:completed</span><span class='p'>,</span> <span class='ss'>:html</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span> <span class='p'>{</span> <span class='o'>|</span><span class='n'>asset</span><span class='o'>|</span> <span class='n'>asset</span><span class='o'>.</span><span class='n'>completed?</span> <span class='p'>?</span> <span class='n'>image_tag</span><span class='p'>(</span><span class='s2'>&quot;green.gif&quot;</span><span class='p'>)</span> <span class='p'>:</span> <span class='n'>image_tag</span><span class='p'>(</span><span class='s2'>&quot;red.gif&quot;</span><span class='p'>)</span> <span class='p'>}</span>
-<span class='c1'># or do it in partial</span>
-<span class='n'>column</span><span class='p'>(</span><span class='ss'>:actions</span><span class='p'>,</span> <span class='ss'>:html</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span> <span class='p'>{</span> <span class='o'>|</span><span class='n'>asset</span><span class='o'>|</span> <span class='n'>render</span> <span class='ss'>:partial</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;admin/assets/actions&quot;</span><span class='p'>,</span> <span class='ss'>:object</span> <span class='o'>=&gt;</span> <span class='n'>asset</span> <span class='p'>}</span>
-</code></pre>
-</div>
-<h3 id="table_customization_with_rails_engines">Table customization with Rails Engines</h3>
+<p>In order to use view helpers to render columns You can use <code>:html</code> option.
+This will call column block in the view context:</p>
 
-<p>Rails Engines allows you to embed views into Rails plugins and make them customizable. If You need serious customization of datagrid <code>&lt;table&gt;</code> and HTML Columns doesn’t help, you can customize datagrid internal views by running:</p>
-<div class='highlight'><pre><code class='sh'>rake datagrid:copy_partials
-</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">column</span><span class="p">(</span><span class="ss">:completed</span><span class="p">,</span> <span class="ss">:html</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">asset</span><span class="o">|</span> <span class="n">asset</span><span class="o">.</span><span class="n">completed?</span> <span class="p">?</span> <span class="n">image_tag</span><span class="p">(</span><span class="s2">&quot;green.gif&quot;</span><span class="p">)</span> <span class="p">:</span> <span class="n">image_tag</span><span class="p">(</span><span class="s2">&quot;red.gif&quot;</span><span class="p">)</span> <span class="p">}</span>
+<span class="c1"># or do it in partial</span>
+<span class="n">column</span><span class="p">(</span><span class="ss">:actions</span><span class="p">,</span> <span class="ss">:html</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">asset</span><span class="o">|</span> <span class="n">render</span> <span class="ss">:partial</span> <span class="o">=&gt;</span> <span class="s2">&quot;admin/assets/actions&quot;</span><span class="p">,</span> <span class="ss">:object</span> <span class="o">=&gt;</span> <span class="n">asset</span> <span class="p">}</span></code></pre></div>
+
+<h3 id="table-customization-with-rails-engines">Table customization with Rails Engines</h3>
+
+<p>Rails Engines allows you to embed views into Rails plugins and make them customizable.
+If You need serious customization of datagrid <code>&lt;table&gt;</code> and HTML Columns doesn’t help, you can customize datagrid internal views by running:</p>
+
+<div class="highlight"><pre><code class="language-sh" data-lang="sh">rake datagrid:copy_partials</code></pre></div>
+
 <p>This will create the following files in your Rails root directory:</p>
+
 <pre>
 <code>
 |~app/
@@ -780,6 +921,7 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
 |     |_table.html.erb
 </code>
 </pre>
+
 <p>Now You are able to customize whatever You want.</p>
 -->
         <h4 class="tags">
@@ -804,76 +946,72 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
             <a href='/2011/11/development-smtp-server'>Improve your Email delivery code with Mailtrap</a>
             <div class="date">18 Nov 2011</div>
         </h2>
-        
-<p>Today, I want introduce the <a href='http://mailtrap.io'>Mailtrap web service</a> aimed to help developers build and improve their email delivery functionality.</p>
+        <p>Today, I want introduce the <a href="http://mailtrap.io">Mailtrap web service</a> aimed to help developers build and improve their email delivery functionality. </p>
 
-<p>Usually people use same SMTP settings for all environments, but this actually creates many problems in Staging and Development environments. Mailtrap is a special SMTP service for these environments aimed to solve specific problems. <!--</p>
+<p>Usually people use same SMTP settings for all environments, but this actually creates many problems in Staging and Development environments. Mailtrap is a special SMTP service for these environments aimed to solve specific problems.
+<!--</p>
 
 <h3 id="problems">Problems</h3>
 
-<h4 id="testing_user_registration_is_hell">Testing user registration is hell</h4>
+<h4 id="testing-user-registration-is-hell">Testing user registration is hell</h4>
 
 <p>In order to register yet another user You need to have new unique email address that should be hosted somewhere.</p>
 
-<h4 id="perform_mass_email_sending_is_a_problem_too">Perform mass email sending is a problem too</h4>
+<h4 id="perform-mass-email-sending-is-a-problem-too">Perform mass email sending is a problem too</h4>
 
 <p>Suppose you have a daily email to all customers and need check if your delivery logic works fine. In this case you need to know what emails were send, which customers received them. And again you need a batch of email addresses to test with.</p>
 
-<h4 id="discuss_email_layout_and_functional_problems_with_product_team">Discuss email layout and functional problems with product team</h4>
+<h4 id="discuss-email-layout-and-functional-problems-with-product-team">Discuss email layout and functional problems with product team</h4>
 
 <p>In order to share email You need to forward it to some inbox or attach to bug ticket as file. This is still not as easy as it could be.</p>
 
-<h4 id="send_emails_to_real_customers_by_mistake">Send emails to real customers by mistake</h4>
+<h4 id="send-emails-to-real-customers-by-mistake">Send emails to real customers by mistake</h4>
 
 <p>In some cases copy production database to staging is a good idea. But You have a risk that real emails appear on development servers. You need to take care about that.</p>
 
-<p>My personal score is about 2500 emails sent by mistake at a time. Some people I know told me that their personal record is <strong>more than 2 millions emails sent by mistake</strong>. (Share your personal fuckup story in comments.)</p>
+<p>My personal score is about 2500 emails sent by mistake at a time.
+Some people I know told me that their personal record is <strong>more than 2 millions emails sent by mistake</strong>.
+(Share your personal fuckup story in comments.)</p>
 
-<h3 id="existing_solutions">Existing solutions</h3>
+<h3 id="existing-solutions">Existing solutions</h3>
 
-<p>You can go in many ways to fix the problem e.g.:</p>
+<p>You can go in many ways to fix the problem e.g.: </p>
 
 <ul>
-<li>setup the script on your smtp server that changes recipient email</li>
-
-<li>use services like mailinator.com (only in some cases)</li>
-
-<li>use custom Ruby specific gems like mail_view or mailcatcher.</li>
+  <li>setup the script on your smtp server that changes recipient email</li>
+  <li>use services like mailinator.com (only in some cases)</li>
+  <li>use custom Ruby specific gems like mail_view or mailcatcher. </li>
 </ul>
 
 <p>All of them solves only some of the problems described above.</p>
 
-<h3 id="our_idea">Our Idea</h3>
+<h3 id="our-idea">Our Idea</h3>
 
-<p>Development SMTP service should work in a different way then production one: It should not deliver emails but just gather them in one place and provide a shared access for team to debug it. Mailtrap is the first SMTP service built specifically for this purpose.</p>
+<p>Development SMTP service should work in a different way then production one: It should not deliver emails but just gather them in one place and provide a shared access for team to debug it. Mailtrap is the first SMTP service built specifically for this purpose. </p>
 
-<p><img src='http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png' style='width: 693px' /></p>
+<p><img src="http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png" style="width: 693px" /></p>
 
-<p>Unlike many alternative solutions, Mailtrap is platform independent, doesn’t require any daemon to run and is just an SMTP server from application stand point. All you need to do is <strong>setup host, username and password</strong>.</p>
+<p>Unlike many alternative solutions, Mailtrap is platform independent, doesn’t require any daemon to run and is just an SMTP server from application stand point.  All you need to do is <strong>setup host, username and password</strong>.</p>
 
 <h3 id="features">Features</h3>
 
 <p>This is not about high load, not about delivery statistics but about:</p>
 
 <ul>
-<li>Ability to access ANY sent email without registration</li>
-
-<li>Share Email is as easy as copypasting the URL</li>
-
-<li>Developer tools for debugging &amp; improving email template:
-<ul>
-<li>Syntax highlight</li>
-
-<li>Easy view source</li>
-
-<li>Apply CSS reset</li>
-</ul>
-</li>
-
-<li>Access to the history</li>
+  <li>Ability to access ANY sent email without registration</li>
+  <li>Share Email is as easy as copypasting the URL</li>
+  <li>Developer tools for debugging &amp; improving email template:
+    <ul>
+      <li>Syntax highlight</li>
+      <li>Easy view source</li>
+      <li>Apply CSS reset</li>
+    </ul>
+  </li>
+  <li>Access to the history</li>
 </ul>
 
-<h2 id="try_mailtrap_right_now">Try <a href="http://mailtrap.io">Mailtrap</a> right now</h2>
+<h2 id="try-mailtraphttpmailtrapio-right-now">Try <a href="http://mailtrap.io">Mailtrap</a> right now</h2>
+
 -->
         <h4 class="tags">
     
@@ -884,37 +1022,6 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
     <a href="/tags/service.html">service</a>
     
     <a href="/tags/environment.html">environment</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
-    <div class="post">
-        <h2>
-            <a href='/2011/11/slides-rails-fat-model-service-code'>Slides: Fighting with fat models</a>
-            <div class="date">11 Nov 2011</div>
-        </h2>
-        
-<p>Here are my slides from <a href="http://rubyc.eu">RubyC</a> conference.</p>
-
-<p>This presentation covers a hot topic for projects that are more than a year old - it’s fat models. The problem appear naturally as models are the best place to allocate business logic code. There are number of existing techniques to manage large amount of code in Rails application. But they are suitable only in a half of use cases. For the rest of them we can use <strong>Traits</strong> pattern that is described well in this presentation.</p>
-
-<p><strong><a href="http://gusiev.com/slides/fighting_fat_models/static">Fighting with fat models</a></strong> <!--</p>
--->
-        <h4 class="tags">
-    
-    <a href="/tags/model.html">model</a>
-    
-    <a href="/tags/service.html">service</a>
-    
-    <a href="/tags/dry.html">dry</a>
-    
-    <a href="/tags/slides.html">slides</a>
-    
-    <a href="/tags/rails.html">rails</a>
     
     
 </h4>
@@ -957,6 +1064,10 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
                         <ul>
                             
                             <li>
+                                <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
                             </li>
                             
@@ -970,10 +1081,6 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
                             
                             <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
                         </ul>
@@ -1036,7 +1143,7 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 30.2px; line-height:30.2px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
@@ -1047,7 +1154,7 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
-<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
 <a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 

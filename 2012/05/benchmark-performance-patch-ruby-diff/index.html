@@ -81,44 +81,49 @@
         <a href="/2012/05/benchmark-performance-patch-ruby-diff">Benchmark your performance patches</a>
         <div class="date">01 May 2012</div>
     </h2>
-    
-<p>After a dozen performance patches to many gems want to share some practical experience I gain. Tools I’ve picked up was <strong>perftools.rb</strong> and ruby <strong>built-in benchmark</strong> library. They are fit well for cases when optimization stays at Ruby level and doesn’t require to fix something in native extensions or dig into IO operations.</p>
+    <p>After a dozen performance patches to many gems want to share some practical experience I gain. 
+Tools I’ve picked up was <strong>perftools.rb</strong> and ruby <strong>built-in benchmark</strong> library.
+They are fit well for cases when optimization stays at Ruby level and doesn’t require to fix something in native extensions or dig into IO operations.</p>
+
 <!--more-->
+
 <p>General flow on how to tackle performance is clear:</p>
 
 <ul>
-<li><a href="https://github.com/tmm1/perftools.rb">perftools.rb</a> shows slow method calls in a nice call graph format.</li>
-
-<li><a href="http://ruby-doc.org/stdlib-1.9.2/libdoc/benchmark/rdoc/Benchmark.html">Benchmark</a> proves that we made an improvement.</li>
+  <li><a href="https://github.com/tmm1/perftools.rb">perftools.rb</a> shows slow method calls in a nice call graph format.</li>
+  <li><a href="http://ruby-doc.org/stdlib-1.9.2/libdoc/benchmark/rdoc/Benchmark.html">Benchmark</a> proves that we made an improvement.</li>
 </ul>
 
-<p>Perftools does all the hard work for you.</p>
+<p>Perftools does all the hard work for you. </p>
 
-<pre><code>require &#39;perftools&#39;
-PerfTools::CpuProfiler.start(&quot;/tmp/profile_result&quot;) do
+<pre><code>require 'perftools'
+PerfTools::CpuProfiler.start("/tmp/profile_result") do
   # code to profile
-end</code></pre>
+end
+</code></pre>
 
 <p>Run test and open result:</p>
 
 <pre><code>gem install perftools.rb
 ruby test.rb
 pprof.rb --gif /tmp/profile_result &gt; /tmp/profile_result.gif
-$IMAGE_VIEWER /tmp/profile_result.gif </code></pre>
+$IMAGE_VIEWER /tmp/profile_result.gif 
+</code></pre>
 
 <p>Example output: <strong>Rails route generator call graph</strong></p>
 
-<p><a href='http://postimage.org/image/fy4fxhzvr/full/'>
-  <img src='/images/perf_sample.gif' width='600px' />
+<p><a href="http://postimage.org/image/fy4fxhzvr/full/">
+  <img src="/images/perf_sample.gif" width="600px" />
 </a></p>
 
-<p>Here is short instruction how to read call graph:</p>
+<p>Here is short instruction how to read call graph: </p>
 
 <p>Each block represents a method that was called. Percentage in a block shows how much time was spend in current method with and without all it’s nested calls comparing to overall time. Arrow with number shows how many times parent method called it’s children method.</p>
 
 <p>That’s it. All you need to do now is find blocks with most percentage and try reduce them.</p>
 
-<p>This flow works fine till the moment when benchmark results before and after patch should be compared. Ruby Benchmark can not merge them together and represent in a human readable form like this:</p>
+<p>This flow works fine till the moment when benchmark results before and after patch should be compared. 
+Ruby Benchmark can not merge them together and represent in a human readable form like this:</p>
 
 <pre><code>Running benchmark with current working tree
 Checkout HEAD^
@@ -136,27 +141,26 @@ Before patch:   0.020000   0.000000   0.020000 (  0.024283)
 
 ---------------------------------headers parsing when empty
 After patch:    0.010000   0.000000   0.010000 (  0.002160)
-Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
+Before patch:   0.000000   0.000000   0.000000 (  0.002354)
+</code></pre>
 
-<p>So, decided to create a library that fixes this problem. Try out <strong><a href="https://github.com/bogdan/diffbench">DiffBench</a></strong> if you ever come up with performance patch.</p>
+<p>So, decided to create a library that fixes this problem.
+Try out <strong><a href="https://github.com/bogdan/diffbench">DiffBench</a></strong> if you ever come up with performance patch.</p>
 
 <p>DiffBench in action examples:</p>
 
 <ul>
-<li>Rails
-<ul>
-<li>ActiveRecord - <a href="https://github.com/rails/rails/pull/5467">#5467</a></li>
-
-<li>ActiveModel - <a href="https://github.com/rails/rails/pull/5431">#5431</a></li>
-
-<li>ActiveSupport - <a href="https://github.com/rails/rails/pull/4493">#4493</a></li>
-
-<li>ActionPack - <a href="https://github.com/rails/rails/pull/5957">#5957</a></li>
+  <li>Rails
+    <ul>
+      <li>ActiveRecord - <a href="https://github.com/rails/rails/pull/5467">#5467</a></li>
+      <li>ActiveModel - <a href="https://github.com/rails/rails/pull/5431">#5431</a></li>
+      <li>ActiveSupport - <a href="https://github.com/rails/rails/pull/4493">#4493</a></li>
+      <li>ActionPack - <a href="https://github.com/rails/rails/pull/5957">#5957</a></li>
+    </ul>
+  </li>
+  <li>Mail - <a href="https://github.com/mikel/mail/pull/369">#396</a>, <a href="https://github.com/mikel/mail/pull/366">#366</a></li>
 </ul>
-</li>
 
-<li>Mail - <a href="https://github.com/mikel/mail/pull/369">#396</a>, <a href="https://github.com/mikel/mail/pull/366">#366</a></li>
-</ul>
 
     <div class="clear"></div>
     <div class="left">
@@ -199,19 +203,19 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
         <ul class="posts">
             
                <!-- Exclude self -->
-                <li><span>16 Aug 2012</span> &raquo; <a href="/2012/08/postgresql-full-text-search-solr">Full text search - Solr(Sunspot) vs PostgreSQL</a></li>
+                <li><span>03 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>01 Mar 2012</span> &raquo; <a href="/2012/03/javascript-ajax-submit-form-validation">Web Forms 2.0: Submit with Ajax and Client Side Validation</a></li>
+                <li><span>25 Jul 2014</span> &raquo; <a href="/2014/07/rubyc-conference-video-parsers-slides">My Talk from RubyC conference</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>06 Jun 2012</span> &raquo; <a href="/2012/06/assumption-driven-development">Assumption Driven Approach</a></li>
+                <li><span>27 May 2014</span> &raquo; <a href="/2014/05/podcast-interview-le0pard-open-source-contribution">Took part in a podcast with Alexey Vasiliev</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>08 Oct 2012</span> &raquo; <a href="/2012/10/crazy-javascript-initialization-strategy">Smart Javascript Initialization Strategy</a></li>
+                <li><span>01 Apr 2014</span> &raquo; <a href="/2014/04/state-machine-minemalistic-validation-perfection-changes">Minimalistic State Machine: Less is More</a></li>
               
             
         </ul>
@@ -246,6 +250,10 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
                         <ul>
                             
                             <li>
+                                <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
                             </li>
                             
@@ -259,10 +267,6 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
                             
                             <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
                         </ul>
@@ -325,7 +329,7 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 30.2px; line-height:30.2px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
@@ -336,7 +340,7 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)</code></pre>
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
-<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
 <a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 

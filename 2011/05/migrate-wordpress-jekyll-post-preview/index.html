@@ -81,32 +81,32 @@
         <a href="/2011/05/migrate-wordpress-jekyll-post-preview">Finally get rid of WordPress and PHP</a>
         <div class="date">20 May 2011</div>
     </h2>
-    
-<p>After a few tries migrate to blog engine with programming language I know well, I finally found <a href="http://github.com/mojombo/jekyll">jekyll</a> - lightweight static site generator. My main concerns in this choice was:</p>
+    <p>After a few tries migrate to blog engine with programming language I know well, I finally found 
+<a href="http://github.com/mojombo/jekyll">jekyll</a> - lightweight static site generator. My main concerns in this choice was:</p>
 
 <ul>
-<li>Edit posts in my favorite text editor with favorite markup</li>
-
-<li>NO PHP</li>
-
-<li>Syntax highlight out of the box</li>
+  <li>Edit posts in my favorite text editor with favorite markup</li>
+  <li>NO PHP</li>
+  <li>Syntax highlight out of the box</li>
 </ul>
+
 <!--more-->
-<h3 id="migration_from_wordpress">Migration from WordPress</h3>
+
+<h3 id="migration-from-wordpress">Migration from WordPress</h3>
 
 <p>Three main migration points was:</p>
 
 <ul>
-<li>Posts that was migrated with <a href="http://google.com/search?q=wordpress%20jekyll%20migrate">several lines of ruby code</a></li>
-
-<li>Comments that imported to <a href="http://wordpress.org/extend/plugins/disqus-comment-system/">disqus</a> as jekyll is static site engine so the comments should be hosted somewhere else</li>
-
-<li>Generate <a href="http://www.google.com.ua/search?sourceid=chrome&client=ubuntu&channel=cs&ie=UTF-8&q=jekyll+tag+cloud">tag cloud and posts by tag pages</a> that also have a lot of workarounds in the web</li>
+  <li>Posts that was migrated with <a href="http://google.com/search?q=wordpress%20jekyll%20migrate">several lines of ruby code</a></li>
+  <li>Comments that imported to <a href="http://wordpress.org/extend/plugins/disqus-comment-system/">disqus</a> as jekyll is static site engine so the comments should be hosted somewhere else</li>
+  <li>Generate <a href="http://www.google.com.ua/search?sourceid=chrome&amp;client=ubuntu&amp;channel=cs&amp;ie=UTF-8&amp;q=jekyll+tag+cloud">tag cloud and posts by tag pages</a> that also have a lot of workarounds in the web</li>
 </ul>
 
-<p>One problem I am currently have is “post preview” feature that is currently unsupported in jekyll. My current approach for this looks like this:</p>
+<p>One problem I am currently have is “post preview” feature that is currently unsupported in jekyll.
+My current approach for this looks like this:</p>
 
-<pre><code>post.content | replace_first:&#39;&lt;!--more--&gt;&#39;,&#39;&lt;!--&#39; | append:&#39;--&gt;&#39; </code></pre>
+<pre><code>post.content | replace_first:'&lt;!--more--&gt;','&lt;!--' | append:'--&gt;' 
+</code></pre>
 
 <h3 id="problems">Problems</h3>
 
@@ -116,7 +116,8 @@
 
 <h3 id="result">Result</h3>
 
-<p>About 12 hours of work to transfer 30 posts and their comments. Reworked site design to be more clean.</p>
+<p>About 12 hours of work to transfer 30 posts and their comments. 
+Reworked site design to be more clean.</p>
 
     <div class="clear"></div>
     <div class="left">
@@ -161,19 +162,19 @@
         <ul class="posts">
             
                <!-- Exclude self -->
-                <li><span>16 Aug 2012</span> &raquo; <a href="/2012/08/postgresql-full-text-search-solr">Full text search - Solr(Sunspot) vs PostgreSQL</a></li>
+                <li><span>03 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>01 Mar 2012</span> &raquo; <a href="/2012/03/javascript-ajax-submit-form-validation">Web Forms 2.0: Submit with Ajax and Client Side Validation</a></li>
+                <li><span>25 Jul 2014</span> &raquo; <a href="/2014/07/rubyc-conference-video-parsers-slides">My Talk from RubyC conference</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>23 Jan 2012</span> &raquo; <a href="/2012/01/rails-32-features-changelog">New Rails Release with a few features from me</a></li>
+                <li><span>27 May 2014</span> &raquo; <a href="/2014/05/podcast-interview-le0pard-open-source-contribution">Took part in a podcast with Alexey Vasiliev</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>06 Jun 2012</span> &raquo; <a href="/2012/06/assumption-driven-development">Assumption Driven Approach</a></li>
+                <li><span>01 Apr 2014</span> &raquo; <a href="/2014/04/state-machine-minemalistic-validation-perfection-changes">Minimalistic State Machine: Less is More</a></li>
               
             
         </ul>
@@ -208,6 +209,10 @@
                         <ul>
                             
                             <li>
+                                <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
                             </li>
                             
@@ -221,10 +226,6 @@
                             
                             <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
                         </ul>
@@ -287,7 +288,7 @@
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 30.2px; line-height:30.2px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
@@ -298,7 +299,7 @@
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
-<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
 <a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 

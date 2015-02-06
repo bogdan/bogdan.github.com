@@ -81,76 +81,72 @@
         <a href="/2011/11/development-smtp-server">Improve your Email delivery code with Mailtrap</a>
         <div class="date">18 Nov 2011</div>
     </h2>
-    
-<p>Today, I want introduce the <a href='http://mailtrap.io'>Mailtrap web service</a> aimed to help developers build and improve their email delivery functionality.</p>
+    <p>Today, I want introduce the <a href="http://mailtrap.io">Mailtrap web service</a> aimed to help developers build and improve their email delivery functionality. </p>
 
-<p>Usually people use same SMTP settings for all environments, but this actually creates many problems in Staging and Development environments. Mailtrap is a special SMTP service for these environments aimed to solve specific problems. <!--more--></p>
+<p>Usually people use same SMTP settings for all environments, but this actually creates many problems in Staging and Development environments. Mailtrap is a special SMTP service for these environments aimed to solve specific problems.
+<!--more--></p>
 
 <h3 id="problems">Problems</h3>
 
-<h4 id="testing_user_registration_is_hell">Testing user registration is hell</h4>
+<h4 id="testing-user-registration-is-hell">Testing user registration is hell</h4>
 
 <p>In order to register yet another user You need to have new unique email address that should be hosted somewhere.</p>
 
-<h4 id="perform_mass_email_sending_is_a_problem_too">Perform mass email sending is a problem too</h4>
+<h4 id="perform-mass-email-sending-is-a-problem-too">Perform mass email sending is a problem too</h4>
 
 <p>Suppose you have a daily email to all customers and need check if your delivery logic works fine. In this case you need to know what emails were send, which customers received them. And again you need a batch of email addresses to test with.</p>
 
-<h4 id="discuss_email_layout_and_functional_problems_with_product_team">Discuss email layout and functional problems with product team</h4>
+<h4 id="discuss-email-layout-and-functional-problems-with-product-team">Discuss email layout and functional problems with product team</h4>
 
 <p>In order to share email You need to forward it to some inbox or attach to bug ticket as file. This is still not as easy as it could be.</p>
 
-<h4 id="send_emails_to_real_customers_by_mistake">Send emails to real customers by mistake</h4>
+<h4 id="send-emails-to-real-customers-by-mistake">Send emails to real customers by mistake</h4>
 
 <p>In some cases copy production database to staging is a good idea. But You have a risk that real emails appear on development servers. You need to take care about that.</p>
 
-<p>My personal score is about 2500 emails sent by mistake at a time. Some people I know told me that their personal record is <strong>more than 2 millions emails sent by mistake</strong>. (Share your personal fuckup story in comments.)</p>
+<p>My personal score is about 2500 emails sent by mistake at a time.
+Some people I know told me that their personal record is <strong>more than 2 millions emails sent by mistake</strong>.
+(Share your personal fuckup story in comments.)</p>
 
-<h3 id="existing_solutions">Existing solutions</h3>
+<h3 id="existing-solutions">Existing solutions</h3>
 
-<p>You can go in many ways to fix the problem e.g.:</p>
+<p>You can go in many ways to fix the problem e.g.: </p>
 
 <ul>
-<li>setup the script on your smtp server that changes recipient email</li>
-
-<li>use services like mailinator.com (only in some cases)</li>
-
-<li>use custom Ruby specific gems like mail_view or mailcatcher.</li>
+  <li>setup the script on your smtp server that changes recipient email</li>
+  <li>use services like mailinator.com (only in some cases)</li>
+  <li>use custom Ruby specific gems like mail_view or mailcatcher. </li>
 </ul>
 
 <p>All of them solves only some of the problems described above.</p>
 
-<h3 id="our_idea">Our Idea</h3>
+<h3 id="our-idea">Our Idea</h3>
 
-<p>Development SMTP service should work in a different way then production one: It should not deliver emails but just gather them in one place and provide a shared access for team to debug it. Mailtrap is the first SMTP service built specifically for this purpose.</p>
+<p>Development SMTP service should work in a different way then production one: It should not deliver emails but just gather them in one place and provide a shared access for team to debug it. Mailtrap is the first SMTP service built specifically for this purpose. </p>
 
-<p><img src='http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png' style='width: 693px' /></p>
+<p><img src="http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png" style="width: 693px" /></p>
 
-<p>Unlike many alternative solutions, Mailtrap is platform independent, doesn’t require any daemon to run and is just an SMTP server from application stand point. All you need to do is <strong>setup host, username and password</strong>.</p>
+<p>Unlike many alternative solutions, Mailtrap is platform independent, doesn’t require any daemon to run and is just an SMTP server from application stand point.  All you need to do is <strong>setup host, username and password</strong>.</p>
 
 <h3 id="features">Features</h3>
 
 <p>This is not about high load, not about delivery statistics but about:</p>
 
 <ul>
-<li>Ability to access ANY sent email without registration</li>
-
-<li>Share Email is as easy as copypasting the URL</li>
-
-<li>Developer tools for debugging &amp; improving email template:
-<ul>
-<li>Syntax highlight</li>
-
-<li>Easy view source</li>
-
-<li>Apply CSS reset</li>
-</ul>
-</li>
-
-<li>Access to the history</li>
+  <li>Ability to access ANY sent email without registration</li>
+  <li>Share Email is as easy as copypasting the URL</li>
+  <li>Developer tools for debugging &amp; improving email template:
+    <ul>
+      <li>Syntax highlight</li>
+      <li>Easy view source</li>
+      <li>Apply CSS reset</li>
+    </ul>
+  </li>
+  <li>Access to the history</li>
 </ul>
 
-<h2 id="try_mailtrap_right_now">Try <a href="http://mailtrap.io">Mailtrap</a> right now</h2>
+<h2 id="try-mailtraphttpmailtrapio-right-now">Try <a href="http://mailtrap.io">Mailtrap</a> right now</h2>
+
 
     <div class="clear"></div>
     <div class="left">
@@ -191,19 +187,19 @@
         <ul class="posts">
             
                <!-- Exclude self -->
-                <li><span>16 Aug 2012</span> &raquo; <a href="/2012/08/postgresql-full-text-search-solr">Full text search - Solr(Sunspot) vs PostgreSQL</a></li>
+                <li><span>03 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>23 Jan 2012</span> &raquo; <a href="/2012/01/rails-32-features-changelog">New Rails Release with a few features from me</a></li>
+                <li><span>25 Jul 2014</span> &raquo; <a href="/2014/07/rubyc-conference-video-parsers-slides">My Talk from RubyC conference</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>01 Mar 2012</span> &raquo; <a href="/2012/03/javascript-ajax-submit-form-validation">Web Forms 2.0: Submit with Ajax and Client Side Validation</a></li>
+                <li><span>27 May 2014</span> &raquo; <a href="/2014/05/podcast-interview-le0pard-open-source-contribution">Took part in a podcast with Alexey Vasiliev</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>08 Oct 2012</span> &raquo; <a href="/2012/10/crazy-javascript-initialization-strategy">Smart Javascript Initialization Strategy</a></li>
+                <li><span>01 Apr 2014</span> &raquo; <a href="/2014/04/state-machine-minemalistic-validation-perfection-changes">Minimalistic State Machine: Less is More</a></li>
               
             
         </ul>
@@ -238,6 +234,10 @@
                         <ul>
                             
                             <li>
+                                <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
                             </li>
                             
@@ -251,10 +251,6 @@
                             
                             <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
                         </ul>
@@ -317,7 +313,7 @@
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 30.2px; line-height:30.2px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
@@ -328,7 +324,7 @@
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
-<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
 <a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 

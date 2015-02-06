@@ -81,94 +81,94 @@
         <a href="/2011/06/ruby-datagrid-gem-report">Reporting made easy by Datagrid gem for Rails</a>
         <div class="date">26 Jun 2011</div>
     </h2>
-    
-<p>4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about <a href="https://github.com/bogdan/datagrid">perfect report gem</a> that would provide easy DSL for making filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head and now finally I have enough knowledge and opportunities to build such tool.</p>
-<!--more-->
-<h3 id="defining_a_grid">Defining a grid</h3>
+    <p>4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about <a href="https://github.com/bogdan/datagrid">perfect report gem</a> that would provide easy DSL for making filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head and now finally I have enough knowledge and opportunities to build such tool. </p>
 
-<p>The idea of Datagrid DSL is to define a scope of ActiveRecord models and define different independent criterias to filter this scope. Than convert filtered data to table view with defined columns. So, typical datagrid report consists of:</p>
+<!--more-->
+
+<h3 id="defining-a-grid">Defining a grid</h3>
+
+<p>The idea of Datagrid DSL is to define a scope of ActiveRecord models and define different independent criterias to filter this scope. 
+Than convert filtered data to table view with defined columns. So, typical datagrid report consists of:</p>
 
 <ul>
-<li>A scope of records to query data</li>
-
-<li>Filters with parameters to make a subsets of this data</li>
-
-<li>Columns to display this data</li>
+  <li>A scope of records to query data</li>
+  <li>Filters with parameters to make a subsets of this data</li>
+  <li>Columns to display this data</li>
 </ul>
 
 <p>And we can easily split their definition with the following ruby DSL</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>SimpleReport</span>
 
-  <span class='kp'>include</span> <span class='no'>Datagrid</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">SimpleReport</span>
 
-  <span class='n'>scope</span> <span class='k'>do</span>
-    <span class='no'>User</span><span class='o'>.</span><span class='n'>includes</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>)</span>
-  <span class='k'>end</span>
+  <span class="kp">include</span> <span class="no">Datagrid</span>
 
-  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:category</span><span class='p'>,</span> <span class='ss'>:enum</span><span class='p'>,</span> <span class='ss'>:select</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='s2'>&quot;first&quot;</span><span class='p'>,</span> <span class='s2'>&quot;second&quot;</span><span class='o'>]</span><span class='p'>)</span>
-  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:group_id</span><span class='p'>,</span> <span class='ss'>:multiple</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span>
-  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:group_name</span><span class='p'>,</span> <span class='ss'>:header</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;Group&quot;</span><span class='p'>)</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>value</span><span class='o'>|</span>
-    <span class='nb'>self</span><span class='o'>.</span><span class='n'>joins</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>)</span><span class='o'>.</span><span class='n'>where</span><span class='p'>(</span><span class='ss'>:groups</span> <span class='o'>=&gt;</span> <span class='p'>{</span><span class='ss'>:name</span> <span class='o'>=&gt;</span> <span class='n'>value</span><span class='p'>})</span>
-  <span class='k'>end</span>
+  <span class="n">scope</span> <span class="k">do</span>
+    <span class="no">User</span><span class="o">.</span><span class="n">includes</span><span class="p">(</span><span class="ss">:group</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="n">filter</span><span class="p">(</span><span class="ss">:category</span><span class="p">,</span> <span class="ss">:enum</span><span class="p">,</span> <span class="ss">:select</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;first&quot;</span><span class="p">,</span> <span class="s2">&quot;second&quot;</span><span class="o">]</span><span class="p">)</span>
+  <span class="n">filter</span><span class="p">(</span><span class="ss">:group_id</span><span class="p">,</span> <span class="ss">:multiple</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+  <span class="n">filter</span><span class="p">(</span><span class="ss">:group_name</span><span class="p">,</span> <span class="ss">:header</span> <span class="o">=&gt;</span> <span class="s2">&quot;Group&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">value</span><span class="o">|</span>
+    <span class="nb">self</span><span class="o">.</span><span class="n">joins</span><span class="p">(</span><span class="ss">:group</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:groups</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="n">value</span><span class="p">})</span>
+  <span class="k">end</span>
 
 
-  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:name</span><span class='p'>)</span>
-  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>,</span> <span class='ss'>:order</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;groups.name&quot;</span><span class='p'>)</span> <span class='k'>do</span>
-    <span class='nb'>self</span><span class='o'>.</span><span class='n'>group</span><span class='o'>.</span><span class='n'>name</span>
-  <span class='k'>end</span>
-  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:active</span><span class='p'>,</span> <span class='ss'>:header</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;Activated&quot;</span><span class='p'>,</span> <span class='ss'>:order</span> <span class='o'>=&gt;</span> <span class='kp'>false</span><span class='p'>)</span>
-    <span class='o'>!</span><span class='nb'>self</span><span class='o'>.</span><span class='n'>disabled</span>
-  <span class='k'>end</span>
-<span class='k'>end</span>
-</code></pre>
-</div>
-<h3 id="grid_instance_api">Grid instance API</h3>
+  <span class="n">column</span><span class="p">(</span><span class="ss">:name</span><span class="p">)</span>
+  <span class="n">column</span><span class="p">(</span><span class="ss">:group</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s2">&quot;groups.name&quot;</span><span class="p">)</span> <span class="k">do</span>
+    <span class="nb">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">name</span>
+  <span class="k">end</span>
+  <span class="n">column</span><span class="p">(</span><span class="ss">:active</span><span class="p">,</span> <span class="ss">:header</span> <span class="o">=&gt;</span> <span class="s2">&quot;Activated&quot;</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span>
+    <span class="o">!</span><span class="nb">self</span><span class="o">.</span><span class="n">disabled</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<h3 id="grid-instance-api">Grid instance API</h3>
 
 <p>And now we can create and manipulate reports:</p>
-<div class='highlight'><pre><code class='ruby'><span class='n'>report</span> <span class='o'>=</span> <span class='no'>SimpleReport</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span>
-        <span class='ss'>:group_id</span>          <span class='o'>=&gt;</span> <span class='o'>[</span><span class='mi'>1</span><span class='p'>,</span><span class='mi'>2</span><span class='o'>]</span><span class='p'>,</span>
-        <span class='ss'>:category</span>          <span class='o'>=&gt;</span> <span class='s2'>&quot;first&quot;</span><span class='p'>,</span>
-        <span class='ss'>:order</span>             <span class='o'>=&gt;</span> <span class='ss'>:group</span><span class='p'>,</span>
-        <span class='ss'>:descending</span>        <span class='o'>=&gt;</span> <span class='kp'>true</span>
-<span class='p'>)</span>
 
-<span class='n'>report</span><span class='o'>.</span><span class='n'>assets</span> <span class='c1'># =&gt; Array of User instances: </span>
-              <span class='c1'># SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count &gt;= 1 AND users.category = &#39;first&#39; ORDER BY groups.name DESC</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">report</span> <span class="o">=</span> <span class="no">SimpleReport</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+        <span class="ss">:group_id</span>          <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">]</span><span class="p">,</span>
+        <span class="ss">:category</span>          <span class="o">=&gt;</span> <span class="s2">&quot;first&quot;</span><span class="p">,</span>
+        <span class="ss">:order</span>             <span class="o">=&gt;</span> <span class="ss">:group</span><span class="p">,</span>
+        <span class="ss">:descending</span>        <span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="p">)</span>
 
-<span class='n'>report</span><span class='o'>.</span><span class='n'>assets</span><span class='o'>.</span><span class='n'>paginate</span><span class='p'>(</span><span class='ss'>:page</span> <span class='o'>=&gt;</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:page</span><span class='o'>]</span><span class='p'>)</span> <span class='c1'># =&gt; Yes, it is</span>
+<span class="n">report</span><span class="o">.</span><span class="n">assets</span> <span class="c1"># =&gt; Array of User instances: </span>
+              <span class="c1"># SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count &gt;= 1 AND users.category = &#39;first&#39; ORDER BY groups.name DESC</span>
 
-<span class='n'>report</span><span class='o'>.</span><span class='n'>header</span> <span class='c1'># =&gt; [&quot;Group&quot;, &quot;Name&quot;, &quot;Activated&quot;]</span>
-<span class='n'>report</span><span class='o'>.</span><span class='n'>rows</span>   <span class='c1'># =&gt; [</span>
-              <span class='c1'>#      [&quot;Steve&quot;, &quot;Spammers&quot;, true],</span>
-              <span class='c1'>#      [ &quot;John&quot;, &quot;Spoilers&quot;, true],</span>
-              <span class='c1'>#      [&quot;Berry&quot;, &quot;Good people&quot;, false]</span>
-              <span class='c1'>#    ]</span>
-<span class='n'>report</span><span class='o'>.</span><span class='n'>data</span>   <span class='c1'># =&gt; [ header, *rows]</span>
+<span class="n">report</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">paginate</span><span class="p">(</span><span class="ss">:page</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:page</span><span class="o">]</span><span class="p">)</span> <span class="c1"># =&gt; Yes, it is</span>
 
-<span class='n'>report</span><span class='o'>.</span><span class='n'>to_csv</span> <span class='c1'># =&gt; Yes, it is</span>
-</code></pre>
-</div>
-<h3 id="feel_the_power_and_flexibility_by_examples">Feel the Power and Flexibility by examples</h3>
+<span class="n">report</span><span class="o">.</span><span class="n">header</span> <span class="c1"># =&gt; [&quot;Group&quot;, &quot;Name&quot;, &quot;Activated&quot;]</span>
+<span class="n">report</span><span class="o">.</span><span class="n">rows</span>   <span class="c1"># =&gt; [</span>
+              <span class="c1">#      [&quot;Steve&quot;, &quot;Spammers&quot;, true],</span>
+              <span class="c1">#      [ &quot;John&quot;, &quot;Spoilers&quot;, true],</span>
+              <span class="c1">#      [&quot;Berry&quot;, &quot;Good people&quot;, false]</span>
+              <span class="c1">#    ]</span>
+<span class="n">report</span><span class="o">.</span><span class="n">data</span>   <span class="c1"># =&gt; [ header, *rows]</span>
 
-<p>I love flexibility. That is why datagrid has a lot of things for non trivial use cases. In order to proof that I’ll show you some examples of what you can do:</p>
+<span class="n">report</span><span class="o">.</span><span class="n">to_csv</span> <span class="c1"># =&gt; Yes, it is</span></code></pre></div>
+
+<h3 id="feel-the-power-and-flexibility-by-examples">Feel the Power and Flexibility by examples</h3>
+
+<p>I love flexibility. That is why datagrid has a lot of things for non trivial use cases.
+In order to proof that I’ll show you some examples of what you can do:</p>
 
 <ul>
-<li><a href="https://gist.github.com/7ba4267aa25b6e37eb44">Range filters</a></li>
-
-<li><a href="https://gist.github.com/4e84d2dad2f2362a9ab4">Time sheets aggregation report</a></li>
-
-<li><a href="https://gist.github.com/8b91694edec900de84be">Daily statistics</a></li>
-
-<li><a href="https://gist.github.com/106acfc3fe689564896c">Extending built in methods</a></li>
+  <li><a href="https://gist.github.com/7ba4267aa25b6e37eb44">Range filters</a></li>
+  <li><a href="https://gist.github.com/4e84d2dad2f2362a9ab4">Time sheets aggregation report</a></li>
+  <li><a href="https://gist.github.com/8b91694edec900de84be">Daily statistics</a></li>
+  <li><a href="https://gist.github.com/106acfc3fe689564896c">Extending built in methods</a></li>
 </ul>
 
 <h3 id="documentation">Documentation</h3>
 
-<p><a href="https://github.com/bogdan/datagrid/wiki">Datagrid WIKI</a> is main documentation source of the gem. Also feel free to ask questions right after this post.</p>
+<p><a href="https://github.com/bogdan/datagrid/wiki">Datagrid WIKI</a> is main documentation source of the gem.
+Also feel free to ask questions right after this post.</p>
 
-<h3 id="in_my_todo_list">In my TODO list</h3>
+<h3 id="in-my-todo-list">In my TODO list</h3>
 
 <p>Current version of datagrid gem have fully document back-end staff. It’s production ready - we are running three projects that use datagrid. Now I am working on front-end that is already part of the distribution, but not yet documented.</p>
+
 
     <div class="clear"></div>
     <div class="left">
@@ -211,19 +211,19 @@
         <ul class="posts">
             
                <!-- Exclude self -->
-                <li><span>16 Aug 2012</span> &raquo; <a href="/2012/08/postgresql-full-text-search-solr">Full text search - Solr(Sunspot) vs PostgreSQL</a></li>
+                <li><span>03 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>23 Jan 2012</span> &raquo; <a href="/2012/01/rails-32-features-changelog">New Rails Release with a few features from me</a></li>
+                <li><span>25 Jul 2014</span> &raquo; <a href="/2014/07/rubyc-conference-video-parsers-slides">My Talk from RubyC conference</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>06 Jun 2012</span> &raquo; <a href="/2012/06/assumption-driven-development">Assumption Driven Approach</a></li>
+                <li><span>27 May 2014</span> &raquo; <a href="/2014/05/podcast-interview-le0pard-open-source-contribution">Took part in a podcast with Alexey Vasiliev</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>08 Jun 2010</span> &raquo; <a href="/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails">Advanced non-flat controllers hierarchy with rails</a></li>
+                <li><span>01 Apr 2014</span> &raquo; <a href="/2014/04/state-machine-minemalistic-validation-perfection-changes">Minimalistic State Machine: Less is More</a></li>
               
             
         </ul>
@@ -258,6 +258,10 @@
                         <ul>
                             
                             <li>
+                                <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
                             </li>
                             
@@ -271,10 +275,6 @@
                             
                             <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
                         </ul>
@@ -337,7 +337,7 @@
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 30.2px; line-height:30.2px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
@@ -348,7 +348,7 @@
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
-<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
 <a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 

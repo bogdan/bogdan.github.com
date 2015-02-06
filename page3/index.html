@@ -77,11 +77,42 @@
                     
     <div class="post">
         <h2>
+            <a href='/2011/11/slides-rails-fat-model-service-code'>Slides: Fighting with fat models</a>
+            <div class="date">11 Nov 2011</div>
+        </h2>
+        <p>Here are my slides from <a href="http://rubyc.eu">RubyC</a> conference.</p>
+
+<p>This presentation covers a hot topic for projects that are more than a year old - it’s fat models. The problem appear naturally as models are the best place to allocate business logic code. There are number of existing techniques to manage large amount of code in Rails application. But they are suitable only in a half of use cases. For the rest of them we can use <strong>Traits</strong> pattern that is described well in this presentation.</p>
+
+<p><strong><a href="http://gusiev.com/slides/fighting_fat_models/static">Fighting with fat models</a></strong>
+<!--</p>
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/model.html">model</a>
+    
+    <a href="/tags/service.html">service</a>
+    
+    <a href="/tags/dry.html">dry</a>
+    
+    <a href="/tags/slides.html">slides</a>
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2011/10/resque-plugins-framework-scaling'>Resque-way</a>
             <div class="date">17 Oct 2011</div>
         </h2>
-        
-<p><a href="http://www.engineyard.com/blog/2011/the-resque-way/">My article about Resque</a> was posted on Engine Yard last week. It has very good notes from EY engineers and doesn’t have my regular grammar mistakes. Enjoy your reading. <!--</p>
+        <p><a href="http://www.engineyard.com/blog/2011/the-resque-way/">My article about Resque</a> was posted on Engine Yard last week. It has very good notes from EY engineers and doesn’t have my regular grammar mistakes. Enjoy your reading.
+<!--</p>
 -->
         <h4 class="tags">
     
@@ -103,10 +134,12 @@
             <a href='/2011/07/rspec-context-behavior-subject-slides'>Advanced RSpec Techniques presentation</a>
             <div class="date">08 Jul 2011</div>
         </h2>
-        
-<p>I’ve always pay attention to Rspec and posted some articles about <a href="/tags/rspec.html">Advanced Rspec features</a>. Right now about 2k tests written by me personally in 3 years of development with Rails.</p>
+        <p>I’ve always pay attention to Rspec and posted some articles about <a href="/tags/rspec.html">Advanced Rspec features</a>.
+Right now about 2k tests written by me personally in 3 years of development with Rails.</p>
 
-<p>Here is the slides from my talk about all invented patterns and best practices: <br /> <strong><a href="http://gusiev.com/dorspec#1">Do rspec: fogotten features of RSpec</a></strong> <!--</p>
+<p>Here is the slides from my talk about all invented patterns and best practices: <br />
+<strong><a href="http://gusiev.com/dorspec#1">Do rspec: fogotten features of RSpec</a></strong>
+<!--</p>
 -->
         <h4 class="tags">
     
@@ -134,94 +167,94 @@
             <a href='/2011/06/ruby-datagrid-gem-report'>Reporting made easy by Datagrid gem for Rails</a>
             <div class="date">26 Jun 2011</div>
         </h2>
-        
-<p>4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about <a href="https://github.com/bogdan/datagrid">perfect report gem</a> that would provide easy DSL for making filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head and now finally I have enough knowledge and opportunities to build such tool.</p>
-<!--
-<h3 id="defining_a_grid">Defining a grid</h3>
+        <p>4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about <a href="https://github.com/bogdan/datagrid">perfect report gem</a> that would provide easy DSL for making filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head and now finally I have enough knowledge and opportunities to build such tool. </p>
 
-<p>The idea of Datagrid DSL is to define a scope of ActiveRecord models and define different independent criterias to filter this scope. Than convert filtered data to table view with defined columns. So, typical datagrid report consists of:</p>
+<!--
+
+<h3 id="defining-a-grid">Defining a grid</h3>
+
+<p>The idea of Datagrid DSL is to define a scope of ActiveRecord models and define different independent criterias to filter this scope. 
+Than convert filtered data to table view with defined columns. So, typical datagrid report consists of:</p>
 
 <ul>
-<li>A scope of records to query data</li>
-
-<li>Filters with parameters to make a subsets of this data</li>
-
-<li>Columns to display this data</li>
+  <li>A scope of records to query data</li>
+  <li>Filters with parameters to make a subsets of this data</li>
+  <li>Columns to display this data</li>
 </ul>
 
 <p>And we can easily split their definition with the following ruby DSL</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>SimpleReport</span>
 
-  <span class='kp'>include</span> <span class='no'>Datagrid</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">SimpleReport</span>
 
-  <span class='n'>scope</span> <span class='k'>do</span>
-    <span class='no'>User</span><span class='o'>.</span><span class='n'>includes</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>)</span>
-  <span class='k'>end</span>
+  <span class="kp">include</span> <span class="no">Datagrid</span>
 
-  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:category</span><span class='p'>,</span> <span class='ss'>:enum</span><span class='p'>,</span> <span class='ss'>:select</span> <span class='o'>=&gt;</span> <span class='o'>[</span><span class='s2'>&quot;first&quot;</span><span class='p'>,</span> <span class='s2'>&quot;second&quot;</span><span class='o'>]</span><span class='p'>)</span>
-  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:group_id</span><span class='p'>,</span> <span class='ss'>:multiple</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span>
-  <span class='n'>filter</span><span class='p'>(</span><span class='ss'>:group_name</span><span class='p'>,</span> <span class='ss'>:header</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;Group&quot;</span><span class='p'>)</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>value</span><span class='o'>|</span>
-    <span class='nb'>self</span><span class='o'>.</span><span class='n'>joins</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>)</span><span class='o'>.</span><span class='n'>where</span><span class='p'>(</span><span class='ss'>:groups</span> <span class='o'>=&gt;</span> <span class='p'>{</span><span class='ss'>:name</span> <span class='o'>=&gt;</span> <span class='n'>value</span><span class='p'>})</span>
-  <span class='k'>end</span>
+  <span class="n">scope</span> <span class="k">do</span>
+    <span class="no">User</span><span class="o">.</span><span class="n">includes</span><span class="p">(</span><span class="ss">:group</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="n">filter</span><span class="p">(</span><span class="ss">:category</span><span class="p">,</span> <span class="ss">:enum</span><span class="p">,</span> <span class="ss">:select</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;first&quot;</span><span class="p">,</span> <span class="s2">&quot;second&quot;</span><span class="o">]</span><span class="p">)</span>
+  <span class="n">filter</span><span class="p">(</span><span class="ss">:group_id</span><span class="p">,</span> <span class="ss">:multiple</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+  <span class="n">filter</span><span class="p">(</span><span class="ss">:group_name</span><span class="p">,</span> <span class="ss">:header</span> <span class="o">=&gt;</span> <span class="s2">&quot;Group&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">value</span><span class="o">|</span>
+    <span class="nb">self</span><span class="o">.</span><span class="n">joins</span><span class="p">(</span><span class="ss">:group</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:groups</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="n">value</span><span class="p">})</span>
+  <span class="k">end</span>
 
 
-  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:name</span><span class='p'>)</span>
-  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:group</span><span class='p'>,</span> <span class='ss'>:order</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;groups.name&quot;</span><span class='p'>)</span> <span class='k'>do</span>
-    <span class='nb'>self</span><span class='o'>.</span><span class='n'>group</span><span class='o'>.</span><span class='n'>name</span>
-  <span class='k'>end</span>
-  <span class='n'>column</span><span class='p'>(</span><span class='ss'>:active</span><span class='p'>,</span> <span class='ss'>:header</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;Activated&quot;</span><span class='p'>,</span> <span class='ss'>:order</span> <span class='o'>=&gt;</span> <span class='kp'>false</span><span class='p'>)</span>
-    <span class='o'>!</span><span class='nb'>self</span><span class='o'>.</span><span class='n'>disabled</span>
-  <span class='k'>end</span>
-<span class='k'>end</span>
-</code></pre>
-</div>
-<h3 id="grid_instance_api">Grid instance API</h3>
+  <span class="n">column</span><span class="p">(</span><span class="ss">:name</span><span class="p">)</span>
+  <span class="n">column</span><span class="p">(</span><span class="ss">:group</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s2">&quot;groups.name&quot;</span><span class="p">)</span> <span class="k">do</span>
+    <span class="nb">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">name</span>
+  <span class="k">end</span>
+  <span class="n">column</span><span class="p">(</span><span class="ss">:active</span><span class="p">,</span> <span class="ss">:header</span> <span class="o">=&gt;</span> <span class="s2">&quot;Activated&quot;</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span>
+    <span class="o">!</span><span class="nb">self</span><span class="o">.</span><span class="n">disabled</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<h3 id="grid-instance-api">Grid instance API</h3>
 
 <p>And now we can create and manipulate reports:</p>
-<div class='highlight'><pre><code class='ruby'><span class='n'>report</span> <span class='o'>=</span> <span class='no'>SimpleReport</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span>
-        <span class='ss'>:group_id</span>          <span class='o'>=&gt;</span> <span class='o'>[</span><span class='mi'>1</span><span class='p'>,</span><span class='mi'>2</span><span class='o'>]</span><span class='p'>,</span>
-        <span class='ss'>:category</span>          <span class='o'>=&gt;</span> <span class='s2'>&quot;first&quot;</span><span class='p'>,</span>
-        <span class='ss'>:order</span>             <span class='o'>=&gt;</span> <span class='ss'>:group</span><span class='p'>,</span>
-        <span class='ss'>:descending</span>        <span class='o'>=&gt;</span> <span class='kp'>true</span>
-<span class='p'>)</span>
 
-<span class='n'>report</span><span class='o'>.</span><span class='n'>assets</span> <span class='c1'># =&gt; Array of User instances: </span>
-              <span class='c1'># SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count &gt;= 1 AND users.category = &#39;first&#39; ORDER BY groups.name DESC</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">report</span> <span class="o">=</span> <span class="no">SimpleReport</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+        <span class="ss">:group_id</span>          <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">]</span><span class="p">,</span>
+        <span class="ss">:category</span>          <span class="o">=&gt;</span> <span class="s2">&quot;first&quot;</span><span class="p">,</span>
+        <span class="ss">:order</span>             <span class="o">=&gt;</span> <span class="ss">:group</span><span class="p">,</span>
+        <span class="ss">:descending</span>        <span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="p">)</span>
 
-<span class='n'>report</span><span class='o'>.</span><span class='n'>assets</span><span class='o'>.</span><span class='n'>paginate</span><span class='p'>(</span><span class='ss'>:page</span> <span class='o'>=&gt;</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:page</span><span class='o'>]</span><span class='p'>)</span> <span class='c1'># =&gt; Yes, it is</span>
+<span class="n">report</span><span class="o">.</span><span class="n">assets</span> <span class="c1"># =&gt; Array of User instances: </span>
+              <span class="c1"># SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count &gt;= 1 AND users.category = &#39;first&#39; ORDER BY groups.name DESC</span>
 
-<span class='n'>report</span><span class='o'>.</span><span class='n'>header</span> <span class='c1'># =&gt; [&quot;Group&quot;, &quot;Name&quot;, &quot;Activated&quot;]</span>
-<span class='n'>report</span><span class='o'>.</span><span class='n'>rows</span>   <span class='c1'># =&gt; [</span>
-              <span class='c1'>#      [&quot;Steve&quot;, &quot;Spammers&quot;, true],</span>
-              <span class='c1'>#      [ &quot;John&quot;, &quot;Spoilers&quot;, true],</span>
-              <span class='c1'>#      [&quot;Berry&quot;, &quot;Good people&quot;, false]</span>
-              <span class='c1'>#    ]</span>
-<span class='n'>report</span><span class='o'>.</span><span class='n'>data</span>   <span class='c1'># =&gt; [ header, *rows]</span>
+<span class="n">report</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">paginate</span><span class="p">(</span><span class="ss">:page</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:page</span><span class="o">]</span><span class="p">)</span> <span class="c1"># =&gt; Yes, it is</span>
 
-<span class='n'>report</span><span class='o'>.</span><span class='n'>to_csv</span> <span class='c1'># =&gt; Yes, it is</span>
-</code></pre>
-</div>
-<h3 id="feel_the_power_and_flexibility_by_examples">Feel the Power and Flexibility by examples</h3>
+<span class="n">report</span><span class="o">.</span><span class="n">header</span> <span class="c1"># =&gt; [&quot;Group&quot;, &quot;Name&quot;, &quot;Activated&quot;]</span>
+<span class="n">report</span><span class="o">.</span><span class="n">rows</span>   <span class="c1"># =&gt; [</span>
+              <span class="c1">#      [&quot;Steve&quot;, &quot;Spammers&quot;, true],</span>
+              <span class="c1">#      [ &quot;John&quot;, &quot;Spoilers&quot;, true],</span>
+              <span class="c1">#      [&quot;Berry&quot;, &quot;Good people&quot;, false]</span>
+              <span class="c1">#    ]</span>
+<span class="n">report</span><span class="o">.</span><span class="n">data</span>   <span class="c1"># =&gt; [ header, *rows]</span>
 
-<p>I love flexibility. That is why datagrid has a lot of things for non trivial use cases. In order to proof that I’ll show you some examples of what you can do:</p>
+<span class="n">report</span><span class="o">.</span><span class="n">to_csv</span> <span class="c1"># =&gt; Yes, it is</span></code></pre></div>
+
+<h3 id="feel-the-power-and-flexibility-by-examples">Feel the Power and Flexibility by examples</h3>
+
+<p>I love flexibility. That is why datagrid has a lot of things for non trivial use cases.
+In order to proof that I’ll show you some examples of what you can do:</p>
 
 <ul>
-<li><a href="https://gist.github.com/7ba4267aa25b6e37eb44">Range filters</a></li>
-
-<li><a href="https://gist.github.com/4e84d2dad2f2362a9ab4">Time sheets aggregation report</a></li>
-
-<li><a href="https://gist.github.com/8b91694edec900de84be">Daily statistics</a></li>
-
-<li><a href="https://gist.github.com/106acfc3fe689564896c">Extending built in methods</a></li>
+  <li><a href="https://gist.github.com/7ba4267aa25b6e37eb44">Range filters</a></li>
+  <li><a href="https://gist.github.com/4e84d2dad2f2362a9ab4">Time sheets aggregation report</a></li>
+  <li><a href="https://gist.github.com/8b91694edec900de84be">Daily statistics</a></li>
+  <li><a href="https://gist.github.com/106acfc3fe689564896c">Extending built in methods</a></li>
 </ul>
 
 <h3 id="documentation">Documentation</h3>
 
-<p><a href="https://github.com/bogdan/datagrid/wiki">Datagrid WIKI</a> is main documentation source of the gem. Also feel free to ask questions right after this post.</p>
+<p><a href="https://github.com/bogdan/datagrid/wiki">Datagrid WIKI</a> is main documentation source of the gem.
+Also feel free to ask questions right after this post.</p>
 
-<h3 id="in_my_todo_list">In my TODO list</h3>
+<h3 id="in-my-todo-list">In my TODO list</h3>
 
 <p>Current version of datagrid gem have fully document back-end staff. It’s production ready - we are running three projects that use datagrid. Now I am working on front-end that is already part of the distribution, but not yet documented.</p>
+
 -->
         <h4 class="tags">
     
@@ -247,33 +280,34 @@
             <a href='/2011/05/dbext-vim-table-names-convention-patch'>Patching dbext vim plugin to support Rails naming conventions</a>
             <div class="date">30 May 2011</div>
         </h2>
-        
-<p><a href="http://www.vim.org/scripts/script.php?script_id=356">dbext</a> is an excellent vim plugin that allows you to execute SQL queries directly from vim. For example: <code>select * from &lt;word under cursor&gt;</code>. When dbext is used with Rails there is a problem that you can work with some variation of table name like:</p>
+        <p><a href="http://www.vim.org/scripts/script.php?script_id=356">dbext</a> is an excellent vim plugin that allows you to execute SQL queries directly from vim. For example: <code>select * from &lt;word under cursor&gt;</code>. When dbext is used with Rails there is a problem that you can work with some variation of table name like: </p>
 
 <ul>
-<li>UserRole</li>
-
-<li>user_role_id</li>
-
-<li>user_role_ids</li>
-
-<li>user_role</li>
+  <li>UserRole</li>
+  <li>user_role_id</li>
+  <li>user_role_ids</li>
+  <li>user_role</li>
 </ul>
 
 <p>But still wants to use it as table name in your database queries so that you won’t type it manually.</p>
+
 <!--
+
 <p>So, I made it to automatically convert word under cursor into a table name with the following configuration options:</p>
 
 <pre><code>let g:dbext_table_names_number = 2 
     # 0 - disabled, 1 - singular, 2 - plural
 let g:dbext_table_names_case = 2 
-    # 0 - disabled, 1 - camelcase, 2 - underscore</code></pre>
+    # 0 - disabled, 1 - camelcase, 2 - underscore
+</code></pre>
 
 <p>Also there is an option to automatically strip <code>_id</code> suffix from word to convert it to table name:</p>
 
-<pre><code>let g:dbext_table_names_strip_id = 1</code></pre>
+<pre><code>let g:dbext_table_names_strip_id = 1
+</code></pre>
 
-<p>All these options match Rails table name convention by default. Staff in <a href="http://github.com/bogdan/dbext">my dbext fork</a>.</p>
+<p>All these options match Rails table name convention by default.
+Staff in <a href="http://github.com/bogdan/dbext">my dbext fork</a>. </p>
 
 <p>Once you install it in your vim runtime put your cursor on any table name variation like example above and run <code>:DBSelectFromTable</code> to get:</p>
 
@@ -281,7 +315,9 @@ let g:dbext_table_names_case = 2
 
 <p>Other commands are also patched. Please let me know if any bugs found.</p>
 
-<p>Don’t know if non-rails developers would love this patch but pretty sure that it won’t annoy them. Please support <a href="https://github.com/zklinger/dbext/pull/1">my pull request</a> if you like it.</p>
+<p>Don’t know if non-rails developers would love this patch but pretty sure that it won’t annoy them. 
+Please support <a href="https://github.com/zklinger/dbext/pull/1">my pull request</a> if you like it.</p>
+
 -->
         <h4 class="tags">
     
@@ -362,32 +398,32 @@ Net::HTTP.colorize = true
             <a href='/2011/05/migrate-wordpress-jekyll-post-preview'>Finally get rid of WordPress and PHP</a>
             <div class="date">20 May 2011</div>
         </h2>
-        
-<p>After a few tries migrate to blog engine with programming language I know well, I finally found <a href="http://github.com/mojombo/jekyll">jekyll</a> - lightweight static site generator. My main concerns in this choice was:</p>
+        <p>After a few tries migrate to blog engine with programming language I know well, I finally found 
+<a href="http://github.com/mojombo/jekyll">jekyll</a> - lightweight static site generator. My main concerns in this choice was:</p>
 
 <ul>
-<li>Edit posts in my favorite text editor with favorite markup</li>
-
-<li>NO PHP</li>
-
-<li>Syntax highlight out of the box</li>
+  <li>Edit posts in my favorite text editor with favorite markup</li>
+  <li>NO PHP</li>
+  <li>Syntax highlight out of the box</li>
 </ul>
+
 <!--
-<h3 id="migration_from_wordpress">Migration from WordPress</h3>
+
+<h3 id="migration-from-wordpress">Migration from WordPress</h3>
 
 <p>Three main migration points was:</p>
 
 <ul>
-<li>Posts that was migrated with <a href="http://google.com/search?q=wordpress%20jekyll%20migrate">several lines of ruby code</a></li>
-
-<li>Comments that imported to <a href="http://wordpress.org/extend/plugins/disqus-comment-system/">disqus</a> as jekyll is static site engine so the comments should be hosted somewhere else</li>
-
-<li>Generate <a href="http://www.google.com.ua/search?sourceid=chrome&client=ubuntu&channel=cs&ie=UTF-8&q=jekyll+tag+cloud">tag cloud and posts by tag pages</a> that also have a lot of workarounds in the web</li>
+  <li>Posts that was migrated with <a href="http://google.com/search?q=wordpress%20jekyll%20migrate">several lines of ruby code</a></li>
+  <li>Comments that imported to <a href="http://wordpress.org/extend/plugins/disqus-comment-system/">disqus</a> as jekyll is static site engine so the comments should be hosted somewhere else</li>
+  <li>Generate <a href="http://www.google.com.ua/search?sourceid=chrome&amp;client=ubuntu&amp;channel=cs&amp;ie=UTF-8&amp;q=jekyll+tag+cloud">tag cloud and posts by tag pages</a> that also have a lot of workarounds in the web</li>
 </ul>
 
-<p>One problem I am currently have is “post preview” feature that is currently unsupported in jekyll. My current approach for this looks like this:</p>
+<p>One problem I am currently have is “post preview” feature that is currently unsupported in jekyll.
+My current approach for this looks like this:</p>
 
-<pre><code>post.content | replace_first:&#39;&lt;!--more--&gt;&#39;,&#39;&lt;!--&#39; | append:&#39;--&gt;&#39; </code></pre>
+<pre><code>post.content | replace_first:'&lt;!--more--&gt;','&lt;!--' | append:'--&gt;' 
+</code></pre>
 
 <h3 id="problems">Problems</h3>
 
@@ -397,7 +433,8 @@ Net::HTTP.colorize = true
 
 <h3 id="result">Result</h3>
 
-<p>About 12 hours of work to transfer 30 posts and their comments. Reworked site design to be more clean.</p>
+<p>About 12 hours of work to transfer 30 posts and their comments. 
+Reworked site design to be more clean.</p>
 -->
         <h4 class="tags">
     
@@ -593,93 +630,6 @@ In some cases it might be useful not only in the development but in production a
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2010/11/dynamic-context-in-rspec-dont-repeat-yourself'>Dynamic context in Rspec - don't repeat yourself</a>
-            <div class="date">03 Nov 2010</div>
-        </h2>
-        We used to have less problems with subject and behavior when writing our unit tests. And <strong>context</strong> is what testing is all about.
- Web apps manage data and the same method can return different values based on current database state.
-Advanced rspec features make it possible to use very effective technique to organize tests. 
-In order to reflect your non-linear business process in unit tests you can not only nest contexts in each other but also make your context more dynamic.
-<!--
-
-<h3>Context callback</h3>
-Rspec <code>#let</code> method is used to lazy load things into context.
-In spite of lazy initialization, let blocks are defined before the <code>before each</code> hook. 
-This allow us to create context callback.
-<br/><br/>
-Understand by example. 
-In this example orders should be delivered to confirmed customer account just after creation and should not be delivered if the account is not confirmed yet.
-<pre><code>describe Order do
-  context "after create" do #defining a partial context
-    before(:each) do
-      subject.customer.confirmed = _confirmed
-      subject.save!
-    end
-
-    context "when customer is confirmed" do 
-      let(:_confirmed) { true }
-      it { should be_delivered }
-    end
-    
-    context "when customer is not confirmed" do 
-      let(:_confirmed) { false }
-      it { should_not be_delivered }
-    end
-  end
-end</code></pre>
-
-Here you can see partial context definition and custom behavior in two nested contexts.
-I used underscore prefix in order to identify the callback method, that is defined differently in different contexts.<br/> <br/>
-This happened because <code>let</code> as method is defined at once but <code>before</code> block is called only when <code>it</code> is reached.
-
-<h3>Testing utility function</h3>
-Another example that is a kind of pattern matching(Erlang term), designed to test utility functions.<br/>
-Suppose we have a boolean expression evaluation function:
-<pre><code>describe Expression
-  describe ".run" do
-
-    subject { Expression.run(arg) }
-
-    context "with '&amp;' where both true" do
-      let(:arg) { "true &amp; true" }
-      it {should be_true}
-    end
-
-    context "with '&amp;' where one false" do
-      let(:arg) { "false &amp; true" }
-      it {should be_false}
-    end
-    ........
-  end
-end</code></pre>
-
-Very good strategy to run same function with different arguments.
-
-<h3>Summary</h3>
-
-Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (e.g. for other programming languages), Rspec authors got in deep to the testing problems and invent flexible and elegant syntax.
--->
-        <h4 class="tags">
-    
-    <a href="/tags/behavior.html">behavior</a>
-    
-    <a href="/tags/rspec.html">rspec</a>
-    
-    <a href="/tags/context.html">context</a>
-    
-    <a href="/tags/test.html">test</a>
-    
-    <a href="/tags/dry.html">dry</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -714,6 +664,10 @@ Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (
                         <ul>
                             
                             <li>
+                                <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
                             </li>
                             
@@ -727,10 +681,6 @@ Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (
                             
                             <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
                         </ul>
@@ -793,7 +743,7 @@ Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 30.2px; line-height:30.2px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
@@ -804,7 +754,7 @@ Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
-<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
 <a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 

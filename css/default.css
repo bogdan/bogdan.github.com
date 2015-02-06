@@ -33,7 +33,7 @@ hr {
   border-color: white; }
 
 h1 a, h2 a, h3 a {
-  color: #ff4444;
+  color: #F44;
   text-decoration: none; }
 
 .left {
@@ -89,7 +89,7 @@ ul li {
   margin-top: 8px; }
 
 a.for-people {
-  color: #ff1111; }
+  color: #F11; }
 
 h4.tags {
   margin: 10px 0;
@@ -138,3 +138,15 @@ h4.tags {
 
 .reddit-button {
   padding-top: 3px; }
+
+table.bordered {
+  border-collapse: collapse;
+  margin: 20px auto; }
+  table.bordered th {
+    font-weight: bold;
+    text-align: center; }
+  table.bordered td, table.bordered th {
+    padding: 4px;
+    border: 1px solid black; }
+
+/*# sourceMappingURL=default.css.map */

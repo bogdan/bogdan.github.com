@@ -81,28 +81,36 @@
         <a href="/2010/01/sql-queries-activerecord-rails-named-scopes-stack">Advanced SQL and scopes stack with ActiveRecord</a>
         <div class="date">24 Jan 2010</div>
     </h2>
-    
-<p>If you ever work with rails application that is a little bit more complex than a simple CRUD you would know that some of the ActiveRecord magic doesn’t work for complex SQL queries. I am primary talking about scopes stack feature.<br /> <!--more--></p>
+    <p>If you ever work with rails application that is a little bit more complex than a simple CRUD you would know that some of the ActiveRecord magic doesn’t work for complex SQL queries. I am primary talking about scopes stack feature.<br />
+<!--more--></p>
 <hr />
-<p> Let’s review the following scope that suppose to be usable in different combinations with others:</p>
-<div class='highlight'><pre><code class='ruby'><span class='n'>scope</span> <span class='ss'>:network_of</span><span class='p'>,</span> <span class='nb'>lambda</span> <span class='p'>{</span><span class='o'>|</span><span class='n'>user</span><span class='o'>|</span>
-<span class='p'>{</span>
-<span class='ss'>:select</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;u.*&quot;</span>
-<span class='ss'>:from</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;users u, followings f1, followings f2&quot;</span><span class='p'>,</span>
-<span class='ss'>:conditions</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;f1.follower_id = </span><span class='si'>#{</span><span class='n'>user</span><span class='o'>.</span><span class='n'>id</span><span class='si'>}</span><span class='s2'> AND &quot;</span> <span class='o'>+</span> 
-<span class='s2'>&quot;f1.followed_id = f2.follower_id AND &quot;</span> <span class='o'>+</span>
-<span class='s2'>&quot;f2.followed_id = u.id&quot;</span>
-<span class='p'>}</span>
-</code></pre>
-</div>
-<p>It suppose to returns all people that are followed by people that are followed by the given person(second circle). From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL. But this solution will have some issues with Active Record scopes stack magic. See that <code>User.network_for(current_user).all(:limit =&gt;5)</code> will result in SQL exception primary because <code>:limit =&gt; 5</code> doesn’t know about the table alias <code>users u</code>. We can not use it in fact.<br /> The second problem comes to the foreground when we will try to use ActiveRecord features like <code>User.network_for(current_user).all(:include =&gt; :orders)</code>. ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.<br /> The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make “users” table to be the last one declared in :from parameter.</p>
-<div class='highlight'><pre><code class='ruby'><span class='ss'>:select</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;users.*&quot;</span>
-<span class='ss'>:from</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;followings f1, followings f2, users&quot;</span><span class='p'>,</span>
-<span class='ss'>:conditions</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;f1.follower_id = </span><span class='si'>#{</span><span class='n'>user</span><span class='o'>.</span><span class='n'>id</span><span class='si'>}</span><span class='s2'> AND &quot;</span> <span class='o'>+</span> 
-<span class='s2'>&quot;f1.followed_id = f2.follower_id AND &quot;</span> <span class='o'>+</span>
-<span class='s2'>&quot;f2.followed_id = users.id&quot;</span>
-</code></pre>
-</div>
+
+<p>Let’s review the following scope that suppose to be usable in different combinations with others:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">scope</span> <span class="ss">:network_of</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span><span class="o">|</span><span class="n">user</span><span class="o">|</span>
+<span class="p">{</span>
+<span class="ss">:select</span> <span class="o">=&gt;</span> <span class="s2">&quot;u.*&quot;</span>
+<span class="ss">:from</span> <span class="o">=&gt;</span> <span class="s2">&quot;users u, followings f1, followings f2&quot;</span><span class="p">,</span>
+<span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s2">&quot;f1.follower_id = </span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> AND &quot;</span> <span class="o">+</span> 
+<span class="s2">&quot;f1.followed_id = f2.follower_id AND &quot;</span> <span class="o">+</span>
+<span class="s2">&quot;f2.followed_id = u.id&quot;</span>
+<span class="p">}</span></code></pre></div>
+
+<p>It suppose to returns all people that are followed by people that are followed by the given person(second circle).
+From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL.
+But this solution will have some issues with Active Record scopes stack magic.
+See that <code>User.network_for(current_user).all(:limit =&gt;5)</code> will result in SQL exception primary because <code>:limit =&gt; 5</code> doesn’t know about the table alias <code>users u</code>.
+We can not use it in fact.<br />
+The second problem comes to the foreground when we will try to use ActiveRecord features like
+<code>User.network_for(current_user).all(:include =&gt; :orders)</code>. ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.<br />
+The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make “users” table to be the last one declared in :from parameter.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="ss">:select</span> <span class="o">=&gt;</span> <span class="s2">&quot;users.*&quot;</span>
+<span class="ss">:from</span> <span class="o">=&gt;</span> <span class="s2">&quot;followings f1, followings f2, users&quot;</span><span class="p">,</span>
+<span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s2">&quot;f1.follower_id = </span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> AND &quot;</span> <span class="o">+</span> 
+<span class="s2">&quot;f1.followed_id = f2.follower_id AND &quot;</span> <span class="o">+</span>
+<span class="s2">&quot;f2.followed_id = users.id&quot;</span></code></pre></div>
+
 <p>Summary I would say that using <code>:joins</code> instead of <code>:from/:conditions</code> would give more flexibility and stackability to your scopes but sometimes <code>:from</code> is more clear and here you got the tip how to use it.</p>
 
     <div class="clear"></div>
@@ -148,19 +156,19 @@
         <ul class="posts">
             
                <!-- Exclude self -->
-                <li><span>16 Aug 2012</span> &raquo; <a href="/2012/08/postgresql-full-text-search-solr">Full text search - Solr(Sunspot) vs PostgreSQL</a></li>
+                <li><span>03 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>23 Jan 2012</span> &raquo; <a href="/2012/01/rails-32-features-changelog">New Rails Release with a few features from me</a></li>
+                <li><span>25 Jul 2014</span> &raquo; <a href="/2014/07/rubyc-conference-video-parsers-slides">My Talk from RubyC conference</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>01 Mar 2012</span> &raquo; <a href="/2012/03/javascript-ajax-submit-form-validation">Web Forms 2.0: Submit with Ajax and Client Side Validation</a></li>
+                <li><span>27 May 2014</span> &raquo; <a href="/2014/05/podcast-interview-le0pard-open-source-contribution">Took part in a podcast with Alexey Vasiliev</a></li>
               
             
                <!-- Exclude self -->
-                <li><span>08 Jun 2010</span> &raquo; <a href="/2010/06/nesting-namespace-route-non-flat-controllers-hierarchy-rails">Advanced non-flat controllers hierarchy with rails</a></li>
+                <li><span>01 Apr 2014</span> &raquo; <a href="/2014/04/state-machine-minemalistic-validation-perfection-changes">Minimalistic State Machine: Less is More</a></li>
               
             
         </ul>
@@ -195,6 +203,10 @@
                         <ul>
                             
                             <li>
+                                <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
                             </li>
                             
@@ -208,10 +220,6 @@
                             
                             <li>
                                 <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/05/rails-ajax-validation-form-submit-javascript'>Support validation through ajax in Rails 4.x</a>
                             </li>
                             
                         </ul>
@@ -274,7 +282,7 @@
 <a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
 <a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
 <a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
-<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 28.4px; line-height:28.4px" rel="tag">javascript</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 30.2px; line-height:30.2px" rel="tag">javascript</a> 
 <a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
@@ -285,7 +293,7 @@
 <a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
 <a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
 <a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
-<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 28.4px; line-height:28.4px" rel="tag">ruby</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
 <a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
