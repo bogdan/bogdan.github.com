@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2015-02-06T15:41:12+02:00</updated>
+ <updated>2015-02-06T15:42:44+02:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
@@ -15,7 +15,7 @@
  <entry>
    <title>Choosing a Templating Language</title>
    <link href="http://gusiev.com/2015/02/criterias-template-language-erb-haml"/>
-   <updated>2015-02-03T00:00:00+02:00</updated>
+   <updated>2015-02-06T00:00:00+02:00</updated>
    <id>http://gusiev.com/2015/02/criterias-template-language-erb-haml</id>
    <content type="html">&lt;p&gt;Whenever you are serious about choosing the frontend template engine to generate HTML, here is some advice how you can make your choice easier and 
 more effective. There are too many template languages right now, but there are only a few main criteria how you can limit your selection to 2-3 of them before
