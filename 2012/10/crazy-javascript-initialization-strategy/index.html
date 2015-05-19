@@ -81,16 +81,17 @@
         <a href="/2012/10/crazy-javascript-initialization-strategy">Smart Javascript Initialization Strategy</a>
         <div class="date">08 Oct 2012</div>
     </h2>
-    <p>JavaScript initialization process is a pain in the ass since dynamic HTML and AJAX became popular. We need to take care all the time about what we need to initialize after every change in DOM. Thanks to <code>jQuery#live</code> and <code>jQuery#on</code> that is not so right but still very effective solution. It allows to fix the problem with initialization of typical events.
-But initialization is not always about binding DOM events. In more advanced cases it could be wrapping widget class over an element or custom jQuery method call like date-picker.</p>
+    <p>The JavaScript initialization process is a pain in the ass since dynamic HTML and AJAX became popular. We need to take care all the time about what we need to initialize after every change in DOM. 
+Thanks to <code>jQuery#live</code> and <code>jQuery#on</code>: We have a not-so-right but still very effective solution. It allows us to fix the problem with initialization of typical events.
+But initialization is not always about binding DOM events. In more advanced cases, it could be wrapping widget class over an element or a custom jQuery method call like a <code>date-picker</code>.</p>
 
 <!--more-->
 
 <p>Here is an example:</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// This line will be required not only on `$(docuemnt).ready` </span>
-<span class="c1">// but every time an update in DOM occur that adds some new date input on page.</span>
-<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.data-picker&quot;</span><span class="p">).</span><span class="nx">datePicker</span><span class="p">();</span></code></pre></div>
+<span class="c1">// but every time an update in DOM occurs that adds some new date input on a page.</span>
+<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.date-picker&quot;</span><span class="p">).</span><span class="nx">datePicker</span><span class="p">();</span></code></pre></div>
 
 <p>Or advanced example:</p>
 
@@ -101,10 +102,10 @@ But initialization is not always about binding DOM events. In more advanced case
   <span class="k">new</span> <span class="nx">ImageGallery</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
 <span class="p">});</span></code></pre></div>
 
-<p>In example above is split into two sections: definition and initialization.
-This fact makes code hard to follow as moving from class to DOM element in HTML template require at least two transitions in your editor.</p>
+<p>In the example above, we see two sections: definition and initialization.
+This fact makes code hard to follow as moving from class to DOM element in HTML template requires at least two transitions in your editor.</p>
 
-<p>And when large page update comes after ajax query this is getting even worth. All initializer should called again:</p>
+<p>And when a large page update comes after an AJAX query, this problem is getting even worse. All initializers should called again:</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/profile/edit&quot;</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">showSomeProfileEditingPopup</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
@@ -113,20 +114,21 @@ This fact makes code hard to follow as moving from class to DOM element in HTML 
   <span class="c1">// More initialization here</span>
 <span class="p">});</span></code></pre></div>
 
-<h3 id="tired-to-handle-things-like-this">Tired to handle things like this?</h3>
+<h3 id="tired-of-handling-things-like-this">Tired of handling things like this?</h3>
 
 <h2 id="change-the-way-of-thinking-about-initialization">Change the way of thinking about initialization</h2>
 
-<p>Initialization code is a bridge where between actual JS class and DOM element.
-In 99% of cases it has one to one or one to many relation.
-Than, why do we always need that intermediate initialization code?</p>
+<p>Initialization code is a bridge between actual JS class and DOM element.
+In 99% of cases, it has one-to-one or one-to-many relation.
+Then why do we always need that intermediate initialization code?</p>
 
 <p>The DOM element could have the class itself:</p>
 
 <div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;profile-image-gallery&quot;</span> <span class="na">data-class=</span><span class="s">&quot;ImageGallery&quot;</span><span class="nt">&gt;</span></code></pre></div>
 
-<p>Now your way from DOM element to JS class require only one transition.
-Moreover all DOM elements could be initialized with one call. It needs to run over DOM and find all elements with <code>data-class</code> attributes that are not initialized and wrap them with a specified class:</p>
+<p>Now your way from DOM element to JS class requires only one transition.
+Moreover, all DOM elements could be initialized with one call. It needs to run over DOM and find all elements with <code>data-class</code> attributes 
+that are not initialized and wrap them with a specified class:</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">Initializer</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">perform</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -139,26 +141,26 @@ Moreover all DOM elements could be initialized with one call. It needs to run ov
   <span class="p">}</span>
 <span class="p">};</span></code></pre></div>
 
-<p>This code bit will probably require some additional functionality to support an options but general idea is strong enough to handle all possible complexity in a future.
-Now, whenever DOM changes everything we need to do is call:</p>
+<p>This code bit will probably require some additional functionality to support options, but the general idea is strong enough to handle all possible complexity in the future.
+Now, whenever DOM changes, everything we need to do is call:</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">Initializer</span><span class="p">.</span><span class="nx">perform</span><span class="p">();</span></code></pre></div>
 
-<p>In order to attach third-party libraries to this initialization process we need to create a simple wrapping class around them:</p>
+<p>In order to attach third-party libraries to this initialization process, we need to create a simple wrapping class around them:</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">DatePicker</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">$</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">datePicker</span><span class="p">()</span>
 <span class="p">}</span></code></pre></div>
 
-<p>Now we are able to convert inputs to date pickers with unified initialization process:</p>
+<p>Now we are able to convert inputs to date pickers with a unified initialization process:</p>
 
 <div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;profile[birth_date]&quot;</span> <span class="na">data-class=</span><span class="s">&quot;DatePicker&quot;</span><span class="nt">&gt;</span></code></pre></div>
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>JavaScript coding is annoying for most people that came from other languages because it keeps fragmented things that should be bound together.
-In order to avoid this problem we need to invent conventions to follow, so that every person in a team understand that.
-But the cost of convention described here is not that much and makes code move clean and easy to follow.</p>
+<p>JavaScript coding is annoying for most people who came from other languages because it keeps things fragmented that should be bound together.
+In order to avoid this problem, we need to invent conventions to follow, so that every person in a team understands that.
+But the cost of convention described here is not that much and makes code more clean and easier to follow.</p>
 
 
     <div class="clear"></div>
