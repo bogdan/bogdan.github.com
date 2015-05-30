@@ -27,9 +27,11 @@
         ul
           min-width: 50%
         .red
-          color: #ff2c2d
+          color: #e02c2d
         .green
           color: #17ff2e
+        .yellow
+          color: yellow
         .blue
           color: #1b91ff
         .left
@@ -42,9 +44,6 @@
   %body
     .reveal
       .slides
-        %section
-          Consistent capitlisation
-          login =&gt; logic
           
         %section
           %h2 How to Report 
@@ -55,7 +54,7 @@
 
           %ul
             %li.fragment in IT for ~ 8 years
-            %li.fragment 6 of them with Ruby and Rails
+            %li.fragment 5 of them with Ruby and Rails
             %li.fragment 3 of them in Talkable Inc.
         %section
           %h2 Talkable Inc.
@@ -86,7 +85,7 @@
               :preserve
                 ActiveRecord::Base.send(:subclasses).map do |klass|
                   klass.where(
-                    "created_at &gt; ?", 1.day.ago
+                    "updated_at &gt; ?", 1.day.ago
                   ).count
                 end.sum
         %section
@@ -132,24 +131,18 @@
 
 
         %section
-          %h3 Business speaks with you like this:
+          %h3.red People Language
 
-          %p Good ones
-          %ul
-            %li How many new users do we acquire a month at average?
-            %li How much sales did we get from this advertising campaign?
-
-          %p And bad ones
           %ul
             %li Please visualise the data.
             %li Can I see how we are performing overall in the last time?
 
         %section
-          %h3 Basic Data Operations in Reporting
+          %h3 Being More Formal
 
           %ul
             %li How many ...?
-            %li What is a total amount of ...?
+            %li What is the total amount of ...?
             %li ... in this scope/date range
             %li ... for each period/category
           .fragment
@@ -162,9 +155,9 @@
               %li where ...
 
         %section
-          %h3 The basic model of doing all that
+          %h3 What to start from
 
-          [you are doing the work in a middle]
+          %img{src: "/slide_A_black.png"}
         %section
           %h3 Stages
 
@@ -175,9 +168,7 @@
 
         %section
           %h3 Let the machine do the work
-          %h4 Let you become a software developer again
-
-          [machine in a middle graph]
+          %img{src: "/slide_B_black.png"}
 
         %section
           %h2 Requirement of unification 
@@ -214,16 +205,18 @@
           %h2 Daylight Saving Time
 
         %section
-          %h3 Does it include a returned sales or not?
+          %h3 Does it include returned sales or not?
           %img{src: "http://monosnap.com/image/8mWPDzrlTJaQEaY9jMR6b9me8yz4zs.png"}
 
         %section
 
+          %h3.red Problem:
           %h3 Same metric can be calculated differently 
           %h3 in different parts of project
 
 
         %section
+          %h2.yellow Conclusion:
           %h3 Same Name =&gt; Same Logic
           %h3 Different Logic =&gt; Different Name
           %h3 No per-person names and reports
@@ -276,7 +269,7 @@
 
         %section
 
-          %h3 Answer to more advanced queries
+          %h3.red Words snowball
 
           %h4 What is total sales for each marketing campaigns in February?
 
@@ -286,7 +279,7 @@
                 Purchase.where(
                   created_at: '2015-02-01'..'2015-03-01'
                 ).group(:marketing_campaign).sum(:subtotal)
-        %section
+
           %h4 What is total sales for each week of February in the given marketing campaign?
 
           %pre
@@ -300,22 +293,20 @@
           
         %section
           %h4 How many first time buyers does that campaign bring?
-          %h4 How offten women buy men's clothes?
+          %h4 What is purchases ditribution by hour of a day for each state?
           %h4 How much did we sell for each product category this black friday comparing to previous one?
-          %h4 What is the average order value of first time buyers and non-first time buyers?
+          %h4 What is the average order value of first time buyers compared to non-first time buyers?
           
           %aside.notes
             All these term rotate around in your head like a snowball of mess at some point.
 
         %section
 
-          %h3 Compile all requirements and concerns together
-
-
-        
+          %h3 How to share code between all those requests?
 
         %section
 
+          %h2.yellow Conclusion:
           %h2 one query =&gt; one number
           %h2
             %strike
@@ -336,14 +327,22 @@
 
         %section
           %h3 Filter: 
-          %h3 detailed (for each) or overall (scope) 
 
           %pre
             %code.ruby
               :preserve
                 campaigns = Campaign.where(id: [22,81,74]) #selected by user
+          %h3 Overall (in the scope) 
+          %pre
+            %code.ruby
+              :preserve
                 total_sales(marketing_campaigns: campaigns)
 
+          %h3 Detailed (for each) 
+
+          %pre
+            %code.ruby
+              :preserve
                 campaigns.map do |campaign|
                   total_sales(marketing_campaigns: campaign)
                 end
@@ -398,7 +397,9 @@
                       = (a * 0.8).to_i
         %section
 
+          %h2.yellow Conclusion:
           %h2 Tables are your friends
+          %h2 Numbers =&gt; Table =&gt; Graph
 
           %aside.notes
             Any data you pull could be put into a table.
@@ -426,11 +427,27 @@
                   end
                   private
                   def purchases_scope
-                    Purchases.successfully_delivered.
+                    Purchase.successfully_delivered.
                       where(paid_at: @filters[:period]).
                       where(marketing_campaign_id: @filters[:marketing_campaign])
                   end
+        %section
+          %h3 And a metadata:
 
+          %pre
+            %code.ruby
+              :preserve
+                def self.metric(name, metadata = {})
+                  @metrics ||= {}
+                  @metrics[name] = metadata
+                  define_method(name) do
+                    yield
+                  end
+                end
+
+                metric(:total_sales, name: 'Total Sales $', description: '...') do
+                  purchases_scope.sum(:subtotal)
+                end
         %section
 
           %h3 Advantages
@@ -453,10 +470,37 @@
               %li Front-end is now decoupled from back-end
 
         %section
-          %h3 Being Consistent = Gain Trust
+
+          %h2 Consistency?
+
+          %table
+            %tr
+              %th Month
+              %th Total Sales $
+            %tr
+              %td March
+              %td $1881
+            %tr
+              %td April
+              %td $1001
+            %tr
+              %td May
+              %td $2074
+            %tr
+              %td Total
+              %td ?
+
+
+        %section
+          
+          %h2.red Consistency!
 
           %h3 Spring = March + April + May
           %h3 Week = Su + Mo + Tu + We + Th + Fr + Sa
+          %br
+          .fragment
+            %h3 DST is your enemy!
+            %h3 because DB can not do it correctly
 
           %aside.notes
             Customers can be very captious.
@@ -465,7 +509,12 @@
             If DST would happen within a week...
             Users will not trust you unless you gonna be accurate.
         %section
-          %h3 Disadvantages
+          
+          %h2.yellow Conclusion:
+          %h3 Being Consistent = Gain Trust
+
+        %section
+          %h3.red Disadvantages
 
           %h2 Performance is going down
 
@@ -489,12 +538,15 @@
             %p There are more numbers you can generate than data in your database
 
         %section
-          %h3 Fighting performance concerns
-          %ul
-            %li Accurate numbers slowly are better than random numbers fast
-            %li Parallel execution
-            %li SSD harddrive
+          %h3 Improve performance with
+          %h2 Parallel execution
 
+          %h3.fragment Google for: Array parallel map
+
+        %section
+          %h3
+            Accurate numbers slowly are better 
+          %h3 than random numbers fast
 
           %aside.notes
             %ul
@@ -502,23 +554,34 @@
               %li Unlike "GROUP BY" this technique is easier to parallelize
               %li Do you still not use SSD hard drive or what?
         %section
-          %h3 Simplified Terminology
+          %h3.yellow Summing Up
+        %section
+          %h3 Same Name =&gt; Same Logic
+          %h3 Different Logic =&gt; Different Name
+
+        %section
+          %h3 How to reuse code?
+          %h3.yellow One Query =&gt; One Number
+
+        %section
+          %h3.yellow Unified Report Definition
 
           %ul
-            %li Filter
-            %li Metric
+            %li 
+              Metrics: Name, Description, ...
+            %li Filters
             %li 
               Operations
               %ul
                 %li count
-                %li count + distinct
                 %li sum
-                %li average
         %section
-          %h3 Same Name =&gt; Same Login
-          %h3 Different Name =&g; Different Logic
-          %h3 Unified Metrics Database
-          %h3 One query =&gt; One number
+          %h2 Thanks for your attention!
+          %ul
+            %li My blog: gusiev.com
+            %li My code: github.com/bogdan
+            %li My company: talkable.com
+
 
 
 
