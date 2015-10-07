@@ -77,6 +77,33 @@
                     
     <div class="post">
         <h2>
+            <a href='/2012/12/rails-contribution-slides-from-ruby-meetup'>Rails Contribution slides from ruby meetup in Kiev</a>
+            <div class="date">11 Dec 2012</div>
+        </h2>
+        <p>Here are slides I’ve shown on ruby meetup in Kiev.
+It’s all about my expirience with <a href="http://gusiev.com/slides/rails_contribution/static/#1">power hacking rails internals</a>.
+Give some inside on how ActiveSupport Callbacks and Rails Router are working.</p>
+
+<!--
+
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    <a href="/tags/contribution.html">contribution</a>
+    
+    <a href="/tags/slides.html">slides</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2012/10/crazy-javascript-initialization-strategy'>Smart Javascript Initialization Strategy</a>
             <div class="date">08 Oct 2012</div>
         </h2>
@@ -943,95 +970,6 @@ If You need serious customization of datagrid <code>&lt;table&gt;</code> and HTM
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2011/11/development-smtp-server'>Improve your Email delivery code with Mailtrap</a>
-            <div class="date">18 Nov 2011</div>
-        </h2>
-        <p>Today, I want introduce the <a href="http://mailtrap.io">Mailtrap web service</a> aimed to help developers build and improve their email delivery functionality. </p>
-
-<p>Usually people use same SMTP settings for all environments, but this actually creates many problems in Staging and Development environments. Mailtrap is a special SMTP service for these environments aimed to solve specific problems.
-<!--</p>
-
-<h3 id="problems">Problems</h3>
-
-<h4 id="testing-user-registration-is-hell">Testing user registration is hell</h4>
-
-<p>In order to register yet another user You need to have new unique email address that should be hosted somewhere.</p>
-
-<h4 id="perform-mass-email-sending-is-a-problem-too">Perform mass email sending is a problem too</h4>
-
-<p>Suppose you have a daily email to all customers and need check if your delivery logic works fine. In this case you need to know what emails were send, which customers received them. And again you need a batch of email addresses to test with.</p>
-
-<h4 id="discuss-email-layout-and-functional-problems-with-product-team">Discuss email layout and functional problems with product team</h4>
-
-<p>In order to share email You need to forward it to some inbox or attach to bug ticket as file. This is still not as easy as it could be.</p>
-
-<h4 id="send-emails-to-real-customers-by-mistake">Send emails to real customers by mistake</h4>
-
-<p>In some cases copy production database to staging is a good idea. But You have a risk that real emails appear on development servers. You need to take care about that.</p>
-
-<p>My personal score is about 2500 emails sent by mistake at a time.
-Some people I know told me that their personal record is <strong>more than 2 millions emails sent by mistake</strong>.
-(Share your personal fuckup story in comments.)</p>
-
-<h3 id="existing-solutions">Existing solutions</h3>
-
-<p>You can go in many ways to fix the problem e.g.: </p>
-
-<ul>
-  <li>setup the script on your smtp server that changes recipient email</li>
-  <li>use services like mailinator.com (only in some cases)</li>
-  <li>use custom Ruby specific gems like mail_view or mailcatcher. </li>
-</ul>
-
-<p>All of them solves only some of the problems described above.</p>
-
-<h3 id="our-idea">Our Idea</h3>
-
-<p>Development SMTP service should work in a different way then production one: It should not deliver emails but just gather them in one place and provide a shared access for team to debug it. Mailtrap is the first SMTP service built specifically for this purpose. </p>
-
-<p><img src="http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png" style="width: 693px" /></p>
-
-<p>Unlike many alternative solutions, Mailtrap is platform independent, doesn’t require any daemon to run and is just an SMTP server from application stand point.  All you need to do is <strong>setup host, username and password</strong>.</p>
-
-<h3 id="features">Features</h3>
-
-<p>This is not about high load, not about delivery statistics but about:</p>
-
-<ul>
-  <li>Ability to access ANY sent email without registration</li>
-  <li>Share Email is as easy as copypasting the URL</li>
-  <li>Developer tools for debugging &amp; improving email template:
-    <ul>
-      <li>Syntax highlight</li>
-      <li>Easy view source</li>
-      <li>Apply CSS reset</li>
-    </ul>
-  </li>
-  <li>Access to the history</li>
-</ul>
-
-<h2 id="try-mailtraphttpmailtrapio-right-now">Try <a href="http://mailtrap.io">Mailtrap</a> right now</h2>
-
--->
-        <h4 class="tags">
-    
-    <a href="/tags/smtp.html">smtp</a>
-    
-    <a href="/tags/development.html">development</a>
-    
-    <a href="/tags/service.html">service</a>
-    
-    <a href="/tags/environment.html">environment</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -1066,6 +1004,10 @@ Some people I know told me that their personal record is <strong>more than 2 mil
                         <ul>
                             
                             <li>
+                                <a href='/2015/10/single-responsibility-principle-srp-criticism'>Something is wrong with Single Reponsibility Principle</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
                             </li>
                             
@@ -1079,10 +1021,6 @@ Some people I know told me that their personal record is <strong>more than 2 mil
                             
                             <li>
                                 <a href='/2014/04/state-machine-minemalistic-validation-perfection-changes'>Minimalistic State Machine: Less is More</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
                             </li>
                             
                         </ul>
@@ -1134,7 +1072,7 @@ Some people I know told me that their personal record is <strong>more than 2 mil
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 26.6px; line-height:26.6px" rel="tag">contribution</a> 
-<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 26.6px; line-height:26.6px" rel="tag">criticism</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 28.4px; line-height:28.4px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 21.2px; line-height:21.2px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 

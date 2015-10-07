@@ -77,6 +77,51 @@
                     
     <div class="post">
         <h2>
+            <a href='/2011/03/ajax-jquery-debug-javascript'>Debug ajax requests in more easy way</a>
+            <div class="date">18 Mar 2011</div>
+        </h2>
+        When I have to debug ajax requests, I always feel pain in the ass accessing the exception message and backtrace. It require at least 3 clicks to get them and only in the plain html format, that web framework use to generate. Is it better to see it at once in the browser popup?  
+<!--
+<br/><br/>
+This can be done with Ajax callbacks offered by javascript framework(if yours doesn't - get rid of it). We can catch errors there and display popup. JQuery example with #ajaxError callback that fires on every unsuccessful ajax call:
+<pre><code>(function() {
+      var popup = null;
+      $(document).ajaxError(function(event, xhr, settings, exception) {
+        if (popup) {
+          popup.close();
+          popup = null;
+        }
+        popup = window.open(null, "error", "width=800,height=600");
+        $(popup.document.documentElement).html(xhr.responseText);
+        return true;
+      });
+    }());</code></pre>
+
+Checked in FF and Chrome(IE is not a browser).
+<a href="http://img6.imagebanana.com/img/drl8wpd9/screenshot_014.png">Screenshot</a> with the result. Be aware of browser popup blocker. <br/>
+You always have a control when popup the error. I like it to be "in any case". But You can customize it with <em>xhr.status</em> and <em>if</em> statement on the server side.
+<br/><br/>
+In some cases it might be useful not only in the development but in production as well. But it should be an iframe inside of pretty html layout, so that designers won't blame programmers too much.
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/javascript.html">javascript</a>
+    
+    <a href="/tags/jquery.html">jquery</a>
+    
+    <a href="/tags/debug.html">debug</a>
+    
+    <a href="/tags/ajax.html">ajax</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2010/11/dynamic-context-in-rspec-dont-repeat-yourself'>Dynamic context in Rspec - don't repeat yourself</a>
             <div class="date">03 Nov 2010</div>
         </h2>
@@ -742,64 +787,6 @@ Unfortunately most of the companies are ignoring that simple rule and unfortunat
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2010/01/sql-queries-activerecord-rails-named-scopes-stack'>Advanced SQL and scopes stack with ActiveRecord</a>
-            <div class="date">24 Jan 2010</div>
-        </h2>
-        <p>If you ever work with rails application that is a little bit more complex than a simple CRUD you would know that some of the ActiveRecord magic doesn’t work for complex SQL queries. I am primary talking about scopes stack feature.<br />
-<!--</p>
-<hr />
-
-<p>Let’s review the following scope that suppose to be usable in different combinations with others:</p>
-
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">scope</span> <span class="ss">:network_of</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span><span class="o">|</span><span class="n">user</span><span class="o">|</span>
-<span class="p">{</span>
-<span class="ss">:select</span> <span class="o">=&gt;</span> <span class="s2">&quot;u.*&quot;</span>
-<span class="ss">:from</span> <span class="o">=&gt;</span> <span class="s2">&quot;users u, followings f1, followings f2&quot;</span><span class="p">,</span>
-<span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s2">&quot;f1.follower_id = </span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> AND &quot;</span> <span class="o">+</span> 
-<span class="s2">&quot;f1.followed_id = f2.follower_id AND &quot;</span> <span class="o">+</span>
-<span class="s2">&quot;f2.followed_id = u.id&quot;</span>
-<span class="p">}</span></code></pre></div>
-
-<p>It suppose to returns all people that are followed by people that are followed by the given person(second circle).
-From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL.
-But this solution will have some issues with Active Record scopes stack magic.
-See that <code>User.network_for(current_user).all(:limit =&gt;5)</code> will result in SQL exception primary because <code>:limit =&gt; 5</code> doesn’t know about the table alias <code>users u</code>.
-We can not use it in fact.<br />
-The second problem comes to the foreground when we will try to use ActiveRecord features like
-<code>User.network_for(current_user).all(:include =&gt; :orders)</code>. ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.<br />
-The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make “users” table to be the last one declared in :from parameter.</p>
-
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="ss">:select</span> <span class="o">=&gt;</span> <span class="s2">&quot;users.*&quot;</span>
-<span class="ss">:from</span> <span class="o">=&gt;</span> <span class="s2">&quot;followings f1, followings f2, users&quot;</span><span class="p">,</span>
-<span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s2">&quot;f1.follower_id = </span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> AND &quot;</span> <span class="o">+</span> 
-<span class="s2">&quot;f1.followed_id = f2.follower_id AND &quot;</span> <span class="o">+</span>
-<span class="s2">&quot;f2.followed_id = users.id&quot;</span></code></pre></div>
-
-<p>Summary I would say that using <code>:joins</code> instead of <code>:from/:conditions</code> would give more flexibility and stackability to your scopes but sometimes <code>:from</code> is more clear and here you got the tip how to use it.</p>
--->
-        <h4 class="tags">
-    
-    <a href="/tags/sql.html">sql</a>
-    
-    <a href="/tags/query.html">query</a>
-    
-    <a href="/tags/ruby.html">ruby</a>
-    
-    <a href="/tags/rails.html">rails</a>
-    
-    <a href="/tags/activerecord.html">activerecord</a>
-    
-    <a href="/tags/scope.html">scope</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -834,6 +821,10 @@ The problem is that :include sometimes appends some joins to the query that is c
                         <ul>
                             
                             <li>
+                                <a href='/2015/10/single-responsibility-principle-srp-criticism'>Something is wrong with Single Reponsibility Principle</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
                             </li>
                             
@@ -847,10 +838,6 @@ The problem is that :include sometimes appends some joins to the query that is c
                             
                             <li>
                                 <a href='/2014/04/state-machine-minemalistic-validation-perfection-changes'>Minimalistic State Machine: Less is More</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
                             </li>
                             
                         </ul>
@@ -902,7 +889,7 @@ The problem is that :include sometimes appends some joins to the query that is c
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 26.6px; line-height:26.6px" rel="tag">contribution</a> 
-<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 26.6px; line-height:26.6px" rel="tag">criticism</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 28.4px; line-height:28.4px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 21.2px; line-height:21.2px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
