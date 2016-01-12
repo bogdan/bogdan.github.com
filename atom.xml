@@ -4,60 +4,13 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2015-10-07T15:16:31+03:00</updated>
+ <updated>2016-01-12T17:58:21+02:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
    <email>agresso@gmail.com</email>
  </author>
  
- 
- <entry>
-   <title>Something is wrong with Single Reponsibility Principle</title>
-   <link href="http://gusiev.com/2015/10/single-responsibility-principle-srp-criticism"/>
-   <updated>2015-10-07T00:00:00+03:00</updated>
-   <id>http://gusiev.com/2015/10/single-responsibility-principle-srp-criticism</id>
-   <content type="html">&lt;p&gt;I’ve never been a fan of Single Responsibility Principle aka SRP&lt;/p&gt;
-
-&lt;p&gt;If any physical thing I used has multiple responsibilities, why would software should be built from SRP things?&lt;/p&gt;
-
-&lt;!--more--&gt;
-
-&lt;p&gt;The role of information technology software is to simulate the outer world. But is there many things in real world that follow SRP?&lt;/p&gt;
-
-&lt;p&gt;SRP feels so elegant from the first glance: why isn’t it wonderful that every tool you have does only one specific job. And all your tools are always sharp and you know exactly which tool is designed for what kind of job.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.evansclarke.com.au/Lib/tools.JPG&quot; width=&quot;300px&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Well, in fact even common instruments are usually multifunctional.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://upload.wikimedia.org/wikipedia/commons/8/84/Claw-hammer.jpg&quot; width=&quot;300px&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;It feels like hammer should be a perfect example of SRP, but it is not. 
-Hint: Pay attention to what is on opposite sides of the handle: these are two different ends designed to do completely different job.
-It is a good example how solution is done based on the process but not on SRP. SRP is too idealistic even for a hammer.
-Convinience requires to merge two instruments into one to make it easy to switch from rriving in to pulling out.
-It always requires in depth integration of functions into processes. &lt;/p&gt;
-
-&lt;p&gt;And this multi-functionality factor expands as we move to more complex and famous devices. Like:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://store.storeimages.cdn-apple.com/4428/as-images.apple.com/is/image/AppleInc/aos/published/images/i/ph/iphone6/plus/iphone6-plus-box-space-gray-2014?wid=478&amp;amp;hei=595&amp;amp;fmt=jpeg&amp;amp;qlt=95&amp;amp;op_sharpen=0&amp;amp;resMode=bicub&amp;amp;op_usm=0.5,0.5,0,0&amp;amp;iccEmbed=0&amp;amp;layer=comp&amp;amp;.v=1411520743411&quot; width=&quot;200px&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Moving into another direction: none of two things on the image below follows SRP.
-Both of them are carrying not just an electrical charge, but some mass and spin as well. It tells that their behaviour is described by their electromagnetic and gravitational responsibilities. See that two is still not one.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://science.jrank.org/article_images/ep201102/science/science982.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Same thing happen in software world: utilities are better when designed to support a specific process and classes are made to simulate real world object that have tons of responsibilities.&lt;/p&gt;
-
-&lt;p&gt;So next time you blame ActiveRecord::Base for having 200+ methods, try to think how well it is designed to support a CRUD process of a database entity.&lt;/p&gt;
-
-&lt;h3 id=&quot;summary&quot;&gt;Summary&lt;/h3&gt;
-
-&lt;p&gt;Principles discusses in software development always were very hot mainly because all engineering principles are pretty controversial. But I can definitely say that SRP is one of the most controversial among them.&lt;/p&gt;
-
-</content>
- </entry>
  
  <entry>
    <title>Choosing a Templating Language</title>
