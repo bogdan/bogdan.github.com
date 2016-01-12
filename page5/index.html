@@ -77,6 +77,64 @@
                     
     <div class="post">
         <h2>
+            <a href='/2010/01/sql-queries-activerecord-rails-named-scopes-stack'>Advanced SQL and scopes stack with ActiveRecord</a>
+            <div class="date">24 Jan 2010</div>
+        </h2>
+        <p>If you ever work with rails application that is a little bit more complex than a simple CRUD you would know that some of the ActiveRecord magic doesn’t work for complex SQL queries. I am primary talking about scopes stack feature.<br />
+<!--</p>
+<hr />
+
+<p>Let’s review the following scope that suppose to be usable in different combinations with others:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">scope</span> <span class="ss">:network_of</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span><span class="o">|</span><span class="n">user</span><span class="o">|</span>
+<span class="p">{</span>
+<span class="ss">:select</span> <span class="o">=&gt;</span> <span class="s2">&quot;u.*&quot;</span>
+<span class="ss">:from</span> <span class="o">=&gt;</span> <span class="s2">&quot;users u, followings f1, followings f2&quot;</span><span class="p">,</span>
+<span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s2">&quot;f1.follower_id = </span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> AND &quot;</span> <span class="o">+</span> 
+<span class="s2">&quot;f1.followed_id = f2.follower_id AND &quot;</span> <span class="o">+</span>
+<span class="s2">&quot;f2.followed_id = u.id&quot;</span>
+<span class="p">}</span></code></pre></div>
+
+<p>It suppose to returns all people that are followed by people that are followed by the given person(second circle).
+From the SQL point of view that is the simpliest and fastest way to do that with a plain SQL.
+But this solution will have some issues with Active Record scopes stack magic.
+See that <code>User.network_for(current_user).all(:limit =&gt;5)</code> will result in SQL exception primary because <code>:limit =&gt; 5</code> doesn’t know about the table alias <code>users u</code>.
+We can not use it in fact.<br />
+The second problem comes to the foreground when we will try to use ActiveRecord features like
+<code>User.network_for(current_user).all(:include =&gt; :orders)</code>. ActiveRecord handles :include in the very different ways and in some cases you will see the SQL exception here as well.<br />
+The problem is that :include sometimes appends some joins to the query that is concatenated to the last table in the :from parameter. To solve that we should make “users” table to be the last one declared in :from parameter.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="ss">:select</span> <span class="o">=&gt;</span> <span class="s2">&quot;users.*&quot;</span>
+<span class="ss">:from</span> <span class="o">=&gt;</span> <span class="s2">&quot;followings f1, followings f2, users&quot;</span><span class="p">,</span>
+<span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s2">&quot;f1.follower_id = </span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> AND &quot;</span> <span class="o">+</span> 
+<span class="s2">&quot;f1.followed_id = f2.follower_id AND &quot;</span> <span class="o">+</span>
+<span class="s2">&quot;f2.followed_id = users.id&quot;</span></code></pre></div>
+
+<p>Summary I would say that using <code>:joins</code> instead of <code>:from/:conditions</code> would give more flexibility and stackability to your scopes but sometimes <code>:from</code> is more clear and here you got the tip how to use it.</p>
+-->
+        <h4 class="tags">
+    
+    <a href="/tags/sql.html">sql</a>
+    
+    <a href="/tags/query.html">query</a>
+    
+    <a href="/tags/ruby.html">ruby</a>
+    
+    <a href="/tags/rails.html">rails</a>
+    
+    <a href="/tags/activerecord.html">activerecord</a>
+    
+    <a href="/tags/scope.html">scope</a>
+    
+    
+</h4>
+<div class="clear"></div>
+
+        <hr/>
+    </div>
+
+    <div class="post">
+        <h2>
             <a href='/2009/12/vim-as-ruby-on-rails-ide-development-perfomanc'>Vim as IDE - new development era for me</a>
             <div class="date">01 Dec 2009</div>
         </h2>
@@ -530,63 +588,6 @@ Think twice before switching to Seam.
         <hr/>
     </div>
 
-    <div class="post">
-        <h2>
-            <a href='/2009/04/update-and-create-timestamps-with-mysql'>Update and create timestamps with MySQL</a>
-            <div class="date">30 Apr 2009</div>
-        </h2>
-        A lot of relational tables need created and update timestamps columns. I prefer having them for all tables with no exception. However, most of applications I am working on are running MySQL. MySQL has minor limitation on timestamps. Unfortunately you can create only one time stamp column that has <em> DEFAULT NOW()</em> value. Read more to see how to avoid this limitation. <!--
-<hr/>
-The simplest way to do this is create the following columns in the table:
-<div class="bordered"><code>stamp_created timestamp default now(), 
-stamp_updated timestamp default now() on update now()) </code></div>
-But MySQL will return the following error: <br/> 
-<em>ERROR 1293 (HY000): Incorrect table definition; there can be only one TIMESTAMP column with CURRENT_ in DEFAULT or ON UPDATE clause</em> <br/>
-You can use only one of the definitions in one table. However here is the way how to create both timestamps columns:
-<pre><code> create table test_table( 
-id integer not null auto_increment primary key, 
-stamp_created timestamp default '0000-00-00 00:00:00', 
-stamp_updated timestamp default now() on update now() 
-); </code></pre>
-Note that it is necessary to enter nulls into both columns during "insert":
-<pre><code> mysql&gt; insert into test_table(stamp_created, stamp_updated) values(null, null); 
-Query OK, 1 row affected (0.06 sec)
-mysql&gt; select * from t5; 
-+----+---------------------+---------------------+ 
-| id | stamp_created       | stamp_updated       |
-+----+---------------------+---------------------+
-|  2 | 2009-04-30 09:44:35 | 2009-04-30 09:44:35 |
-+----+---------------------+---------------------+
-2 rows in set (0.00 sec)  
-mysql&gt; update test_table set id = 3 where id = 2; 
-Query OK, 1 row affected (0.05 sec) Rows matched: 1  Changed: 1  Warnings: 0  
-mysql&gt; select * from test_table;
-+----+---------------------+---------------------+
-| id | stamp_created       | stamp_updated       | 
-+----+---------------------+---------------------+ 
-|  3 | 2009-04-30 09:44:35 | 2009-04-30 09:46:59 | 
-+----+---------------------+---------------------+ 
-2 rows in set (0.00 sec)  
-mysql&gt;
-</code></pre>
--->
-        <h4 class="tags">
-    
-    <a href="/tags/howto.html">howto</a>
-    
-    <a href="/tags/mysql.html">mysql</a>
-    
-    <a href="/tags/timestamp.html">timestamp</a>
-    
-    <a href="/tags/database.html">database</a>
-    
-    
-</h4>
-<div class="clear"></div>
-
-        <hr/>
-    </div>
-
 
 <div class='paginator'>
     
@@ -621,6 +622,10 @@ mysql&gt;
                         <ul>
                             
                             <li>
+                                <a href='/2016/01/single-responsibility-principle-srp-criticism'>Something is wrong with Single Reponsibility Principle</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
                             </li>
                             
@@ -634,10 +639,6 @@ mysql&gt;
                             
                             <li>
                                 <a href='/2014/04/state-machine-minemalistic-validation-perfection-changes'>Minimalistic State Machine: Less is More</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2013/11/datagrid-slides-report-framework'>Datagrid slides from Ruby Meditation 3</a>
                             </li>
                             
                         </ul>
@@ -689,7 +690,7 @@ mysql&gt;
 <a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
 <a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
 <a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 26.6px; line-height:26.6px" rel="tag">contribution</a> 
-<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 26.6px; line-height:26.6px" rel="tag">criticism</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 28.4px; line-height:28.4px" rel="tag">criticism</a> 
 <a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
 <a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 21.2px; line-height:21.2px" rel="tag">datagrid</a> 
 <a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
