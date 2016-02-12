@@ -1,117 +1,177 @@
-!SLIDE 
-# Fighting with fat models
-##### and many other problems
-## Bogdan Gusiev
-### September 2011
+!SLIDE[bg=techtalk_main.png] 
 
-!SLIDE 
+<!--<img src="/file/techtalk_main.png" style=""/>-->
+
+!SLIDE[bg=techtalk_bg.png]
+
+
+# Fighting with fat models
+## Bogdan Gusiev
+
+!SLIDE[bg=techtalk_bg.png] 
 
 
 ## Bogdan G.
 
-* is 7 years in IT, 3 years with Ruby and Rails
-* Contributed to:
-  * Rails 
-    * wait for my features in 3.2
-    * Deeply understands Rails internals
-    * In context of Rails moving direction
-  * Resque and about 5-7 plugins
-    * Knows something about high load
-  * Many others
+* is 9 years in IT
+* 6 years with Ruby and Rails
+  * Long Run Rails Contributor
 
-* Created:
-  * [datagrid](http://github.com/bogdan/datagrid) - 180+ watchers
-  * [js-routes](http://github.com/railsware/js-routes) - 100+ watchers
+!SLIDE[bg=techtalk_bg.png] 
 
 
-!SLIDE 
-##### Why the problem appear?
+# Some of my gems
 
-####All business logic code goes to *model by default*.
-
-<br/>
-
-##### Why it should not be in controller?
-
-#### Because **controller is hard** to test, maintain and reuse.
+* [Datagrid](https://github.com/bogdan/datagrid)
+* [js-routes](https://github.com/railsware/js-routes)
+* [accepts_values_for](https://github.com/bogdan/accepts_values_for)
+* [furi](https://github.com/bogdan/furi)
+* [http://github.com/bogdan](http://github.com/bogdan)
 
 
-<br/>
+!SLIDE[bg=techtalk_bg.png]
 
-##### Why it should not be in **view**?
+## My Blog
 
-#### Many reasons
+# http://gusiev.com
 
-
-!SLIDE 
-
-
-# **250 Lines of code**
-
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 
-# *Update*
+# ![Talkable](http://d2jjzw81hqbuqv.cloudfront.net/assets/static/logo-dark-large.png)
 
-## but not:
+## http://talkable.com
 
-# **Select**
+## A small startup is a great place 
+## to move from middle to senior and above
+
+!SLIDE[bg=techtalk_bg.png] 
+
+# Fat Models 
+## Why the problem appears?
+
+## All business logic code goes to *model by default*.
+
+!SLIDE[bg=techtalk_bg.png]
+
+# In the MVC:
+## Why it should not be in controller or view?
+
+Because they are hard to: 
+
+* test
+* maintain
+* reuse
 
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
+
+
+## A definition of being fat
+# **1000 Lines of code**
+
+But it depends on:
+
+* Docs
+* Whitespace
+* Comments
+
+!SLIDE[bg=techtalk_bg.png] 
+
+    @@@ text
+
+    $ wc -l app/models/* | sort -n | tail
+         532 app/models/incentive.rb
+         540 app/models/person.rb
+         544 app/models/visitor_offer.rb
+         550 app/models/reward.rb
+         571 app/models/web_hook.rb
+         786 app/models/site.rb
+         790 app/models/referral.rb
+         943 app/models/campaign.rb
+         998 app/models/offer.rb
+       14924 total
+
+
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Existing techniques
 
 * Services 
   * Separated utility class
-* Observers 
-  * Event listeners
-* Traits 
+* Concerns
   * Modules that get included to models
 
-The problem is to **understand** which one *fit best* for you.
 
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## What do we expect?
 
 Standard:
 
-* *Agile*
-* *Reusable* 
+* *Reusable* code
 * Easy to *test*
+* Good API
+
+Advanced:
 
 
-Specific:
+* Single Origin Principle
+* *MORE* features per second
+* Data Safety
 
-* *MORE* FEATURES PER SECOND
-* Make the data  **safe**
+!SLIDE[bg=techtalk_bg.png]
+
+# Good API
+
+Is a user connected to facebook?
+
+    @@@ ruby
+    user.connected_to_facebook?
+    # OR
+    FacebookService.connected_to_facebook?(user)
+    # OR
+    FacebookWrapper.new(user)
+      .connected_to_facebook?
 
 
-!SLIDE 
-### The need of Services
+!SLIDE[bg=techtalk_bg.png] 
 
-#####When amount of utils that supports Model goes higher 
+# The need of Services
 
-#####extract them to service is good idea.
+## When amount of utils that supports Model goes higher 
+
+## extract them to service is good idea.
+
+!SLIDE[bg=techtalk_bg.png]
 
     @@@ ruby
 
     # move
-    User.create_from_facebook
+    (1) User.create_from_facebook
     # to
-    UserService.create_from_facebook
+    (2) UserService.create_from_facebook
     # or
-    FacebookService.create_user
+    (3) FacebookService.create_user
 
-!SLIDE 
+### Move class methods between files is cheap
 
-## Services
+!SLIDE[bg=techtalk_bg.png] 
 
-The most common way to extract logic from model is create a service.
+
+## Organise services by *process* 
+## rather than **object** they operate on
+
+### Otherwise at some moment UserService would not be enough
+
+
+!SLIDE[bg=techtalk_bg.png] 
+
+## The problem of services
+
 
 Service is separated utility class.
 
@@ -126,55 +186,51 @@ Service is separated utility class.
 #### "Я знаю откуда что берется"
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
-#### The problem of services
-### Services **don't** provide *default behavior*
+# Services **don't** 
+# provide *default behavior*
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
-## Need of Default Behavior
+## The Need of Default Behavior
 
-Object should incapsulate behavior:
+Object should encapsulate behavior:
 
 * Data Validation
-  * Set of rules that model should fit at programming level
-    * Comment should have author
-* Business rules
-  * Set of rules that model should fit to exist in real world
-    * Comment should deliver email notification
+  * Set of rules that a model should fit at the programming level
+    * A comment should have an author
+* Business Rules
+  * Set of rules that a model should fit to exist in the real world
+    * A comment should deliver an email notification
 
 
-(Circles here)
+!SLIDE[bg=techtalk_bg.png] 
 
-!SLIDE 
+# What is a model?
 
-#### What is a model?
-
-
-###The model is an imitation of real object 
-###that reflects some it's behaviors
-###that we are focused on.
+##The model is an imitation of real object 
+##that reflects some it's behaviors
+##that we are focused on.
 
 ##### Wikipedia
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Implementation
 
-Using builtin Rails code:
+Using built-in Rails features:
 
-* ActiveModel::Observer
 * ActiveRecord::Callbacks
 
 Have the following benefits:
 
 * Reduce number of conventions
-* Suites to common knowledge - nothing more than Rails
+* Suits to common knowledge - nothing more than Rails
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
-##Hooks in models
+## Hooks in models
 
 We create default behavior and our data is safe.
 
@@ -182,46 +238,61 @@ Example: Comment can not be created without notification.
 
     @@@ ruby
     class Comment < AR::Base
-      after_create :send_comment_notification
+      after_create :send_notification
     end
 
-!SLIDE 
 
-## Observers
+!SLIDE[bg=techtalk_bg.png] 
 
-Model sends it's events to observer automatically and observer is calling a hook.
-
-    @@@ ruby
-    class CommentObserver < AR::Observer
-      def after_create(comment)
-        send_comment_notification(comment)
-      end
-    end
-
-* *+* Model doesn't depend on the notification code
-* **-** Some folks say: "Observers Not done well in Rails"
-
-
-!SLIDE 
-
-## API comparision
+## API comparison
 
     @@@ ruby
     Comment.create
     # or
     CommentService.create
 
-#### Reimplement other person's API 
-#### has more wisdom than invent new one.
+!SLIDE[bg=techtalk_bg.png]
 
-!SLIDE 
+## Successful Projects tend to do 
+# *one thing* 
+## in many different ways
+## rather than a lot of things
 
-## **Edge cases**
+!SLIDE[bg=techtalk_bg.png]
+
+* Comment on a web site
+* Comment in native mobile iOS app
+* Comment in native mobile Android app
+* Comment by replying to an email letter
+* Automatically generate comments
+
+
+!SLIDE[bg=techtalk_bg.png]
+
+# Team Growth Problem
+## How would you deliver a knowledge that comment should be made like this to 10 people?
+
+    @@@ ruby
+    CommentService.create(...)
+
+!SLIDE[bg=techtalk_bg.png]
+
+## Reimplement other person's API 
+## has more wisdom than invent new one.
+
+    @@@ ruby
+    Comment.create(...)
+    
+!SLIDE[bg=techtalk_bg.png] 
+
+# **Edge cases**
 
 ### In all cases data created in regular way
 ### In one edge cases special rules applied
 
-!SLIDE 
+
+
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Service with options
 
@@ -229,37 +300,25 @@ Plan A:
 
     @@@ ruby
     module CommentService
-      def self.create_with_notification(attributes)
-      def self.create(attributes)
+      def self.create_with_notification(attrs)
+      def self.create(attrs)
     end
 
-Maintenance problems:
-
-* Hard to keep all team informed about all services in the App
-* Hard to support as number of options goes higher
-
-!SLIDE 
-
-## Services with options
 
 Plan B:
 
     @@@ ruby
     module CommentService
-      def self.create(attributes, skip_notification = false)
+      def self.create(
+        attrs, skip_notification = false)
     end
 
-* Method will be a **mess** as number of options goes higher.
-* Don't respect functional paradigm
-  * As many functions as possible
 
+!SLIDE[bg=techtalk_bg.png] 
 
-!SLIDE 
+# *Default behavior* 
+# and **edge cases**
 
-## *Default behavior* and **edge cases**
-
-
-The property of default behavior in this example:
 
 * Hey model, create my comment.
   * Ok
@@ -268,85 +327,110 @@ The property of default behavior in this example:
 * Hey model, create model without notification
   * Ok
 
-!SLIDE 
 
-## Observers with option
+!SLIDE[bg=techtalk_bg.png] 
 
-
-    @@@ ruby
-
-    class Comment < AR::Base
-      attr_accessor :skip_comment_notification
-    end
-
-    class CommentObserver < AR::Observer
-      def after_create(comment)
-        deliver_notification(comment) \
-          unless comment.skip_comment_notification
-      end
-    end
-
-* Hard to access to model internals
-  * Some observer code stays in model
-* Have some problems with testing
-* Makes feature code more fragmented
-
-!SLIDE 
-### Support parameter in model
+# Support parameter in model
 
 
     @@@ ruby
     class Comment < AR::Base
       attr_accessor :skip_comment_notification
       after_create do
-        send_comment_notification \
-          unless self.skip_comment_notification
+        unless self.skip_comment_notification
+          send_notification
+        end
       end
     end
 
 
 `#skip_comment_notification` is used only in edge cases.
 
-!SLIDE 
 
-### Observers are effective when
+!SLIDE[bg=techtalk_bg.png]
 
-##**no direct access** to *observed class*
+## Default Behaviour is hard to make
+## But it solves communication problem
+## that will only increase over time
 
-#### Example: when it is part of some library inside 
-#### a fat enterprise project
+!SLIDE
 
-
-!SLIDE 
-
-## Observer <=> Trait
-### conversion is *cheap*
-
-!SLIDE 
+## What is the difference?
+    @@@ ruby
+    FacebookService.register_user(...)
+    
+    Comment.after_create :send_notification
 
 
-###Model stands for *should*
+!SLIDE[bg=techtalk_bg.png] 
 
-###Service stands for *could*
+<br/>
+<br/>
+# Model stands for *should*
 
-###Observer stands for **big fat enterprise**
+# Service stands for *could*
 
-!SLIDE 
+## Please do not confuse *should* with **must**
+
+!SLIDE[bg=techtalk_bg.png] 
 ## The model is still **fat**. 
 ## What to do?
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
-## Use traits
+## Use Concerns
 
     @@@ ruby
     class Comment < AR::Base
-      include Traits::Comment::Notification
+      include CommentNotification
+      include FeedActivityGeneration
+      include Archivable
     end
 
-`Notification` module encapsulates a feature
+`app/models/concerns/*`
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png]
+
+# Attention! 
+## People with high pressure or propensity to suicide
+## Better close your eyes and ears
+
+!SLIDE[bg=techtalk_bg.png]
+
+## Single Reponsibility Principle 
+# SUCKS
+## The proof follows
+
+!SLIDE[bg=techtalk_bg.png]
+
+## There is no a single thing 
+## in the universe that follows the SRP
+
+<div class="right">
+
+<img src="http://science.jrank.org/article_images/ep201102/science/science982.jpg"/>
+<!--![Proton](http://science.jrank.org/article_images/ep201102/science/science982.jpg)-->
+
+</div>
+
+    @@@ ruby
+    class Proton
+      include Gravitation
+      include ElectroMagnetism
+      include StrongNuclearForce
+      include WeekNuclearForce
+    end
+
+<div class="clear"></div>
+
+
+!SLIDE[bg=techtalk_bg.png]
+
+# Why man made things should?
+## The world is unreasonably complext to follow SRP
+
+
+!SLIDE[bg=techtalk_bg.png] 
 ### *Vertical slicing* stands for
 
 ## Split things by features 
@@ -356,142 +440,117 @@ The property of default behavior in this example:
 #### **Unlike MVC** which is horizontal slicing.
 
 
-!SLIDE 
-
-### Vertical slicing
+!SLIDE[bg=techtalk_bg.png] 
 
 
-Split model into *Traits*
+
+# Split model into *Concerns*
 
     @@@ ruby
     class User < AR::Base
-      include Traits::User::Facebook
-      include Traits::User::Linkedin
-      include Traits::State::CanBeDisabled
+      include FacebookProfile
     end
 
-    module Facebook
-      has_one :facebook_profile
+    # Hybrid Concern that provides 
+    # instance and class methods
+    module FacebookProfile
+      has_one :facebook_profile # simplified
       def connected_to_facebook?
-      ...
+      def self.register_from_facebook(attributes)
+      def self.connect_facebook_profile(user, attributes)
     end
 
-    module CanBeDisabled
-      scope :disabled
-      scope :enabled
-      def disable!
-      def disabled?
-    end
+!SLIDE[bg=techtalk_bg.png] 
 
-!SLIDE 
 
+## Ex.1 User + Facebook
+
+* `has_one :facebook_profile` => Model
+* `#register_user_from_facebook` => Service
+* `connect_facebook_profile` => Service
+* `connected_to_facebook?`  => Model
+  * Every user should know if it is connected to facebook or not
+
+!SLIDE[bg=techtalk_bg.png] 
+
+## Ex.2 Deliver comment notification
+
+* Comment `#send_notification` => Model
+  * Default Behaviour
+  * Even if exceptions exist
+
+!SLIDE[bg=techtalk_bg.png] 
 
 ### Basic application architecture
 
 
-<table>
+<table class="full-border">
 <tr>
-  <td colspan="3">View</td>
+  <td colspan="100%">View</td>
 </tr>
 <tr>
-  <td colspan="3">Controller</td>
+  <td colspan="100%">Controller</td>
 </tr>
 <tr>
-  <td colspan="3" style="padding-top: 0px; padding-bottom: 0px">Thin model</td>
+  <td colspan="3" style="">Model</td>
+  <td rowspan="2" style="">Services</td>
 </tr>
 
 <tr>
-  <td style="padding-top: 40px; padding-bottom: 40px">Trait</td>
-  <td>Trait</td>
-  <td>Trait</td>
+  <td style="padding-top: 40px; padding-bottom: 40px">Concern</td>
+  <td>Concern</td>
+  <td>Concern</td>
 </tr>
 
 </table>
 
-!SLIDE 
 
-## This is OOP
-
-### Traits include all staff that can be defined in model
+!SLIDE[bg=techtalk_bg.png]
 
 
+# Concerns Base
 
-!SLIDE
+* Attributes
+* Associations
+  * `has_one`
+  * `has_many`
+  * `has_and_belongs_to_many`
+
+## But rarely
+
+* `belongs_to`
 
 
-### Dependencies appear
 
-As number of traits grow:
+!SLIDE[bg=techtalk_bg.png] 
 
-* associations
-* attributes
+## Associations and Concerns
 
-#### Dependency tree
-
-![Model dependency](./file/model_dependency.png)
-
-<!--<table>-->
-<!--<tr>-->
-<!--<td colspan="4">Model</td>-->
-<!--</tr>-->
-<!--<tr>-->
-<!--<td colspan="2">belongs_to :model1</td> -->
-<!--<td colspan="2">belongs_to :model2</td>-->
-<!--</tr>-->
-<!--<tr>-->
-<!--<td>attribute1</td>-->
-<!--<td>attribute2</td>-->
-<!--<td>attribute3</td>-->
-<!--<td>attribute4</td>-->
-<!--</tr>-->
-<!--<tr>-->
-<!--<td colspan="2">has_many :models3</td>-->
-<!--<td colspan="2">has_many :models4</td>-->
-<!--</tr>-->
-
-<!--</table>-->
-
-!SLIDE 
-
-## Associations and Traits
-
-Associations is a base for Traits technique.
+Associations is a base for Concerns technique.
 
 * *`belongs_to`* is a *core* of a model 
   * This associations is used in almost all methods.
 * *`has_many`* is usually *better* to create a slice
-  * Methods with this associations is usually independent from each other.
+  * Methods with this associations is usually independent.
 
-!SLIDE 
 
-#### How to not get lost?
+!SLIDE[bg=techtalk_bg.png] 
 
-## If *A* depends on *B* 
-## then **B** should not depend on **A**
-
-!SLIDE 
-
-## Traits best practices
+## Concerns best practices
 
 * Apply pattern to *multifunctional models* only
-  * `User`
-* Traits name space with the same name as model
-  * `Traits::User::Facebook`
 
 * Use *OOP*:
   * Abstract method
   * `super` is super
 
-* Api *consistency*
-  * "name", "subject", "title" => select one
-  * "disabled", "inactive", "deleted" => select one
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
-## Libraries using traits
+## Libraries using Concerns
 
 * ActiveRecord
-* Authlogic
+* ActiveModel
 * Devise
 * Datagrid
 
@@ -499,72 +558,48 @@ Associations is a base for Traits technique.
 <!--##### then it is **easy** for *regular projects*-->
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
-## *Flow* nature and *Event* nature
-
-
-Service has flow nature:
-
-* goes step by step
-  * order can matter
-* call each other
-  * dependent
-
-Observers and Callbacks have event nature:
-
-* one can spawn more than one other events
-  * can be parallelized 
-* don't call each other
-  * can be backgrounded
-  
+## *Flow* nature of a Service
+## *Event* nature of a Callback
 
 
 
-!SLIDE 
-
-## Super advanced logic infrastructure
-
-![Architecture](./file/architechture.png)
-
-
-!SLIDE 
-
-### There is only one 100% reason 
-### when this can be broken.
-
-
-
-!SLIDE 
-
-### Of course this is 
-## Perfomance
-#### Others are doubtful
-
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 # Summary
 
+!SLIDE[bg=techtalk_bg.png]
 
-!SLIDE 
-### *Could?*  => **Service**
-### *Should?* => **Model**
-!SLIDE 
-## **Fat** models => *Thin* Traits 
-#### and sometimes observers
-!SLIDE 
-### *Reimplement* other person's API 
-### has more wisdom than **invent new** one.
-!SLIDE 
-### If *A* depends on *B* 
-### then **B** should not depend on **A**
+# Inject Service between Model and Controller
+## if you need them
 
+!SLIDE[bg=techtalk_bg.png] 
+# *Could?*  => **Service**
+# *Should?* => **Model**
 
 !SLIDE 
 
-### The **End**
+# SRP is a misleading principle
 
-#### Thanks for *watching*
+## It should not inhibit you from having
+## a Better Application Model
+!SLIDE[bg=techtalk_bg.png] 
+# **Fat** models => *Thin* Concerns 
 
-##### [http://gusiev.com](http://gusiev.com)
-##### [https://github.com/bogdan](https://github.com/bogdan)
+!SLIDE[bg=techtalk_bg.png] 
+## *Reimplement* other person's API 
+## has more wisdom than **invent new** one.
+
+
+
+
+
+!SLIDE[bg=techtalk_bg.png] 
+
+# The **End**
+
+## Thanks for *your time*
+
+### [http://gusiev.com](http://gusiev.com)
+### [https://github.com/bogdan](https://github.com/bogdan)
