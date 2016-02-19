@@ -12,9 +12,11 @@
     %link{:href => "http://lab.hakim.se/reveal-js/css/theme/night.css", :rel => "stylesheet"}/
     / For syntax highlighting
     %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     / If the query includes 'print-pdf', use the PDF print sheet
     :javascript
       document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+      
 
     :sass
       .yellow
@@ -23,14 +25,33 @@
         color: #17ff2e !important
       .red
         color: red !important
+      .first-slide
+        width: 100% !important
+        height: 100% !important
+        top: 0 !important
+        position: absolute !important
+        max-width: 100% !important
+        max-height: 100% !important
+        background-color: white !important
   %body
+    .all-slides
+      %img{src: "/techtalk_bottom.png", style: 'position: absolute; bottom: 0; left:0'}
+      %img{src: "/techtalk_corner.png", style: 'position: absolute; top: 0; left:0'}
+    %img.first-slide{src: "/techtalk_main.png", style: 'z-index: 10000'}
     .reveal
       .slides
+        %section{}
         %section
           %h2 How to build a project
           %h2 architecture in 3 days
               
           %h3 Bogdan Gusiev
+        %section
+          %h3 Bogdan Gusiev:
+        
+          %ul
+            %li Working for startups for 7 years
+            %li Ruby on Rails for 7 years
 
         %section
           %h2 Start a project
@@ -83,6 +104,7 @@
  
 
         %section
+          %h3 Example:
           %h1 Talkable
 
           %h3.fragment "Driving Ecommerce Growth With Customer Referrals"
@@ -110,7 +132,7 @@
             -#%img{src: "http://1.bp.blogspot.com/_304FEZpyoiw/TCg4rfnhGPI/AAAAAAAAAAU/5iiFLnsTUNo/s1600/DSCN0963-2.jpg"}
             %img{src: "https://monosnap.com/file/bN4jtIHqsKOfhEO3LBegM0VHUIeVKg.png"}
         %section 
-          %h1 WTF?
+          %h1 What did we get?
           %h2.fragment 2 years of corrupt production data
           %h2.fragment 3 month to fix an issue 
 
@@ -160,6 +182,7 @@
             %nobr==  Customer -> Purchase <- Vendor
           %h3.fragment
             %nobr== Customer -> Order -> Order Item <- Product
+            Order == Cart
         %section{"data-markdown" => ""}
           %script{:type => "text/template"}
             \## Add some hierarchy
@@ -194,21 +217,26 @@
             </p>
         %section
           %h2 How does it look like in code?
-          %h3 
-            Hint: Author &amp; Subscriber 
-            %br
-            are the same person
-          %br
           
           %pre
             %code.ruby
               :preserve
                 # The Basics
-                User.has_many :subscriptions, :foreign_key => :subscriber_id
-                User.has_many :subscribed_entries, :foreign_key => :author_id, 
-                  :class_name => "Subscription"
-                User.has_many :likes, :photos, :activities
+                User.includes Subscriber
+                User.includes Author
 
+          %pre.fragment
+            %code.ruby
+              :preserve
+                Subscriber.has_many :subscriptions, :foreign_key => :subscriber_id
+
+                Author.has_many :subscribed_entries, :foreign_key => :author_id, 
+                  :class_name => "Subscription"
+                Author.has_many :likes, :photos, :activities
+
+          %pre.fragment
+            %code.ruby
+              :preserve
                 Like.has_one :activity, :as => :target
                 Photo.has_one :activity, :as => :target
                 Comment.has_one :activity, :as => :target
@@ -217,21 +245,23 @@
             %code.ruby
               :preserve
                 # The Core
-                class User
+                module Author
                   def authored_activities
                     ?
                   end
+                end
+                module Subscriber
                   def subscribed_activities
                     ?
                   end
                 end
         %section
-          %h4 The most complicated part
+          %h3 The most complicated part
 
           %h3.fragment
             implement 
             %br
-            <code class='highlight-red'> User#subscribed_activities </code>
+            <code class='highlight-red'> Subscriber#subscribed_activities </code>
           <div class="fragment">
           <img src="https://api.monosnap.com/image/download?id=c3qOtt5uMSSGnpHTf3Oa2pScm" />
           </div>
@@ -249,10 +279,11 @@
             %br
             %nobr App2: Message &lt;- Recipient
         %section
-          %h3 Search Engine
+          %h2 Search Engine
 
           
-          %h2!== Page -> Result Item <- Query
+          %h3!== Searcher -> Search Result <- Page Owner
+          %h3.fragment!== Query -> Result Item <- Page
           %img{src: "https://api.monosnap.com/image/download?id=ILHCoxrWnAjawYNokuv7rc1Wi"}
 
         %section
@@ -269,6 +300,11 @@
                 Page.has_many :result_items
                 Query.has_many :result_items, :order =&gt; ?
               
+        %section
+          %h3 How to maintain a
+          %h2
+            %span.yellow< healthy startup
+            ?
         %section
           %h2 Be Focused
           %pre{style: "margin: 0 auto; width: 600px; font-size: 1.2em; text-align: center"}
@@ -291,20 +327,29 @@
           %br
           %h3 Person -&gt; Model1,Model2 &lt;- Person
 
+          %h3.fragment
+            Model1 -&gt; Model2
+
+
         %section
-          %h3 Communicating to a different person via a different tool
+          %h3 One person work space
           
-          %h2 Person1 -&gt; Model1 &lt;- Person2
-          %h2 Person2 -&gt; Model2 &lt;- Person3
+          %h2 Role1 -&gt; Model1 &lt;- Role2
+          %h2.fragment Role2 -&gt; Model2 &lt;- Role3
+
+          %h3.fragment Only 3 days
         %section
-          %h2.yellow
-            A startup should only 
+          %h2
+            A startup MVP should only 
             %br
-            be built for 2 roles
+            be built for 
+            .yellow
+              2 roles and 
+              one model
         %section
           %h3 "Respond to a Change"
           %h3 is OK, but
-          %h2 Basic model should never change
+          %h2.yellow Basic model should never change
           
         %section 
           %h3 Because things are good for
@@ -317,9 +362,11 @@
             %li Build intermediate relations
             %li Implement high level relations
         %section
-          Refer a Friend:
+          %h3 Talkable's refer a friend technology
 
-          %pre
+          Advocate -&gt; Offer -&gt; <span class='red'>Share</span> -&gt; Visitor -&gt; <span class='red'>Referral</span> &lt;- Purchase &lt;- <span class="red">Friend</span>
+          
+          %pre.fragment
             %code.ruby
               :preserve
                 class Person
@@ -327,27 +374,24 @@
                   include Friend
                 end
 
-          %pre
-            %code.ruby
-              :preserve
-                class Referral
-          %pre
-            %code.ruby
-              :preserve
-                Advocate -> Share -> Visitor -> Referral &lt;- Purchase &lt;- Friend
-          
-          %pre
-            %code.ruby
-              :preserve
-                Advocate.has_many :shares
-                  Share.has_many :visitors
-                    Visitor.has_many :referrals
+                Advocate.has_many :offers
+                  Offer.has_many :shares
+                    Share.has_many :visitors
+                      Visitor.has_many :referrals
 
                 Friend.has_many :purchases
                   Purchase.has_one :referral
 
-                Advocate#referred_friends
-                Friend#referred_by
+                # Core Relations
+                Advocate#referrals
+                Friend#referrals
+        %section
+          %h2 Thank You
+
+          %br
+          %ul
+            %li http://github.com/bogdan
+            %li http://gusiev.com
 
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
     %script{:src => "http://lab.hakim.se/reveal-js/js/reveal.js"}
@@ -375,3 +419,6 @@
       // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
       ]
       });
+      Reveal.addEventListener( 'slidechanged', function( event ) {
+        $('.first-slide').hide()
+      } );
