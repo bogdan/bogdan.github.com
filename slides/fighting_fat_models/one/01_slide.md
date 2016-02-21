@@ -1,12 +1,9 @@
-
-
-
 !SLIDE
-
 
 <script type='text/javascript'>
 
 function reloadSlides () {
+  alert('go')
   loadSlides(loadSlidesBool, loadSlidesPrefix, true);
   showSlide();
 }
@@ -36,11 +33,11 @@ function reloadSlides () {
 
 # Some of my gems
 
-* [Datagrid](https://github.com/bogdan/datagrid)
-* [js-routes](https://github.com/railsware/js-routes)
-* [accepts_values_for](https://github.com/bogdan/accepts_values_for)
-* [furi](https://github.com/bogdan/furi)
 * [http://github.com/bogdan](http://github.com/bogdan)
+  * [Datagrid](https://github.com/bogdan/datagrid)
+  * [js-routes](https://github.com/railsware/js-routes)
+  * [accepts_values_for](https://github.com/bogdan/accepts_values_for)
+  * [furi](https://github.com/bogdan/furi)
 
 
 !SLIDE
