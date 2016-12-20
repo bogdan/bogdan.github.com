@@ -1,0 +1,285 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Optimize Database IO
+    %meta{:content => "How to start a project", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/theme/white.css", :rel => "stylesheet"}/
+    / For syntax highlighting
+    %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    - if params[:'print-pdf']
+      :sass
+        body .reveal
+          color: black !important
+          h1, h2, h3, h4, h5
+            color: black !important
+
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+      
+
+    :sass
+      .yellow
+        color: yellow !important
+      .green
+        color: #17ff2e !important
+      .red
+        color: red !important
+      .first-slide
+        width: 100% !important
+        height: 100% !important
+        top: 0 !important
+        position: absolute !important
+        max-width: 100% !important
+        max-height: 100% !important
+        background-color: white !important
+  %body
+    .reveal
+      .slides
+        %section{}
+        %section
+          %h2 Optimize Database Queries
+              
+          %h3 Bogdan Gusiev
+        %section
+          %h3 Bogdan Gusiev:
+        
+          %ul
+            %li Working for startups for 7 years
+            %li Ruby on Rails for 7 years
+
+        %section
+          %h3 Ultimate goal
+
+          %h2 Make you app spend less time waiting on the query response
+
+        %section
+
+          %h2 Methods
+
+          %ul
+            %li Avoid queries
+            %li Reduce number of queries
+            %li Make queries faster
+            %li Query from a faster place than DB
+
+        %section
+          %h2
+            Types of queries
+          %ul
+            %li 
+              Instant
+              %ul
+                %li time spent mainly on networking IO and FS read
+                %li There are many of them
+            %li 
+              Slow 
+              %ul
+                %li time spent on calculating the data
+                %li Slow time comes from joins or aggregation or dynamic conditions
+
+        %section
+          %h2 Avoid Queries
+          %pre
+            %code.ruby
+              :preserve
+                Campaign.has_many :offers
+                Offer.belongs_to :campaign
+
+          %pre
+            %code
+              :preserve
+                 >> campaign.offers.first.campaign
+                 Offer Load    (0.3ms)  SELECT  `offers`.* FROM `offers` WHERE `offers`.`campaign_id` = 1  ORDER BY `offers`.`created_at` DESC LIMIT 1
+                 Campaign Load (0.3ms)  SELECT  `campaigns`.* FROM `campaigns` WHERE `campaigns`.`id` = 1 LIMIT 1
+
+        %section
+          %pre
+            %code.haml
+              :preserve
+                = render partial: "offers/offer", collection: campaign.offers
+          %pre
+            %code.haml
+              :preserve
+                # app/views/offers/_offer.html.haml
+                %p= link_to offer.name, campaign_offer_path(offer.campaign, offer)
+
+
+        %section
+          %h1.yellow Solution
+
+          %pre
+            %code.ruby
+              :preserve
+                Campaign.has_many :offers, inverse_of: :campaign
+                Offer.belongs_to :campaign, inverse_of: :offers   
+
+        %section
+          %pre
+            %code.ruby
+              :preserve
+                class UserRole &lt; AR::Base
+                  validates_uniqness_of :role_id, scope: [:user_id]
+                end
+          %h2 Absolutely useless query!
+          %h2 Use unique index instead
+
+        %section
+          %h3 Rails built-in avoid queries methods:
+
+          %ul
+            %li inverse_of
+            %li counter_cache
+            %li has_many :through
+
+        %section
+          %h2 Avoid Queries
+
+          %pre
+            %code.ruby
+              :preserve
+                Coupon.belongs_to :purchase, counter_cache: true
+                class Purhcase &lt; AR::Base
+                  has_many :coupons
+                
+                  def coupon_codes
+                    coupons.map(&:code)
+                  end
+                end
+          %pre
+            %code.ruby
+              :preserve
+                def coupon_codes
+                  coupon_count > 0 ? coupons.map(&:code) : []
+                end
+                    
+        %section
+          %h2 Cache immutable data
+          %h3 Data is immutable from business logic stand point
+
+          %pre
+            %code.ruby
+              :preserve
+                create_table :comments do |t|
+                  t.integer :post_id
+                  t.integer :author_id
+                  t.text :body
+                end
+
+            \#body is mutable but #post and #author are not
+          %pre
+            %code.ruby
+              :preserve
+                Comment.has_one :feed_activity
+                FeedActivity.before_validation do 
+                  self.forum = comment.post.forum
+                  self.author = comment.author
+                }
+
+
+
+        %section
+          %h1 Speedup queries
+
+        %section
+          %pre
+            %code.ruby
+              :preserve
+                add_index :users, :email, unique: true
+                add_index :products, :category_id
+
+          %ul
+            %li Become actual after 100_000 records
+            %li Indexes take disk space
+            %li Foreign Key index is almost always a good idea
+
+        %section
+
+          %h2 Index Usage Guide
+
+          %p Index by one column will help you make the related query fast
+          %pre
+            %code.sql
+              :preserve
+                SELECT * FROM users WHERE email = ?
+
+          %p Multi-column index can be used to query by first column, 1st&2nd column etc
+
+          %pre
+            %code.ruby
+              :preserve
+                add_index :users_roles, [:user_id, :role_id], unique: true
+                add_index :users_roles, :role_id
+
+
+        %section
+          %pre
+            %code.ruby
+              :preserve
+                Site.has_many :visitors
+                Site.has_many :traffic_sources
+                TrafficSource.belongs_to :site
+                Visitor.doesnt_belong_to :site
+          %pre
+            %code.diff
+              :preserve
+                -  Site.has_many :visitors
+                +  Site.has_many :visitors, ->(traffic_source) { 
+                     where(site_id: traffic_source.site_id, traffic_source_id: traffic_source.id) }
+        %section
+          %h2 Avoid Join
+
+          %pre
+            %code.ruby
+              == Coupon.belongs_to :purchase, counter_cache: true
+              == Purchase.has_many :coupons
+              == Purchase.scope :used_coupon_from_st_valentine_day, -> {
+              ==  joins(:coupons).
+              ==    where("coupons.code like ?", "ST-VAL-%").
+              ==    <span class="fragment">where("coupons_count &gt; 0")</span>
+              == }
+        %section
+          %h2 Thank You
+
+          %br
+          %ul
+            %li http://github.com/bogdan
+            %li http://gusiev.com
+
+    %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
+    %script{:src => "http://lab.hakim.se/reveal-js/js/reveal.js"}
+    :javascript
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+
+      theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+      // { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      // { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      // { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+      // { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ]
+      });
+      Reveal.addEventListener( 'slidechanged', function( event ) {
+        $('.first-slide').hide()
+      } );
