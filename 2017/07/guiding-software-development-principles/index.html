@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+
+    <title>
+      
+        Guiding Software Development Principles -
+      
+      Bogdan's blog
+    </title>
+    <meta name="robots" content="follow, all" />
+    <meta charset="utf-8"> 
+    
+    <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
+    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, report, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
+    <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
+    <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
+    <link rel="shortcut icon" href="/images/favicon.ico"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                var params = decodeURI(window.location.search).replace(/^\?/, "").split("&");
+                $(params).each(function(index, param) {
+                    if (param.match(/^p=/)) {
+
+                        switch(parseInt(param.split("=")[1])) {
+                            case 11: window.location.href = "http://www.gusiev.com/2009/04/clear-upload-file-input-field/";
+                            break;
+                            case 3: window.location.href = "http://www.gusiev.com/2009/04/upload-files-with-selenium-ide/";
+                            break;
+                        }
+                    }
+                })
+            });
+        </script>
+    </head>
+
+    <body>
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=354906294546402";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+        <a href="http://github.com/bogdan" class="fork">
+            <img src="/images/fork.png"/>
+        </a>
+
+        <div id="wrapper">
+
+            <div class="header">
+                <div class="title">
+                    <h1><a href="/">Bogdan Gusiev's blog</a></h1>
+                    <h4>How to make good software <a class="for-people" href="/pages/about.html#dream_job">for people</a></h4>
+                </div>
+
+                <div class="pages">
+                    <a href="/">Home</a>
+                    <a href="/pages/about.html">About me</a>
+                    <a href="/pages/contacts.html">Contacts</a>
+                </div>
+                <a href="/pages/about.html" class="avatar">
+                    <img src="/images/me.jpg"/>
+                </a>
+                <div class="clear"></div>
+                <hr/>
+            </div> <!-- Closes header -->
+
+
+            <div id="main">
+
+                <div id="content">
+                    <div id="post">
+    <h2>
+        <a href="/2017/07/guiding-software-development-principles">Guiding Software Development Principles</a>
+        <div class="date">07 Jul 2017</div>
+    </h2>
+    <p>It is becoming popular to talk about software development principles from time to time. The new major concepts appear and die due to the fact that most of them are designed to be perfect but they are not. If you would stay in IT long enough, you encounter articles and talks where people discovered an amazing concept “X” that solved all their development problems and brought their team to inevitable success. Unfortunately permanent success is usually temporary or even a self-deception. The truth is: there is no silver bullets in software development just like in any other engineering process. Engineering of world class products requires precise resources control, trade offs and balance between easy and complex, fast and slow, and beautiful and ugly. Here, I will try to explain my guiding software development principles as well as the why-s.</p>
+
+<!--more-->
+
+<h2 id="priority-matters">Priority Matters</h2>
+
+<p>We often forget that most principles don’t match not only with the real solutions but also each other: you can not swim and guard clothing at the same time. So first thing you need to consider is priority of your principles. Some of them should be more important than others. In this way you can solve contradiction between them: if there are two principles and they can not be followed at the same time, pick the higher priority one.</p>
+
+<h2 id="less-is-more">Less is More</h2>
+
+<p>There should be very limited number of principles to follow. More principles under the same concept just creates more contradiction and leaves less room to be situational and follow additional guidelines that would fit best for given problem. I think the ideal number in you “guiding principles” that apply <strong>almost</strong> to everything in your software should be 3. Higher numbers are possible. </p>
+
+<p>Christian God was so kind that he left us with 10 that still have very small contradiction like: should I steal a weapon from a person that wants to kill me tomorrow? That’s an amazing result for human moral that is at least 1000x times older than software development. Based on our level of understanding of software engineering, we can effort only 3 at the same time.</p>
+
+<h2 id="build-for-humans">Build for Humans</h2>
+
+<p>Software is always build by humans and for humans. Software should do what it should do in a convenient, fast and robust way. If any principle violates the usefulness of software, it can be only partially followed. And that is fine because principles are imperfect. They should not be taken as dogmas because they are defined imperfectly by imperfect people.</p>
+
+<h2 id="getting-to-the-core">Getting to the core</h2>
+
+<p>So here are principles that guide me through software development sprints as well as through software development marathons:</p>
+
+<ol>
+  <li>Software should do what it should do.</li>
+  <li>Model the real world</li>
+  <li>Reuse Code</li>
+  <li>Track Dependencies</li>
+</ol>
+
+<p>Lets go through them one by one:</p>
+
+<h2 id="model-the-real-world">1. Model the real world</h2>
+
+<p>This is the most important and genius principles I ever encounter that is even older than computers comes for analogue computers: model the real world.
+Try to be as close as possible to the piece of world you are modelling in the software: if there are users of your software, there should be a User in your code. If you simulate an iPhone, there should be an essence of iPhone in your software that performs all of its functions no matter how many of them there are. Also this principle requires you to name things right making them closer to processes they simulate. There will be always a gap between how the process is simulated in software and the real process, but this gap needs to be as close as possible to ensure software does things efficiently. </p>
+
+<p>We tend to think that a software is complex. But the complexity comes from several factors. First is the processes being modeled are complex - here you would need to rethink them to make them simpler. But the second reason is software developer didn’t model them right. If you model things as they are, you eliminate second factor. If you model things even better than they are, you can even eliminate the first factor. It is worth mentioning that is only possible if you have a power to alter the process or the process you are modeling doesn’t exist yet. This is mostly the case for the modern software. If you are about to make a “select your seat” functionality for the plane ticket, there is no way you can simplify plane seat locations. If you make a new e-commerce web site, you are an author of most processes and can make product finding functionality as simple as possible until you reach a fact that it needs to fit not just your needs but also all your users needs which are quite different. </p>
+
+<h2 id="code-reuse">2. Code Reuse</h2>
+
+<p>As you model more and more processes, the code base grows. It needs to be generalized and reused. We all know which problems come from unreused code: bug fixes and changes need to be made more than once that inevitably leads to the lack of consistency in software where buttons that would suppose to do the same thing do it in a slightly or not so slightly different way. But code reuse is more than that: architecture is just a code reuse metric. If you have a code that is easy to reuse, the architecture arises on its own because people tend to reuse existing code instead of writing new. From the other hand, you can measure the “architectureness” of any code piece including third party(aka gems) by counting how many times it is used. That definition is well aligned with the popular idea that architecture is hard to change: if you reuse a particular piece more, it gets harder and harder to change it because the change affects more places. Following this principle also requires a good test coverage. The most reused code is usually the most covered by tests. You can not test everything, but you can define your priority based on number of usages of particular module.</p>
+
+<h2 id="track-dependencies">3. Track Dependencies</h2>
+
+<p>This is the most advanced and the most complex principle of all three. I have heard so many times: “Hey, why couldn’t we just break up our code into reusable modules that are independent?” or “Can we just write many independent micro-services?”. Yes, this is all about real breaking of software into independent pieces. Many theoretical-software-developers think it is a silver bullet, but it is not. Firstly because you violate Principle 1: model the real world. If things are interconnected and mutually dependent in the real world, you can not model them differently. It is a big talent to be able to find those possibilities with the minimum sacrifices of principles 1 and 2 which are more important to follow, but still sometimes violated due to the need of breaking software into independent modules.
+It is worse clarifying that there are 3 level of dependencies:</p>
+
+<ol>
+  <li>Mutually Dependent</li>
+  <li>One-way Dependent</li>
+  <li>Independent</li>
+</ol>
+
+<p>Here is more formal definition: if you have code blocks A and B, they are totally independent if each block can perform its functions (aka pass all tests written) without other one. They are one-way dependent if A can perform its work without B or vice versa. And, finally, they are mutually dependent if neither can perform its work without another. In most cases, when Rails developers talk about several modules in their app, that is just a bullshit because there is no way one model can perform its work without others. They all are mutually dependent. And this is a very effective design because this is how the real world works: no modules - everything is mutually dependent as much as flowers and bees. You may start modeling pollination process from Bee class and Flower class and even consider them “independent modules” but in a few hours you would end up referencing one from another all the time. </p>
+
+<p>The name of the principle as “Track Dependencies” comes from the fact that there are 3 level of interdependencies and you should at least stop thinking too abstract about them: figure out how much they are dependent and control that. Usually making things completely independent is unnecessary within one application. One-way dependent is good enough. You in-app dependency tree should be based on your vendor libraries dependency tree that is very well defined. You may consider your Gemfile dependency tree as the ideal dependency tree. Maybe you will come along the same structure in your app but it will be 10 times harder due to reasons that are hard to explain in a small article.</p>
+
+<p>There is far more to say about it, but I’ll probably make a dedicated article about “Track Dependencies” later.</p>
+
+<h2 id="software-should-do-what-it-should-do">0. Software should do what it should do.</h2>
+
+<p>As I said earlier. You should always sacrifice principles if you can not build software that meets all the requirements with them.
+It is worth admitting that this is due to the fact that you are not a perfect software developer. Maybe the task wants you to be 2x better at software development than you are. And you can not become 2x better in a blink of an eye while your project has deadlines. Most likely you would be able to complete the task following all your principles with infinite resources, but they will not happen any time soon. You need sacrifices due lack of time, brain power, people and restrictions from security, performance, usability and other sources. Those are main reasons that causes the code to look ugly and complex, but never give up the beauty completely.</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>There is more to say about each principle above. It lacks examples but it is hard to find good ones that don’t require a lot of context to understand. I’ll write a more detailed article on each principle. Also, even thought the priority of principles is pretty important to follow, there might be exceptions. Exceptions are hard to formalize. You should judge them based on your practical experience and still make an internal note why the priority was changes for a particular case, but not the rest.</p>
+
+
+    <div class="clear"></div>
+    <div class="left">
+      <table class="post-social-share">
+        <tr>
+          <td>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Guiding Software Development Principles" data-via="bgusiev" data-url="http://gusiev.com/2017/07/guiding-software-development-principles">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </td>
+          <td>
+            <div class="fb-like" data-href="http://gusiev.com/2017/07/guiding-software-development-principles" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+          </td>
+          <td>
+            <div class="reddit-button">
+              <script type="text/javascript" src="http://www.reddit.com/static/button/button1.js"></script>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <h4 class="tags">
+    
+    
+    <a href="/tags/principles.html">principles</a>
+    
+    <a href="/tags/software.html">software</a>
+    
+    <a href="/tags/it.html">it</a>
+    
+    <a href="/tags/imperfection.html">imperfection</a>
+    
+</h4>
+<div class="clear"></div>
+
+    <div id="related">
+        <h3>Related Posts</h3>
+        <ul class="posts">
+            
+               <!-- Exclude self -->
+                <li><span>12 Jan 2016</span> &raquo; <a href="/2016/01/single-responsibility-principle-srp-criticism">Something is wrong with Single Reponsibility Principle</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>06 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>25 Jul 2014</span> &raquo; <a href="/2014/07/rubyc-conference-video-parsers-slides">My Talk from RubyC conference</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>27 May 2014</span> &raquo; <a href="/2014/05/podcast-interview-le0pard-open-source-contribution">Took part in a podcast with Alexey Vasiliev</a></li>
+              
+            
+        </ul>
+    </div>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
+
+    //var disqus_identifier = '/2017/07/guiding-software-development-principles';
+    //var disqus_url = 'http://gusiev.com/2017/07/guiding-software-development-principles';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+</div>
+
+
+                </div>
+                <div class="vsplit">
+                </div>
+                <div id="sidebar">
+                    <div class="recent-posts">
+                        <h2>Recent Posts</h2>
+                        <a class="rss" href="http://feeds.feedburner.com/BogdanGusiev">
+                            <img src="/images/rss.png" alt="Bogdan Gusiev&#8217;s blog" />
+                        </a>
+                        <div class="clear"></div>
+                        <ul>
+                            
+                            <li>
+                                <a href='/2017/07/guiding-software-development-principles'>Guiding Software Development Principles</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2016/01/single-responsibility-principle-srp-criticism'>Something is wrong with Single Reponsibility Principle</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2015/02/criterias-template-language-erb-haml'>Choosing a Templating Language</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
+                            </li>
+                            
+                            <li>
+                                <a href='/2014/05/podcast-interview-le0pard-open-source-contribution'>Took part in a podcast with Alexey Vasiliev</a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                    <div class="slides">
+                      <h2>Slides</h2>
+                      <ul>
+                        <li>
+                          <a href="/slides/datagrid/index.html#/">Datagrid - table data framework</a>
+                        </li>
+                        <li>
+                          <a href='/dorspec#1'>Fogotten Features of RSpec</a>
+                        </li>
+                        <li>
+                          <a href='/slides/rails_contribution/static/#1'>Power Hacking Rails internals</a>
+                        </li>
+                        <li>
+                          <a href='/slides/fighting_fat_models/static'>Fighting Fat Models</a>
+                        </li>
+                        <li>
+                          <a href='/slides/background-jobs-frameworks/static/#1'>Background job Frameworks</a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="sidebarbox">
+                        <h2>Search</h2>
+                        <form method="get" id="searchform" action="">
+    <input type="text" placeholder="Search keywords" name="s" id="searchbox"/>
+    <input type="submit" class="submitbutton" value="Find" />
+</form>
+<script>
+    $('#searchform').submit(function(event) {
+    event.preventDefault();
+    window.location.href = "http://google.com/search?q=site:gusiev.com " + $('#searchbox').val();
+    });
+</script>
+
+                    </div>
+                    <div class="sidebarbox tag-cloud">
+                        <h2>Browse by tags</h2>
+                        <a href="/tags/activerecord.html" title="Pages tagged activerecord" style="font-size: 23.0px; line-height:23.0px" rel="tag">activerecord</a> 
+<a href="/tags/ajax.html" title="Pages tagged ajax" style="font-size: 21.2px; line-height:21.2px" rel="tag">ajax</a> 
+<a href="/tags/api.html" title="Pages tagged api" style="font-size: 17.6px; line-height:17.6px" rel="tag">api</a> 
+<a href="/tags/application.html" title="Pages tagged application" style="font-size: 17.6px; line-height:17.6px" rel="tag">application</a> 
+<a href="/tags/bdd.html" title="Pages tagged bdd" style="font-size: 17.6px; line-height:17.6px" rel="tag">bdd</a> 
+<a href="/tags/behavior.html" title="Pages tagged behavior" style="font-size: 19.4px; line-height:19.4px" rel="tag">behavior</a> 
+<a href="/tags/changelog.html" title="Pages tagged changelog" style="font-size: 17.6px; line-height:17.6px" rel="tag">changelog</a> 
+<a href="/tags/class.html" title="Pages tagged class" style="font-size: 17.6px; line-height:17.6px" rel="tag">class</a> 
+<a href="/tags/commit.html" title="Pages tagged commit" style="font-size: 17.6px; line-height:17.6px" rel="tag">commit</a> 
+<a href="/tags/context.html" title="Pages tagged context" style="font-size: 17.6px; line-height:17.6px" rel="tag">context</a> 
+<a href="/tags/contribution.html" title="Pages tagged contribution" style="font-size: 26.6px; line-height:26.6px" rel="tag">contribution</a> 
+<a href="/tags/criticism.html" title="Pages tagged criticism" style="font-size: 28.4px; line-height:28.4px" rel="tag">criticism</a> 
+<a href="/tags/database.html" title="Pages tagged database" style="font-size: 19.4px; line-height:19.4px" rel="tag">database</a> 
+<a href="/tags/datagrid.html" title="Pages tagged datagrid" style="font-size: 21.2px; line-height:21.2px" rel="tag">datagrid</a> 
+<a href="/tags/debug.html" title="Pages tagged debug" style="font-size: 19.4px; line-height:19.4px" rel="tag">debug</a> 
+<a href="/tags/dry.html" title="Pages tagged dry" style="font-size: 19.4px; line-height:19.4px" rel="tag">dry</a> 
+<a href="/tags/gem.html" title="Pages tagged gem" style="font-size: 24.8px; line-height:24.8px" rel="tag">gem</a> 
+<a href="/tags/git.html" title="Pages tagged git" style="font-size: 17.6px; line-height:17.6px" rel="tag">git</a> 
+<a href="/tags/howto.html" title="Pages tagged howto" style="font-size: 21.2px; line-height:21.2px" rel="tag">howto</a> 
+<a href="/tags/html.html" title="Pages tagged html" style="font-size: 21.2px; line-height:21.2px" rel="tag">html</a> 
+<a href="/tags/idea.html" title="Pages tagged idea" style="font-size: 17.6px; line-height:17.6px" rel="tag">idea</a> 
+<a href="/tags/java.html" title="Pages tagged java" style="font-size: 21.2px; line-height:21.2px" rel="tag">java</a> 
+<a href="/tags/javascript.html" title="Pages tagged javascript" style="font-size: 30.2px; line-height:30.2px" rel="tag">javascript</a> 
+<a href="/tags/jquery.html" title="Pages tagged jquery" style="font-size: 17.6px; line-height:17.6px" rel="tag">jquery</a> 
+<a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
+<a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
+<a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
+<a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
+<a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
+<a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 39.2px; line-height:39.2px" rel="tag">rails</a> 
+<a href="/tags/report.html" title="Pages tagged report" style="font-size: 17.6px; line-height:17.6px" rel="tag">report</a> 
+<a href="/tags/resque.html" title="Pages tagged resque" style="font-size: 17.6px; line-height:17.6px" rel="tag">resque</a> 
+<a href="/tags/rspec.html" title="Pages tagged rspec" style="font-size: 23.0px; line-height:23.0px" rel="tag">rspec</a> 
+<a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
+<a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
+<a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
+<a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
+<a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
+<a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
+<a href="/tags/validation.html" title="Pages tagged validation" style="font-size: 23.0px; line-height:23.0px" rel="tag">validation</a> 
+<a href="/tags/vim.html" title="Pages tagged vim" style="font-size: 17.6px; line-height:17.6px" rel="tag">vim</a> 
+
+                    </div>
+                </div><!-- Closes Sidebar_full -->
+                <div class="clear"></div>
+            </div> <!-- Closes Sidebar -->
+            <div class="clear"></div>
+
+        </div><!-- Closes Main -->
+
+
+        <div class="footer">
+            <hr/>
+            <!--LiveInternet counter-->
+
+            <script type="text/javascript">
+                if (window.location.href.indexOf("gusiev") >= 0) {
+                document.write("<a href='http://www.liveinternet.ru/click' "+
+                        "target=_blank><img src='http://counter.yadro.ru/hit?t40.6;r"+
+                        escape(document.referrer)+((typeof(screen)=="undefined")?"":
+                            ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+                                screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+                        ";"+Math.random()+
+                        "' alt='' title='LiveInternet' "+
+                        "border='0' width='31' height='31'><\/a>");
+                }
+                </script><!--/LiveInternet-->
+                <script type="text/javascript">
+                if (window.location.href.indexOf("gusiev") >= 0) {
+                    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+                    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+                }
+                    </script>
+                    <script type="text/javascript">
+                if (window.location.href.indexOf("gusiev") >= 0) {
+                        try {
+                            var pageTracker = _gat._getTracker("UA-12663165-1");
+                            pageTracker._trackPageview();
+                        } catch(err) {}
+                }</script>
+
+            <div style="text-align: center; padding-right: 350px">
+                The Content of this blog can be published anywhere with the link to original source.
+            </div>
+        </div><!-- Closes morefoot -->
+
+
+
+
+    </body>
+</html>
+
+
+
