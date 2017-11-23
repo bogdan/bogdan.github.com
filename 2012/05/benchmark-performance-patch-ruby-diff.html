@@ -6,7 +6,7 @@
 
     <title>
       
-        Что такое архитектура? -
+        Benchmark your performance patches -
       
       Bogdan's blog
     </title>
@@ -78,30 +78,88 @@
                 <div id="content">
                     <div id="post">
     <h2>
-        <a href="/architecture">Что такое архитектура?</a>
-        <div class="date">23 Nov 2017</div>
+        <a href="/2012/05/benchmark-performance-patch-ruby-diff">Benchmark your performance patches</a>
+        <div class="date">01 May 2012</div>
     </h2>
-    <p>Все разработчики, с которыми мне приходилось работать, так или иначе упоминали понятие “Архитектура”. Хотя это очень размытое понятие, им оперируют почти все. Я долго пытался разобраться сам - что имею ввиду, когда говорю что это часть архитектуры, а это нет.
-Статьи на Wikipedia и в некоторых других источниках крайне занудные. Похоже, что понятие довольно старое, и ему не дано четкого определения внутри современных Agile стилей разработки. Но мы попрежнему оперируем им. Поэтому постараюсь дать определение этому понятию в рамках Agile Development Process.</p>
+    <p>After a dozen performance patches to many gems want to share some practical experience I gain. 
+Tools I’ve picked up was <strong>perftools.rb</strong> and ruby <strong>built-in benchmark</strong> library.
+They are fit well for cases when optimization stays at Ruby level and doesn’t require to fix something in native extensions or dig into IO operations.</p>
 
-<p>Начнем с того, на чем сходятся все источники:</p>
+<!--more-->
+
+<p>General flow on how to tackle performance is clear:</p>
 
 <ul>
-  <li>Архитектура это фундаметальные договоренности и решения</li>
-  <li>Архитектура это нечто важное</li>
-  <li>Архитектуру сложно менять</li>
-  <li>Архитектура должна быть использована повторно (в силу своей клевости естественно)</li>
+  <li><a href="https://github.com/tmm1/perftools.rb">perftools.rb</a> shows slow method calls in a nice call graph format.</li>
+  <li><a href="http://ruby-doc.org/stdlib-1.9.2/libdoc/benchmark/rdoc/Benchmark.html">Benchmark</a> proves that we made an improvement.</li>
 </ul>
 
-<p>Ну и это пожалуй все. Поверх этого есть много шума о том как именно она должна создаваться и какие есть подходы по ее управлению.
-Все эти описания используют такие сложные слова, что сложно представить подобные процедуры в рамках Agile процессов.
-Важная мысль, которая как мне кажется является истоком понятия архитектура это “Архитектурые решения сложно менять” или другими словами “Решения, которые сложно поменять, являются архитектурными”. И это действительно то что имеет наибольшее значение. На сколько сложно поменять решение определяет степень его архитектурности. Так же важно, что любое решение легко поменять на следующий день после его принятия или легко поменять решение, которое мало на что влияет. При чем в данном случае “решение” это как програмное решение так и просто договоренность (которая рано или позно все равно закрепляется програмным решением).
-На уровне кода это можно выразить: как архитектурный код или софт это тот, который используется повторно наибольшее количество раз. При чем это правда как для софта написанного вами лично, так и для когда заимствованого.
-Пару примеров: степень архитектурности базы данных это есть количество данных, которые в ней хранятся. Т.е чем больше вы храните данных в этой конкретной базе, тем более архитектурна она для Вас. С другой стороны подключенная к проекту база данных, в которой пока или уже ничего не хранится, архитектурой не является. При этом важно сделать упор именно на то, насколько сложно потом эту базу сменить. Например если вам понадобится поменять MySQL на PostgreSQL, то архитектурность MySQL будет зависить от колличества специфичных ее фич, которые вы использовали. Очень важно отслеживать архитектурность тех или иных решение по мере развития проекта, а не только на его зарождении. В outsource компаниях часто встречается подход, когда в новом проекте приходит важные дядя (например CTO компании) и создает архитектуру, а на следующий день уходит из проекта. Его решения действительно важны, но архитектура им не строится, а строиться теми кто эти решения используют.</p>
+<p>Perftools does all the hard work for you.</p>
 
-<h3 id="Заимствованая-Архитектура-и-своя-архитектура">Заимствованая Архитектура и своя архитектура</h3>
+<pre><code>require 'perftools'
+PerfTools::CpuProfiler.start("/tmp/profile_result") do
+  # code to profile
+end
+</code></pre>
 
-<p>Зачастую заимствованые програмные решения гораздо проще поменять, чем свои собственные разработки. Так происходит потому что заимствованый софт совсем ничего не знает о ваших личных целях и задачах. Он решает общие для всего software-community проблемы, которые решены не один раз и похожим способом: поменять одих хостинг на другой будет насравнимо проще чем поменять структуру данных вами же созданную. Создание архитектуры из звоего собственного кода в долгоиграющих проектах очень важна. Она начинается с простого повторного использования кода: кто-то написал класс или метод и кто-то им поспользовался. Архитектурность кода как раз определяется колличеством его повторного использования. Первый хороший звоночек того, что у Вас это получается: если написаный вами метод используют другие члены вашей команды без принуждения к этому. Это говорит о том, что им проще положиться на ваш код как на архитектуру, чем создавать что-то с нуля(а мы все знаем насколько программисты любят создавать велосипеды). Ну а дальше начинается адаптация и обобщение старых решений под новые задачи.</p>
+<p>Run test and open result:</p>
+
+<pre><code>gem install perftools.rb
+ruby test.rb
+pprof.rb --gif /tmp/profile_result &gt; /tmp/profile_result.gif
+$IMAGE_VIEWER /tmp/profile_result.gif 
+</code></pre>
+
+<p>Example output: <strong>Rails route generator call graph</strong></p>
+
+<p><a href="http://postimage.org/image/fy4fxhzvr/full/">
+  <img src="/images/perf_sample.gif" width="600px" />
+</a></p>
+
+<p>Here is short instruction how to read call graph:</p>
+
+<p>Each block represents a method that was called. Percentage in a block shows how much time was spend in current method with and without all it’s nested calls comparing to overall time. Arrow with number shows how many times parent method called it’s children method.</p>
+
+<p>That’s it. All you need to do now is find blocks with most percentage and try reduce them.</p>
+
+<p>This flow works fine till the moment when benchmark results before and after patch should be compared. 
+Ruby Benchmark can not merge them together and represent in a human readable form like this:</p>
+
+<pre><code>Running benchmark with current working tree
+Checkout HEAD^
+Running benchmark with HEAD^
+Checkout to previous HEAD again
+
+                    user     system      total        real
+----------------------------------headers parsing when long
+After patch:    0.100000   0.000000   0.100000 (  0.089926)
+Before patch:   0.700000   0.000000   0.700000 (  0.697444)
+
+----------------------------------headers parsing when tiny
+After patch:    0.000000   0.000000   0.000000 (  0.009930)
+Before patch:   0.020000   0.000000   0.020000 (  0.024283)
+
+---------------------------------headers parsing when empty
+After patch:    0.010000   0.000000   0.010000 (  0.002160)
+Before patch:   0.000000   0.000000   0.000000 (  0.002354)
+</code></pre>
+
+<p>So, decided to create a library that fixes this problem.
+Try out <strong><a href="https://github.com/bogdan/diffbench">DiffBench</a></strong> if you ever come up with performance patch.</p>
+
+<p>DiffBench in action examples:</p>
+
+<ul>
+  <li>Rails
+    <ul>
+      <li>ActiveRecord - <a href="https://github.com/rails/rails/pull/5467">#5467</a></li>
+      <li>ActiveModel - <a href="https://github.com/rails/rails/pull/5431">#5431</a></li>
+      <li>ActiveSupport - <a href="https://github.com/rails/rails/pull/4493">#4493</a></li>
+      <li>ActionPack - <a href="https://github.com/rails/rails/pull/5957">#5957</a></li>
+    </ul>
+  </li>
+  <li>Mail - <a href="https://github.com/mikel/mail/pull/369">#396</a>, <a href="https://github.com/mikel/mail/pull/366">#366</a></li>
+</ul>
 
 
     <div class="clear"></div>
@@ -109,11 +167,11 @@
       <table class="post-social-share">
         <tr>
           <td>
-            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Что такое архитектура?" data-via="bgusiev" data-url="http://gusiev.com/architecture">Tweet</a>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Benchmark your performance patches" data-via="bgusiev" data-url="http://gusiev.com/2012/05/benchmark-performance-patch-ruby-diff">Tweet</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
           </td>
           <td>
-            <div class="fb-like" data-href="http://gusiev.com/architecture" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+            <div class="fb-like" data-href="http://gusiev.com/2012/05/benchmark-performance-patch-ruby-diff" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
           </td>
           <td>
             <div class="reddit-button">
@@ -127,13 +185,15 @@
     <h4 class="tags">
     
     
-    <a href="/tags/principles.html">principles</a>
+    <a href="/tags/gem.html">gem</a>
     
-    <a href="/tags/software.html">software</a>
+    <a href="/tags/contribution.html">contribution</a>
     
-    <a href="/tags/naming.html">naming</a>
+    <a href="/tags/performance.html">performance</a>
     
-    <a href="/tags/code.html">code</a>
+    <a href="/tags/callgraph.html">callgraph</a>
+    
+    <a href="/tags/patch.html">patch</a>
     
 </h4>
 <div class="clear"></div>
@@ -142,6 +202,22 @@
         <h3>Related Posts</h3>
         <ul class="posts">
             
+               <!-- Exclude self -->
+                <li><span>23 Nov 2017</span> &raquo; <a href="/2017/11/naming-things-problem">"Naming Things" Solution</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>07 Jul 2017</span> &raquo; <a href="/2017/07/guiding-software-development-principles">Guiding Software Development Principles</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>12 Jan 2016</span> &raquo; <a href="/2016/01/single-responsibility-principle-srp-criticism">Something is wrong with Single Reponsibility Principle</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>06 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
+              
+            
         </ul>
     </div>
 
@@ -149,8 +225,8 @@
 <script type="text/javascript">
     var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
 
-    //var disqus_identifier = '/architecture';
-    //var disqus_url = 'http://gusiev.com/architecture';
+    //var disqus_identifier = '/2012/05/benchmark-performance-patch-ruby-diff';
+    //var disqus_url = 'http://gusiev.com/2012/05/benchmark-performance-patch-ruby-diff';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

@@ -6,7 +6,7 @@
 
     <title>
       
-        Что такое архитектура? -
+        Smart Javascript Initialization Strategy -
       
       Bogdan's blog
     </title>
@@ -78,30 +78,89 @@
                 <div id="content">
                     <div id="post">
     <h2>
-        <a href="/architecture">Что такое архитектура?</a>
-        <div class="date">23 Nov 2017</div>
+        <a href="/2012/10/crazy-javascript-initialization-strategy">Smart Javascript Initialization Strategy</a>
+        <div class="date">08 Oct 2012</div>
     </h2>
-    <p>Все разработчики, с которыми мне приходилось работать, так или иначе упоминали понятие “Архитектура”. Хотя это очень размытое понятие, им оперируют почти все. Я долго пытался разобраться сам - что имею ввиду, когда говорю что это часть архитектуры, а это нет.
-Статьи на Wikipedia и в некоторых других источниках крайне занудные. Похоже, что понятие довольно старое, и ему не дано четкого определения внутри современных Agile стилей разработки. Но мы попрежнему оперируем им. Поэтому постараюсь дать определение этому понятию в рамках Agile Development Process.</p>
+    <p>The JavaScript initialization process is a pain in the ass since dynamic HTML and AJAX became popular. We need to take care all the time about what we need to initialize after every change in DOM. 
+Thanks to <code>jQuery#live</code> and <code>jQuery#on</code>: We have a not-so-right but still very effective solution. It allows us to fix the problem with initialization of typical events.
+But initialization is not always about binding DOM events. In more advanced cases, it could be wrapping widget class over an element or a custom jQuery method call like a <code>date-picker</code>.</p>
 
-<p>Начнем с того, на чем сходятся все источники:</p>
+<!--more-->
 
-<ul>
-  <li>Архитектура это фундаметальные договоренности и решения</li>
-  <li>Архитектура это нечто важное</li>
-  <li>Архитектуру сложно менять</li>
-  <li>Архитектура должна быть использована повторно (в силу своей клевости естественно)</li>
-</ul>
+<p>Here is an example:</p>
 
-<p>Ну и это пожалуй все. Поверх этого есть много шума о том как именно она должна создаваться и какие есть подходы по ее управлению.
-Все эти описания используют такие сложные слова, что сложно представить подобные процедуры в рамках Agile процессов.
-Важная мысль, которая как мне кажется является истоком понятия архитектура это “Архитектурые решения сложно менять” или другими словами “Решения, которые сложно поменять, являются архитектурными”. И это действительно то что имеет наибольшее значение. На сколько сложно поменять решение определяет степень его архитектурности. Так же важно, что любое решение легко поменять на следующий день после его принятия или легко поменять решение, которое мало на что влияет. При чем в данном случае “решение” это как програмное решение так и просто договоренность (которая рано или позно все равно закрепляется програмным решением).
-На уровне кода это можно выразить: как архитектурный код или софт это тот, который используется повторно наибольшее количество раз. При чем это правда как для софта написанного вами лично, так и для когда заимствованого.
-Пару примеров: степень архитектурности базы данных это есть количество данных, которые в ней хранятся. Т.е чем больше вы храните данных в этой конкретной базе, тем более архитектурна она для Вас. С другой стороны подключенная к проекту база данных, в которой пока или уже ничего не хранится, архитектурой не является. При этом важно сделать упор именно на то, насколько сложно потом эту базу сменить. Например если вам понадобится поменять MySQL на PostgreSQL, то архитектурность MySQL будет зависить от колличества специфичных ее фич, которые вы использовали. Очень важно отслеживать архитектурность тех или иных решение по мере развития проекта, а не только на его зарождении. В outsource компаниях часто встречается подход, когда в новом проекте приходит важные дядя (например CTO компании) и создает архитектуру, а на следующий день уходит из проекта. Его решения действительно важны, но архитектура им не строится, а строиться теми кто эти решения используют.</p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="c1">// This line will be required not only on `$(docuemnt).ready` </span>
+<span class="c1">// but every time an update in DOM occurs that adds some new date input on a page.</span>
+<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.date-picker&quot;</span><span class="p">).</span><span class="nx">datePicker</span><span class="p">();</span></code></pre></figure>
 
-<h3 id="Заимствованая-Архитектура-и-своя-архитектура">Заимствованая Архитектура и своя архитектура</h3>
+<p>Or advanced example:</p>
 
-<p>Зачастую заимствованые програмные решения гораздо проще поменять, чем свои собственные разработки. Так происходит потому что заимствованый софт совсем ничего не знает о ваших личных целях и задачах. Он решает общие для всего software-community проблемы, которые решены не один раз и похожим способом: поменять одих хостинг на другой будет насравнимо проще чем поменять структуру данных вами же созданную. Создание архитектуры из звоего собственного кода в долгоиграющих проектах очень важна. Она начинается с простого повторного использования кода: кто-то написал класс или метод и кто-то им поспользовался. Архитектурность кода как раз определяется колличеством его повторного использования. Первый хороший звоночек того, что у Вас это получается: если написаный вами метод используют другие члены вашей команды без принуждения к этому. Это говорит о том, что им проще положиться на ваш код как на архитектуру, чем создавать что-то с нуля(а мы все знаем насколько программисты любят создавать велосипеды). Ну а дальше начинается адаптация и обобщение старых решений под новые задачи.</p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="kd">var</span> <span class="nx">ImageGallery</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="cm">/* Class with 100+ lines of code here */</span>
+<span class="p">};</span> 
+<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.image-gallery&quot;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">){</span>
+  <span class="k">new</span> <span class="nx">ImageGallery</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>In the example above, we see two sections: definition and initialization.
+This fact makes code hard to follow as moving from class to DOM element in HTML template requires at least two transitions in your editor.</p>
+
+<p>And when a large page update comes after an AJAX query, this problem is getting even worse. All initializers should called again:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/profile/edit&quot;</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">showSomeProfileEditingPopup</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.profile-birth-date&quot;</span><span class="p">).</span><span class="nx">datePicker</span><span class="p">();</span>
+  <span class="k">new</span> <span class="nx">ImageGallery</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.profile-image-gallery&#39;</span><span class="p">));</span>
+  <span class="c1">// More initialization here</span>
+<span class="p">});</span></code></pre></figure>
+
+<h3 id="tired-of-handling-things-like-this">Tired of handling things like this?</h3>
+
+<h2 id="change-the-way-of-thinking-about-initialization">Change the way of thinking about initialization</h2>
+
+<p>Initialization code is a bridge between actual JS class and DOM element.
+In 99% of cases, it has one-to-one or one-to-many relation.
+Then why do we always need that intermediate initialization code?</p>
+
+<p>The DOM element could have the class itself:</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;profile-image-gallery&quot;</span> <span class="na">data-class</span><span class="o">=</span><span class="s">&quot;ImageGallery&quot;</span><span class="p">&gt;</span></code></pre></figure>
+
+<p>Now your way from DOM element to JS class requires only one transition.
+Moreover, all DOM elements could be initialized with one call. It needs to run over DOM and find all elements with <code>data-class</code> attributes 
+that are not initialized and wrap them with a specified class:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="kd">var</span> <span class="nx">Initializer</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">perform</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;[data-class]:not(.initialized)&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+      <span class="nx">element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;initialized&#39;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">klass</span> <span class="o">=</span> <span class="nb">window</span><span class="p">[</span><span class="nx">element</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">element</span><span class="p">)];</span>
+      <span class="k">new</span> <span class="nx">klass</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">};</span></code></pre></figure>
+
+<p>This code bit will probably require some additional functionality to support options, but the general idea is strong enough to handle all possible complexity in the future.
+Now, whenever DOM changes, everything we need to do is call:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="nx">Initializer</span><span class="p">.</span><span class="nx">perform</span><span class="p">();</span></code></pre></figure>
+
+<p>In order to attach third-party libraries to this initialization process, we need to create a simple wrapping class around them:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="kd">var</span> <span class="nx">DatePicker</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">datePicker</span><span class="p">()</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Now we are able to convert inputs to date pickers with a unified initialization process:</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span></span><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;profile[birth_date]&quot;</span> <span class="na">data-class</span><span class="o">=</span><span class="s">&quot;DatePicker&quot;</span><span class="p">&gt;</span></code></pre></figure>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>JavaScript coding is annoying for most people who came from other languages because it keeps things fragmented that should be bound together.
+In order to avoid this problem, we need to invent conventions to follow, so that every person in a team understands that.
+But the cost of convention described here is not that much and makes code more clean and easier to follow.</p>
 
 
     <div class="clear"></div>
@@ -109,11 +168,11 @@
       <table class="post-social-share">
         <tr>
           <td>
-            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Что такое архитектура?" data-via="bgusiev" data-url="http://gusiev.com/architecture">Tweet</a>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Smart Javascript Initialization Strategy" data-via="bgusiev" data-url="http://gusiev.com/2012/10/crazy-javascript-initialization-strategy">Tweet</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
           </td>
           <td>
-            <div class="fb-like" data-href="http://gusiev.com/architecture" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+            <div class="fb-like" data-href="http://gusiev.com/2012/10/crazy-javascript-initialization-strategy" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
           </td>
           <td>
             <div class="reddit-button">
@@ -127,13 +186,11 @@
     <h4 class="tags">
     
     
-    <a href="/tags/principles.html">principles</a>
+    <a href="/tags/javascript.html">javascript</a>
     
-    <a href="/tags/software.html">software</a>
+    <a href="/tags/initialization.html">initialization</a>
     
-    <a href="/tags/naming.html">naming</a>
-    
-    <a href="/tags/code.html">code</a>
+    <a href="/tags/class.html">class</a>
     
 </h4>
 <div class="clear"></div>
@@ -142,6 +199,22 @@
         <h3>Related Posts</h3>
         <ul class="posts">
             
+               <!-- Exclude self -->
+                <li><span>23 Nov 2017</span> &raquo; <a href="/2017/11/naming-things-problem">"Naming Things" Solution</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>07 Jul 2017</span> &raquo; <a href="/2017/07/guiding-software-development-principles">Guiding Software Development Principles</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>12 Jan 2016</span> &raquo; <a href="/2016/01/single-responsibility-principle-srp-criticism">Something is wrong with Single Reponsibility Principle</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>06 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
+              
+            
         </ul>
     </div>
 
@@ -149,8 +222,8 @@
 <script type="text/javascript">
     var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
 
-    //var disqus_identifier = '/architecture';
-    //var disqus_url = 'http://gusiev.com/architecture';
+    //var disqus_identifier = '/2012/10/crazy-javascript-initialization-strategy';
+    //var disqus_url = 'http://gusiev.com/2012/10/crazy-javascript-initialization-strategy';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

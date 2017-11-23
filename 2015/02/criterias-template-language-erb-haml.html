@@ -6,7 +6,7 @@
 
     <title>
       
-        Что такое архитектура? -
+        Choosing a Templating Language -
       
       Bogdan's blog
     </title>
@@ -78,30 +78,168 @@
                 <div id="content">
                     <div id="post">
     <h2>
-        <a href="/architecture">Что такое архитектура?</a>
-        <div class="date">23 Nov 2017</div>
+        <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a>
+        <div class="date">06 Feb 2015</div>
     </h2>
-    <p>Все разработчики, с которыми мне приходилось работать, так или иначе упоминали понятие “Архитектура”. Хотя это очень размытое понятие, им оперируют почти все. Я долго пытался разобраться сам - что имею ввиду, когда говорю что это часть архитектуры, а это нет.
-Статьи на Wikipedia и в некоторых других источниках крайне занудные. Похоже, что понятие довольно старое, и ему не дано четкого определения внутри современных Agile стилей разработки. Но мы попрежнему оперируем им. Поэтому постараюсь дать определение этому понятию в рамках Agile Development Process.</p>
+    <p>Whenever you are serious about choosing the frontend template engine to generate HTML, here is some advice how you can make your choice easier and 
+more effective. There are too many template languages right now, but there are only a few main criteria how you can limit your selection to 2-3 of them before
+getting into details.</p>
 
-<p>Начнем с того, на чем сходятся все источники:</p>
+<!--more-->
 
-<ul>
-  <li>Архитектура это фундаметальные договоренности и решения</li>
-  <li>Архитектура это нечто важное</li>
-  <li>Архитектуру сложно менять</li>
-  <li>Архитектура должна быть использована повторно (в силу своей клевости естественно)</li>
-</ul>
+<p>Here they are:</p>
 
-<p>Ну и это пожалуй все. Поверх этого есть много шума о том как именно она должна создаваться и какие есть подходы по ее управлению.
-Все эти описания используют такие сложные слова, что сложно представить подобные процедуры в рамках Agile процессов.
-Важная мысль, которая как мне кажется является истоком понятия архитектура это “Архитектурые решения сложно менять” или другими словами “Решения, которые сложно поменять, являются архитектурными”. И это действительно то что имеет наибольшее значение. На сколько сложно поменять решение определяет степень его архитектурности. Так же важно, что любое решение легко поменять на следующий день после его принятия или легко поменять решение, которое мало на что влияет. При чем в данном случае “решение” это как програмное решение так и просто договоренность (которая рано или позно все равно закрепляется програмным решением).
-На уровне кода это можно выразить: как архитектурный код или софт это тот, который используется повторно наибольшее количество раз. При чем это правда как для софта написанного вами лично, так и для когда заимствованого.
-Пару примеров: степень архитектурности базы данных это есть количество данных, которые в ней хранятся. Т.е чем больше вы храните данных в этой конкретной базе, тем более архитектурна она для Вас. С другой стороны подключенная к проекту база данных, в которой пока или уже ничего не хранится, архитектурой не является. При этом важно сделать упор именно на то, насколько сложно потом эту базу сменить. Например если вам понадобится поменять MySQL на PostgreSQL, то архитектурность MySQL будет зависить от колличества специфичных ее фич, которые вы использовали. Очень важно отслеживать архитектурность тех или иных решение по мере развития проекта, а не только на его зарождении. В outsource компаниях часто встречается подход, когда в новом проекте приходит важные дядя (например CTO компании) и создает архитектуру, а на следующий день уходит из проекта. Его решения действительно важны, но архитектура им не строится, а строиться теми кто эти решения используют.</p>
+<h2 id="logic-less-or-with-programming-language">Logic-less OR with Programming language</h2>
 
-<h3 id="Заимствованая-Архитектура-и-своя-архитектура">Заимствованая Архитектура и своя архитектура</h3>
+<p>The most common way to generate a template that would seem obvious to any developer would be using programming language.
+Example: ERB for Ruby, JSP for Java etc.
+That is a pretty straight way to implement loops, conditions and more rare view structures.</p>
 
-<p>Зачастую заимствованые програмные решения гораздо проще поменять, чем свои собственные разработки. Так происходит потому что заимствованый софт совсем ничего не знает о ваших личных целях и задачах. Он решает общие для всего software-community проблемы, которые решены не один раз и похожим способом: поменять одих хостинг на другой будет насравнимо проще чем поменять структуру данных вами же созданную. Создание архитектуры из звоего собственного кода в долгоиграющих проектах очень важна. Она начинается с простого повторного использования кода: кто-то написал класс или метод и кто-то им поспользовался. Архитектурность кода как раз определяется колличеством его повторного использования. Первый хороший звоночек того, что у Вас это получается: если написаный вами метод используют другие члены вашей команды без принуждения к этому. Это говорит о том, что им проще положиться на ваш код как на архитектуру, чем создавать что-то с нуля(а мы все знаем насколько программисты любят создавать велосипеды). Ну а дальше начинается адаптация и обобщение старых решений под новые задачи.</p>
+<p>On the other hand, logic-less templates like Mustache restrict you from using complicated structures in the template forcing you to extract and put them to a different layer.</p>
+
+<p>Example of the same condition in logic-less or programming language template engines:</p>
+
+<figure class="highlight"><pre><code class="language-erb" data-lang="erb"><span></span><span class="cp">&lt;%</span> <span class="k">if</span> <span class="vi">@user</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">empty?</span> <span class="o">&amp;&amp;</span> <span class="vi">@user</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">empty?</span> <span class="cp">%&gt;</span><span class="x"></span>
+<span class="x">  &lt;a href=&quot;#&quot;&gt;Delete&lt;/a&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span></code></pre></figure>
+
+<p>In logic-less template language, it would look like:</p>
+
+<figure class="highlight"><pre><code class="language-erb" data-lang="erb"><span></span><span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">possible_to_delete_user?</span> <span class="cp">%&gt;</span><span class="x"></span>
+<span class="x">  &lt;a href=&quot;#&quot;&gt;Delete&lt;/a&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">def</span> <span class="nf">possible_to_delete_user?</span>
+  <span class="vi">@user</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">empty?</span> <span class="o">&amp;&amp;</span> <span class="vi">@user</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">empty?</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>That looks more clean but less flexible as the logic-less template forces you to make quality even if you would like to save time instead.</p>
+
+<p>In general I would recommend Logic-Free languages for a huge team with lots of beginner developers that need a strong force — like language restriction — to be controlled.</p>
+
+<h2 id="frontend-rendering-support">Frontend Rendering support</h2>
+
+<p>Frontend rendering can be the ultimate reason to switch to this type of template language. The decision here usually comes from more strong reasons of the application design rather than template language properties.
+I will assume that you already know if you want to use frontend rendering or not.
+And in case of yes, you would need to think if it is ok to have a single language  for both — front and back end — or a different one for backend rendering.
+Two template languages overhead can be not so large overhead sometimes. For example, when the backend templates are only used for static layout like html head, or footer and header of the page, or admin pages.</p>
+
+<p>It is pretty obvious that such a template language needs to use JavaScript in some way even though it is CoffeeScript.</p>
+
+<h2 id="minimalistic-or-html-compatible">Minimalistic OR HTML Compatible</h2>
+
+<p>HTML is being blamed for too ambiguous structures: you should always repeat yourself with closing tags, often used html attributes don’t have shortcuts etc.
+Minimalistic template languages are not trying to look like HTML and provide a convenient way to write an XML-like structure.
+When I write HAML instead of ERB, my fingers run a significantly smaller distance.</p>
+
+<p>On the other hand, minimalistic templates can be hard to understand for old school software developers that parse HTML on autopilot.
+If your team has too many developers like that, then a Minimalistic template engine isn’t worth it.</p>
+
+<h2 id="sandbox-mode-support">Sandbox Mode support</h2>
+
+<p>The Sandbox Mode support requirement is pretty exotic. It is only required if you would like to allow users to change the appearance of site pages significantly
+by allowing them to edit the template themselves without modifying the site source code.
+Maybe it is not obvious to everyone, but in this case, template language would need to support many limitations to the template source code that will prevent your server from blowing up.
+The most trivial example of how a template could blow up a server would be loops nested to each other one hundred times that will consume too many resources.
+Sandbox is a super mode of the logic-less template. When not just full power programming language is not allowed, but additional limitations exist to make any possible template safe.
+Most popular template languages like ERB, HAML or EJS (just like ERB but Javascript instead of Ruby) don’t support Sandbox. But here are two that do: <a href="http://github.com/shopify/liquid">liquid</a> and <a href="https://github.com/stefankroes/scribble">scribble</a></p>
+
+<h2 id="summary">Summary</h2>
+
+<p>After a clear answer to what kind of template you need, the choice becomes more obvious as there will be only a few template engines matching given requirements.
+I’ve even spent some time letting to build this nice table for you:</p>
+
+<table class="bordered">
+  <thead>
+    <tr>
+      <th>Logic-less</th>
+      <th>FrontEnd</th>
+      <th>Minimalistic</th>
+      <th>Variants</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>yes</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>yes</td>
+      <td>yes</td>
+      <td>no</td>
+      <td>mustache, handlebars</td>
+    </tr>
+    <tr>
+      <td>yes</td>
+      <td>no</td>
+      <td>yes</td>
+      <td>hamstache</td>
+    </tr>
+    <tr>
+      <td>yes</td>
+      <td>no</td>
+      <td>no</td>
+      <td>mustache, curly</td>
+    </tr>
+    <tr>
+      <td>no</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td>Haml-coffee, Jade</td>
+    </tr>
+    <tr>
+      <td>no</td>
+      <td>yes</td>
+      <td>no</td>
+      <td>EJS, ECO</td>
+    </tr>
+    <tr>
+      <td>no</td>
+      <td>no</td>
+      <td>yes</td>
+      <td>HAML, Slim</td>
+    </tr>
+    <tr>
+      <td>no</td>
+      <td>no</td>
+      <td>no</td>
+      <td>ERB +alternative compilers</td>
+    </tr>
+    <tr>
+      <td>sandbox</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>sandbox</td>
+      <td>yes</td>
+      <td>no</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>sandbox</td>
+      <td>no</td>
+      <td>yes</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>sandbox</td>
+      <td>no</td>
+      <td>no</td>
+      <td>Liquid, Scribble</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>This table doesn’t include all variants, but I’ve tried to fill in as many cells in the last column giving at least 2 variants if possible.</p>
+
+<p>The current software world of Ruby &amp; JavaScript doesn’t give full spectrum of choices when you would like to have Sandbox mode support.
+As I said before: Sandbox Mode is very rare requirement.</p>
+
+<p>But in other cases you have enough choices. It is strange that there is no logic-less, frontend and minimalistic template engine now. If there is one - please suggest me in a comment.</p>
 
 
     <div class="clear"></div>
@@ -109,11 +247,11 @@
       <table class="post-social-share">
         <tr>
           <td>
-            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Что такое архитектура?" data-via="bgusiev" data-url="http://gusiev.com/architecture">Tweet</a>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Choosing a Templating Language" data-via="bgusiev" data-url="http://gusiev.com/2015/02/criterias-template-language-erb-haml">Tweet</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
           </td>
           <td>
-            <div class="fb-like" data-href="http://gusiev.com/architecture" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+            <div class="fb-like" data-href="http://gusiev.com/2015/02/criterias-template-language-erb-haml" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
           </td>
           <td>
             <div class="reddit-button">
@@ -127,13 +265,13 @@
     <h4 class="tags">
     
     
-    <a href="/tags/principles.html">principles</a>
+    <a href="/tags/templates.html">templates</a>
     
-    <a href="/tags/software.html">software</a>
+    <a href="/tags/frontend.html">frontend</a>
     
-    <a href="/tags/naming.html">naming</a>
+    <a href="/tags/ruby.html">ruby</a>
     
-    <a href="/tags/code.html">code</a>
+    <a href="/tags/javascript.html">javascript</a>
     
 </h4>
 <div class="clear"></div>
@@ -142,6 +280,22 @@
         <h3>Related Posts</h3>
         <ul class="posts">
             
+               <!-- Exclude self -->
+                <li><span>23 Nov 2017</span> &raquo; <a href="/2017/11/naming-things-problem">"Naming Things" Solution</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>07 Jul 2017</span> &raquo; <a href="/2017/07/guiding-software-development-principles">Guiding Software Development Principles</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>12 Jan 2016</span> &raquo; <a href="/2016/01/single-responsibility-principle-srp-criticism">Something is wrong with Single Reponsibility Principle</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>25 Jul 2014</span> &raquo; <a href="/2014/07/rubyc-conference-video-parsers-slides">My Talk from RubyC conference</a></li>
+              
+            
         </ul>
     </div>
 
@@ -149,8 +303,8 @@
 <script type="text/javascript">
     var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
 
-    //var disqus_identifier = '/architecture';
-    //var disqus_url = 'http://gusiev.com/architecture';
+    //var disqus_identifier = '/2015/02/criterias-template-language-erb-haml';
+    //var disqus_url = 'http://gusiev.com/2015/02/criterias-template-language-erb-haml';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

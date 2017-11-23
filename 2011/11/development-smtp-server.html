@@ -6,7 +6,7 @@
 
     <title>
       
-        Что такое архитектура? -
+        Improve your Email delivery code with Mailtrap -
       
       Bogdan's blog
     </title>
@@ -78,30 +78,74 @@
                 <div id="content">
                     <div id="post">
     <h2>
-        <a href="/architecture">Что такое архитектура?</a>
-        <div class="date">23 Nov 2017</div>
+        <a href="/2011/11/development-smtp-server">Improve your Email delivery code with Mailtrap</a>
+        <div class="date">18 Nov 2011</div>
     </h2>
-    <p>Все разработчики, с которыми мне приходилось работать, так или иначе упоминали понятие “Архитектура”. Хотя это очень размытое понятие, им оперируют почти все. Я долго пытался разобраться сам - что имею ввиду, когда говорю что это часть архитектуры, а это нет.
-Статьи на Wikipedia и в некоторых других источниках крайне занудные. Похоже, что понятие довольно старое, и ему не дано четкого определения внутри современных Agile стилей разработки. Но мы попрежнему оперируем им. Поэтому постараюсь дать определение этому понятию в рамках Agile Development Process.</p>
+    <p>Today, I want introduce the <a href="http://mailtrap.io">Mailtrap web service</a> aimed to help developers build and improve their email delivery functionality.</p>
 
-<p>Начнем с того, на чем сходятся все источники:</p>
+<p>Usually people use same SMTP settings for all environments, but this actually creates many problems in Staging and Development environments. Mailtrap is a special SMTP service for these environments aimed to solve specific problems.
+<!--more--></p>
+
+<h3 id="problems">Problems</h3>
+
+<h4 id="testing-user-registration-is-hell">Testing user registration is hell</h4>
+
+<p>In order to register yet another user You need to have new unique email address that should be hosted somewhere.</p>
+
+<h4 id="perform-mass-email-sending-is-a-problem-too">Perform mass email sending is a problem too</h4>
+
+<p>Suppose you have a daily email to all customers and need check if your delivery logic works fine. In this case you need to know what emails were send, which customers received them. And again you need a batch of email addresses to test with.</p>
+
+<h4 id="discuss-email-layout-and-functional-problems-with-product-team">Discuss email layout and functional problems with product team</h4>
+
+<p>In order to share email You need to forward it to some inbox or attach to bug ticket as file. This is still not as easy as it could be.</p>
+
+<h4 id="send-emails-to-real-customers-by-mistake">Send emails to real customers by mistake</h4>
+
+<p>In some cases copy production database to staging is a good idea. But You have a risk that real emails appear on development servers. You need to take care about that.</p>
+
+<p>My personal score is about 2500 emails sent by mistake at a time.
+Some people I know told me that their personal record is <strong>more than 2 millions emails sent by mistake</strong>.
+(Share your personal fuckup story in comments.)</p>
+
+<h3 id="existing-solutions">Existing solutions</h3>
+
+<p>You can go in many ways to fix the problem e.g.:</p>
 
 <ul>
-  <li>Архитектура это фундаметальные договоренности и решения</li>
-  <li>Архитектура это нечто важное</li>
-  <li>Архитектуру сложно менять</li>
-  <li>Архитектура должна быть использована повторно (в силу своей клевости естественно)</li>
+  <li>setup the script on your smtp server that changes recipient email</li>
+  <li>use services like mailinator.com (only in some cases)</li>
+  <li>use custom Ruby specific gems like mail_view or mailcatcher.</li>
 </ul>
 
-<p>Ну и это пожалуй все. Поверх этого есть много шума о том как именно она должна создаваться и какие есть подходы по ее управлению.
-Все эти описания используют такие сложные слова, что сложно представить подобные процедуры в рамках Agile процессов.
-Важная мысль, которая как мне кажется является истоком понятия архитектура это “Архитектурые решения сложно менять” или другими словами “Решения, которые сложно поменять, являются архитектурными”. И это действительно то что имеет наибольшее значение. На сколько сложно поменять решение определяет степень его архитектурности. Так же важно, что любое решение легко поменять на следующий день после его принятия или легко поменять решение, которое мало на что влияет. При чем в данном случае “решение” это как програмное решение так и просто договоренность (которая рано или позно все равно закрепляется програмным решением).
-На уровне кода это можно выразить: как архитектурный код или софт это тот, который используется повторно наибольшее количество раз. При чем это правда как для софта написанного вами лично, так и для когда заимствованого.
-Пару примеров: степень архитектурности базы данных это есть количество данных, которые в ней хранятся. Т.е чем больше вы храните данных в этой конкретной базе, тем более архитектурна она для Вас. С другой стороны подключенная к проекту база данных, в которой пока или уже ничего не хранится, архитектурой не является. При этом важно сделать упор именно на то, насколько сложно потом эту базу сменить. Например если вам понадобится поменять MySQL на PostgreSQL, то архитектурность MySQL будет зависить от колличества специфичных ее фич, которые вы использовали. Очень важно отслеживать архитектурность тех или иных решение по мере развития проекта, а не только на его зарождении. В outsource компаниях часто встречается подход, когда в новом проекте приходит важные дядя (например CTO компании) и создает архитектуру, а на следующий день уходит из проекта. Его решения действительно важны, но архитектура им не строится, а строиться теми кто эти решения используют.</p>
+<p>All of them solves only some of the problems described above.</p>
 
-<h3 id="Заимствованая-Архитектура-и-своя-архитектура">Заимствованая Архитектура и своя архитектура</h3>
+<h3 id="our-idea">Our Idea</h3>
 
-<p>Зачастую заимствованые програмные решения гораздо проще поменять, чем свои собственные разработки. Так происходит потому что заимствованый софт совсем ничего не знает о ваших личных целях и задачах. Он решает общие для всего software-community проблемы, которые решены не один раз и похожим способом: поменять одих хостинг на другой будет насравнимо проще чем поменять структуру данных вами же созданную. Создание архитектуры из звоего собственного кода в долгоиграющих проектах очень важна. Она начинается с простого повторного использования кода: кто-то написал класс или метод и кто-то им поспользовался. Архитектурность кода как раз определяется колличеством его повторного использования. Первый хороший звоночек того, что у Вас это получается: если написаный вами метод используют другие члены вашей команды без принуждения к этому. Это говорит о том, что им проще положиться на ваш код как на архитектуру, чем создавать что-то с нуля(а мы все знаем насколько программисты любят создавать велосипеды). Ну а дальше начинается адаптация и обобщение старых решений под новые задачи.</p>
+<p>Development SMTP service should work in a different way then production one: It should not deliver emails but just gather them in one place and provide a shared access for team to debug it. Mailtrap is the first SMTP service built specifically for this purpose.</p>
+
+<p><img src="http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png" style="width: 693px" /></p>
+
+<p>Unlike many alternative solutions, Mailtrap is platform independent, doesn’t require any daemon to run and is just an SMTP server from application stand point.  All you need to do is <strong>setup host, username and password</strong>.</p>
+
+<h3 id="features">Features</h3>
+
+<p>This is not about high load, not about delivery statistics but about:</p>
+
+<ul>
+  <li>Ability to access ANY sent email without registration</li>
+  <li>Share Email is as easy as copypasting the URL</li>
+  <li>Developer tools for debugging &amp; improving email template:
+    <ul>
+      <li>Syntax highlight</li>
+      <li>Easy view source</li>
+      <li>Apply CSS reset</li>
+    </ul>
+  </li>
+  <li>Access to the history</li>
+</ul>
+
+<h2 id="try-mailtrap-right-now">Try <a href="http://mailtrap.io">Mailtrap</a> right now</h2>
 
 
     <div class="clear"></div>
@@ -109,11 +153,11 @@
       <table class="post-social-share">
         <tr>
           <td>
-            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Что такое архитектура?" data-via="bgusiev" data-url="http://gusiev.com/architecture">Tweet</a>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Improve your Email delivery code with Mailtrap" data-via="bgusiev" data-url="http://gusiev.com/2011/11/development-smtp-server">Tweet</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
           </td>
           <td>
-            <div class="fb-like" data-href="http://gusiev.com/architecture" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+            <div class="fb-like" data-href="http://gusiev.com/2011/11/development-smtp-server" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
           </td>
           <td>
             <div class="reddit-button">
@@ -127,13 +171,13 @@
     <h4 class="tags">
     
     
-    <a href="/tags/principles.html">principles</a>
+    <a href="/tags/smtp.html">smtp</a>
     
-    <a href="/tags/software.html">software</a>
+    <a href="/tags/development.html">development</a>
     
-    <a href="/tags/naming.html">naming</a>
+    <a href="/tags/service.html">service</a>
     
-    <a href="/tags/code.html">code</a>
+    <a href="/tags/environment.html">environment</a>
     
 </h4>
 <div class="clear"></div>
@@ -142,6 +186,22 @@
         <h3>Related Posts</h3>
         <ul class="posts">
             
+               <!-- Exclude self -->
+                <li><span>23 Nov 2017</span> &raquo; <a href="/2017/11/naming-things-problem">"Naming Things" Solution</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>07 Jul 2017</span> &raquo; <a href="/2017/07/guiding-software-development-principles">Guiding Software Development Principles</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>12 Jan 2016</span> &raquo; <a href="/2016/01/single-responsibility-principle-srp-criticism">Something is wrong with Single Reponsibility Principle</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>06 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
+              
+            
         </ul>
     </div>
 
@@ -149,8 +209,8 @@
 <script type="text/javascript">
     var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
 
-    //var disqus_identifier = '/architecture';
-    //var disqus_url = 'http://gusiev.com/architecture';
+    //var disqus_identifier = '/2011/11/development-smtp-server';
+    //var disqus_url = 'http://gusiev.com/2011/11/development-smtp-server';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

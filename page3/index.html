@@ -101,11 +101,11 @@
 
 <p><code>pluck</code> can be used to query a single column from the underlying table of a model. It accepts a column name as argument and returns an array of values of the specified column with the corresponding data type.</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Client</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:active</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:id</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="no">Client</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:active</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:id</span><span class="p">)</span>
 <span class="c1"># SELECT id FROM clients WHERE active = 1</span>
 
 <span class="no">Client</span><span class="o">.</span><span class="n">uniq</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:role</span><span class="p">)</span>
-<span class="c1"># SELECT DISTINCT role FROM clients</span></code></pre></div>
+<span class="c1"># SELECT DISTINCT role FROM clients</span></code></pre></figure>
 
 <p><a href="http://edgeguides.rubyonrails.org/active_record_querying.html#pluck">Pluck in Rails guides</a></p>
 
@@ -115,12 +115,12 @@
 
 <p>Use case:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Article</span> <span class="o">&lt;</span> <span class="no">AR</span><span class="o">::</span><span class="no">Base</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">class</span> <span class="nc">Article</span> <span class="o">&lt;</span> <span class="no">AR</span><span class="o">::</span><span class="no">Base</span>
   <span class="n">validates</span> <span class="ss">:author</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
 <span class="k">end</span>
 
 <span class="n">u</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">new</span>
-<span class="n">u</span><span class="o">.</span><span class="n">save</span> <span class="c1"># =&gt; false</span></code></pre></div>
+<span class="n">u</span><span class="o">.</span><span class="n">save</span> <span class="c1"># =&gt; false</span></code></pre></figure>
 
 <p><code>#author</code> is usually set in controller from <code>current_user</code>. If somebody forgets to do it - user see error: 
 <code>Author cann't be blank</code>. 
@@ -129,18 +129,18 @@ More over DEV team is not notified about the problem.</p>
 
 <p>In order to fix that You can use <a href="https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2">validate! method</a> that generates validator that always raises exception when fails:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Article</span> <span class="o">&lt;</span> <span class="no">AR</span><span class="o">::</span><span class="no">Base</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">class</span> <span class="nc">Article</span> <span class="o">&lt;</span> <span class="no">AR</span><span class="o">::</span><span class="no">Base</span>
   <span class="n">validates!</span> <span class="ss">:author</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
 <span class="k">end</span>
 
 <span class="n">u</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span>
-<span class="n">u</span><span class="o">.</span><span class="n">save</span> <span class="c1"># raises ActiveModel::StrictValidationFailed</span></code></pre></div>
+<span class="n">u</span><span class="o">.</span><span class="n">save</span> <span class="c1"># raises ActiveModel::StrictValidationFailed</span></code></pre></figure>
 
 <h2 id="customizing-mass-assignment-sanitizer">Customizing Mass Assignment Sanitizer</h2>
 
-<p>Added an ability to specify <a href="https://github.com/rails/rails/commit/aa2639e746d8af5d7673bbbbbccbe868edeb0161">your own behavior on mass assignment protection</a>, controlled by option: </p>
+<p>Added an ability to specify <a href="https://github.com/rails/rails/commit/aa2639e746d8af5d7673bbbbbccbe868edeb0161">your own behavior on mass assignment protection</a>, controlled by option:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">ActiveModel</span><span class="o">::</span><span class="no">MassAssignmentSecurity</span><span class="o">.</span><span class="n">mass_assignment_sanitizer</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="no">ActiveModel</span><span class="o">::</span><span class="no">MassAssignmentSecurity</span><span class="o">.</span><span class="n">mass_assignment_sanitizer</span></code></pre></figure>
 
 <p>The main idea behind this change is to make Mass Assignment Sanitizer to raise exceptions in development and test environments while leaving logging behavior in production. This will be the <a href="https://github.com/rails/rails/commit/0fab8c388ea9cfcace0907102697c78a68762be3">default Rails application template</a> in version 3.2. It will allow to detect mass assignment protection issues caused by bug in code more effectively before they will be deployed to production.</p>
 
@@ -148,7 +148,7 @@ More over DEV team is not notified about the problem.</p>
 
 <p>Quote from Rails documentation that comes along with <a href="https://github.com/rails/rails/commit/faba406fa15251cdc9588364d23c687a14ed6885">the patch</a>:</p>
 
-<p>The HTML specification says: </p>
+<p>The HTML specification says:</p>
 
 <p>When <code>multiple</code> parameter passed to select and all options got deselected 
 web browsers do not send any value to server. Unfortunately this introduces a gotcha:
@@ -156,17 +156,17 @@ if an <code>User</code> model has many <code>roles</code> and have <code>role_id
 the user deselects all roles from <code>role_ids</code> multiple select box, no <code>role_ids</code> parameter is sent. So,
 any mass-assignment idiom like</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vi">@user</span><span class="o">.</span><span class="n">update_attributes</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span>  <span class="vi">@user</span><span class="o">.</span><span class="n">update_attributes</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span></code></pre></figure>
 
 <p>wouldn’t update roles.</p>
 
 <p>To prevent this the helper generates an auxiliary hidden field before
 every multiple select. The hidden field has the same name as multiple select and blank value.</p>
 
-<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;user[role_ids]&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;user_role_ids&quot;</span> <span class="na">name=</span><span class="s">&quot;user[role_ids]&quot;</span> <span class="na">multiple=</span><span class="s">&quot;multiple&quot;</span><span class="nt">&gt;</span>
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span></span><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;user[role_ids]&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">/&gt;</span>
+<span class="p">&lt;</span><span class="nt">select</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;user_role_ids&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;user[role_ids]&quot;</span> <span class="na">multiple</span><span class="o">=</span><span class="s">&quot;multiple&quot;</span><span class="p">&gt;</span>
   ....
-<span class="nt">&lt;/select&gt;</span></code></pre></div>
+<span class="p">&lt;/</span><span class="nt">select</span><span class="p">&gt;</span></code></pre></figure>
 
 <p>This way, the client either sends only the hidden field (representing
 the deselected multiple select box), or both fields. Since the HTML specification
@@ -199,7 +199,7 @@ If you know an effective way to fix that - let me know.</p>
             <a href='/2012/01/datagrid-reports-release-gem'>New release of Datagrid: Mongoid, Rails Engines and HTML columns support</a>
             <div class="date">10 Jan 2012</div>
         </h2>
-        <p><a href="https://github.com/bogdan/datagrid">Datagrid</a> version 0.5.0 has been released. </p>
+        <p><a href="https://github.com/bogdan/datagrid">Datagrid</a> version 0.5.0 has been released.</p>
 
 <p>Datagrid is a Ruby on Rails plugin that helps you to build and <a href="http://datagrid.herokuapp.com">represent table-like data</a> with:</p>
 
@@ -225,16 +225,16 @@ If you know an effective way to fix that - let me know.</p>
 <p>In order to use view helpers to render columns You can use <code>:html</code> option.
 This will call column block in the view context:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">column</span><span class="p">(</span><span class="ss">:completed</span><span class="p">,</span> <span class="ss">:html</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">asset</span><span class="o">|</span> <span class="n">asset</span><span class="o">.</span><span class="n">completed?</span> <span class="p">?</span> <span class="n">image_tag</span><span class="p">(</span><span class="s2">&quot;green.gif&quot;</span><span class="p">)</span> <span class="p">:</span> <span class="n">image_tag</span><span class="p">(</span><span class="s2">&quot;red.gif&quot;</span><span class="p">)</span> <span class="p">}</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="n">column</span><span class="p">(</span><span class="ss">:completed</span><span class="p">,</span> <span class="ss">:html</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">asset</span><span class="o">|</span> <span class="n">asset</span><span class="o">.</span><span class="n">completed?</span> <span class="p">?</span> <span class="n">image_tag</span><span class="p">(</span><span class="s2">&quot;green.gif&quot;</span><span class="p">)</span> <span class="p">:</span> <span class="n">image_tag</span><span class="p">(</span><span class="s2">&quot;red.gif&quot;</span><span class="p">)</span> <span class="p">}</span>
 <span class="c1"># or do it in partial</span>
-<span class="n">column</span><span class="p">(</span><span class="ss">:actions</span><span class="p">,</span> <span class="ss">:html</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">asset</span><span class="o">|</span> <span class="n">render</span> <span class="ss">:partial</span> <span class="o">=&gt;</span> <span class="s2">&quot;admin/assets/actions&quot;</span><span class="p">,</span> <span class="ss">:object</span> <span class="o">=&gt;</span> <span class="n">asset</span> <span class="p">}</span></code></pre></div>
+<span class="n">column</span><span class="p">(</span><span class="ss">:actions</span><span class="p">,</span> <span class="ss">:html</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">asset</span><span class="o">|</span> <span class="n">render</span> <span class="ss">:partial</span> <span class="o">=&gt;</span> <span class="s2">&quot;admin/assets/actions&quot;</span><span class="p">,</span> <span class="ss">:object</span> <span class="o">=&gt;</span> <span class="n">asset</span> <span class="p">}</span></code></pre></figure>
 
 <h3 id="table-customization-with-rails-engines">Table customization with Rails Engines</h3>
 
 <p>Rails Engines allows you to embed views into Rails plugins and make them customizable.
 If You need serious customization of datagrid <code>&lt;table&gt;</code> and HTML Columns doesn’t help, you can customize datagrid internal views by running:</p>
 
-<div class="highlight"><pre><code class="language-sh" data-lang="sh">rake datagrid:copy_partials</code></pre></div>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span></span>rake datagrid:copy_partials</code></pre></figure>
 
 <p>This will create the following files in your Rails root directory:</p>
 
@@ -273,7 +273,7 @@ If You need serious customization of datagrid <code>&lt;table&gt;</code> and HTM
             <a href='/2011/11/development-smtp-server'>Improve your Email delivery code with Mailtrap</a>
             <div class="date">18 Nov 2011</div>
         </h2>
-        <p>Today, I want introduce the <a href="http://mailtrap.io">Mailtrap web service</a> aimed to help developers build and improve their email delivery functionality. </p>
+        <p>Today, I want introduce the <a href="http://mailtrap.io">Mailtrap web service</a> aimed to help developers build and improve their email delivery functionality.</p>
 
 <p>Usually people use same SMTP settings for all environments, but this actually creates many problems in Staging and Development environments. Mailtrap is a special SMTP service for these environments aimed to solve specific problems.
 <!--</p>
@@ -302,19 +302,19 @@ Some people I know told me that their personal record is <strong>more than 2 mil
 
 <h3 id="existing-solutions">Existing solutions</h3>
 
-<p>You can go in many ways to fix the problem e.g.: </p>
+<p>You can go in many ways to fix the problem e.g.:</p>
 
 <ul>
   <li>setup the script on your smtp server that changes recipient email</li>
   <li>use services like mailinator.com (only in some cases)</li>
-  <li>use custom Ruby specific gems like mail_view or mailcatcher. </li>
+  <li>use custom Ruby specific gems like mail_view or mailcatcher.</li>
 </ul>
 
 <p>All of them solves only some of the problems described above.</p>
 
 <h3 id="our-idea">Our Idea</h3>
 
-<p>Development SMTP service should work in a different way then production one: It should not deliver emails but just gather them in one place and provide a shared access for team to debug it. Mailtrap is the first SMTP service built specifically for this purpose. </p>
+<p>Development SMTP service should work in a different way then production one: It should not deliver emails but just gather them in one place and provide a shared access for team to debug it. Mailtrap is the first SMTP service built specifically for this purpose.</p>
 
 <p><img src="http://mailtrap.io/assets/marketing/banner-cfb4ba4d680e3d51ed5d08641b8501b7.png" style="width: 693px" /></p>
 
@@ -337,7 +337,7 @@ Some people I know told me that their personal record is <strong>more than 2 mil
   <li>Access to the history</li>
 </ul>
 
-<h2 id="try-mailtraphttpmailtrapio-right-now">Try <a href="http://mailtrap.io">Mailtrap</a> right now</h2>
+<h2 id="try-mailtrap-right-now">Try <a href="http://mailtrap.io">Mailtrap</a> right now</h2>
 
 -->
         <h4 class="tags">
@@ -449,7 +449,7 @@ Right now about 2k tests written by me personally in 3 years of development with
             <a href='/2011/06/ruby-datagrid-gem-report'>Reporting made easy by Datagrid gem for Rails</a>
             <div class="date">26 Jun 2011</div>
         </h2>
-        <p>4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about <a href="https://github.com/bogdan/datagrid">perfect report gem</a> that would provide easy DSL for making filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head and now finally I have enough knowledge and opportunities to build such tool. </p>
+        <p>4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about <a href="https://github.com/bogdan/datagrid">perfect report gem</a> that would provide easy DSL for making filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head and now finally I have enough knowledge and opportunities to build such tool.</p>
 
 <!--
 
@@ -466,7 +466,7 @@ Than convert filtered data to table view with defined columns. So, typical datag
 
 <p>And we can easily split their definition with the following ruby DSL</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">SimpleReport</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">class</span> <span class="nc">SimpleReport</span>
 
   <span class="kp">include</span> <span class="no">Datagrid</span>
 
@@ -488,13 +488,13 @@ Than convert filtered data to table view with defined columns. So, typical datag
   <span class="n">column</span><span class="p">(</span><span class="ss">:active</span><span class="p">,</span> <span class="ss">:header</span> <span class="o">=&gt;</span> <span class="s2">&quot;Activated&quot;</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span>
     <span class="o">!</span><span class="nb">self</span><span class="o">.</span><span class="n">disabled</span>
   <span class="k">end</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <h3 id="grid-instance-api">Grid instance API</h3>
 
 <p>And now we can create and manipulate reports:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">report</span> <span class="o">=</span> <span class="no">SimpleReport</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="n">report</span> <span class="o">=</span> <span class="no">SimpleReport</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
         <span class="ss">:group_id</span>          <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">]</span><span class="p">,</span>
         <span class="ss">:category</span>          <span class="o">=&gt;</span> <span class="s2">&quot;first&quot;</span><span class="p">,</span>
         <span class="ss">:order</span>             <span class="o">=&gt;</span> <span class="ss">:group</span><span class="p">,</span>
@@ -514,7 +514,7 @@ Than convert filtered data to table view with defined columns. So, typical datag
               <span class="c1">#    ]</span>
 <span class="n">report</span><span class="o">.</span><span class="n">data</span>   <span class="c1"># =&gt; [ header, *rows]</span>
 
-<span class="n">report</span><span class="o">.</span><span class="n">to_csv</span> <span class="c1"># =&gt; Yes, it is</span></code></pre></div>
+<span class="n">report</span><span class="o">.</span><span class="n">to_csv</span> <span class="c1"># =&gt; Yes, it is</span></code></pre></figure>
 
 <h3 id="feel-the-power-and-flexibility-by-examples">Feel the Power and Flexibility by examples</h3>
 
@@ -562,7 +562,7 @@ Also feel free to ask questions right after this post.</p>
             <a href='/2011/05/dbext-vim-table-names-convention-patch'>Patching dbext vim plugin to support Rails naming conventions</a>
             <div class="date">30 May 2011</div>
         </h2>
-        <p><a href="http://www.vim.org/scripts/script.php?script_id=356">dbext</a> is an excellent vim plugin that allows you to execute SQL queries directly from vim. For example: <code>select * from &lt;word under cursor&gt;</code>. When dbext is used with Rails there is a problem that you can work with some variation of table name like: </p>
+        <p><a href="http://www.vim.org/scripts/script.php?script_id=356">dbext</a> is an excellent vim plugin that allows you to execute SQL queries directly from vim. For example: <code>select * from &lt;word under cursor&gt;</code>. When dbext is used with Rails there is a problem that you can work with some variation of table name like:</p>
 
 <ul>
   <li>UserRole</li>
@@ -589,7 +589,7 @@ let g:dbext_table_names_case = 2
 </code></pre>
 
 <p>All these options match Rails table name convention by default.
-Staff in <a href="http://github.com/bogdan/dbext">my dbext fork</a>. </p>
+Staff in <a href="http://github.com/bogdan/dbext">my dbext fork</a>.</p>
 
 <p>Once you install it in your vim runtime put your cursor on any table name variation like example above and run <code>:DBSelectFromTable</code> to get:</p>
 

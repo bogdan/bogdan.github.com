@@ -137,7 +137,7 @@ Some objects are just internal - end users don’t interact with them directly. 
 
 <p>At first, ensure that internal thing doesn’t take a name of the thing that is actually available to the end users. This is very important to do: leave good names for things your users care most and can interact with.</p>
 
-<p>At second,  it is good to give them a longer names to encode more information on what they do. There could be understanding illusion connected to a name. Internals of your software tend to do some specific work. When you give them a short name, software developers tend to assume they understand what they do. It can be a complete illusion. </p>
+<p>At second,  it is good to give them a longer names to encode more information on what they do. There could be understanding illusion connected to a name. Internals of your software tend to do some specific work. When you give them a short name, software developers tend to assume they understand what they do. It can be a complete illusion.</p>
 
 <p>At third, sometimes it is even a good idea to give a confusing name to something.
  You may avoid that illusion by giving a name that would cause software developer to never assume what this thing does before looking at it.<br />
@@ -145,7 +145,7 @@ Some objects are just internal - end users don’t interact with them directly. 
 
 <h2 id="summary">Summary</h2>
 
-<p>There could be 3 types of names: </p>
+<p>There could be 3 types of names:</p>
 
 <ol>
   <li>Direct name - like your users call it</li>
@@ -159,7 +159,7 @@ Some objects are just internal - end users don’t interact with them directly. 
   <li>Follow naming that was already given by software users or community/business overall</li>
   <li>Name things uniquely to avoid confusion</li>
   <li>Avoid naming collision through simplification of terms and shortening of actions</li>
-  <li>Give longer names to more complex things </li>
+  <li>Give longer names to more complex things</li>
   <li>Give shorter names to things that are frequently used</li>
 </ol>
 
@@ -196,7 +196,7 @@ Some objects are just internal - end users don’t interact with them directly. 
 
 <h2 id="less-is-more">Less is More</h2>
 
-<p>There should be very limited number of principles to follow. More principles under the same concept just creates more contradiction and leaves less room to be situational and follow additional guidelines that would fit best for given problem. I think the ideal number in your “guiding principles” that apply <strong>almost</strong> to everything in your software should be 3. Higher numbers are possible. </p>
+<p>There should be very limited number of principles to follow. More principles under the same concept just creates more contradiction and leaves less room to be situational and follow additional guidelines that would fit best for given problem. I think the ideal number in your “guiding principles” that apply <strong>almost</strong> to everything in your software should be 3. Higher numbers are possible.</p>
 
 <p>Christian God was so kind that he left us with 12 that still have very small contradiction like: should I steal a weapon from a person that wants to kill me tomorrow? That’s an amazing result for human moral that is at least 1000x times older than software development. Based on our level of understanding of software engineering, we can effort only 3 at the same time.</p>
 
@@ -217,20 +217,20 @@ Some objects are just internal - end users don’t interact with them directly. 
 
 <p>Lets go through them one by one:</p>
 
-<h2 id="model-the-real-world">1. Model the real world</h2>
+<h2 id="1-model-the-real-world">1. Model the real world</h2>
 
 <p>This is the most important and genius principles I ever encounter that is even older than computers comes for analogue computers: model the real world.
-Try to be as close as possible to the piece of world you are modelling in the software: if there are users of your software, there should be a User in your code. If you simulate an iPhone, there should be an essence of iPhone in your software that performs all of its functions no matter how many of them there are. Also this principle requires you to name things right making them closer to processes they simulate. There will be always a gap between how the process is simulated in software and the real process, but this gap needs to be as close as possible to ensure software does things efficiently. </p>
+Try to be as close as possible to the piece of world you are modelling in the software: if there are users of your software, there should be a User in your code. If you simulate an iPhone, there should be an essence of iPhone in your software that performs all of its functions no matter how many of them there are. Also this principle requires you to name things right making them closer to processes they simulate. There will be always a gap between how the process is simulated in software and the real process, but this gap needs to be as close as possible to ensure software does things efficiently.</p>
 
-<p>We tend to think that a software is complex. But the complexity comes from several factors. First is the processes being modeled are complex - here you would need to rethink them to make them simpler. But the second reason is software developer didn’t model them right. If you model things as they are, you eliminate second factor. If you model things even better than they are, you can even eliminate the first factor. It is worth mentioning that is only possible if you have a power to alter the process or the process you are modeling doesn’t exist yet. This is mostly the case for the modern software. If you are about to make a “select your seat” functionality for the plane ticket, there is no way you can simplify plane seat locations. If you make a new e-commerce web site, you are an author of most processes and can make product finding functionality as simple as possible until you reach a fact that it needs to fit not just your needs but also all your users needs which are quite different. </p>
+<p>We tend to think that a software is complex. But the complexity comes from several factors. First is the processes being modeled are complex - here you would need to rethink them to make them simpler. But the second reason is software developer didn’t model them right. If you model things as they are, you eliminate second factor. If you model things even better than they are, you can even eliminate the first factor. It is worth mentioning that is only possible if you have a power to alter the process or the process you are modeling doesn’t exist yet. This is mostly the case for the modern software. If you are about to make a “select your seat” functionality for the plane ticket, there is no way you can simplify plane seat locations. If you make a new e-commerce web site, you are an author of most processes and can make product finding functionality as simple as possible until you reach a fact that it needs to fit not just your needs but also all your users needs which are quite different.</p>
 
-<h2 id="build-an-architecture">2. Build an Architecture</h2>
+<h2 id="2-build-an-architecture">2. Build an Architecture</h2>
 
 <p>Architecture is often seen as a luxurius term that can only be understoon and build by an elite part of development team. Sometimes in outsource companies this is given to the team by someone like company CTO that is not even part of the team. But architecture is something more trivial and someone everyone in a team is building. Lets try to define architecture in the most basic way:
 Architecture is the code that is used by your software the most number of times.
 As you model more and more processes, the code base grows. It needs to be generalized and reused. We all know which problems come from unreused code: bug fixes and changes need to be made more than once that inevitably leads to the lack of consistency in software where buttons that would suppose to do the same thing do it in a slightly or not so slightly different way. But code reuse is more than that: architecture is just a code reuse metric. If you have a code that is easy to reuse, the architecture arises on its own because people tend to reuse existing code instead of writing new. From the other hand, you can measure the “architectureness” of any code piece including third party(aka gems) by counting how many times it is used. That definition is well aligned with the popular idea that architecture is hard to change: if you reuse a particular piece more, it gets harder and harder to change it because the change affects more places. Following this principle also requires a good test coverage. The most reused code is usually the most covered by tests. You can not test everything, but you can define your priority based on number of usages of particular module.</p>
 
-<h2 id="track-dependencies">3. Track Dependencies</h2>
+<h2 id="3-track-dependencies">3. Track Dependencies</h2>
 
 <p>This is the most advanced and the most complex principle of all three. I have heard so many times: “Hey, why couldn’t we just break up our code into reusable modules that are independent?” or “Can we just write many independent micro-services?”. Yes, this is all about real breaking of software into independent pieces. Many theoretical-software-developers think it is a silver bullet, but it is not. Firstly because you violate Principle 1: model the real world. If things are interconnected and mutually dependent in the real world, you can not model them differently. It is a big talent to be able to find those possibilities with the minimum sacrifices of principles 1 and 2 which are more important to follow, but still sometimes violated due to the need of breaking software into independent modules.
 It is worse clarifying that there are 3 level of dependencies:</p>
@@ -241,13 +241,13 @@ It is worse clarifying that there are 3 level of dependencies:</p>
   <li>Independent</li>
 </ol>
 
-<p>Here is more formal definition: if you have code blocks A and B, they are totally independent if each block can perform its functions (aka pass all tests written) without other one. They are one-way dependent if A can perform its work without B or vice versa. And, finally, they are mutually dependent if neither can perform its work without another. In most cases, when Rails developers talk about several modules in their app, that is just a bullshit because there is no way one model can perform its work without others. They all are mutually dependent. And this is a very effective design because this is how the real world works: no modules - everything is mutually dependent as much as flowers and bees. You may start modeling pollination process from Bee class and Flower class and even consider them “independent modules” but in a few hours you would end up referencing one from another all the time. </p>
+<p>Here is more formal definition: if you have code blocks A and B, they are totally independent if each block can perform its functions (aka pass all tests written) without other one. They are one-way dependent if A can perform its work without B or vice versa. And, finally, they are mutually dependent if neither can perform its work without another. In most cases, when Rails developers talk about several modules in their app, that is just a bullshit because there is no way one model can perform its work without others. They all are mutually dependent. And this is a very effective design because this is how the real world works: no modules - everything is mutually dependent as much as flowers and bees. You may start modeling pollination process from Bee class and Flower class and even consider them “independent modules” but in a few hours you would end up referencing one from another all the time.</p>
 
 <p>The name of the principle as “Track Dependencies” comes from the fact that there are 3 level of interdependencies and you should at least stop thinking too abstract about them: figure out how much they are dependent and control that. Usually making things completely independent is unnecessary within one application. One-way dependent is good enough. You in-app dependency tree should be based on your vendor libraries dependency tree that is very well defined. You may consider your Gemfile dependency tree as the ideal dependency tree. Maybe you will come along the same structure in your app but it will be 10 times harder due to reasons that are hard to explain in a small article.</p>
 
 <p>There is far more to say about it, but I’ll probably make a dedicated article about “Track Dependencies” later.</p>
 
-<h2 id="software-should-do-what-it-should-do">0. Software should do what it should do.</h2>
+<h2 id="0-software-should-do-what-it-should-do">0. Software should do what it should do.</h2>
 
 <p>As I said earlier. You should always sacrifice principles if you can not build software that meets all the requirements with them.
 It is worth admitting that this is due to the fact that you are not a perfect software developer. Maybe the task wants you to be 2x better at software development than you are. And you can not become 2x better in a blink of an eye while your project has deadlines. Most likely you would be able to complete the task following all your principles with infinite resources, but they will not happen any time soon. You need sacrifices due lack of time, brain power, people and restrictions from security, performance, usability and other sources. Those are main reasons that causes the code to look ugly and complex, but never give up the beauty completely.</p>
@@ -299,7 +299,7 @@ It is worth admitting that this is due to the fact that you are not a perfect so
 Hint: Pay attention to what is on opposite sides of the handle: these are two different ends designed to do completely different job.
 It is a good example how solution is done based on the process but not on SRP. SRP is too idealistic even for a hammer.
 Convenience requires to merge two instruments into one to make it easy to switch from riving in to pulling out.
-It always requires in depth integration of functions into processes. </p>
+It always requires in depth integration of functions into processes.</p>
 
 <p>The pliers show even deeper integration in their design, allowing many processes associated with a wire to be done with using a single tool:</p>
 
@@ -359,19 +359,19 @@ That is a pretty straight way to implement loops, conditions and more rare view 
 
 <p>Example of the same condition in logic-less or programming language template engines:</p>
 
-<div class="highlight"><pre><code class="language-erb" data-lang="erb"><span class="cp">&lt;%</span> <span class="k">if</span> <span class="vi">@user</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">empty?</span> <span class="o">&amp;&amp;</span> <span class="vi">@user</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">empty?</span> <span class="cp">%&gt;</span><span class="x"></span>
+<figure class="highlight"><pre><code class="language-erb" data-lang="erb"><span></span><span class="cp">&lt;%</span> <span class="k">if</span> <span class="vi">@user</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">empty?</span> <span class="o">&amp;&amp;</span> <span class="vi">@user</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">empty?</span> <span class="cp">%&gt;</span><span class="x"></span>
 <span class="x">  &lt;a href=&quot;#&quot;&gt;Delete&lt;/a&gt;</span>
-<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span></code></pre></div>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span></code></pre></figure>
 
 <p>In logic-less template language, it would look like:</p>
 
-<div class="highlight"><pre><code class="language-erb" data-lang="erb"><span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">possible_to_delete_user?</span> <span class="cp">%&gt;</span><span class="x"></span>
+<figure class="highlight"><pre><code class="language-erb" data-lang="erb"><span></span><span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">possible_to_delete_user?</span> <span class="cp">%&gt;</span><span class="x"></span>
 <span class="x">  &lt;a href=&quot;#&quot;&gt;Delete&lt;/a&gt;</span>
-<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span></code></pre></div>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span></code></pre></figure>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">possible_to_delete_user?</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">def</span> <span class="nf">possible_to_delete_user?</span>
   <span class="vi">@user</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">empty?</span> <span class="o">&amp;&amp;</span> <span class="vi">@user</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">empty?</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>That looks more clean but less flexible as the logic-less template forces you to make quality even if you would like to save time instead.</p>
 
@@ -384,7 +384,7 @@ I will assume that you already know if you want to use frontend rendering or not
 And in case of yes, you would need to think if it is ok to have a single language  for both — front and back end — or a different one for backend rendering.
 Two template languages overhead can be not so large overhead sometimes. For example, when the backend templates are only used for static layout like html head, or footer and header of the page, or admin pages.</p>
 
-<p>It is pretty obvious that such a template language needs to use JavaScript in some way even though it is CoffeeScript. </p>
+<p>It is pretty obvious that such a template language needs to use JavaScript in some way even though it is CoffeeScript.</p>
 
 <h2 id="minimalistic-or-html-compatible">Minimalistic OR HTML Compatible</h2>
 
@@ -601,7 +601,7 @@ The fact that all of them produces custom API to define a ruby method doesn’t 
 
 <h3 id="samples-using-common-state-machine-gems">Samples using common state machine gems</h3>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># State Machine gem example</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="c1"># State Machine gem example</span>
 <span class="n">state_machine</span> <span class="ss">:state</span><span class="p">,</span> <span class="ss">:initial</span> <span class="o">=&gt;</span> <span class="ss">:parked</span> <span class="k">do</span>
   <span class="n">event</span> <span class="ss">:approve!</span> <span class="k">do</span>
     <span class="n">transition</span> <span class="ss">:pending</span> <span class="o">=&gt;</span> <span class="ss">:approved</span>
@@ -620,7 +620,7 @@ The fact that all of them produces custom API to define a ruby method doesn’t 
 <span class="k">def</span> <span class="nf">approve!</span>
   <span class="n">update_attributes!</span><span class="p">(</span><span class="ss">:state</span> <span class="o">=&gt;</span> <span class="s2">&quot;approved&quot;</span><span class="p">)</span>
   <span class="n">send_approval_email</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>Maybe I don’t know all modern trends but ruby version looks more human readable to me.</p>
 
@@ -631,21 +631,21 @@ This part of state machine is something that really matter.</p>
 
 <p>In my head it appears as some kind of allowed changes map:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">order_state_changes_map</span> <span class="o">=</span> <span class="p">{</span> 
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="n">order_state_changes_map</span> <span class="o">=</span> <span class="p">{</span> 
   <span class="kp">nil</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:pending</span><span class="o">]</span><span class="p">,</span> <span class="c1"># Initial state is always pending</span>
   <span class="ss">:pending</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:approved</span><span class="p">,</span> <span class="ss">:rejected</span><span class="o">]</span><span class="p">,</span> <span class="c1"># Pending can be changed to to paid and delivered</span>
   <span class="ss">:approved</span> <span class="o">=&gt;</span> <span class="ss">:paid</span> <span class="c1"># Delivered can only be changed to paid</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>If the state machine’s main goal is to validate changes than let’s implement it as a validation:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Order</span> <span class="o">&lt;</span> <span class="no">AR</span><span class="o">::</span><span class="no">Base</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">class</span> <span class="nc">Order</span> <span class="o">&lt;</span> <span class="no">AR</span><span class="o">::</span><span class="no">Base</span>
   <span class="n">validates</span> <span class="ss">:state</span><span class="p">,</span> <span class="ss">:changes</span> <span class="o">=&gt;</span> <span class="n">order_state_changes_map</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>With this pattern you can define state change methods in ruby:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">validates</span> <span class="ss">:state</span><span class="p">,</span> <span class="ss">:changes</span> <span class="o">=&gt;</span> <span class="p">{</span> 
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="n">validates</span> <span class="ss">:state</span><span class="p">,</span> <span class="ss">:changes</span> <span class="o">=&gt;</span> <span class="p">{</span> 
   <span class="kp">nil</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:pending</span><span class="o">]</span><span class="p">,</span> <span class="c1"># Initial state is always pending</span>
   <span class="ss">:pending</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:approved</span><span class="p">,</span> <span class="ss">:rejected</span><span class="o">]</span><span class="p">,</span> <span class="c1"># Pending can be changed to to paid and delivered</span>
   <span class="ss">:approved</span> <span class="o">=&gt;</span> <span class="ss">:paid</span> <span class="c1"># Delivered can only be changed to paid</span>
@@ -657,7 +657,7 @@ This part of state machine is something that really matter.</p>
 
 <span class="k">def</span> <span class="nf">upproved?</span>
   <span class="c1"># ....</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>Now it looks really readable and a person who never saw this kind of API before can figure out what is happening.</p>
 
@@ -759,7 +759,7 @@ If you feel especially interested in this feature, say your +1 here or on github
             <div class="date">08 Apr 2013</div>
         </h2>
         <p>I heard about 10 different ways to organize work flow around pivotaltracker and git and about 5 gems to support that process.
-All of them seems abusing for me: the outcome of pivotal/git integration is a git commit attached to pivotal story and the rest of conventions like naming branches or merge policy doesn’t make any sense in long time perspective and is just a waste of time in fact. </p>
+All of them seems abusing for me: the outcome of pivotal/git integration is a git commit attached to pivotal story and the rest of conventions like naming branches or merge policy doesn’t make any sense in long time perspective and is just a waste of time in fact.</p>
 
 <p>That’s why I’ve decided to make the most trivial integration that covers this idea and don’t provide additional complexity:
 Meet <a href="https://github.com/bogdan/git-storyid">git-storyid</a> gem - the only one git/pivotaltracker integration that saves your time.
@@ -767,15 +767,15 @@ Meet <a href="https://github.com/bogdan/git-storyid">git-storyid</a> gem - the o
 
 <h2 id="installation">Installation</h2>
 
-<div class="highlight"><pre><code class="language-sh" data-lang="sh">gem install git-storyid</code></pre></div>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span></span>gem install git-storyid</code></pre></figure>
 
 <h2 id="usage">Usage</h2>
 
-<div class="highlight"><pre><code class="language-sh" data-lang="sh">git storyid -m <span class="s2">&quot;Initial implementation of campaign tags&quot;</span>
-<span class="c"># Api token (https://www.pivotaltracker.com/profile): a56f0e9a4fbXXXXXXXXXXXXXX</span>
-<span class="c"># Use SSL (y/n): y</span>
-<span class="c"># Your pivotal initials (e.g. BG): BG</span>
-<span class="c"># Project ID: 494XXX</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span></span>git storyid -m <span class="s2">&quot;Initial implementation of campaign tags&quot;</span>
+<span class="c1"># Api token (https://www.pivotaltracker.com/profile): a56f0e9a4fbXXXXXXXXXXXXXX</span>
+<span class="c1"># Use SSL (y/n): y</span>
+<span class="c1"># Your pivotal initials (e.g. BG): BG</span>
+<span class="c1"># Project ID: 494XXX</span></code></pre></figure>
 
 <p>Now interactive menu is displayed to select one of <strong>Started stories</strong> owned by you:</p>
 

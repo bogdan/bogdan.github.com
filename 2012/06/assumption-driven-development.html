@@ -6,7 +6,7 @@
 
     <title>
       
-        Что такое архитектура? -
+        Assumption Driven Approach -
       
       Bogdan's blog
     </title>
@@ -78,30 +78,107 @@
                 <div id="content">
                     <div id="post">
     <h2>
-        <a href="/architecture">Что такое архитектура?</a>
-        <div class="date">23 Nov 2017</div>
+        <a href="/2012/06/assumption-driven-development">Assumption Driven Approach</a>
+        <div class="date">06 Jun 2012</div>
     </h2>
-    <p>Все разработчики, с которыми мне приходилось работать, так или иначе упоминали понятие “Архитектура”. Хотя это очень размытое понятие, им оперируют почти все. Я долго пытался разобраться сам - что имею ввиду, когда говорю что это часть архитектуры, а это нет.
-Статьи на Wikipedia и в некоторых других источниках крайне занудные. Похоже, что понятие довольно старое, и ему не дано четкого определения внутри современных Agile стилей разработки. Но мы попрежнему оперируем им. Поэтому постараюсь дать определение этому понятию в рамках Agile Development Process.</p>
+    <p>This post shows some examples of how things can go wrong way because of people actions based on assumptions but not on facts.
+It is more conceptual than practical, so be patient and don’t blame my grammar mistakes too much.
+<!--more--></p>
 
-<p>Начнем с того, на чем сходятся все источники:</p>
+<h3 id="evil-of-assumptions">Evil of assumptions</h3>
+
+<p>This is my favorite example of how wrong assumption can be:</p>
+
+<p>Very popular ruby questions for newbies:</p>
+
+<pre><code>What is the difference between `private` and `protected` methods?
+</code></pre>
+
+<p>Question seems good and reasonable. But most people don’t know the right answer even after years with ruby.
+Most people assume that <code>private</code> methods can not be called from inherited classes, but <code>protected</code> can be.</p>
+
+<p>But that’s only an assumption. Have you ever tried to ensure that it’s right?
+The answer is: <strong>This is not true</strong>. Private method can be called from inherited class in the same way as protected.</p>
+
+<pre><code>class A
+  private
+  def a
+    puts 'hello'
+  end
+end
+
+class B &lt; A
+  def b
+    a
+  end
+end
+
+B.new.b # No Exception here
+</code></pre>
+
+<p><a href="http://gusiev.com/2010/04/ruby18-private-protected-incapsulatio/">More about private and public methods here</a>.</p>
+
+<p>This is good example on how myths can spread the world:
+Almost every person is surprised by the output of program above.</p>
+
+<p>This makes me feel that many interviewers ask questions while don’t know what they are asking about.
+From this point I can state that a lot of ruby interviews goes in a wrong direction by providing an assumption as a fact.</p>
+
+<h3 id="class-variables-assumption">Class variables assumption</h3>
+
+<p>Yet another assumption that can be made based on ruby documentation is connected with ruby class variables:</p>
+
+<pre><code>class A
+  @@x = 2
+  def self.pr
+    @@x
+  end
+end
+
+class B &lt; A
+  @@x = 5
+end
+
+puts B.pr
+puts A.pr
+</code></pre>
+
+<p>You can assume that last two lines produce 5 and 2, but they both produce 5.
+Because class variables are shared across all classes.</p>
+
+<h3 id="assumption-example-in-the-performance-field">Assumption example in the performance field</h3>
+
+<p>Most popular assumptions field is performance. And here we come up with the most recent bad assumption example:</p>
+
+<p>Ruby 2.0 offers lazy enumeration feature.</p>
+
+<pre><code>(1...100000).to_a.lazy.select{|a| a.odd? }.map{|a| a**2}.to_a
+</code></pre>
+
+<p>In short: there will be only one iteration over an array with no intermediate array between <code>select</code> and <code>map</code>.
+If you are an assumption-driven person, you already assumed that <code>#lazy</code> not only saves your memory, but also improve performance.</p>
+
+<p>And problem is that it is not true. <a href="https://bugs.ruby-lang.org/issues/6183"><code>#lazy</code> is very slow</a>.</p>
+
+<h3 id="how-to-use-assumption-in-a-right-way">How to use assumption in a right way?</h3>
+
+<p>Why we are still using assumptions a lot? Because they are cheap: they allow us to move faster without proofing that we are moving the right direction.</p>
+
+<p>Here are some MUSTs that we need to follow:</p>
 
 <ul>
-  <li>Архитектура это фундаметальные договоренности и решения</li>
-  <li>Архитектура это нечто важное</li>
-  <li>Архитектуру сложно менять</li>
-  <li>Архитектура должна быть использована повторно (в силу своей клевости естественно)</li>
+  <li>Always make sure that you are 100% right when you are interviewing other person.</li>
+  <li>Never make assumptions in performance field.</li>
 </ul>
 
-<p>Ну и это пожалуй все. Поверх этого есть много шума о том как именно она должна создаваться и какие есть подходы по ее управлению.
-Все эти описания используют такие сложные слова, что сложно представить подобные процедуры в рамках Agile процессов.
-Важная мысль, которая как мне кажется является истоком понятия архитектура это “Архитектурые решения сложно менять” или другими словами “Решения, которые сложно поменять, являются архитектурными”. И это действительно то что имеет наибольшее значение. На сколько сложно поменять решение определяет степень его архитектурности. Так же важно, что любое решение легко поменять на следующий день после его принятия или легко поменять решение, которое мало на что влияет. При чем в данном случае “решение” это как програмное решение так и просто договоренность (которая рано или позно все равно закрепляется програмным решением).
-На уровне кода это можно выразить: как архитектурный код или софт это тот, который используется повторно наибольшее количество раз. При чем это правда как для софта написанного вами лично, так и для когда заимствованого.
-Пару примеров: степень архитектурности базы данных это есть количество данных, которые в ней хранятся. Т.е чем больше вы храните данных в этой конкретной базе, тем более архитектурна она для Вас. С другой стороны подключенная к проекту база данных, в которой пока или уже ничего не хранится, архитектурой не является. При этом важно сделать упор именно на то, насколько сложно потом эту базу сменить. Например если вам понадобится поменять MySQL на PostgreSQL, то архитектурность MySQL будет зависить от колличества специфичных ее фич, которые вы использовали. Очень важно отслеживать архитектурность тех или иных решение по мере развития проекта, а не только на его зарождении. В outsource компаниях часто встречается подход, когда в новом проекте приходит важные дядя (например CTO компании) и создает архитектуру, а на следующий день уходит из проекта. Его решения действительно важны, но архитектура им не строится, а строиться теми кто эти решения используют.</p>
+<p>And here are some more conceptual advices:</p>
 
-<h3 id="Заимствованая-Архитектура-и-своя-архитектура">Заимствованая Архитектура и своя архитектура</h3>
-
-<p>Зачастую заимствованые програмные решения гораздо проще поменять, чем свои собственные разработки. Так происходит потому что заимствованый софт совсем ничего не знает о ваших личных целях и задачах. Он решает общие для всего software-community проблемы, которые решены не один раз и похожим способом: поменять одих хостинг на другой будет насравнимо проще чем поменять структуру данных вами же созданную. Создание архитектуры из звоего собственного кода в долгоиграющих проектах очень важна. Она начинается с простого повторного использования кода: кто-то написал класс или метод и кто-то им поспользовался. Архитектурность кода как раз определяется колличеством его повторного использования. Первый хороший звоночек того, что у Вас это получается: если написаный вами метод используют другие члены вашей команды без принуждения к этому. Это говорит о том, что им проще положиться на ваш код как на архитектуру, чем создавать что-то с нуля(а мы все знаем насколько программисты любят создавать велосипеды). Ну а дальше начинается адаптация и обобщение старых решений под новые задачи.</p>
+<ul>
+  <li>Make assumptions depend on facts, but not other assumptions.</li>
+  <li>Prove any assumption with fact before going with another assumption</li>
+  <li>Do not tell people about assumptions as if they are facts.</li>
+  <li>When we can’t make a good assumption from the beginning, maybe it’s time to gather more facts</li>
+</ul>
 
 
     <div class="clear"></div>
@@ -109,11 +186,11 @@
       <table class="post-social-share">
         <tr>
           <td>
-            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Что такое архитектура?" data-via="bgusiev" data-url="http://gusiev.com/architecture">Tweet</a>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Assumption Driven Approach" data-via="bgusiev" data-url="http://gusiev.com/2012/06/assumption-driven-development">Tweet</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
           </td>
           <td>
-            <div class="fb-like" data-href="http://gusiev.com/architecture" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+            <div class="fb-like" data-href="http://gusiev.com/2012/06/assumption-driven-development" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
           </td>
           <td>
             <div class="reddit-button">
@@ -127,13 +204,13 @@
     <h4 class="tags">
     
     
-    <a href="/tags/principles.html">principles</a>
+    <a href="/tags/assumption.html">assumption</a>
     
-    <a href="/tags/software.html">software</a>
+    <a href="/tags/ruby.html">ruby</a>
     
-    <a href="/tags/naming.html">naming</a>
+    <a href="/tags/performance.html">performance</a>
     
-    <a href="/tags/code.html">code</a>
+    <a href="/tags/fact.html">fact</a>
     
 </h4>
 <div class="clear"></div>
@@ -142,6 +219,22 @@
         <h3>Related Posts</h3>
         <ul class="posts">
             
+               <!-- Exclude self -->
+                <li><span>23 Nov 2017</span> &raquo; <a href="/2017/11/naming-things-problem">"Naming Things" Solution</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>07 Jul 2017</span> &raquo; <a href="/2017/07/guiding-software-development-principles">Guiding Software Development Principles</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>12 Jan 2016</span> &raquo; <a href="/2016/01/single-responsibility-principle-srp-criticism">Something is wrong with Single Reponsibility Principle</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>06 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
+              
+            
         </ul>
     </div>
 
@@ -149,8 +242,8 @@
 <script type="text/javascript">
     var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
 
-    //var disqus_identifier = '/architecture';
-    //var disqus_url = 'http://gusiev.com/architecture';
+    //var disqus_identifier = '/2012/06/assumption-driven-development';
+    //var disqus_url = 'http://gusiev.com/2012/06/assumption-driven-development';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

@@ -6,7 +6,7 @@
 
     <title>
       
-        Что такое архитектура? -
+        Reporting made easy by Datagrid gem for Rails -
       
       Bogdan's blog
     </title>
@@ -78,30 +78,96 @@
                 <div id="content">
                     <div id="post">
     <h2>
-        <a href="/architecture">Что такое архитектура?</a>
-        <div class="date">23 Nov 2017</div>
+        <a href="/2011/06/ruby-datagrid-gem-report">Reporting made easy by Datagrid gem for Rails</a>
+        <div class="date">26 Jun 2011</div>
     </h2>
-    <p>Все разработчики, с которыми мне приходилось работать, так или иначе упоминали понятие “Архитектура”. Хотя это очень размытое понятие, им оперируют почти все. Я долго пытался разобраться сам - что имею ввиду, когда говорю что это часть архитектуры, а это нет.
-Статьи на Wikipedia и в некоторых других источниках крайне занудные. Похоже, что понятие довольно старое, и ему не дано четкого определения внутри современных Agile стилей разработки. Но мы попрежнему оперируем им. Поэтому постараюсь дать определение этому понятию в рамках Agile Development Process.</p>
+    <p>4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about <a href="https://github.com/bogdan/datagrid">perfect report gem</a> that would provide easy DSL for making filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head and now finally I have enough knowledge and opportunities to build such tool.</p>
 
-<p>Начнем с того, на чем сходятся все источники:</p>
+<!--more-->
+
+<h3 id="defining-a-grid">Defining a grid</h3>
+
+<p>The idea of Datagrid DSL is to define a scope of ActiveRecord models and define different independent criterias to filter this scope. 
+Than convert filtered data to table view with defined columns. So, typical datagrid report consists of:</p>
 
 <ul>
-  <li>Архитектура это фундаметальные договоренности и решения</li>
-  <li>Архитектура это нечто важное</li>
-  <li>Архитектуру сложно менять</li>
-  <li>Архитектура должна быть использована повторно (в силу своей клевости естественно)</li>
+  <li>A scope of records to query data</li>
+  <li>Filters with parameters to make a subsets of this data</li>
+  <li>Columns to display this data</li>
 </ul>
 
-<p>Ну и это пожалуй все. Поверх этого есть много шума о том как именно она должна создаваться и какие есть подходы по ее управлению.
-Все эти описания используют такие сложные слова, что сложно представить подобные процедуры в рамках Agile процессов.
-Важная мысль, которая как мне кажется является истоком понятия архитектура это “Архитектурые решения сложно менять” или другими словами “Решения, которые сложно поменять, являются архитектурными”. И это действительно то что имеет наибольшее значение. На сколько сложно поменять решение определяет степень его архитектурности. Так же важно, что любое решение легко поменять на следующий день после его принятия или легко поменять решение, которое мало на что влияет. При чем в данном случае “решение” это как програмное решение так и просто договоренность (которая рано или позно все равно закрепляется програмным решением).
-На уровне кода это можно выразить: как архитектурный код или софт это тот, который используется повторно наибольшее количество раз. При чем это правда как для софта написанного вами лично, так и для когда заимствованого.
-Пару примеров: степень архитектурности базы данных это есть количество данных, которые в ней хранятся. Т.е чем больше вы храните данных в этой конкретной базе, тем более архитектурна она для Вас. С другой стороны подключенная к проекту база данных, в которой пока или уже ничего не хранится, архитектурой не является. При этом важно сделать упор именно на то, насколько сложно потом эту базу сменить. Например если вам понадобится поменять MySQL на PostgreSQL, то архитектурность MySQL будет зависить от колличества специфичных ее фич, которые вы использовали. Очень важно отслеживать архитектурность тех или иных решение по мере развития проекта, а не только на его зарождении. В outsource компаниях часто встречается подход, когда в новом проекте приходит важные дядя (например CTO компании) и создает архитектуру, а на следующий день уходит из проекта. Его решения действительно важны, но архитектура им не строится, а строиться теми кто эти решения используют.</p>
+<p>And we can easily split their definition with the following ruby DSL</p>
 
-<h3 id="Заимствованая-Архитектура-и-своя-архитектура">Заимствованая Архитектура и своя архитектура</h3>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">class</span> <span class="nc">SimpleReport</span>
 
-<p>Зачастую заимствованые програмные решения гораздо проще поменять, чем свои собственные разработки. Так происходит потому что заимствованый софт совсем ничего не знает о ваших личных целях и задачах. Он решает общие для всего software-community проблемы, которые решены не один раз и похожим способом: поменять одих хостинг на другой будет насравнимо проще чем поменять структуру данных вами же созданную. Создание архитектуры из звоего собственного кода в долгоиграющих проектах очень важна. Она начинается с простого повторного использования кода: кто-то написал класс или метод и кто-то им поспользовался. Архитектурность кода как раз определяется колличеством его повторного использования. Первый хороший звоночек того, что у Вас это получается: если написаный вами метод используют другие члены вашей команды без принуждения к этому. Это говорит о том, что им проще положиться на ваш код как на архитектуру, чем создавать что-то с нуля(а мы все знаем насколько программисты любят создавать велосипеды). Ну а дальше начинается адаптация и обобщение старых решений под новые задачи.</p>
+  <span class="kp">include</span> <span class="no">Datagrid</span>
+
+  <span class="n">scope</span> <span class="k">do</span>
+    <span class="no">User</span><span class="o">.</span><span class="n">includes</span><span class="p">(</span><span class="ss">:group</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="n">filter</span><span class="p">(</span><span class="ss">:category</span><span class="p">,</span> <span class="ss">:enum</span><span class="p">,</span> <span class="ss">:select</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;first&quot;</span><span class="p">,</span> <span class="s2">&quot;second&quot;</span><span class="o">]</span><span class="p">)</span>
+  <span class="n">filter</span><span class="p">(</span><span class="ss">:group_id</span><span class="p">,</span> <span class="ss">:multiple</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+  <span class="n">filter</span><span class="p">(</span><span class="ss">:group_name</span><span class="p">,</span> <span class="ss">:header</span> <span class="o">=&gt;</span> <span class="s2">&quot;Group&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">value</span><span class="o">|</span>
+    <span class="nb">self</span><span class="o">.</span><span class="n">joins</span><span class="p">(</span><span class="ss">:group</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:groups</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="n">value</span><span class="p">})</span>
+  <span class="k">end</span>
+
+
+  <span class="n">column</span><span class="p">(</span><span class="ss">:name</span><span class="p">)</span>
+  <span class="n">column</span><span class="p">(</span><span class="ss">:group</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s2">&quot;groups.name&quot;</span><span class="p">)</span> <span class="k">do</span>
+    <span class="nb">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">name</span>
+  <span class="k">end</span>
+  <span class="n">column</span><span class="p">(</span><span class="ss">:active</span><span class="p">,</span> <span class="ss">:header</span> <span class="o">=&gt;</span> <span class="s2">&quot;Activated&quot;</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span>
+    <span class="o">!</span><span class="nb">self</span><span class="o">.</span><span class="n">disabled</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<h3 id="grid-instance-api">Grid instance API</h3>
+
+<p>And now we can create and manipulate reports:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="n">report</span> <span class="o">=</span> <span class="no">SimpleReport</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+        <span class="ss">:group_id</span>          <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">]</span><span class="p">,</span>
+        <span class="ss">:category</span>          <span class="o">=&gt;</span> <span class="s2">&quot;first&quot;</span><span class="p">,</span>
+        <span class="ss">:order</span>             <span class="o">=&gt;</span> <span class="ss">:group</span><span class="p">,</span>
+        <span class="ss">:descending</span>        <span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="p">)</span>
+
+<span class="n">report</span><span class="o">.</span><span class="n">assets</span> <span class="c1"># =&gt; Array of User instances: </span>
+              <span class="c1"># SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count &gt;= 1 AND users.category = &#39;first&#39; ORDER BY groups.name DESC</span>
+
+<span class="n">report</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">paginate</span><span class="p">(</span><span class="ss">:page</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:page</span><span class="o">]</span><span class="p">)</span> <span class="c1"># =&gt; Yes, it is</span>
+
+<span class="n">report</span><span class="o">.</span><span class="n">header</span> <span class="c1"># =&gt; [&quot;Group&quot;, &quot;Name&quot;, &quot;Activated&quot;]</span>
+<span class="n">report</span><span class="o">.</span><span class="n">rows</span>   <span class="c1"># =&gt; [</span>
+              <span class="c1">#      [&quot;Steve&quot;, &quot;Spammers&quot;, true],</span>
+              <span class="c1">#      [ &quot;John&quot;, &quot;Spoilers&quot;, true],</span>
+              <span class="c1">#      [&quot;Berry&quot;, &quot;Good people&quot;, false]</span>
+              <span class="c1">#    ]</span>
+<span class="n">report</span><span class="o">.</span><span class="n">data</span>   <span class="c1"># =&gt; [ header, *rows]</span>
+
+<span class="n">report</span><span class="o">.</span><span class="n">to_csv</span> <span class="c1"># =&gt; Yes, it is</span></code></pre></figure>
+
+<h3 id="feel-the-power-and-flexibility-by-examples">Feel the Power and Flexibility by examples</h3>
+
+<p>I love flexibility. That is why datagrid has a lot of things for non trivial use cases.
+In order to proof that I’ll show you some examples of what you can do:</p>
+
+<ul>
+  <li><a href="https://gist.github.com/7ba4267aa25b6e37eb44">Range filters</a></li>
+  <li><a href="https://gist.github.com/4e84d2dad2f2362a9ab4">Time sheets aggregation report</a></li>
+  <li><a href="https://gist.github.com/8b91694edec900de84be">Daily statistics</a></li>
+  <li><a href="https://gist.github.com/106acfc3fe689564896c">Extending built in methods</a></li>
+</ul>
+
+<h3 id="documentation">Documentation</h3>
+
+<p><a href="https://github.com/bogdan/datagrid/wiki">Datagrid WIKI</a> is main documentation source of the gem.
+Also feel free to ask questions right after this post.</p>
+
+<h3 id="in-my-todo-list">In my TODO list</h3>
+
+<p>Current version of datagrid gem have fully document back-end staff. It’s production ready - we are running three projects that use datagrid. Now I am working on front-end that is already part of the distribution, but not yet documented.</p>
 
 
     <div class="clear"></div>
@@ -109,11 +175,11 @@
       <table class="post-social-share">
         <tr>
           <td>
-            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Что такое архитектура?" data-via="bgusiev" data-url="http://gusiev.com/architecture">Tweet</a>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="Reporting made easy by Datagrid gem for Rails" data-via="bgusiev" data-url="http://gusiev.com/2011/06/ruby-datagrid-gem-report">Tweet</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
           </td>
           <td>
-            <div class="fb-like" data-href="http://gusiev.com/architecture" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+            <div class="fb-like" data-href="http://gusiev.com/2011/06/ruby-datagrid-gem-report" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
           </td>
           <td>
             <div class="reddit-button">
@@ -127,13 +193,15 @@
     <h4 class="tags">
     
     
-    <a href="/tags/principles.html">principles</a>
+    <a href="/tags/rails.html">rails</a>
     
-    <a href="/tags/software.html">software</a>
+    <a href="/tags/activerecord.html">activerecord</a>
     
-    <a href="/tags/naming.html">naming</a>
+    <a href="/tags/datagrid.html">datagrid</a>
     
-    <a href="/tags/code.html">code</a>
+    <a href="/tags/gem.html">gem</a>
+    
+    <a href="/tags/report.html">report</a>
     
 </h4>
 <div class="clear"></div>
@@ -142,6 +210,22 @@
         <h3>Related Posts</h3>
         <ul class="posts">
             
+               <!-- Exclude self -->
+                <li><span>23 Nov 2017</span> &raquo; <a href="/2017/11/naming-things-problem">"Naming Things" Solution</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>07 Jul 2017</span> &raquo; <a href="/2017/07/guiding-software-development-principles">Guiding Software Development Principles</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>12 Jan 2016</span> &raquo; <a href="/2016/01/single-responsibility-principle-srp-criticism">Something is wrong with Single Reponsibility Principle</a></li>
+              
+            
+               <!-- Exclude self -->
+                <li><span>06 Feb 2015</span> &raquo; <a href="/2015/02/criterias-template-language-erb-haml">Choosing a Templating Language</a></li>
+              
+            
         </ul>
     </div>
 
@@ -149,8 +233,8 @@
 <script type="text/javascript">
     var disqus_shortname = 'gusiev'; // required: replace example with your forum shortname
 
-    //var disqus_identifier = '/architecture';
-    //var disqus_url = 'http://gusiev.com/architecture';
+    //var disqus_identifier = '/2011/06/ruby-datagrid-gem-report';
+    //var disqus_url = 'http://gusiev.com/2011/06/ruby-datagrid-gem-report';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
