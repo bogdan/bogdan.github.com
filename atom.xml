@@ -4,7 +4,7 @@
  <title>Bogdan Gusiev's blog</title>
  <link href="http://gusiev.com/atom.xml" rel="self"/>
  <link href="http://gusiev.com"/>
- <updated>2017-07-07T15:02:17+03:00</updated>
+ <updated>2017-11-23T16:13:21+02:00</updated>
  <id>http://gusiev.com/</id>
  <author>
    <name>Bogdan Gusiev</name>
@@ -13,11 +13,102 @@
  
  
  <entry>
+   <title>"Naming Things" Solution</title>
+   <link href="http://gusiev.com/2017/11/naming-things-problem"/>
+   <updated>2017-11-23T00:00:00+02:00</updated>
+   <id>http://gusiev.com/2017/11/naming-things-problem</id>
+   <content type="html">&lt;p&gt;Naming things in software is really a big deal. It gets harder and harder over time when a code base gets larger.
+I’ve never encountered an article that would try to address the issue. So here, I will try to define good name criteria as well as naming strategies that appeared to be useful in my experience.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;name-like-your-users-do&quot;&gt;Name like your users do&lt;/h2&gt;
+
+&lt;p&gt;The most basic idea of giving a thing like class, method or function a good name is to name by how your users suppose to call it.
+Like if there is a tweet in twitter I would assume that there should be a thing named “Tweet” inside twitter source code.
+It is as simple as it is, but when you model things right your internal infrastructure just reflects the actual interaction between software users. This principle applies well to the structure we call OOD: the right OOD has maximum number of classes that your users can see through software interface and minimum number of classes that your users can not see. And those things that users can see should have their name from how your users call it or would call it.&lt;/p&gt;
+
+&lt;p&gt;Good example when things can get a different name:&lt;/p&gt;
+
+&lt;p&gt;Lets say we have Article and Email and both of them are having a header. But in the article it is usually called “title” but in the email it is usually called “subject”. If you don’t have any shared code between the two, it is better to stick with different names rather than the same: it will make you closer to how your users call it and will avoid unnecessary naming collision that is described later.&lt;/p&gt;
+
+&lt;p&gt;It is worse noting that this is not the only one principle to follow. There can be a number of reasons you may go with a different name rather than the name that comes naturally. They are described below.&lt;/p&gt;
+
+&lt;h2 id=&quot;avoid-simplifications-through-naming&quot;&gt;Avoid simplifications through naming&lt;/h2&gt;
+
+&lt;p&gt;If there is some completely new thing that needs to be named for both end users and software, ensure that there is no other thing that has the same name in your software.
+Human brain tend to simplify the world around us and use the same name for different things.&lt;/p&gt;
+
+&lt;p&gt;Here is a good example:
+Suppose your software allows people to subscribe to newsletter and to unsubscribe from email notifications.
+In this case, human brain interprets this two possibilities as logically opposite while they are not: there is actually three states the person can have: subscribed to newsletter, unsubscribed from email notifications and undefined (or default); or even 2 independent options with “Yes/No” states. Even though all software developers in your team understand the difference, you can not expect all people in the world to understand that.
+In order to avoid the automatic simplification, you’d better call those states: opted in for newsletter (or simply “opted_in” internally) and unsubscribed from email notifications (or simply “unsubscribed” internally).&lt;/p&gt;
+
+&lt;p&gt;The idea that “Opted In” should stuck as a term for newsletter subscription and “Unsubscribed” should stuck for email notifications. When people speak fast, they will always shorten those terms. It means that through the daily conversation certain verbs will be used instead of describing the entire action. Example: “How many subscribed people do we have?” will have some uncertainty in case “to subscribe” will be used for both: describing newsletter subscription and notification emails subscription instead of just one.&lt;/p&gt;
+
+&lt;h2 id=&quot;naming-uniqueness&quot;&gt;Naming Uniqueness&lt;/h2&gt;
+
+&lt;p&gt;Here is a good example from my practice on how naming uniqueness can be broken:
+English has two words “Company” and “Campaign”. In my native tongue they actually translated into a single word: “Компания” /compania/. It is better to just avoid using these both terms for naming in the international team. While this is a rare case, it gives the idea on how naming problem appears: Russian conversation don’t make a difference between 2 things that are pretty different. Same case appears naturally within a single language all the time.&lt;/p&gt;
+
+&lt;p&gt;The other source of naming collision can still be a fast speech between team members.
+Suppose your software works with “WebPageSnapshot” as well as “ServerSnapshot”
+When people speak fast, they will tend to use “Snapshot” for both terms. It can lead to misunderstanding in daily conversation.
+The phrase: “I made a patch that touches a snapshot source code, please take a look” doesn’t define the actual place to look at. It will almost certainly lead to time waste from people assumptions they understood each other. Either the speaker or the listener could not be aware that both types of snapshot exist and they may feel natural with the assumption that “Snapshot” can only mean one of the types.
+Please only use adjectives to distinguish between terms if they are actually same thing at some level of abstraction like:
+“VideoFile” and “ImageFile” are just “File” at some levels in your software (in other words: share code and behaviour).&lt;/p&gt;
+
+&lt;p&gt;Using same adjectives to ensure things are connected by their names is a good idea.
+Consider the business rule: “Affiliate Member” can participate in “Affiliate Campaign”. 
+We will not make any confusion by using same adjective for both terms. Avoiding adjectives in fast conversation will not be that misleading: “The member with email ‘bogdan@example.com’ has joined the campaign 2 days ago”
+A business rule like: ‘“Member Affiliate” can participate in “Campaign Affiliate”’ is worse than a weapon of mass destruction for communication inside your team. 
+The general rule: ensure that shorten versions of names are easy to use in daily conversations.&lt;/p&gt;
+
+&lt;h2 id=&quot;naming-internal-objects&quot;&gt;Naming internal objects&lt;/h2&gt;
+
+&lt;p&gt;What I mean by internal here is a thing that is pretty known inside your software but completely unseen by the end users.
+Examples from Rails: “UsersController” or “UsersHelper”&lt;/p&gt;
+
+&lt;p&gt;Note that there is no problem in calling every controller like “WhateverController” (with the same suffix) because all of those controllers actually share code and behaviour, so they are the same thing at some basic level while “WebPageSnapshot” and “ServerSnapshot” were not in the previous example.
+Some objects are just internal - end users don’t interact with them directly. There are some principles that would allow to give them a good name too.&lt;/p&gt;
+
+&lt;p&gt;At first, ensure that internal thing doesn’t take a name of the thing that is actually available to the end users. This is very important to do: leave good names for things your users care most and can interact with.&lt;/p&gt;
+
+&lt;p&gt;At second,  it is good to give them a longer names to encode more information on what they do. There could be understanding illusion connected to a name. Internals of your software tend to do some specific work. When you give them a short name, software developers tend to assume they understand what they do. It can be a complete illusion. &lt;/p&gt;
+
+&lt;p&gt;At third, sometimes it is even a good idea to give a confusing name to something.
+ You may avoid that illusion by giving a name that would cause software developer to never assume what this thing does before looking at it.&lt;br /&gt;
+ Choose wisely if you want your developers to assume what a method does based on name or not. These assumptions can be misleading for complex cases. In my project, we have a method called &lt;code&gt;def fuck_short_url(text)&lt;/code&gt;. It has more comments than lines of code: it makes a very specific replacement of links inside a text fragment and we don’t want any developer to assume they know what it does based on name. Here is the method source code for the most curious readers: &lt;a href=&quot;https://gist.github.com/7a823c15ac350aaf948668f0fc3a3238&quot;&gt;https://gist.github.com/7a823c15ac350aaf948668f0fc3a3238&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;There could be 3 types of names: &lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Direct name - like your users call it&lt;/li&gt;
+  &lt;li&gt;Descriptive name - long and describing the function of an object or method&lt;/li&gt;
+  &lt;li&gt;Strange Name - eliminates the name based assumption&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Good principles to follow:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Follow naming that was already given by software users or community/business overall&lt;/li&gt;
+  &lt;li&gt;Name things uniquely to avoid confusion&lt;/li&gt;
+  &lt;li&gt;Avoid naming collision through simplification of terms and shortening of actions&lt;/li&gt;
+  &lt;li&gt;Give longer names to more complex things &lt;/li&gt;
+  &lt;li&gt;Give shorter names to things that are frequently used&lt;/li&gt;
+&lt;/ol&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
    <title>Guiding Software Development Principles</title>
    <link href="http://gusiev.com/2017/07/guiding-software-development-principles"/>
    <updated>2017-07-07T00:00:00+03:00</updated>
    <id>http://gusiev.com/2017/07/guiding-software-development-principles</id>
-   <content type="html">&lt;p&gt;It is becoming popular to talk about software development principles from time to time. The new major concepts appear and die due to the fact that most of them are designed to be perfect but they are not. If you would stay in IT long enough, you encounter articles and talks where people discovered an amazing concept “X” that solved all their development problems and brought their team to inevitable success. Unfortunately permanent success is usually temporary or even a self-deception. The truth is: there is no silver bullets in software development just like in any other engineering process. Engineering of world class products requires precise resources control, trade offs and balance between easy and complex, fast and slow, and beautiful and ugly. Here, I will try to explain my guiding software development principles as well as the why-s.&lt;/p&gt;
+   <content type="html">&lt;p&gt;It is becoming popular to talk about software development principles from time to time. The new major concepts appear and die due to the fact that most of them are designed to be perfect but they are not. If you would stay in IT long enough, you encounter articles and talks where people discovered an amazing concept “X” that solved all their development problems and brought their team to inevitable success. Unfortunately that “permanent success” is usually temporary or even a self-deception. The truth is: there is no silver bullets in software development just like in any other engineering process. Engineering of world class products requires precise resources control, trade offs and balance between easy and complex, fast and slow, and beautiful and ugly. Here, I will try to explain my guiding software development principles as well as the why-s.&lt;/p&gt;
 
 &lt;!--more--&gt;
 
@@ -27,9 +118,9 @@
 
 &lt;h2 id=&quot;less-is-more&quot;&gt;Less is More&lt;/h2&gt;
 
-&lt;p&gt;There should be very limited number of principles to follow. More principles under the same concept just creates more contradiction and leaves less room to be situational and follow additional guidelines that would fit best for given problem. I think the ideal number in you “guiding principles” that apply &lt;strong&gt;almost&lt;/strong&gt; to everything in your software should be 3. Higher numbers are possible. &lt;/p&gt;
+&lt;p&gt;There should be very limited number of principles to follow. More principles under the same concept just creates more contradiction and leaves less room to be situational and follow additional guidelines that would fit best for given problem. I think the ideal number in your “guiding principles” that apply &lt;strong&gt;almost&lt;/strong&gt; to everything in your software should be 3. Higher numbers are possible. &lt;/p&gt;
 
-&lt;p&gt;Christian God was so kind that he left us with 10 that still have very small contradiction like: should I steal a weapon from a person that wants to kill me tomorrow? That’s an amazing result for human moral that is at least 1000x times older than software development. Based on our level of understanding of software engineering, we can effort only 3 at the same time.&lt;/p&gt;
+&lt;p&gt;Christian God was so kind that he left us with 12 that still have very small contradiction like: should I steal a weapon from a person that wants to kill me tomorrow? That’s an amazing result for human moral that is at least 1000x times older than software development. Based on our level of understanding of software engineering, we can effort only 3 at the same time.&lt;/p&gt;
 
 &lt;h2 id=&quot;build-for-humans&quot;&gt;Build for Humans&lt;/h2&gt;
 
@@ -42,7 +133,7 @@
 &lt;ol&gt;
   &lt;li&gt;Software should do what it should do.&lt;/li&gt;
   &lt;li&gt;Model the real world&lt;/li&gt;
-  &lt;li&gt;Reuse Code&lt;/li&gt;
+  &lt;li&gt;Build an Architecture&lt;/li&gt;
   &lt;li&gt;Track Dependencies&lt;/li&gt;
 &lt;/ol&gt;
 
@@ -55,9 +146,11 @@ Try to be as close as possible to the piece of world you are modelling in the so
 
 &lt;p&gt;We tend to think that a software is complex. But the complexity comes from several factors. First is the processes being modeled are complex - here you would need to rethink them to make them simpler. But the second reason is software developer didn’t model them right. If you model things as they are, you eliminate second factor. If you model things even better than they are, you can even eliminate the first factor. It is worth mentioning that is only possible if you have a power to alter the process or the process you are modeling doesn’t exist yet. This is mostly the case for the modern software. If you are about to make a “select your seat” functionality for the plane ticket, there is no way you can simplify plane seat locations. If you make a new e-commerce web site, you are an author of most processes and can make product finding functionality as simple as possible until you reach a fact that it needs to fit not just your needs but also all your users needs which are quite different. &lt;/p&gt;
 
-&lt;h2 id=&quot;code-reuse&quot;&gt;2. Code Reuse&lt;/h2&gt;
+&lt;h2 id=&quot;build-an-architecture&quot;&gt;2. Build an Architecture&lt;/h2&gt;
 
-&lt;p&gt;As you model more and more processes, the code base grows. It needs to be generalized and reused. We all know which problems come from unreused code: bug fixes and changes need to be made more than once that inevitably leads to the lack of consistency in software where buttons that would suppose to do the same thing do it in a slightly or not so slightly different way. But code reuse is more than that: architecture is just a code reuse metric. If you have a code that is easy to reuse, the architecture arises on its own because people tend to reuse existing code instead of writing new. From the other hand, you can measure the “architectureness” of any code piece including third party(aka gems) by counting how many times it is used. That definition is well aligned with the popular idea that architecture is hard to change: if you reuse a particular piece more, it gets harder and harder to change it because the change affects more places. Following this principle also requires a good test coverage. The most reused code is usually the most covered by tests. You can not test everything, but you can define your priority based on number of usages of particular module.&lt;/p&gt;
+&lt;p&gt;Architecture is often seen as a luxurius term that can only be understoon and build by an elite part of development team. Sometimes in outsource companies this is given to the team by someone like company CTO that is not even part of the team. But architecture is something more trivial and someone everyone in a team is building. Lets try to define architecture in the most basic way:
+Architecture is the code that is used by your software the most number of times.
+As you model more and more processes, the code base grows. It needs to be generalized and reused. We all know which problems come from unreused code: bug fixes and changes need to be made more than once that inevitably leads to the lack of consistency in software where buttons that would suppose to do the same thing do it in a slightly or not so slightly different way. But code reuse is more than that: architecture is just a code reuse metric. If you have a code that is easy to reuse, the architecture arises on its own because people tend to reuse existing code instead of writing new. From the other hand, you can measure the “architectureness” of any code piece including third party(aka gems) by counting how many times it is used. That definition is well aligned with the popular idea that architecture is hard to change: if you reuse a particular piece more, it gets harder and harder to change it because the change affects more places. Following this principle also requires a good test coverage. The most reused code is usually the most covered by tests. You can not test everything, but you can define your priority based on number of usages of particular module.&lt;/p&gt;
 
 &lt;h2 id=&quot;track-dependencies&quot;&gt;3. Track Dependencies&lt;/h2&gt;
 

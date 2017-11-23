@@ -14,7 +14,7 @@
     <meta charset="utf-8"> 
     
     <meta name="description" content="This is personal blog of Bogdan Gusiev: ruby on rails developer, open source contributor">
-    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, programming, query, rails, report, resque, rspec, ruby, service, slides, sql, test, usability, validation, vim" />
+    <meta name="keywords" content="activerecord, ajax, api, application, bdd, behavior, changelog, class, commit, context, contribution, criticism, database, datagrid, debug, dry, gem, git, howto, html, idea, java, javascript, jquery, patch, pattern, performance, principles, programming, query, rails, report, resque, rspec, ruby, service, slides, software, sql, test, usability, validation, vim" />
     <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/highlight.css" type="text/css" media="screen" />
     <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="http://feeds.feedburner.com/BogdanGusiev" />
@@ -81,7 +81,7 @@
         <a href="/2017/07/guiding-software-development-principles">Guiding Software Development Principles</a>
         <div class="date">07 Jul 2017</div>
     </h2>
-    <p>It is becoming popular to talk about software development principles from time to time. The new major concepts appear and die due to the fact that most of them are designed to be perfect but they are not. If you would stay in IT long enough, you encounter articles and talks where people discovered an amazing concept “X” that solved all their development problems and brought their team to inevitable success. Unfortunately permanent success is usually temporary or even a self-deception. The truth is: there is no silver bullets in software development just like in any other engineering process. Engineering of world class products requires precise resources control, trade offs and balance between easy and complex, fast and slow, and beautiful and ugly. Here, I will try to explain my guiding software development principles as well as the why-s.</p>
+    <p>It is becoming popular to talk about software development principles from time to time. The new major concepts appear and die due to the fact that most of them are designed to be perfect but they are not. If you would stay in IT long enough, you encounter articles and talks where people discovered an amazing concept “X” that solved all their development problems and brought their team to inevitable success. Unfortunately that “permanent success” is usually temporary or even a self-deception. The truth is: there is no silver bullets in software development just like in any other engineering process. Engineering of world class products requires precise resources control, trade offs and balance between easy and complex, fast and slow, and beautiful and ugly. Here, I will try to explain my guiding software development principles as well as the why-s.</p>
 
 <!--more-->
 
@@ -91,9 +91,9 @@
 
 <h2 id="less-is-more">Less is More</h2>
 
-<p>There should be very limited number of principles to follow. More principles under the same concept just creates more contradiction and leaves less room to be situational and follow additional guidelines that would fit best for given problem. I think the ideal number in you “guiding principles” that apply <strong>almost</strong> to everything in your software should be 3. Higher numbers are possible. </p>
+<p>There should be very limited number of principles to follow. More principles under the same concept just creates more contradiction and leaves less room to be situational and follow additional guidelines that would fit best for given problem. I think the ideal number in your “guiding principles” that apply <strong>almost</strong> to everything in your software should be 3. Higher numbers are possible. </p>
 
-<p>Christian God was so kind that he left us with 10 that still have very small contradiction like: should I steal a weapon from a person that wants to kill me tomorrow? That’s an amazing result for human moral that is at least 1000x times older than software development. Based on our level of understanding of software engineering, we can effort only 3 at the same time.</p>
+<p>Christian God was so kind that he left us with 12 that still have very small contradiction like: should I steal a weapon from a person that wants to kill me tomorrow? That’s an amazing result for human moral that is at least 1000x times older than software development. Based on our level of understanding of software engineering, we can effort only 3 at the same time.</p>
 
 <h2 id="build-for-humans">Build for Humans</h2>
 
@@ -106,7 +106,7 @@
 <ol>
   <li>Software should do what it should do.</li>
   <li>Model the real world</li>
-  <li>Reuse Code</li>
+  <li>Build an Architecture</li>
   <li>Track Dependencies</li>
 </ol>
 
@@ -119,9 +119,11 @@ Try to be as close as possible to the piece of world you are modelling in the so
 
 <p>We tend to think that a software is complex. But the complexity comes from several factors. First is the processes being modeled are complex - here you would need to rethink them to make them simpler. But the second reason is software developer didn’t model them right. If you model things as they are, you eliminate second factor. If you model things even better than they are, you can even eliminate the first factor. It is worth mentioning that is only possible if you have a power to alter the process or the process you are modeling doesn’t exist yet. This is mostly the case for the modern software. If you are about to make a “select your seat” functionality for the plane ticket, there is no way you can simplify plane seat locations. If you make a new e-commerce web site, you are an author of most processes and can make product finding functionality as simple as possible until you reach a fact that it needs to fit not just your needs but also all your users needs which are quite different. </p>
 
-<h2 id="code-reuse">2. Code Reuse</h2>
+<h2 id="build-an-architecture">2. Build an Architecture</h2>
 
-<p>As you model more and more processes, the code base grows. It needs to be generalized and reused. We all know which problems come from unreused code: bug fixes and changes need to be made more than once that inevitably leads to the lack of consistency in software where buttons that would suppose to do the same thing do it in a slightly or not so slightly different way. But code reuse is more than that: architecture is just a code reuse metric. If you have a code that is easy to reuse, the architecture arises on its own because people tend to reuse existing code instead of writing new. From the other hand, you can measure the “architectureness” of any code piece including third party(aka gems) by counting how many times it is used. That definition is well aligned with the popular idea that architecture is hard to change: if you reuse a particular piece more, it gets harder and harder to change it because the change affects more places. Following this principle also requires a good test coverage. The most reused code is usually the most covered by tests. You can not test everything, but you can define your priority based on number of usages of particular module.</p>
+<p>Architecture is often seen as a luxurius term that can only be understoon and build by an elite part of development team. Sometimes in outsource companies this is given to the team by someone like company CTO that is not even part of the team. But architecture is something more trivial and someone everyone in a team is building. Lets try to define architecture in the most basic way:
+Architecture is the code that is used by your software the most number of times.
+As you model more and more processes, the code base grows. It needs to be generalized and reused. We all know which problems come from unreused code: bug fixes and changes need to be made more than once that inevitably leads to the lack of consistency in software where buttons that would suppose to do the same thing do it in a slightly or not so slightly different way. But code reuse is more than that: architecture is just a code reuse metric. If you have a code that is easy to reuse, the architecture arises on its own because people tend to reuse existing code instead of writing new. From the other hand, you can measure the “architectureness” of any code piece including third party(aka gems) by counting how many times it is used. That definition is well aligned with the popular idea that architecture is hard to change: if you reuse a particular piece more, it gets harder and harder to change it because the change affects more places. Following this principle also requires a good test coverage. The most reused code is usually the most covered by tests. You can not test everything, but you can define your priority based on number of usages of particular module.</p>
 
 <h2 id="track-dependencies">3. Track Dependencies</h2>
 
@@ -189,6 +191,10 @@ It is worth admitting that this is due to the fact that you are not a perfect so
         <ul class="posts">
             
                <!-- Exclude self -->
+                <li><span>23 Nov 2017</span> &raquo; <a href="/2017/11/naming-things-problem">"Naming Things" Solution</a></li>
+              
+            
+               <!-- Exclude self -->
                 <li><span>12 Jan 2016</span> &raquo; <a href="/2016/01/single-responsibility-principle-srp-criticism">Something is wrong with Single Reponsibility Principle</a></li>
               
             
@@ -198,10 +204,6 @@ It is worth admitting that this is due to the fact that you are not a perfect so
             
                <!-- Exclude self -->
                 <li><span>25 Jul 2014</span> &raquo; <a href="/2014/07/rubyc-conference-video-parsers-slides">My Talk from RubyC conference</a></li>
-              
-            
-               <!-- Exclude self -->
-                <li><span>27 May 2014</span> &raquo; <a href="/2014/05/podcast-interview-le0pard-open-source-contribution">Took part in a podcast with Alexey Vasiliev</a></li>
               
             
         </ul>
@@ -236,6 +238,10 @@ It is worth admitting that this is due to the fact that you are not a perfect so
                         <ul>
                             
                             <li>
+                                <a href='/2017/11/naming-things-problem'>"Naming Things" Solution</a>
+                            </li>
+                            
+                            <li>
                                 <a href='/2017/07/guiding-software-development-principles'>Guiding Software Development Principles</a>
                             </li>
                             
@@ -249,10 +255,6 @@ It is worth admitting that this is due to the fact that you are not a perfect so
                             
                             <li>
                                 <a href='/2014/07/rubyc-conference-video-parsers-slides'>My Talk from RubyC conference</a>
-                            </li>
-                            
-                            <li>
-                                <a href='/2014/05/podcast-interview-le0pard-open-source-contribution'>Took part in a podcast with Alexey Vasiliev</a>
                             </li>
                             
                         </ul>
@@ -320,6 +322,7 @@ It is worth admitting that this is due to the fact that you are not a perfect so
 <a href="/tags/patch.html" title="Pages tagged patch" style="font-size: 17.6px; line-height:17.6px" rel="tag">patch</a> 
 <a href="/tags/pattern.html" title="Pages tagged pattern" style="font-size: 17.6px; line-height:17.6px" rel="tag">pattern</a> 
 <a href="/tags/performance.html" title="Pages tagged performance" style="font-size: 19.4px; line-height:19.4px" rel="tag">performance</a> 
+<a href="/tags/principles.html" title="Pages tagged principles" style="font-size: 17.6px; line-height:17.6px" rel="tag">principles</a> 
 <a href="/tags/programming.html" title="Pages tagged programming" style="font-size: 21.2px; line-height:21.2px" rel="tag">programming</a> 
 <a href="/tags/query.html" title="Pages tagged query" style="font-size: 17.6px; line-height:17.6px" rel="tag">query</a> 
 <a href="/tags/rails.html" title="Pages tagged rails" style="font-size: 39.2px; line-height:39.2px" rel="tag">rails</a> 
@@ -329,6 +332,7 @@ It is worth admitting that this is due to the fact that you are not a perfect so
 <a href="/tags/ruby.html" title="Pages tagged ruby" style="font-size: 30.2px; line-height:30.2px" rel="tag">ruby</a> 
 <a href="/tags/service.html" title="Pages tagged service" style="font-size: 19.4px; line-height:19.4px" rel="tag">service</a> 
 <a href="/tags/slides.html" title="Pages tagged slides" style="font-size: 24.8px; line-height:24.8px" rel="tag">slides</a> 
+<a href="/tags/software.html" title="Pages tagged software" style="font-size: 17.6px; line-height:17.6px" rel="tag">software</a> 
 <a href="/tags/sql.html" title="Pages tagged sql" style="font-size: 19.4px; line-height:19.4px" rel="tag">sql</a> 
 <a href="/tags/test.html" title="Pages tagged test" style="font-size: 19.4px; line-height:19.4px" rel="tag">test</a> 
 <a href="/tags/usability.html" title="Pages tagged usability" style="font-size: 17.6px; line-height:17.6px" rel="tag">usability</a> 
