@@ -6,7 +6,7 @@ html {
   background-color: #e4e4e4; }
 
 body {
-  color: #888888;
+  color: #888;
   padding: 10px;
   min-height: 600px;
   font: 14px/1.3 "Segoe UI", Arial, sans-serif;
@@ -31,7 +31,7 @@ h1 {
   overflow: hidden;
   margin: 150px auto 10px;
   text-align: center;
-  color: #222222; }
+  color: #222; }
 
 h2 {
   font-size: 17px;
@@ -39,10 +39,10 @@ h2 {
   font-style: italic;
   font-weight: normal;
   text-align: center;
-  color: #222222; }
+  color: #222; }
 
 #footer {
-  color: #999999;
+  color: #999;
   font-size: 15px;
   line-height: 1.6;
   padding: 40px 20px 0;
@@ -59,7 +59,7 @@ body > img {
   text-align: center;
   margin: 0 auto;
   position: relative;
-  background-color: white;
+  background-color: #fff;
   display: block;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -115,7 +115,7 @@ a.downloadButton {
   width: 490px;
   margin: 50px auto 0 auto;
   padding: 25px;
-  background: #eeeeee;
+  background: #eee;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px; }
@@ -123,3 +123,5 @@ a.downloadButton {
     margin: 10px; }
   #help li {
     list-style: inside; }
+
+/*# sourceMappingURL=ajaxsubmit.css.map */
