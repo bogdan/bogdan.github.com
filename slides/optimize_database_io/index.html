@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
+    <title>reveal.js</title>
+    <link href='css/reveal.css' rel='stylesheet'>
+    <link href='css/theme/simple.css' rel='stylesheet'>
+    <!-- Theme used for syntax highlighting of code -->
+    <link href='lib/css/zenburn.css' rel='stylesheet'>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <style>
+      .splash-image {
+        position: absolute;
+        top: 10%;
+        left: 0;
+        border: 0 !important;
+        background-color: transparent !important;
+        width: 100%;
+        margin: auto; }
+      
+      .yellow {
+        color: #F3B521 !important; }
+      
+      .green {
+        color: #17ff2e !important; }
+      
+      .red {
+        color: red !important; }
+      
+      .first-slide {
+        width: 100% !important;
+        height: 100% !important;
+        top: 0 !important;
+        position: absolute !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        background-color: white !important; }
+    </style>
+    <style>
+      code.line-numbers {
+        counter-reset: line_numbers; }
+      code span.line-number {
+        counter-increment: line_numbers; }
+        code span.line-number:before {
+          content: counter(line_numbers);
+          color: gray; }
+      code span.highlight-line:before {
+        color: yellow; }
+    </style>
+  </head>
+  <body>
+    <div class='reveal'>
+      <div class='slides'>
+        <section>
+          <h2>Optimize Database Queries</h2>
+          <h3>Bogdan Gusiev</h3>
+          <h3>June 2017</h3>
+        </section>
+        <section>
+          <h3>Bogdan Gusiev:</h3>
+          <ul>
+            <li>Working for startups for X years</li>
+            <li>Contributing to Ruby on Rails X years</li>
+          </ul>
+        </section>
+        <section>
+          <h3>2011: Started</h3>
+          <img src='https://monosnap.com/file/zbsymGAuTXPpwhLrwLf3wmGl0jXBiY.png'>
+        </section>
+        <section>
+          <h3>2017: Won an argument with DHH</h3>
+          <img src='https://monosnap.com/file/e7VO7qmiVjqfhyosW5TIYW7cbH2S80.png'>
+        </section>
+        <section>
+          <h3>
+            Why is SQL queries
+            <br>
+            worth to be optimized?
+          </h3>
+        </section>
+        <section>
+          <h3>Optimize Your App</h3>
+          <ul>
+            <li>Web Server</li>
+            <li>Application Container (unicorn etc)</li>
+            <li>Rack/Rails</li>
+            <li class='fragment'>Your code</li>
+          </ul>
+          <h3 class='fragment red'>90% it is all yours</h3>
+        </section>
+        <section>
+          <h3>Top of the mind</h3>
+          <ul>
+            <li>Use a different database</li>
+            <li>Buy a new hardware</li>
+            <li>Use a magic setting</li>
+            <li class='fragment yellow'>Optimize Slow Parts</li>
+          </ul>
+        </section>
+        <section>
+          <h3>What takes time in the app</h3>
+          <img src='https://monosnap.com/file/c7ZZ3fwZzo5KK2m4R51qIbJTZpl5Lz.png'>
+        </section>
+        <section>
+          <h3>What takes time in the app</h3>
+          <img src='https://monosnap.com/file/qKmy2rxT2iJ2vpHqYQez22PLgh9X0q.png'>
+        </section>
+        <section>
+          <h2>Optimize DB queries is important</h2>
+        </section>
+        <section>
+          <h2>Methods</h2>
+          <ul>
+            <li>Avoid queries</li>
+            <li>Make queries faster</li>
+            <li>Merge queries (several simple into one complex)</li>
+            <li>Use Cache</li>
+          </ul>
+        </section>
+        <section>
+          <h2>
+            Types of queries
+          </h2>
+          <ul>
+            <li>
+              Instant ( &lt; 10ms )
+              <ul>
+                <li>time spent mainly on networking IO and FS read</li>
+                <li>There are many of them</li>
+              </ul>
+            </li>
+            <li class='fragment'>
+              Slow  ( &gt; 50ms )
+              <ul>
+                <li>time spent on aggregating or searching the data</li>
+                <li>Slow time comes from joins or aggregation or dynamic conditions</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>Avoid Instant Queries</h2>
+          <pre><code class='ruby'>Campaign.has_many :offers&#x000A;Offer.belongs_to :campaign&#x000A;</code></pre>
+          <pre><code> >> campaign.offers.first.campaign&#x000A; SELECT  `offers`.* FROM `offers` WHERE `offers`.`campaign_id` = 1&#x000A; SELECT  `campaigns`.* FROM `campaigns` WHERE `campaigns`.`id` = 1&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>Why does it happen?</h2>
+          <pre><code class='haml'>= render partial: "offers/offer", collection: campaign.offers</code></pre>
+          <pre><code class='haml'>-# app/views/offers/_offer.html.haml&#x000A;%a{href: campaign_offer_path(offer.campaign, offer)}&#x000A;  = offer.name&#x000A;  &#x000A;&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2 class='yellow'>Avoid Queries is Possible</h2>
+          <pre><code class='ruby'>Campaign.has_many :offers, inverse_of: :campaign&#x000A;Offer.belongs_to :campaign, inverse_of: :offers   &#x000A;&#x000A;</code></pre>
+        </section>
+        <section>
+          <pre><code class='ruby'>class UserRole &lt; AR::Base&#x000A;  belongs_to :user&#x000A;  validates_uniqueness_of :role_id, scope: [:user_id]&#x000A;end</code></pre>
+          <img src='https://monosnap.com/file/uZ06k8hdnHqF4rbcWS7xgOuoiuGgaP.png'>
+          <div class='fragment'>
+            <h2>Use unique index instead</h2>
+          </div>
+        </section>
+        <section>
+          <h3>Rails built-in avoid queries methods:</h3>
+          <ul>
+            <li>inverse_of</li>
+            <li>counter_cache</li>
+            <li>has_many :through</li>
+            <li>preload/includes</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Avoid Queries</h2>
+          <pre><code class='ruby'>Coupon.belongs_to :purchase, counter_cache: true&#x000A;class Purhcase &lt; AR::Base&#x000A;  has_many :coupons, class_name: "DiscountCoupon"&#x000A;&#x000A;  def coupon_codes&#x000A;    coupons.map(&:code)&#x000A;  end&#x000A;end</code></pre>
+          <pre class='fragment'><code class='ruby'>def coupon_codes&#x000A;  coupon_count > 0 ? coupons.map(&:code) : []&#x000A;end</code></pre>
+        </section>
+        <section>
+          <pre><code class='ruby'>Comment.belongs_to :post, counter_cache: true</code></pre>
+          <pre><code class='haml line-numbers'>- if @post.comments.any?&#x000A;  Comments (#{@post.comments.count}):&#x000A;  - @post.comments.each do |comment|&#x000A;    = render partial: "posts/comment", object: comment&#x000A;- else&#x000A;  No Comments Made yet</code></pre>
+          <h3>
+            How many queries
+            <br>
+            in the worst case scenario?
+          </h3>
+          <h2 class='fragment'>3 Queries</h2>
+        </section>
+        <section>
+          <h3>Rails Feature Proposal</h3>
+          <p>
+            <br>
+            Make use of `counter_cache`
+            <br>
+            in Association methods like
+            <ul>
+              <li>count</li>
+              <li>any?</li>
+              <li>empty?</li>
+            </ul>
+            <br>
+            <div class='fragment'>Avoid loading completely when counter is 0</div>
+          </p>
+          <style>
+            .thumb-up {
+              position: absolute;
+              right: 0;
+              top: 10%;
+              box-shadow: 0 0 0 0 !important; }
+          </style>
+          <img class='thumb-up fragment fade-left' src='bogdan_480.png' style='width: 50%; right: 0; border: 0; background-color: transparent'>
+        </section>
+        <section>
+          <h2>Cache Columns</h2>
+          <h3>as a way to avoid queries</h3>
+        </section>
+        <section>
+          <h3>Cache immutable data</h3>
+          <pre><code class='ruby'>create_table :comments do |t|&#x000A;  t.integer :post_id&#x000A;  t.integer :author_id&#x000A;  t.text :body&#x000A;end&#x000A;</code>
+          #body is mutable but #post and #author are not</pre>
+          <pre class='fragment'><code class='ruby'>Comment.has_one :feed_activity, as: :target&#x000A;FeedActivity.belongs_to :target, polymorphic: true&#x000A;FeedActivity.before_validation do &#x000A;  self.forum = comment.post.forum&#x000A;  self.author = comment.author&#x000A;}&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>Cache Columns</h2>
+          <h3>Pros</h3>
+          <ul>
+            <li>Cheap to make</li>
+            <li>Cheap to maintain for immutable data</li>
+          </ul>
+          <h3>Cons</h3>
+          <ul>
+            <li>Expensive to maintain for mutable data</li>
+            <li>Takes disc space</li>
+          </ul>
+        </section>
+        <section>
+          <h1>Speedup queries</h1>
+        </section>
+        <section>
+          <pre><code class='ruby'>add_index :users, :email, unique: true&#x000A;add_index :products, :category_id&#x000A;</code></pre>
+          <ul>
+            <li>Become actual after 100_000 records</li>
+            <li>Indexes take disk space</li>
+            <li>Foreign Key index is almost always a good idea</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Index Usage Guide</h2>
+          <p>Index by one column will help you make the related query fast</p>
+          <pre><code class='sql'>SELECT * FROM users WHERE email = ?&#x000A;</code></pre>
+          <div class='fragment'>
+            <p>
+              Multi-column index can be used to query
+              <br>
+                by 1st column, 1st &amp; 2nd column etc
+              </br>
+            </p>
+            <pre><code class='ruby'>add_index :users_roles, [:user_id, :role_id], unique: true&#x000A;add_index :users_roles, :role_id&#x000A;</code></pre>
+          </div>
+        </section>
+        <section>
+          <h3>Some Math</h3>
+          <p>
+            If I have a table with N columns, how many indexes do I need to cover 100% of possible where conditions?
+          </p>
+        </section>
+        <section>
+          <h2>
+            2
+            <sup>
+              <i>n</i>
+            </sup>
+          </h2>
+          <h3 class='fragment'>How about partial index usage optimization?</h3>
+          <h3 class='fragment'>
+            2
+            <sup>
+              <i>n-1</i>
+            </sup>
+          </h3>
+        </section>
+        <section>
+          <h3>Indexes are not free</h3>
+          <h4>Talkable DB Space Usage in GB</h4>
+          <img src='https://monosnap.com/file/uy3gMAu72njmGRyvgTQixzqIzVUrNr.png'>
+        </section>
+        <section>
+          <h2>Index Usage Optimization</h2>
+          <pre><code class='sql'>SELECT * FROM posts p &#x000A;WHERE p.forum_id = ? AND p.user_id = ? AND p.created_at = ?&#x000A;</code></pre>
+          <ul>
+            <li>Index A: forum_id, created_at</li>
+            <li>Index B: user_id</li>
+          </ul>
+        </section>
+        <section>
+          <h3>But the DB may disagree</h3>
+          <pre><code class='sql'>SELECT * FROM posts p USE INDEX(index_b)&#x000A;WHERE p.forum_id = ? AND p.user_id = ? AND p.created_at = ?</code></pre>
+          <h3 class='fragment'>WHERE conditions are applied one after another</h3>
+        </section>
+        <section>
+          <h4>
+            Apply indexes to columns that would
+          </h4>
+          <h3 class='yellow'>cut the most records</h3>
+          <h4>from the result in where condition</h4>
+        </section>
+        <section>
+          <h4>Indexes are the best to speed up your queries</h4>
+          <h3>But they are not the only one</h3>
+        </section>
+        <section>
+          <h3>Cache Tables</h3>
+          <pre><code class='ruby'>Product.belongs_to :store&#x000A;Product.belongs_to :category&#x000A;Store.has_many :categories, through: :products</code></pre>
+          <pre class='fragment'><code class='ruby'>create_table :stores_categories do |t|&#x000A;  t.integer :store_id&#x000A;  t.integer :category_id&#x000A;end</code></pre>
+          <p class='fragment'>
+            Faster join because of low number of records
+          </p>
+        </section>
+        <section>
+          <h3>Extra Conditions</h3>
+          <pre><code class='swzql'>SELECT * FROM offers&#x000A;WHERE campaign_id = {campaign.id}</code>
+          <code class='sql fragment'>AND site_id = {campaign.site.id}</code>
+          <code class='sql fragment'>AND created_at &#x000A;  BETWEEN {campaign.created_at} AND {campaign.deactivated_at}&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>Avoid Join</h2>
+          <pre><code class='ruby'>Purchase.has_many :discount_coupons&#x000A;DiscountCoupon.belongs_to :purchase, counter_cache: true&#x000A;&#x000A;Purchase.scope :shipped_for_free, -> {&#x000A; joins(:discount_coupons).&#x000A;   where(discount_coupons: {free_shipping: true}).&#x000A;}&#x000A;</code>
+          <code class='ruby fragment'>where("discount_coupons.coupons_count &gt; 0")</code></pre>
+        </section>
+        <section>
+          <h2>DB is smart on doing JOINS</h2>
+          <pre><code class='ruby'>Purchase.&#x000A;  where(created_at: 30.days.ago..Time.now).&#x000A;  shipped_for_free&#x000A;</code></pre>
+          <pre class='fragment'><code class='sql line-numbers'>SELECT * FROM purchases &#x000A;USE INDEX (index_purchases_created_at)&#x000A;INNER JOIN coupons ON purchases.coupon_id = coupons.id&#x000A;WHERE &#x000A;  purchases.coupons_count &gt; 0 AND &#x000A;  (purchases.created_at BETWEEN ? AND ?) AND &#x000A;  coupons.free_shipping</code></pre>
+          <div class='fragment'>
+            <h4>
+              created_at -> coupons_count ->
+              <br>
+              &nbsp;&nbsp;&nbsp; join coupons -> free_shipping
+            </h4>
+          </div>
+        </section>
+        <section>
+          <h2>Query execution mystery</h2>
+          <pre><code class='sql'>SELECT * FROM members LEFT JOIN projects ON &#x000A;members.project_id = projects.id&#x000A;WHERE projects.organization_id = ?&#x000A;&#x000A;SELECT * FROM members WHERE project_id in (&#x000A;  SELECT * FROM projects WHERE organization_id = ?)&#x000A;&#x000A;-- pseudocode&#x000A;ids = SELECT id FROM projects WHERE organization_id = ?&#x000A;SELECT * FROM members WHERE project_id in (ids)</code></pre>
+        </section>
+        <section>
+          <h4>
+            Queries can be equivalent for
+            <span class='green'>your data</span>
+          </h4>
+          <h4 class='fragment'>
+            but they are not equivalent for
+            <span class='red'>any data</span>
+          </h4>
+          <h4 class='fragment'>
+            <br>
+            <span class='yellow'>
+              Know your data
+            </span>
+            is a key to performance
+          </h4>
+        </section>
+        <section>
+          <h3>OR operation</h3>
+          <pre><code class='ruby'>Product.where(&#x000A;  category_id: Category.where(archived: false).ids&#x000A;)&#x000A;</code></pre>
+          <pre><code class='sql'>SELECT id FROM categories WHERE archived = false&#x000A;SELECT * FROM product WHERE category_id in (1,2,3,4,5 ....)&#x000A;</code></pre>
+          <pre class='fragment'><code class='sql'>SELECT * FROM product WHERE category_id = 1 UNION&#x000A;SELECT * FROM product WHERE category_id = 2 UNION&#x000A;SELECT * FROM product WHERE category_id = 3 UNION ...&#x000A;</code></pre>
+          <p class='fragment'>
+            "OR" operator is bad for your performance
+            <br>
+            Beware of "OR" in the hidden form
+          </p>
+        </section>
+        <section>
+          <h3>"Nested queries are evil"</h3>
+          <h3>(c) My University Professor 2006</h3>
+        </section>
+        <section>
+          <h2>Nested queries are good when</h2>
+          <ul>
+            <li>
+              They is
+              <span class='red'>no closures</span>
+              <ul>
+                <li>Result is the same for each query row</li>
+              </ul>
+            </li>
+            <li>
+              The result set has not more than
+              <span class='red'>100 records</span>
+            </li>
+            <li>They let you define a stricter query execution plan</li>
+          </ul>
+        </section>
+        <section>
+          <h3>In most cases, two simple queries will be faster than one complex</h3>
+          <h3 class='fragment'>if nested query didn't work</h3>
+        </section>
+        <section>
+          <h2>Query Execution Plan</h2>
+          <ul>
+            <li>PostgreSQL <code>explain</code> statement is amazing</li>
+            <li>MySQL <code>explain</code> statement is useless</li>
+          </ul>
+        </section>
+        <section>
+          <h2>PostgreSQL Explain</h2>
+          <pre><code>tpcc=# explain select (&#x000A;  select count(*) from item where i_id = empty.i_id&#x000A;) from empty;&#x000A;&#x000A; QUERY PLAN&#x000A;----------------------------------------------------------------------------------&#x000A;Seq Scan on empty (cost=0.00..19933.22 rows=2400 width=4)&#x000A;  SubPlan&#x000A;    -> Aggregate (cost=8.28..8.29 rows=1 width=0)&#x000A;      -> Index Scan using pk_item on item (cost=0.00..8.28 rows=1 width=0)&#x000A;          Index Cond: (i_id = $0)&#x000A;</code></pre>
+          <a href='https://wiki.postgresql.org/wiki/File:Explaining_EXPLAIN.pdf'>
+            wiki.postgresql.org/wiki/File:Explaining_EXPLAIN.pdf
+          </a>
+        </section>
+        <section>
+          <h3>Real Example:</h3>
+          <h2>Leaderboard</h2>
+          <table>
+            <tr>
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Comments</th>
+            </tr>
+            <tr>
+              <td>1st</td>
+              <td>Jonh</td>
+              <td>97</td>
+            </tr>
+            <tr>
+              <td>2nd</td>
+              <td>Rick</td>
+              <td>95</td>
+            </tr>
+            <tr>
+              <td>3rd</td>
+              <td>Aaron</td>
+              <td>60</td>
+            </tr>
+            <tr class='fragment'>
+              <td>95th</td>
+              <td>You</td>
+              <td>20</td>
+            </tr>
+          </table>
+        </section>
+        <section>
+          <h2>Manually controlling the query execution plan</h2>
+          <pre><code class='ruby'>find_person_by_id(add_ranking(get_names_and_counts), ?)</code></pre>
+          <pre class='fragment'><code class='sql line-numbers'>SELECT people.*, leaderboard.* FROM (&#x000A;  SELECT leaders.*, CAST(@rnk:=@rnk+1 AS UNSIGNED) leaderboard_rank &#x000A;  FROM (&#x000A;    SELECT  `comments`.`person_id` person_id, &#x000A;      COUNT(*) AS `leaderboard_count` &#x000A;    FROM `comments`  &#x000A;    WHERE `comments`.`created_at` BETWEEN ? AND ? &#x000A;    GROUP BY `comments`.`person_id` &#x000A;    ORDER BY `leaderboard_count` DESC &#x000A;    LIMIT ?&#x000A;  ) AS leaders, (SELECT @rnk:=0) AS ranking&#x000A;) AS leaderboard left join people on people.id = leaderboard.person_id &#x000A;WHERE people.id = ?&#x000A;ORDER BY leaderboard_rank</code></pre>
+        </section>
+        <section>
+          Supercomplex SQL query can be fast
+          <br>
+          if you control the execution plan
+          <pre><code class='sql'>SELECT people.*, leaderboard.* FROM (&#x000A;  SELECT leaders.*, CAST(@rnk:=@rnk+1 AS UNSIGNED) leaderboard_rank FROM (&#x000A;    SELECT `offers`.`person_id` person_id, COUNT(*) AS `leaderboard_count`, SUM(`referrals`.`referred_subtotal`) AS `leaderboard_subtotal` FROM `referrals` &#x000A;      INNER JOIN `offers` ON `offers`.`id` = `referrals`.`offer_id` &#x000A;      INNER JOIN `origins` ON `origins`.`id` = `referrals`.`referred_origin_id` AND `origins`.`type` IN ('Event', 'Purchase') &#x000A;      WHERE `referrals`.`site_id` = %SITE_ID% AND `referrals`.`status` IN ('approved', 'unblocked') AND &#x000A;        (`offers`.`person_id` IS NOT NULL) AND `origins`.`event_category_id` = 17201 AND &#x000A;        (`referrals`.`status` != 'blocked') AND `referrals`.`campaign_id` = 51710 AND &#x000A;        (`referrals`.`created_at` BETWEEN %STARTED_AT% AND %FINISHED_AT%) &#x000A;      GROUP BY `offers`.`person_id` &#x000A;      ORDER BY `leaderboard_count` DESC, `leaderboard_subtotal` DESC, `offers`.`person_id` ASC&#x000A;  ) AS leaders, (SELECT @rnk:=0) AS ranking&#x000A;) AS leaderboard &#x000A;LEFT JOIN people on people.id = leaderboard.person_id &#x000A;WHERE `people`.`site_id` = %SITE_ID% AND `people`.`id` = {person_id} &#x000A;ORDER BY leaderboard_rank&#x000A;</code></pre>
+        </section>
+        <section>
+          <h3>Use Cache</h3>
+          <ul class='fragment'>
+            <li>Key-Value DB</li>
+            <li>HTTP ETAG</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Key-Value DB</h2>
+          <pre><code class='ruby'>class Forum&#x000A;  def comments_leaderboard(period)&#x000A;    Rails.cache.fetch(cache_key(period)) do&#x000A;      all_that_heavy_sql&#x000A;    end&#x000A;  end&#x000A;end&#x000A;</code></pre>
+          <pre class='fragment'><code class='ruby'>def cache_key(period)&#x000A;  ["comments_leaderboard", period, &#x000A;    comments.where(created_at: period).&#x000A;      order(:created_at).last.id]&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h3>
+            <div class='fragment strike'>Expiration by key</div>
+            <div class='fragment'>
+              <h3>Rails 5.2</h3>
+              Expiration by version
+            </div>
+          </h3>
+          <h3 class='fragment'>
+            PR #29092:
+            <br>
+            <a href='https://github.com/rails/rails/pull/29092'>
+              Recyclable Cache Keys
+            </a>
+          </h3>
+        </section>
+        <section>
+          <h3>Expiration Version Feature</h3>
+          <pre><code class='ruby'>Rails.cache.fetch(["post_preview", post]) do&#x000A;  heavy_lifting&#x000A;end</code></pre>
+          <pre><code class='ruby'>class Post&#x000A;  def cache_key&#x000A;    "post/#{id}"&#x000A;  end&#x000A;  def cache_version&#x000A;    updated_at&#x000A;  end&#x000A;end</code></pre>
+          <img class='splash-image fragment fade-in' src='http://www.rizzimichele.it/wp-content/themes/evolve/library/media/images/parallax/Off_topic.gif'>
+        </section>
+        <section>
+          <h4>Etag Caching</h4>
+          <h3 class='yellow'>304 Not Modified</h3>
+          <div class='fragment'>
+            <img src='http://mohanraj-nagasamy.github.io/images/posts/etags-rails-3-and-rails-4.png' style='margin: auto;background-color: white'>
+            <br>
+            <a href='http://mohanraj-nagasamy.github.io/blog/2014/02/22/browser-cache-how-etags-works-in-rails-3-and-rails-4/'>Original article</a>
+          </div>
+          <img class='splash-image fragment fade-in' src='http://www.rizzimichele.it/wp-content/themes/evolve/library/media/images/parallax/Off_topic.gif'>
+        </section>
+        <section>
+          <h4>Can't optimize the query?</h4>
+          <h3>Cache at higher level!</h3>
+        </section>
+        <section>
+          <h3>High Level Caching is tough</h3>
+          <ul>
+            <li>Cache Hit</li>
+            <li>Invalidation</li>
+            <li>Invalidation Maintenance</li>
+            <li>
+              Invalidation Bugs
+              <ul class='fragment'>
+                <li>Description: "Sometimes..."</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h3>Optimizing Steps</h3>
+          <ol>
+            <li>Many Queries -&gt; Merge or Avoid Queries</li>
+            <li>
+              Slow Queries -&gt;
+              <span class='yellow'>Optimize Queries</span>
+              <ol>
+                <li>Figure Out Domain Specifics</li>
+                <li>Use Indexes Effectively</li>
+                <li>Control Disk Space</li>
+                <li>Control Query Execution Plan</li>
+              </ol>
+            </li>
+            <li class='fragment red'>Use High Level Cache</li>
+          </ol>
+        </section>
+        <section>
+          <h2>Thank You</h2>
+          <br>
+          <ul>
+            <li>
+              <a href='http://github.com/bogdan' style='color: white'>http://github.com/bogdan</a>
+            </li>
+            <li>
+              <a href='http://gusiev.com' style='color: white'>http://gusiev.com</a>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+    <script src='lib/js/head.min.js'></script>
+    <script src='js/reveal.js'></script>
+    <script>
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      history: true,
+      // More info https://github.com/hakimel/reveal.js#dependencies
+      dependencies: [
+        { src: 'plugin/markdown/marked.js' },
+        { src: 'plugin/markdown/markdown.js' },
+        { src: 'plugin/notes/notes.js', async: true },
+        {src: 'plugin/line-numbers/line-numbers.js', async: false},
+        { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+      ]
+      });
+    </script>
+  </body>
+</html>
