@@ -55,6 +55,18 @@
             border: 0px
             box-shadow: 0 0 0 0
       
+          code
+            &.line-numbers
+              counter-reset: line_numbers
+            span
+              &.line-number
+                counter-increment: line_numbers
+                margin-right: 1em
+                &:before
+                  content: counter(line_numbers, decimal-leading-zero)
+                  color: gray
+              &.highlight-line:before
+                color: yellow
           
         
   %body
@@ -172,8 +184,8 @@
 
         %section
           %ol
-            %li Make a fork (optional)
-            %li Create a Branch
+            %li Make a branch or fork
+            %li Make a change
             %li Open a Pull Request
             %li Wait for review
             %li 
@@ -251,14 +263,15 @@
             %li High Level Performance
         %section
 
-          %h4 Only show custom properties with at least one value in select
+          %h4 Only show product categories with at least one product 
+          %h4 in the select box
 
           %pre
             %code.diff
               :preserve
                 def selectable_product_categories
-                +  ProductCategory.with_at_least_one_product
-                -  ProductCategory.all
+                -  ProductCategory.with_at_least_one_product
+                +  ProductCategory.all
                 end
 
           %pre.fragment
@@ -276,11 +289,11 @@
           %h3.fragment This is not very secure
 
         %section
-          %h2 High Level Performance
-          %h3 Check if the change
-          %ul
+          %h2 High Level Performance:
+          %h3 Is there a way to even make this feature fast?
+          %ul.fragment
             %li 
-              Touches Performance 
+              Touches performance 
               %span.red sensitive code
             %li 
               Will be slow for 
@@ -291,7 +304,7 @@
           %h2 Public APIs
           %h3 Using HTTP API as example
           %ol
-            %li Efficiency
+            %li.red Efficiency
             %li Logical Endpoints
             %li Request Parameters
             %li Response Format
@@ -300,23 +313,24 @@
           %h4.fragment Whatever that is documented
         %section
           %h2 API inefficiency example
-
           %pre
             %code.ruby
               :preserve
                 Purchase.has_one :referral
-          %pre
-            %code
-              :preserve
-                GET /purchases/:order_number
-                  {
-                    id: 1,
-                    order_number: '1838382',
-                    referral_id: 17
-                  }
+          %p How do I approve the referral when I have a Purchase#order_number?
+          .fragment
+            %pre
+              %code
+                :preserve
+                  GET /purchases/:order_number
+                    {
+                      id: 1,
+                      order_number: '1838382',
+                      referral_id: 17
+                    }
 
-                POST  /referrals/:id/approve
-          %h3 Efficient Way?
+                  POST  /referrals/:id/approve
+            %h3 Efficient Way?
           %pre.fragment
             %code.less
               :preserve
@@ -349,20 +363,20 @@
           %pre
             %code.js
               :preserve
-                setCustomProperty: function (person, properties) {
+                setProperties: function (person, properties) {
                   ...
                 }
-                setCustomProperty('advocate', {key: value})
-                setCustomProperty('friend',   {key: value})
+                setProperties('advocate', {key: value})
+                setProperties('friend',   {key: value})
           %pre.fragment
             %code.js
               :preserve
-                setAdvocateCustomProperty: function(properties) {
-                  private_stuff.setCustomProperty("advocate", properties);
+                setAdvocateProperties: function(properties) {
+                  privateStuff.setProperties("advocate", properties);
                 },
 
-                setFriendCustomProperty: function(properties) {
-                  private_stuff.setCustomProperty("friend", properties);
+                setFriendProperties: function(properties) {
+                  privateStuff.setProperties("friend", properties);
                 },
         %section
           %h2 Database Schema
@@ -375,12 +389,12 @@
         %section
           %h3 Efficient Relations
 
-          %p
-            %img{src: "http://support.smartbear.com/support/media/images/support/kb/data/2011/1/31/info-database-schema.jpg", style: 'height: 300px'}
-
           %ol
             %li What are the variants?
             %li Was the best one selected?
+          %p
+            %img{src: "http://support.smartbear.com/support/media/images/support/kb/data/2011/1/31/info-database-schema.jpg", style: 'height: 300px'}
+
                
         %section
 
@@ -411,12 +425,40 @@
           %h3.fragment 
             even if it makes it 
             %span.red harder to write
+          %h3.fragment
+            Database schema change 
+            %br 
+            can be one of the hardest ones
         %section
           %h2 Object Oriented Design
           %ol
-            %li Reflects Real World
-            %li Inheritance
-            %li Constructors
+            %li 
+              Reflects Real World
+              %ul
+                %li Classes correspond to the real interactions that happen
+            %li 
+              Inheritance
+              %ul
+                %li Classes are inherited correctly
+
+            %li.red Constructors
+        %section
+          %h1 Inheritance
+          %h3 From Random Java Handbook:
+          %pre
+            %code.java
+              :preserve
+                public class Animal {
+                }
+
+                public class Mammal extends Animal {
+                }
+
+                public class Reptile extends Animal {
+                }
+
+                public class Dog extends Mammal {
+                }
         %section
           %h2 Reviewing constructors
           %h3 Circular Dependency
@@ -437,7 +479,7 @@
                   end
                 end
         %section
-          %h2 Object constructors are important:
+          %h2 Class constructor answers to:
 
           %ul
             %li Which things are required to use an object?
@@ -448,8 +490,14 @@
             %li Which methods can be implemented in the object?
             %li 
               Which things would need to be passed to methods as arguments?
-              %ul
-                %li Constructor defines object API
+          %br
+          %br
+          %h4.fragment
+            Name gives a clue what object 
+            %span.red should do
+            %br
+            Constructor gives a clue what object 
+            %span.green can do
 
         %section
           %h2 Reviewing Constructors
@@ -466,13 +514,13 @@
           %pre.fragment
             %code.ruby
               :preserve
-                CrawlerRequestAnalyzer.new(
+                ConcreteRequestAnalyzer.new(
                   request.user_agent, request.url, request.content_type
                 ).analyze
         %section
           %h2 Public Method Signatures
           %ol
-            %li Placement
+            %li.red Placement
             %li Arguments
             %li Name
         %section
@@ -494,6 +542,10 @@
             %code.js
               :preserve
                 this.extractUserData(this.data)
+          %pre
+            %code.js
+              :preserve
+                renderFeedbackForm(user, user.role)
                 
         %section
           %h1 Implementation
@@ -503,12 +555,36 @@
           %p Each method or class separately
           %p Check one by one:
           %ol
-            %li Approach &amp; Algorithm
+            %li Approach
             %li Performance
             %li Security
             %li Minimalism
             %li Local Variable Names
 
+        %section
+          %h1 Approach
+          %ol
+            %li Cycles statements
+            %li Conditional statements
+            %li Everything else
+        %section
+          %pre
+            %code.ruby.line-numbers{data: {highlight_lines: "2,3,6,7,9"}}
+              :preserve
+                existing_properties = by_site(site).preload(:key).
+                  by_person_or_visitor(person&.id, visitor&.id).group_by(&:key)
+                new_properties = properties.transform_keys do |key|
+                  site.custom_property_key_for!(key)
+                end
+                (existing_properties.keys + new_properties.keys).uniq.each do |key|
+                  target_property = existing_properties[key]&.find do |property|
+                    property.with_person_or_visitor?(person, visitor)
+                  end || CustomProperty.new(key: key, value: existing_properties[key]&.first&.value)
+                  target_property.person = person if person
+                  target_property.visitor = visitor if visitor
+                  target_property.value = new_properties.fetch(key) || ''
+                  target_property.save! if target_property.changed?
+                end
         %section
           %h2 Performance &amp; Vulnerabilities
 
@@ -544,28 +620,42 @@
           %pre
             %code.diff
               :preserve
-                -{{ advocate_info.first_name }}
-                +{{ advocate_info.first_name | escape }}
+                -&lt;%= advocate_info.first_name %&gt;
+                +&lt;%= escape(advocate_info.first_name) %&gt;
         %section
           %h1 Security
           %ul
             %li 
-              Approach Security (Step 1)
+              General Security
               %ul
                 %li Is it secure to have this feature?
                 %li Is it secure to implement the feature this way?
             %li.fragment 
-              Vulnerabilities 
+              Implementation Vulnerabilities 
               %ul
                 %li XSS
                 %li Allowed Parameters
                 %li Backend Authorisation check
                 %li Authorisation for UI elements
         %section
+          %h1 Performance
+          %ul
+            %li 
+              General Performance
+              %ul
+                %li Can it be done fast?
+                %li Will it work fast for all possible use cases?
+            %li.fragment 
+              Implementation Performance
+              %ul
+                %li Fast DB queries
+                %li Caching
+                %li Microoptimization
+        %section
           %h2 Tests
 
           %ol
-            %li Use Cases Coverage
+            %li.red Use Cases Coverage
             %li Formal Code Coverage
             %li Tests Implementation
         %section
@@ -577,12 +667,6 @@
             %li Discuss the method name before the method existence as a fact
             %li Discuss Code Style before implementation itself 
         %section
-          %h2 Boss control approach
-          
-          %p Ensure top points from the list are always performed
-          %p Choose X things on top of the list to double-check and delegate the rest completely
-          
-        %section
           %h2 Code Review Culture
           
           %ul
@@ -591,9 +675,15 @@
             %li 
               First things first
               %ul.fragment
-                %li Reduce number of cycles
+                %li Reduce number of review cycles
                 %li Save Author's time
                 %li Save Your time
+        %section
+          %h2 Boss control approach
+          
+          %p Ensure top points from the list are always performed
+          %p Choose X things on top of the list to double-check and delegate the rest completely
+          
         %section
           %h2 Top to Bottom Code Review 
 
@@ -613,6 +703,79 @@
                 %li Views
                 %li Test Coverage
                 %li Code Style, Typos, Whitespace
+        %section
+          %h1
+            %p Buktopuha
+        %section
+          %p The code that uploads toxic assets to FTP every day
+          %h3 Why is the date passed to worker as argument?
+          %pre
+            %code.ruby
+              :preserve
+                # Runs daily via crontab
+                task :upload_toxic_asset_to_ftp => :environment do
+                  ToxicUploaderWorker.perform_async(Date.today)
+                end
+
+                class ToxicUploaderWorker
+                  def perform(date)
+                    file_name = "toxic-assets-\#{date}.csv"
+                    upload_to_ftp(file_name, to_csv(Asset.where(created_at: date)))
+                  end
+                end
+          
+        %section
+          %h3 What does it return no results? How to fix that?
+          %pre
+            %code.ruby
+              :preserve
+                User.where(created_at: Date.today).count # => 0
+        %section
+          %h3 The code fragment generates 4 SQL queries:
+
+          %h3 Why does it happen and how to fix that?
+          %pre
+            %code.ruby
+              :preserve
+                Campaign.has_many :localizations
+                Localiztion.has_many :variants
+
+                def localize_by_key(key)
+                  @campaign.localizations.preload(:variants).find do |l|
+                    l.key == key
+                  end.text
+                end
+          %pre
+            %code.haml
+              :preserve
+                = localize_by_key("offer_title")
+                = localize_by_key("offer_description")
+          %pre.fragment
+            %code.sql
+              :preserve
+                (SQL) SELECT * from localizations where campaign_id = ?
+                (SQL) SELECT * from variants where localization_id in ?
+                (Cached) SELECT * from localizations where campaign_id = ?
+                (Cached) SELECT * from variants where localization_id in ?
+        %section
+          %h1 The Fix:
+          %pre
+            %code.ruby
+              :preserve
+                ActiveRecord::Associations::Preloader.new.preload(
+                  campaign.localizations, :variants
+                )
+        %section
+          %h1 Rails v3
+          %pre
+            %code.ruby
+              :preserve
+                Post.has_many :comments, where(published: true)
+          %h1 Rails v4
+          %pre
+            %code.ruby
+              :preserve
+                Post.has_many :comments, -> { where(published: true) }
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
     %script{:src => "https://rawgithub.com/hakimel/reveal.js/3.6.0/js/reveal.js"}
     :javascript
@@ -632,6 +795,8 @@
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
           { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
       		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
       		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
