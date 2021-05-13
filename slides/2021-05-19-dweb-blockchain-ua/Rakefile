@@ -12,6 +12,6 @@ namespace :slides do
     File.write("#{__dir__}/index.html", html)
   end
   task :deploy => ['slides:build'] do
-    `bundle exec --gemfile=../../Gemfile "rake --rakefile ../../Rakefile deploy"`
+    puts `bundle exec --gemfile=../../Gemfile "rake --rakefile ../../Rakefile deploy"`
   end
 end
