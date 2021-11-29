@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<title>Future of decentralized Web</title>
+<meta content='' name='description'>
+<meta content='Bogdan Gusiev' name='author'>
+<meta content='yes' name='apple-mobile-web-app-capable'>
+<meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
+<link href='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/zenburn.css' id='highlight-theme' rel='stylesheet'>
+<link href='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.css' rel='stylesheet'>
+<link href='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/theme/white.css' rel='stylesheet'>
+<script src='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/highlightjs/highlightjs-solidity/solidity.js'></script>
+<script></script>
+<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+<script>
+  var link = document.createElement( 'link' );
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+  document.getElementsByTagName( 'head' )[0].appendChild( link );
+</script>
+<style>
+  body .reveal {
+    font-size: 30px !important; }
+  
+  .reveal section pre code {
+    padding: 20px 5px;
+    font-size: 1.3em;
+    line-height: 1.3em; }
+  .reveal section ul {
+    min-width: 50%; }
+  .reveal section .grey {
+    color: grey; }
+  .reveal section .red {
+    color: #e02c2d; }
+  .reveal section .green {
+    color: #17cc1e; }
+  .reveal section .yellow {
+    color: yellow; }
+  .reveal section .orange {
+    color: orange; }
+  .reveal section .blue {
+    color: #1b91ff; }
+  .reveal section .grey {
+    color: grey; }
+  .reveal section .left {
+    float: left; }
+  .reveal section .right {
+    float: right; }
+  .reveal section .clearfix {
+    overflow: hidden; }
+  .reveal section table.full-border {
+    border-collapse: collapse; }
+    .reveal section table.full-border td {
+      border: 1px solid black !important; }
+  .reveal section img {
+    border: 0px;
+    box-shadow: 0 0 0 0; }
+  .reveal section code.line-numbers {
+    counter-reset: line_numbers; }
+  .reveal section code span.line-number {
+    counter-increment: line_numbers;
+    margin-right: 1em; }
+    .reveal section code span.line-number:before {
+      content: counter(line_numbers,decimal-leading-zero);
+      color: gray; }
+  .reveal section code span.highlight-line:before {
+    color: yellow; }
+</style>
+</head>
+<body>
+<div class='reveal'>
+<div class='slides'>
+<section>
+<h1>
+The Future of
+</h1>
+<h1>Decentralized Web</h1>
+<h2>
+Liscon October 2021
+</h2>
+</section>
+<section>
+<h1>Plan</h1>
+<ol>
+<li>Internet and its pros and cons</li>
+<li>Decentralization with Blockchain</li>
+<li>Decentralized technologies problems</li>
+<li>Unstoppable Domains's Plans</li>
+</ol>
+</section>
+<section>
+<h3>What is good about the internet</h3>
+<ul>
+<li class='fragment'>TCP/IP can survive a nuclear attack</li>
+<li class='fragment'>You can own your content</li>
+<li class='fragment'>Dynamic</li>
+<li class='fragment'>Easy to use</li>
+</ul>
+</section>
+<section>
+<h2>Decentralized Future</h2>
+<h2>of the internet</h2>
+<ul>
+<li>ID ownership</li>
+<li>Minimize Trust</li>
+<li>Accessibility of the technology</li>
+</ul>
+</section>
+<section>
+<h3>Internet ID</h3>
+<ul>
+<li>Domain Name</li>
+<li>Facebook Login</li>
+<li>SSO ID</li>
+<li>etc...</li>
+</ul>
+</section>
+<section>
+<h2>What can be decentralized?</h2>
+<ol>
+<li>
+Internet ID
+<ol>
+<li>Ownership</li>
+<li>Configuration</li>
+</ol>
+</li>
+<li>
+Content
+<ol>
+<li>Static</li>
+<li>Dynamic</li>
+</ol>
+</li>
+</ol>
+</section>
+<section>
+<h2>Can blockchain technologies</h2>
+<h2>help with that?</h2>
+<h1 class='fragment'>YES!</h1>
+<ul class='fragment'>
+<li>Convert your internet ID into NFT</li>
+<li>Put domain configuration to blockchain</li>
+<li>Build bridges between old software and new technologies</li>
+</ul>
+</section>
+<section>
+<h2>Implement it in one day</h2>
+<pre><code class='solidity'>contract IRegistry is IERC721 {&#x000A;  function set(key, value, tokenId);&#x000A;  function get(key, tokenId) returns (string);&#x000A;}&#x000A;</code></pre>
+</section>
+<section>
+<h2>Resolution Algorithm</h2>
+<img src='https://api.monosnap.com/file/download?id=grkQNqNj5powY7GltCNL4eVRJ58LQZ'>
+<ul>
+<li>User puts example.crypto in a browser</li>
+<li class='fragment'>
+Browser sends DNS request
+<ul>
+<li class='grey'>type: A name: example.crypto</li>
+</ul>
+</li>
+<li class='fragment'>
+The gateway sends request on chain
+<ul class='grey'>
+<li>Registry.get("dns.A", hash("example.crypto"))</li>
+<li>Registry.get("dns.A.ttl", hash("example.crypto"))</li>
+</ul>
+</li>
+<li class='fragment'>
+Gateway sends response to the browser
+<ul class='grey'>
+<li>value: 192.168.0.1, ttl: 128</li>
+</ul>
+</li>
+</ul>
+</section>
+<section>
+<h2>Decentralized Content Storage</h2>
+<h3>like IPFS</h3>
+<ul>
+<li>Put content to network</li>
+<li>Receive ID (hash) of your content</li>
+<li>Configure your domain to have that ID</li>
+</ul>
+<pre class='fragment'><code class='javascript'>Registry.set(&#x000A;  "dweb.IPFS.hash", &#x000A;  "QmXHHUN57Arn3Lo25qyFV6L52gSb7XgDswfAkxe1KkL8pr",&#x000A;  hash('example.crypto')&#x000A;);&#x000A;</code></pre>
+</section>
+<section>
+<h2>Realistic Decentralization</h2>
+<ul>
+<li class='fragment'>Putting data on chain is expensive</li>
+<li class='fragment'>Content storage motivation is not solved</li>
+<li class='fragment'>Dynamic content is not even a thing</li>
+<li class='fragment'>Decentralized technologies are slow</li>
+</ul>
+</section>
+<section>
+<h2>Content storage problem</h2>
+<p>What is the motivation of the network to store your content?</p>
+<p>Ethereum has its own content storage motivation</p>
+<p>Can this model be applied to content?</p>
+<ul>
+<li class='fragment'>There is a way to motivate the network to store your content</li>
+<li class='fragment'>There is a way to ask service provider for content storage confirmation</li>
+<li class='fragment'>There is NO WAY to ensure service provider makes your content available</li>
+</ul>
+</section>
+<section>
+<h2>Dynamic Content</h2>
+<p>
+Every time you hear about some success in decentralized content storage and deliver
+no one is even telling you its only for static content
+</p>
+<p>There is no technology to store dynamic content in a decentralized way in development</p>
+</section>
+<section>
+<h2>Decentralized technologies are slow</h2>
+<table>
+<tr>
+<td>Decentralized</td>
+<td>&nbsp;</td>
+<td>Centralized</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>IPFS</td>
+<td>3 sec</td>
+<td>CDN</td>
+<td>0.5 sec</td>
+</tr>
+<tr>
+<td>ETH Tx</td>
+<td>2 min - 1 week</td>
+<td>DNS Update</td>
+<td>2 min</td>
+</tr>
+<tr>
+<td>ETH Query</td>
+<td>1 sec</td>
+<td>DNS Query</td>
+<td>0.2 sec</td>
+</tr>
+</table>
+</section>
+<section>
+<h2>Unstoppable Domains Philosophy</h2>
+<ul>
+<li class='fragment'>Indisputable ownership of your ID</li>
+<li class='fragment'>Get content anywhere, verify it on chain</li>
+<li class='fragment'>Step by step migration to decentralized technologies</li>
+<li class='fragment'>Accessible at every step of migration</li>
+</ul>
+</section>
+<section>
+<h2>Indisputable ownership of your ID</h2>
+<ul>
+<li>Pure ERC-721</li>
+<li>No subscription fee</li>
+<li>No administrative TLDs</li>
+</ul>
+</section>
+<section>
+<h2>Step by Step Decentralization</h2>
+<ol>
+<li class='fragment'>Domain name as NFT</li>
+<li class='fragment'>Cheap gas</li>
+<li class='fragment'>Integration with browsers</li>
+<li class='fragment'>Anyone can get a domain for free</li>
+<li class='fragment'>Traditional websites on decentralized domains</li>
+<li class='fragment'>Static decentralized websites</li>
+<li class='fragment'>Use domain name as a login ID</li>
+</ol>
+</section>
+<section>
+<h2>
+Accessibility of decentralized internet
+</h2>
+<ul>
+<li>Free to configure</li>
+<li>Performance is acceptable</li>
+<li>Minimize blockchain knowledge</li>
+</ul>
+</section>
+<section>
+<h1>Thanks!</h1>
+<h3>
+<a href='https://unstoppabledomains.com'>https://unstoppabledomains.com</a>
+</h3>
+<h3>
+<a href='https://github.com/bogdan'>https://github.com/bogdan</a>
+</h3>
+</section>
+</div>
+</div>
+<script src='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js'></script>
+<script>
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+  	controls: true,
+  	progress: true,
+  	history: true,
+  	center: true,
+    plugins: [RevealHighlight],
+  
+  	theme: 'simple', // available themes are in /css/theme
+  	transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+  
+  	// Optional libraries used to extend on reveal.js
+  	dependencies: [
+  		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      //{ src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js', async: true},
+      {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+      
+      { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+  		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+  		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+  		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+  	]
+  });
+  Reveal.getPlugin('highlight').hljs.registerLanguage('solidity', window.hljsDefineSolidity);
+</script>
+</body>
+</html>
