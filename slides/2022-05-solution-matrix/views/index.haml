@@ -1,0 +1,339 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Strategic Technical Decisions
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{rel: "stylesheet", href: "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/zenburn.css", id: "highlight-theme"}
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/theme/white.css", :rel => "stylesheet"}/
+    %script{src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js'}
+    %script{src: 'https://cdn.jsdelivr.net/gh/highlightjs/highlightjs-solidity/solidity.js'}
+
+    %script
+
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    :sass
+      body .reveal
+        font-size: 30px !important
+      .reveal
+        section
+          pre
+            code
+              padding: 20px 5px
+              font-size: 1.30em
+              line-height: 1.3em
+          ul
+            min-width: 50%
+          .grey
+            color: grey
+          .red
+            color: #e02c2d
+          .green
+            color: #17cc1e
+          .yellow
+            color: yellow
+          .orange
+            color: orange
+          .blue
+            color: #1b91ff
+          .left
+            float: left
+          .right
+            float: right
+          .clearfix
+            overflow: hidden
+          table.full-border
+            border-collapse: collapse
+            td
+              border: 1px solid black !important
+          img
+            border: 0px
+            box-shadow: 0 0 0 0
+      
+          code
+            &.line-numbers
+              counter-reset: line_numbers
+            span
+              &.line-number
+                counter-increment: line_numbers
+                margin-right: 1em
+                &:before
+                  content: counter(line_numbers, decimal-leading-zero)
+                  color: gray
+              &.highlight-line:before
+                color: yellow
+          
+        
+  %body
+    .reveal
+      .slides
+        %section
+          %h2
+            Strategic technical decisions
+        %section
+          %h2 Bogdan's life as a CTO
+
+          %ul
+            %li 5 years as software developer 
+            %li 6 years as CTO at Talkable Inc.
+            %li 4 years as CTO at Unstoppable Domains
+
+        %section
+          %h2 What makes you an executive?
+
+          %h3 a lot of answers,
+          %h3.fragment but making decisions is critically important
+        %section
+          %h2 Why good decision matter?
+
+          %h3 The relation between outcome and 
+          %h3 resources spent can be infinite
+
+        %section
+          %h2 What makes a decision strategic?
+
+          %ul
+            %li Eliminates some other big possibilities
+            %li 
+              Difficult to change
+              %ul
+                %li The more time passes the more difficult it is
+            %li Feels important
+            
+        %section
+          %h1 Agenda
+
+          %ol
+            %li Intuitive approach 
+            %li Naive approach
+            %li Common Mistakes
+            %li Professional approach
+            %li Advices &amp; Recommendations
+
+
+        %section
+          %h2 Intuitive approach
+
+          %p I don't think I just know
+          %ul
+            %li.fragment Takes almost no time
+            %li.fragment Has High Confidence
+            %li.fragment Always Feels Right
+
+
+        %section
+          %h2 Problems of Intuitive Decision
+          %ul
+            %li.fragment Requires Experience
+            %li.fragment Hard to communicate
+            %li.fragment Needs respect or trust from the team
+            %li.fragment Discussion is difficult
+            %li.fragment Applicable by people with tamed ego 
+
+        %section
+          %h2 Naive approach
+          
+          .fragment
+            %h4 Comes when the criteria 
+            %h4 isn't met
+
+        %section
+          %h2 Typical Naive approach
+          %ul
+            %li.fragment Name Decisions
+            %li.fragment List Pros and Cons
+            %li.fragment Handle discussion
+            %li.fragment Choose something
+
+        %section
+          %h2 Example
+          %h3 Which database is best for project A?
+
+          %ul
+            %li MySQL
+            %li PostgreSQL
+            %li MongoDB
+        %section
+          %table
+            %tr
+              %th &nbsp;
+              %th{style: 'text-align: center'} MySQL
+              %th{style: 'text-align: center'} PostgreSQL
+              %th{style: 'text-align: center'} MongoDB
+            %tr
+              %td Pros
+              %td
+                %ul
+                  %li Has support for Google BigQuery
+                  %li Team has Scaling Experience
+                  %li Amazon RDS Support
+              %td
+                %ul
+                  %li Faster performance 
+                  %li Concurrent schema update out of the box
+              %td
+                %ul
+                  %li Schema updates are not required
+                  %li JSON structures support
+            %tr
+              %td Cons
+              %td
+                %ul
+                  %li The slowest on trivial operations
+                  %li "EXPLAIN" statement is almost useless
+              %td
+                %ul
+                  %li Little advanced scaling tools
+              %td
+                %ul
+                  %li A process can crash randomly
+                  %li Memory consumption is unpredictable
+                  %li Weaker query language
+
+        %section
+          %h3 Unanswered Questions
+          %ul
+            %li If MongoDB process can crash, how stable are other solutions?
+            %li If "EXPLAIN" statement is useless for MySQL, does it mean that it is useful anywhere else?
+            %li If Amazon RDS supports MySQL, does it support others?
+        %section
+          %h3 Downsides of Pros/Cons approach
+
+          %ul
+            %li Mostly random statements about each solution
+            %li More solutions can not be properly compared
+            %li Hard to "load" all the statement to your head
+            %li Can make a decision political
+        %section
+          %h2 What we need
+
+          %ul
+            %li All solutions are evaluated by the same criteria
+            %li Visually digestible
+            %li All parties are heard
+
+        %section
+          %h3 Introducing Criteria
+
+          %ul
+            %li All pros and cons should be assigned to a criteria.
+            %li Criteria should be applicable to all solutions. 
+            %li Otherwise it is a bad criteria.
+
+        %section
+          %h2 Example
+
+
+          What is a criteria for each of the following statements:
+          %ul
+            %li 
+              "EXPLAIN" statement is almost useless
+              %ul
+                %li Query Optimization Tools
+            %li 
+              Amazon RDS support
+              %ul
+                %li Hosting Services
+            %li 
+              Process crashes randomly
+              %ul
+                %li Process Stability
+        %section
+          
+          %h3 MySQL vs PostgreSQL vs MongoDB
+
+          %ul
+            %li Process stability
+            %li Hosting Providers
+            %li Performance on trivial operations
+            %li Data Migration
+            %li Query Optimization Tools
+            %li Team Experience
+        %section
+          %h2 Fully mapped information
+          -# https://docs.google.com/spreadsheets/d/1ukCQBUMSoVvNtZdI3obpiNffTsRdlhzpY_FftAJcNms/edit#gid=0
+          %iframe{style: 'width: 100%; height: 400px', src: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXccYU5DFnnHwoMorlbmcSkqohT4Zhn1jhH9dpKHfPP-rG7mYXAVqti1iJlIBj5BxtgiXa2byLxAQB/pubhtml?widget=true&amp;headers=false"}
+          
+        %section
+          
+          %h2 Live Example #1
+          -# Reverse Resolution
+          -# https://docs.google.com/spreadsheets/d/1yyFlnqphZ7att1qOO3HPFbjWW4u43SA9HWOz5gtHNn4/edit#gid=0
+          %img{src: "https://api.monosnap.com/file/download?id=cfVAYcaoOt0vFo1tOyEQWb0p46l6T1"}
+          -# %iframe{style: 'width: 100%; height: 400px', src: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRhbW_V_HfuwiCK4PsSitnC6VJtZ3ACAuR377ElMLMkhW21PSo4hpVtU12-QJeLpg6MTluGopuJgME7/pubhtml?widget=true&amp;headers=false"}
+        %section
+
+          %h3 Live Example #2
+          %img{src: "https://api.monosnap.com/file/download?id=edvkz2NrjDiP2A88CXAZIvtWaqt1xn"}
+
+        -# Offchain Resolvers
+        -# https://docs.google.com/spreadsheets/d/1haI18KTOxm_Ntinffh3O-derwqhq1_mR4E7ONgY_-s0/edit#gid=0
+        %section
+          %h3 Live Example #3
+          %img{src: "https://api.monosnap.com/file/download?id=VbA8oFLl2qsic6qpnH8AMW0QziKe33"}
+        -# Chainlink
+        -# https://docs.google.com/spreadsheets/d/1_8p-_ODRK70LdIGuB3c2TZpLlFHCJ47ZWsed8BxVBJw/edit#gid=0
+
+        %section
+          %h3
+            When to apply?
+          %ul
+            %li.fragment More than 2 variants
+            %li.fragment No ability to change your mind
+            %li.fragment Long term consequences
+            %li.fragment No team consensus
+        %section
+          %h3 How to apply?
+          %ul
+            %li Make sure all variants are in
+            %li Make sure criteria are applicable to all solutions
+            %li Colorize cells for better high level overview
+            %li It can be that good to show it to non-technical people
+        %section
+          %h2 Philosophy
+          %h3 Decision making is mostly emotional
+          %p 
+            Once you really see what is going on high level, 
+            your mind become liberated from routine and you just see the right decision
+        %section
+          %h2 Homework:
+          %h3 What is the best way to extend JSON to support timestamp data type?
+
+            
+    %script{:src => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+        plugins: [RevealHighlight],
+
+      	theme: 'simple', // available themes are in /css/theme
+      	transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          //{ src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js', async: true},
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
+      Reveal.getPlugin('highlight').hljs.registerLanguage('solidity', window.hljsDefineSolidity);

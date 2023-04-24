@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<title>Strategic Technical Decisions</title>
+<meta content='' name='description'>
+<meta content='Bogdan Gusiev' name='author'>
+<meta content='yes' name='apple-mobile-web-app-capable'>
+<meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
+<link href='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/zenburn.css' id='highlight-theme' rel='stylesheet'>
+<link href='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.css' rel='stylesheet'>
+<link href='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/theme/white.css' rel='stylesheet'>
+<script src='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/highlightjs/highlightjs-solidity/solidity.js'></script>
+<script></script>
+<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+<script>
+  var link = document.createElement( 'link' );
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+  document.getElementsByTagName( 'head' )[0].appendChild( link );
+</script>
+<style>
+  body .reveal {
+    font-size: 30px !important; }
+  
+  .reveal section pre code {
+    padding: 20px 5px;
+    font-size: 1.30em;
+    line-height: 1.3em; }
+  
+  .reveal section ul {
+    min-width: 50%; }
+  
+  .reveal section .grey {
+    color: grey; }
+  
+  .reveal section .red {
+    color: #e02c2d; }
+  
+  .reveal section .green {
+    color: #17cc1e; }
+  
+  .reveal section .yellow {
+    color: yellow; }
+  
+  .reveal section .orange {
+    color: orange; }
+  
+  .reveal section .blue {
+    color: #1b91ff; }
+  
+  .reveal section .left {
+    float: left; }
+  
+  .reveal section .right {
+    float: right; }
+  
+  .reveal section .clearfix {
+    overflow: hidden; }
+  
+  .reveal section table.full-border {
+    border-collapse: collapse; }
+    .reveal section table.full-border td {
+      border: 1px solid black !important; }
+  
+  .reveal section img {
+    border: 0px;
+    box-shadow: 0 0 0 0; }
+  
+  .reveal section code.line-numbers {
+    counter-reset: line_numbers; }
+  
+  .reveal section code span.line-number {
+    counter-increment: line_numbers;
+    margin-right: 1em; }
+    .reveal section code span.line-number:before {
+      content: counter(line_numbers, decimal-leading-zero);
+      color: gray; }
+  
+  .reveal section code span.highlight-line:before {
+    color: yellow; }
+</style>
+</head>
+<body>
+<div class='reveal'>
+<div class='slides'>
+<section>
+<h2>
+Strategic technical decisions
+</h2>
+</section>
+<section>
+<h2>Bogdan's life as a CTO</h2>
+<ul>
+<li>5 years as software developer</li>
+<li>6 years as CTO at Talkable Inc.</li>
+<li>4 years as CTO at Unstoppable Domains</li>
+</ul>
+</section>
+<section>
+<h2>What makes you an executive?</h2>
+<h3>a lot of answers,</h3>
+<h3 class='fragment'>but making decisions is critically important</h3>
+</section>
+<section>
+<h2>Why good decision matter?</h2>
+<h3>The relation between outcome and</h3>
+<h3>resources spent can be infinite</h3>
+</section>
+<section>
+<h2>What makes a decision strategic?</h2>
+<ul>
+<li>Eliminates some other big possibilities</li>
+<li>
+Difficult to change
+<ul>
+<li>The more time passes the more difficult it is</li>
+</ul>
+</li>
+<li>Feels important</li>
+</ul>
+</section>
+<section>
+<h1>Agenda</h1>
+<ol>
+<li>Intuitive approach</li>
+<li>Naive approach</li>
+<li>Common Mistakes</li>
+<li>Professional approach</li>
+<li>Advices &amp; Recommendations</li>
+</ol>
+</section>
+<section>
+<h2>Intuitive approach</h2>
+<p>I don't think I just know</p>
+<ul>
+<li class='fragment'>Takes almost no time</li>
+<li class='fragment'>Has High Confidence</li>
+<li class='fragment'>Always Feels Right</li>
+</ul>
+</section>
+<section>
+<h2>Problems of Intuitive Decision</h2>
+<ul>
+<li class='fragment'>Requires Experience</li>
+<li class='fragment'>Hard to communicate</li>
+<li class='fragment'>Needs respect or trust from the team</li>
+<li class='fragment'>Discussion is difficult</li>
+<li class='fragment'>Applicable by people with tamed ego</li>
+</ul>
+</section>
+<section>
+<h2>Naive approach</h2>
+<div class='fragment'>
+<h4>Comes when the criteria</h4>
+<h4>isn't met</h4>
+</div>
+</section>
+<section>
+<h2>Typical Naive approach</h2>
+<ul>
+<li class='fragment'>Name Decisions</li>
+<li class='fragment'>List Pros and Cons</li>
+<li class='fragment'>Handle discussion</li>
+<li class='fragment'>Choose something</li>
+</ul>
+</section>
+<section>
+<h2>Example</h2>
+<h3>Which database is best for project A?</h3>
+<ul>
+<li>MySQL</li>
+<li>PostgreSQL</li>
+<li>MongoDB</li>
+</ul>
+</section>
+<section>
+<table>
+<tr>
+<th>&nbsp;</th>
+<th style='text-align: center'>MySQL</th>
+<th style='text-align: center'>PostgreSQL</th>
+<th style='text-align: center'>MongoDB</th>
+</tr>
+<tr>
+<td>Pros</td>
+<td>
+<ul>
+<li>Has support for Google BigQuery</li>
+<li>Team has Scaling Experience</li>
+<li>Amazon RDS Support</li>
+</ul>
+</td>
+<td>
+<ul>
+<li>Faster performance</li>
+<li>Concurrent schema update out of the box</li>
+</ul>
+</td>
+<td>
+<ul>
+<li>Schema updates are not required</li>
+<li>JSON structures support</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td>Cons</td>
+<td>
+<ul>
+<li>The slowest on trivial operations</li>
+<li>"EXPLAIN" statement is almost useless</li>
+</ul>
+</td>
+<td>
+<ul>
+<li>Little advanced scaling tools</li>
+</ul>
+</td>
+<td>
+<ul>
+<li>A process can crash randomly</li>
+<li>Memory consumption is unpredictable</li>
+<li>Weaker query language</li>
+</ul>
+</td>
+</tr>
+</table>
+</section>
+<section>
+<h3>Unanswered Questions</h3>
+<ul>
+<li>If MongoDB process can crash, how stable are other solutions?</li>
+<li>If "EXPLAIN" statement is useless for MySQL, does it mean that it is useful anywhere else?</li>
+<li>If Amazon RDS supports MySQL, does it support others?</li>
+</ul>
+</section>
+<section>
+<h3>Downsides of Pros/Cons approach</h3>
+<ul>
+<li>Mostly random statements about each solution</li>
+<li>More solutions can not be properly compared</li>
+<li>Hard to "load" all the statement to your head</li>
+<li>Can make a decision political</li>
+</ul>
+</section>
+<section>
+<h2>What we need</h2>
+<ul>
+<li>All solutions are evaluated by the same criteria</li>
+<li>Visually digestible</li>
+<li>All parties are heard</li>
+</ul>
+</section>
+<section>
+<h3>Introducing Criteria</h3>
+<ul>
+<li>All pros and cons should be assigned to a criteria.</li>
+<li>Criteria should be applicable to all solutions.</li>
+<li>Otherwise it is a bad criteria.</li>
+</ul>
+</section>
+<section>
+<h2>Example</h2>
+What is a criteria for each of the following statements:
+<ul>
+<li>
+"EXPLAIN" statement is almost useless
+<ul>
+<li>Query Optimization Tools</li>
+</ul>
+</li>
+<li>
+Amazon RDS support
+<ul>
+<li>Hosting Services</li>
+</ul>
+</li>
+<li>
+Process crashes randomly
+<ul>
+<li>Process Stability</li>
+</ul>
+</li>
+</ul>
+</section>
+<section>
+<h3>MySQL vs PostgreSQL vs MongoDB</h3>
+<ul>
+<li>Process stability</li>
+<li>Hosting Providers</li>
+<li>Performance on trivial operations</li>
+<li>Data Migration</li>
+<li>Query Optimization Tools</li>
+<li>Team Experience</li>
+</ul>
+</section>
+<section>
+<h2>Fully mapped information</h2>
+<iframe src='https://docs.google.com/spreadsheets/d/e/2PACX-1vSXccYU5DFnnHwoMorlbmcSkqohT4Zhn1jhH9dpKHfPP-rG7mYXAVqti1iJlIBj5BxtgiXa2byLxAQB/pubhtml?widget=true&amp;amp;headers=false' style='width: 100%; height: 400px'></iframe>
+</section>
+<section>
+<h2>Live Example #1</h2>
+<img src='https://api.monosnap.com/file/download?id=cfVAYcaoOt0vFo1tOyEQWb0p46l6T1'>
+</section>
+<section>
+<h3>Live Example #2</h3>
+<img src='https://api.monosnap.com/file/download?id=edvkz2NrjDiP2A88CXAZIvtWaqt1xn'>
+</section>
+<section>
+<h3>Live Example #3</h3>
+<img src='https://api.monosnap.com/file/download?id=VbA8oFLl2qsic6qpnH8AMW0QziKe33'>
+</section>
+<section>
+<h3>
+When to apply?
+</h3>
+<ul>
+<li class='fragment'>More than 2 variants</li>
+<li class='fragment'>No ability to change your mind</li>
+<li class='fragment'>Long term consequences</li>
+<li class='fragment'>No team consensus</li>
+</ul>
+</section>
+<section>
+<h3>How to apply?</h3>
+<ul>
+<li>Make sure all variants are in</li>
+<li>Make sure criteria are applicable to all solutions</li>
+<li>Colorize cells for better high level overview</li>
+<li>It can be that good to show it to non-technical people</li>
+</ul>
+</section>
+<section>
+<h2>Philosophy</h2>
+<h3>Decision making is mostly emotional</h3>
+<p>
+Once you really see what is going on high level,
+your mind become liberated from routine and you just see the right decision
+</p>
+</section>
+<section>
+<h2>Homework:</h2>
+<h3>What is the best way to extend JSON to support timestamp data type?</h3>
+</section>
+</div>
+</div>
+<script src='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js'></script>
+<script>
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+  	controls: true,
+  	progress: true,
+  	history: true,
+  	center: true,
+    plugins: [RevealHighlight],
+  
+  	theme: 'simple', // available themes are in /css/theme
+  	transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+  
+  	// Optional libraries used to extend on reveal.js
+  	dependencies: [
+  		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      //{ src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js', async: true},
+      {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+      
+      { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+  		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+  		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+  		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+  	]
+  });
+  Reveal.getPlugin('highlight').hljs.registerLanguage('solidity', window.hljsDefineSolidity);
+</script>
+</body>
+</html>
